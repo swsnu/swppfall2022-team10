@@ -35,7 +35,7 @@ frontend/src/data/*.jpg
 db.sqlite3
 backend/beafamily/api/migrations/*.py
 backend/beafamily/api/migrations/*.pyc
-!migrations/__init__.py
+!backend/beafamily/api/migrations/__init__.py
 __pycache__/
 !backend/beafamily/data/post
 backend/beafamily/data/post/*
