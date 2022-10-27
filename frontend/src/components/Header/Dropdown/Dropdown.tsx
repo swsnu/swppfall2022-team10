@@ -24,7 +24,7 @@ export default function Dropdown(props: IProps) {
 			{props.visibility && (
 				<div>
 					{props.userId ? (
-						<div className="dropdown-user">
+						<div className="dropdown-user dropdown-content">
 							<button
 								className="dropdown-button"
 								onClick={(event) => {
@@ -54,7 +54,7 @@ export default function Dropdown(props: IProps) {
 							</button>
 						</div>
 					) : (
-						<div className="dropdown-non-user">
+						<div className="dropdown-non-user dropdown-content">
 							<button
 								className="dropdown-button"
 								onClick={(event) => {

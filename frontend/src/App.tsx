@@ -1,7 +1,8 @@
 import "./App.css";
 import Login from "./components/Login/Login";
-import PostList from "./components/PostList/PostList";
-import PostDetail from "./components/PostDetail/PostDetail";
+import PostList from "./components/PostComponents/PostList/PostList";
+import PostDetail from "./components/PostComponents/PostDetail/PostDetail";
+import ReviewList from "./components/ReviewComponents/ReviewList/ReviewList";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 function App() {
@@ -20,6 +21,11 @@ function App() {
 						path="/mypost/:id"
 						element={<PostDetail is_author={true} />}
 					/>
+					<Route path="/review" element={<ReviewList />} />
+					{/* <Route
+						path="/review/:id"
+						element={<ReviewDetail is_author={false} />}
+					/> */}
 					<Route path="*" element={<h1>Not Found</h1>} />
 				</Routes>
 			</BrowserRouter>

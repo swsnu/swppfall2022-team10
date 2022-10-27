@@ -1,16 +1,35 @@
 .Dropdown {
 	display: flex;
 	flex-direction: column;
+	background-color: whitesmoke;
+
+	.dropdown-content {
+		display: none;
+		position: absolute;
+		// z-index: 1; /*다른 요소들보다 앞에 배치*/
+		font-weight: 400;
+		background-color: #f9f9f9;
+		min-width: 150px;
+		border-radius: 5px;
+		box-shadow: 0 5px 10px rgb(0 0 0 / 20%);
+	}
+
+	.dropdown-content button {
+		all: unset;
+		cursor: pointer;
+		display: block;
+		text-decoration: none;
+		color: rgb(37, 37, 37);
+		font-size: 17px;
+		padding: 12px 20px;
+
+		&:hover {
+			background-color: #ececec;
+		}
+	}
 
 	.dropdown-non-user {
 		display: flex;
 		flex-direction: column;
-	}
-
-	.dropdown-button {
-		padding: 10px 15px;
-		margin: 3px;
-		border: none;
-		background: #edc69c;
 	}
 }

@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { MdPhone, MdOutlineEmail } from "react-icons/md";
+import { MdPhone, MdOutlineEmail, MdHomeFilled } from "react-icons/md";
 import {
 	MDBFooter,
 	MDBContainer,
@@ -75,69 +75,21 @@ export default function Footer(props: IProps) {
 								Contact
 							</h6>
 							<p>
-								<MDBIcon icon="home" className="me-2" />
-								Seoul, South Korea
+								<MdHomeFilled />
+								&nbsp; Seoul, South Korea
 							</p>
 							<p>
-								<MDBIcon icon="envelope" className="me-3" />
-								beAfamily@gmail.com
+								<MdOutlineEmail />
+								&nbsp; beAfamily@gmail.com
 							</p>
 							<p>
-								<MDBIcon icon="phone" className="me-3" /> + 01
-								010-0000-0000
+								<MdPhone />
+								&nbsp; 010-0000-0000
 							</p>
 						</MDBCol>
 					</MDBRow>
 				</MDBContainer>
 			</section>
 		</MDBFooter>
-		// {/* <div className="Footer">
-		// 	<div>
-		// 		<button
-		// 			id="terms-of-service-button"
-		// 			onClick={(event) => {
-		// 				event.preventDefault();
-		// 			}}
-		// 		>
-		// 			이용약관
-		// 		</button>
-		// 		<button
-		// 			id="terms-of-privacy-button"
-		// 			onClick={(event) => {
-		// 				event.preventDefault();
-		// 			}}
-		// 		>
-		// 			개인정보처리방침
-		// 		</button>
-		// 		<button
-		// 			id="about-us-button"
-		// 			onClick={(event) => {
-		// 				event.preventDefault();
-		// 			}}
-		// 		>
-		// 			About Us
-		// 		</button>
-		// 	</div>
-		// 	<div>
-		// 		<button
-		// 			id="contact-us-button"
-		// 			onClick={(event) => {
-		// 				event.preventDefault();
-		// 			}}
-		// 		>
-		// 			<MdPhone />
-		// 			010-0000-0000
-		// 		</button>
-		// 		<button
-		// 			id="email-us-button"
-		// 			onClick={(event) => {
-		// 				event.preventDefault();
-		// 			}}
-		// 		>
-		// 			<MdOutlineEmail />
-		// 			BeAFamily@gmail.com
-		// 		</button>
-		// 	</div>
-		// </div> */}
 	);
 }

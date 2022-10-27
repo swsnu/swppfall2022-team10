@@ -35,7 +35,7 @@ def getPost(request, pid=0):
             # print(pid)
             post = Post.objects.get(post_id=pid)
             file_path = post.post_detail
-            with open(f"{file_path}/info.json", "r") as f:
+            with open(f"{file_path}/info.json", "r", encoding='UTF-8') as f:
                 info = json.loads(f.read())
                 info_response = {
                     "id": post.post_id,
@@ -58,7 +58,7 @@ def getPostList(request):
         # print(len(list(post_list.iterator())))
         for post in post_list.iterator():
             file_path = post.post_detail
-            with open(f"{file_path}/info.json", "r") as f:
+            with open(f"{file_path}/info.json", "r", encoding='UTF-8') as f:
                 info = json.loads(f.read())
                 info_response = {
                     "id": post.post_id,
