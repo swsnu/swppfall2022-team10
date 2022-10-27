@@ -7,6 +7,8 @@ node_modules/
 
 # testing
 /coverage
+coverage.xml
+.coverage
 
 # production
 /build
@@ -42,3 +44,5 @@ backend/beafamily/data/post/*
 backend/beafamily/data/application/*
 backend/beafamily/data/question/*
 backend/beafamily/data/review/*
+
+
