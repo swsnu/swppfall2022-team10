@@ -1,0 +1,16 @@
+.Dropdown {
+	display: flex;
+	flex-direction: column;
+
+	.dropdown-non-user {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.dropdown-button {
+		padding: 10px 15px;
+		margin: 3px;
+		border: none;
+		background: #edc69c;
+	}
+}

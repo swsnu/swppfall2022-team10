@@ -1,0 +1,39 @@
+.Header {
+	.menu-bar-header {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		height: 60px;
+		padding: 5px 20px;
+	}
+
+	.header-buttons {
+		width: fit-content;
+		padding: 10px 15px;
+		margin: 3px;
+		border: none;
+		background: none;
+		font-size: 18px;
+
+		&:hover {
+			font-weight: bold;
+			cursor: pointer;
+		}
+	}
+
+	#logo {
+		font-weight: 500;
+		justify-content: center;
+		background-color: #f8f8f8;
+		height: fit-content;
+		padding: 10px;
+		border-radius: 50%;
+	}
+
+	.list-header {
+		background-color: #c19565;
+		height: 50px;
+		/* padding: 20px 32px 10px 32px;
+		border-bottom: 2px solid #dadde0; */
+	}
+}

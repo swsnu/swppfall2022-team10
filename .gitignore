@@ -1,0 +1,44 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+node_modules/
+.pnp/
+.pnp.js
+
+# testing
+/coverage
+
+# production
+/build
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+
+frontend/src/components/PostCreate
+frontend/src/components/PostEdit
+frontend/api
+frontend/README.md
+frontend/src/store/slices/comment.ts
+frontend/src/data/*.jpg
+
+
+# django
+db.sqlite3
+backend/beafamily/api/migrations/*.py
+backend/beafamily/api/migrations/*.pyc
+!migrations/__init__.py
+__pycache__/
+!backend/beafamily/data/post
+backend/beafamily/data/post/*
+backend/beafamily/data/application/*
+backend/beafamily/data/question/*
+backend/beafamily/data/review/*
