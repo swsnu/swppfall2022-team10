@@ -1,3 +1,5 @@
+import Layout from "../Layout/Layout";
+
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../store";
@@ -7,7 +9,6 @@ import {
 	selectUser,
 	UserType,
 } from "../../store/slices/user";
-// import { Navigate } from "react-router-dom";
 import { Navigate, useNavigate } from "react-router-dom";
 import "./Login.scss";
 
@@ -42,40 +43,47 @@ export default function LogIn() {
 		return <Navigate to="/posts" />;
 	} else {
 		return (
-			<div className="Login">
-				<div className="login-header">
-					<h1>Welcome!</h1>
-				</div>
-				<form className="login-form">
-					<div className="login-input">
-						<input
-							id="email-input"
-							type="text"
-							placeholder="Enter Email"
-							value={email}
-							onChange={(event) => setEmail(event.target.value)}
-						/>
-						<input
-							id="pw-input"
-							type="password"
-							placeholder="Enter Password"
-							value={password}
-							onChange={(event) =>
-								setPassword(event.target.value)
-							}
-						/>
+			<Layout>
+				<div className="Login">
+					<div className="login-header">
+						<h1>로그인</h1>
 					</div>
-					<button
-						id="login-button"
-						onClick={(e) => {
-							e.preventDefault();
-							logInHandler();
-						}}
-					>
-						Login
-					</button>
-				</form>
-			</div>
+					<form className="login-form">
+						<div className="login-input">
+							<input
+								id="email-input"
+								type="text"
+								placeholder="아이디"
+								value={email}
+								onChange={(event) =>
+									setEmail(event.target.value)
+								}
+							/>
+							<input
+								id="pw-input"
+								type="password"
+								placeholder="비밀번호"
+								value={password}
+								onChange={(event) =>
+									setPassword(event.target.value)
+								}
+							/>
+						</div>
+						<button
+							id="login-button"
+							onClick={(e) => {
+								e.preventDefault();
+								logInHandler();
+							}}
+						>
+							로그인
+						</button>
+					</form>
+					<span id="login-signup">
+						계정이 없으신가요? <a href="/signup">회원가입</a>하기
+					</span>
+				</div>
+			</Layout>
 		);
 	}
 }

@@ -20,6 +20,20 @@ export interface postType {
 	is_active: boolean;
 }
 
+export interface postCreateType {
+	author_id: number;
+	name: string;
+	vaccination: boolean;
+	neutering: boolean;
+	title: string;
+	animal_type: string;
+	photo_path: string[];
+	species: string;
+	age: number;
+	gender: boolean;
+	character: string;
+}
+
 export interface postState {
 	posts: postType[];
 	selectedPost: postType | null;
@@ -47,7 +61,7 @@ export const getPost = createAsyncThunk(
 
 export const createPost = createAsyncThunk(
 	"post/createPost",
-	async (post: postType, { dispatch }) => {
+	async (post: postCreateType, { dispatch }) => {
 		const response = await axios.post("/api/posts/", post);
 		dispatch(postActions.addPost(response.data));
 		return response.data;

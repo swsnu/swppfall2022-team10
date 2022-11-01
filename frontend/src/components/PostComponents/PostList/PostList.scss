@@ -31,23 +31,48 @@
 
 	.create-post {
 		text-align: right;
+		#create-post-button {
+			all: unset;
+			transition: 0.25s;
+			&:hover {
+				cursor: pointer;
+				transform: scale(1.1);
+			}
+			&:active {
+				transform: scale(1.2);
+			}
+		}
+	}
+
+	.search-bar {
+		margin: auto;
+
+		margin-bottom: 20px;
+		width: 80%;
+		#search-input {
+			line-height: 1;
+			text-align: center;
+		}
+		#search-button {
+			color: #c19565;
+			border-color: #c19565;
+			&:hover {
+				background-color: #c19565;
+				color: white;
+			}
+		}
 	}
 
 	#list-filter-button {
-		width: fit-content;
-		border: none;
-		border-radius: 2px;
-		padding: 5px 10px;
-	}
-
-	#create-post-button {
 		all: unset;
 		transition: 0.25s;
+		width: fit-content;
+		border: none;
+		padding: 10px 10px;
+		margin-left: auto;
+		margin-right: 120px;
 		&:hover {
 			cursor: pointer;
-			transform: scale(1.1);
-		}
-		&:active {
 			transform: scale(1.2);
 		}
 	}
