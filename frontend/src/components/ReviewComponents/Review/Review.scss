@@ -1,0 +1,31 @@
+.Review {
+	display: flex;
+	flex-direction: row;
+	border-top: 1px solid #f1f3f5;
+	// margin: 10px;
+	padding: 1rem;
+	justify-content: space-between;
+	transition: all 0.15s;
+	text-align: left;
+
+	&:hover {
+		font-weight: bold;
+		cursor: pointer;
+	}
+	.review-image {
+		justify-content: flex-start;
+		width: 200px;
+		border-radius: 5px;
+	}
+	.review-container {
+		border-radius: 5px;
+		border-width: 2px;
+		border-color: black;
+		all: unset;
+		flex: 1;
+		cursor: pointer;
+	}
+	#review-author {
+		text-align: right;
+	}
+}

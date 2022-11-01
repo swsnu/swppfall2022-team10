@@ -1,0 +1,54 @@
+.ListContainer {
+	padding-top: 10px;
+	padding-bottom: 50px;
+	margin: 0 50px;
+	display: flex;
+	flex-direction: column;
+	font-family: "Pretendard-Regular";
+}
+
+.PostList {
+	position: relative;
+
+	margin: 0 auto;
+
+	margin-top: 10px;
+	margin-bottom: 32px;
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	padding: 20px 32px;
+	padding-bottom: 48px;
+	overflow-y: auto;
+
+	.posts {
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		flex-wrap: wrap;
+		padding: 20px 32px 10px 32px;
+	}
+
+	.create-post {
+		text-align: right;
+	}
+
+	#list-filter-button {
+		width: fit-content;
+		border: none;
+		border-radius: 2px;
+		padding: 5px 10px;
+	}
+
+	#create-post-button {
+		all: unset;
+		transition: 0.25s;
+		&:hover {
+			cursor: pointer;
+			transform: scale(1.1);
+		}
+		&:active {
+			transform: scale(1.2);
+		}
+	}
+}
