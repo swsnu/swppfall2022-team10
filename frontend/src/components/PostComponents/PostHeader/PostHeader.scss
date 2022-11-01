@@ -1,0 +1,75 @@
+.PostHeaderContainer {
+	.post-image {
+		height: 400px;
+		padding: 20px;
+		border-radius: 10px;
+		margin-bottom: 20px;
+	}
+
+	.post-header-container {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		.post-header-bookmark {
+			display: flex;
+			flex-direction: row;
+			width: stretch;
+			margin: 0 30px;
+			margin-bottom: 20px;
+			padding-right: 10px;
+			justify-content: space-between;
+			border-bottom: 2px solid rgb(35, 22, 22);
+
+			.post-header {
+				display: flex;
+				flex-direction: row;
+
+				.post-title-container {
+					padding: 0 20px 0 20px;
+					text-align: left;
+				}
+
+				.post-adoption-status {
+					width: fit-content;
+					height: fit-content;
+					font-size: 20px;
+					padding: 10px 25px;
+					margin: 3px;
+					color: black;
+					border-radius: 22px;
+				}
+				#active {
+					background-color: #ffcd29;
+					border: 2.5px solid #d6a80f;
+				}
+				#unactive {
+					background-color: #bbb9ac;
+					border: 2.5px solid #9c9b94;
+				}
+			}
+
+			.bookmark-button-container {
+				margin: auto 0;
+				#bookmark-button {
+					all: unset;
+					transition: 0.25s;
+					&:hover {
+						cursor: pointer;
+						transform: scale(1.2);
+					}
+				}
+			}
+		}
+		.post-button-container {
+			margin: auto;
+			margin-top: 50px;
+			width: fit-content;
+			#adopt-button {
+				min-width: 140px;
+				border-radius: 10px;
+				padding: 13px 30px;
+				font-size: 20px;
+			}
+		}
+	}
+}

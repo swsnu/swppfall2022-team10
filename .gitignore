@@ -31,6 +31,7 @@ frontend/api
 frontend/README.md
 frontend/src/store/slices/comment.ts
 frontend/src/data/*.jpg
+frontend/node_modules
 
 
 # django

@@ -6,7 +6,11 @@ import { useEffect } from "react";
 import Post from "../Post/Post";
 import { getPosts, postType, selectPost } from "../../../store/slices/post";
 import { AppDispatch } from "../../../store";
-import { MdFilterList, MdOutlineAddBox } from "react-icons/md";
+import { MdFilterList, MdOutlineAddBox, MdSearch } from "react-icons/md";
+
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
+
 import "./PostList.scss";
 
 export default function PostList() {
@@ -24,9 +28,21 @@ export default function PostList() {
 		<Layout>
 			<div className="ListContainer">
 				<div className="PostList">
-					<div id="list-filter-button">
+					<Form className="d-flex search-bar">
+						<Form.Control
+							type="search"
+							placeholder="종        |         보호기간        |        나이/성별"
+							className="me-2"
+							id="search-input"
+							aria-label="Search"
+						/>
+						<Button id="search-button" variant="outline-success">
+							<MdSearch size={50} />
+						</Button>
+					</Form>
+					<button id="list-filter-button">
 						<MdFilterList size="25" />
-					</div>
+					</button>
 					<div className="posts">
 						{postState.posts.map((post: postType) => {
 							return (
@@ -49,7 +65,7 @@ export default function PostList() {
 					<div className="create-post">
 						<button
 							id="create-post-button"
-							onClick={() => navigate("/posts/create")}
+							onClick={() => navigate("/post/create")}
 						>
 							<MdOutlineAddBox size="50" />
 						</button>
