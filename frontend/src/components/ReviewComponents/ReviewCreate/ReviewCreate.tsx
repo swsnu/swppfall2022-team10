@@ -1,22 +1,19 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
+/* eslint-disable @typescript-eslint/no-misused-promises */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import Layout from "../../Layout/Layout";
 
-import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Navigate, useNavigate } from "react-router-dom";
-import { AppDispatch } from "../../../store";
-import { createReview } from "../../../store/slices/review";
-import { selectUser } from "../../../store/slices/user";
+import { useState} from "react";
+import { useNavigate } from "react-router-dom";
 import { MdArrowBack } from "react-icons/md";
 
 import "./ReviewCreate.scss";
 
 export default function ReviewCreate() {
-	const [title, setTitle] = useState<string>("");
-	const [content, setContent] = useState<string>("");
+	const [title] = useState<string>("");
+	const [content] = useState<string>("");
 	const [file, setFile] = useState<{}>({ selectedFiles: null })
 
-	const dispatch = useDispatch<AppDispatch>();
-	const userState = useSelector(selectUser);
 	const navigate = useNavigate();
 
 	// useEffect(() => {
