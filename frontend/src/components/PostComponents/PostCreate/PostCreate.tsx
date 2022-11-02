@@ -16,12 +16,21 @@ import './PostCreate.scss'
 export default function PostCreate() {
 	const [title, setTitle] = useState<string>('')
 	const [content, setContent] = useState<string>('')
+	const [file, setFile] = useState<{}>({ selectedFiles: null })
 
 	const navigate = useNavigate()
 
 	// useEffect(() => {
 	// 	if (!userState.currentUser) navigate("/login");
 	// }, [userState.currentUser, navigate]);
+
+	const fileChangedHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+		const files = event.target.files
+		console.log(files)
+		setFile({
+			selectedFiles: files
+		})
+	}
 
 	const createPostHandler = async (
 		event: React.FormEvent<HTMLFormElement>
@@ -163,6 +172,17 @@ export default function PostCreate() {
 								<textarea
 									id='post-content-input'
 									name='content'
+								/>
+							</div>
+							<div className='input-container'>
+								<label htmlFor='post-age-input'>사진:</label>
+								<input
+									id='post-photo-input'
+									type='file'
+									multiple
+									name='photo'
+									accept='image/*'
+									onChange={fileChangedHandler}
 								/>
 							</div>
 							<button

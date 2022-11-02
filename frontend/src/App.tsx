@@ -1,10 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import './App.css'
 import Login from './components/Login/Login'
 import PostList from './components/PostComponents/PostList/PostList'
 import PostDetail from './components/PostComponents/PostDetail/PostDetail'
 import PostCreate from './components/PostComponents/PostCreate/PostCreate'
 import ReviewList from './components/ReviewComponents/ReviewList/ReviewList'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import ReviewCreate from './components/ReviewComponents/ReviewCreate/ReviewCreate'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 
 function App() {
 	return (
@@ -28,6 +30,7 @@ function App() {
 						path="/review/:id"
 						element={<ReviewDetail is_author={false} />}
 					/> */}
+					<Route path='/reviews/create' element={<ReviewCreate />} />
 					<Route path='*' element={<h1>Not Found</h1>} />
 				</Routes>
 			</BrowserRouter>
