@@ -4,13 +4,13 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate, useNavigate } from "react-router-dom";
 import { AppDispatch } from "../../../store";
-import { createPost } from "../../../store/slices/post";
+import { createReview } from "../../../store/slices/review";
 import { selectUser } from "../../../store/slices/user";
 import { MdArrowBack } from "react-icons/md";
 
-import "./PostCreate.scss";
+import "./ReviewCreate.scss";
 
-export default function PostCreate() {
+export default function ReviewCreate() {
 	const [title, setTitle] = useState<string>("");
 	const [content, setContent] = useState<string>("");
 	const [file, setFile] = useState<{}>({ selectedFiles: null })
@@ -23,7 +23,7 @@ export default function PostCreate() {
 	// 	if (!userState.currentUser) navigate("/login");
 	// }, [userState.currentUser, navigate]);
 
-    const fileChangedHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+	const fileChangedHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         const files = event.target.files;
         console.log(files);
         setFile({
@@ -31,7 +31,7 @@ export default function PostCreate() {
         });
     };
 
-	const createPostHandler = async (
+	const createReviewHandler = async (
 		event: React.FormEvent<HTMLFormElement>
 	) => {
 		event.preventDefault();
@@ -63,23 +63,23 @@ export default function PostCreate() {
 	return (
 		<Layout>
 			<div className="CreateContainer">
-				<div className="PostCreate">
+				<div className="ReviewCreate">
 					<button
 						id="back-create-post-button"
 						onClick={(event) => {
 							event.preventDefault();
-							navigate("/");
+							navigate("/review");
 						}}
 					>
 						<MdArrowBack />
 					</button>
 					<div>
 						<div className="create-header">
-							<h1>입양게시글 올리기</h1>
+							<h1>입양후기 올리기</h1>
 						</div>
 						<form
 							className="create-post-container"
-							onSubmit={createPostHandler}
+							onSubmit={createReviewHandler}
 						>
 							<div className="input-container">
 								<label htmlFor="post-title-input">제목:</label>
@@ -89,83 +89,9 @@ export default function PostCreate() {
 									name="title"
 								/>
 							</div>
-							<div className="input-container">
-								<label htmlFor="post-name-input">이름:</label>
-								<input
-									id="post-name-input"
-									type="text"
-									name="name"
-								/>
-							</div>
-							<div className="input-container">
-								<label htmlFor="post-species-input">종:</label>
-								<input
-									id="post-species-input"
-									type="text"
-									name="species"
-								/>
-							</div>
-							<div className="input-container">
-								<label htmlFor="post-age-input">나이:</label>
-								<input
-									id="post-age-input"
-									type="text"
-									name="age"
-								/>
-							</div>
-							<div className="input-container">
-								<label htmlFor="post-gender-input">성별:</label>
-								<div id="post-gender-input">
-									<div className="radio-input">
-										<input
-											type="radio"
-											id="gender-female"
-											name="gender"
-											value="female"
-											checked
-										/>
-										<label htmlFor="female">암컷</label>
-									</div>
-									<div className="radio-input">
-										<input
-											type="radio"
-											id="gender-male"
-											name="gender"
-											value="male"
-										/>
-										<label htmlFor="male">수컷</label>
-									</div>
-								</div>
-							</div>
-							<div className="input-container">
-								<label htmlFor="post-neutering-input">
-									중성화 여부:
-								</label>
-								<div id="post-neutering-input">
-									<div className="radio-input">
-										<input
-											type="radio"
-											id="neutering-done"
-											name="neutering"
-											value="done"
-											checked
-										/>
-										<label htmlFor="done">O</label>
-									</div>
-									<div className="radio-input">
-										<input
-											type="radio"
-											id="neutering-undone"
-											name="neutering"
-											value="undone"
-										/>
-										<label htmlFor="undone">X</label>
-									</div>
-								</div>
-							</div>
 							<div className="content-container">
 								<label htmlFor="post-content-input">
-									동물에 대해 추가로 알려주세요! 자세한 설명은
+									입양 후기를 알려주세요! 자세한 후기는
 									입양에 도움이 됩니다:&#41;
 								</label>
 								<textarea
@@ -173,10 +99,10 @@ export default function PostCreate() {
 									name="content"
 								/>
 							</div>
-							<div className="input-container">
+							<div className="photo-container">
 								<label htmlFor="post-age-input">사진:</label>
 								<input
-									id="post-photo-input"
+									id="review-photo-input"
 									type="file" multiple
 									name="photo"
 									accept = 'image/*'
