@@ -1,27 +1,30 @@
-import { useSelector } from "react-redux";
-import Header from "../Header/Header";
-import Footer from "../Footer/Footer";
-import { selectUser } from "../../store/slices/user";
-import { ReactNode } from "react";
-import React from "react";
+import { useSelector } from 'react-redux'
+import Header from '../Header/Header'
+import Footer from '../Footer/Footer'
+import { selectUser } from '../../store/slices/user'
+import { ReactNode } from 'react'
 
-import "./Layout.scss";
+import './Layout.scss'
 
 interface IProps {
-	children: ReactNode;
+	children: ReactNode
 }
 
 export default function Layout({ children }: IProps) {
-	const userState = useSelector(selectUser);
+	const userState = useSelector(selectUser)
 	return (
-		<div className="Layout">
+		<div className='Layout'>
 			<Header
-				userId={userState.currentUser ? userState.currentUser.id : 0}
+				userId={
+					userState.currentUser != null ? userState.currentUser.id : 0
+				}
 			/>
 			<main>{children}</main>
 			<Footer
-				userId={userState.currentUser ? userState.currentUser.id : 0}
+				userId={
+					userState.currentUser != null ? userState.currentUser.id : 0
+				}
 			/>
 		</div>
-	);
+	)
 }
