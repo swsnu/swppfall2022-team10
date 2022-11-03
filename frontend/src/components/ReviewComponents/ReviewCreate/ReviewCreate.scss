@@ -4,10 +4,10 @@
 	margin: 0 50px;
 	display: flex;
 	flex-direction: column;
-	font-family: 'Pretendard-Regular';
+	font-family: "Pretendard-Regular";
 }
 
-.PostCreate {
+.ReviewCreate {
 	padding: 10px 20px 20px 20px;
 	position: relative;
 	margin-top: 20px;
@@ -80,22 +80,28 @@
 				height: 400px;
 			}
 		}
+		.photo-container {
+			display: flex;
+			flex-direction: row;
+			align-self: flex-start;
+			padding: 0 20px;
+			label {
+				width: 300px;
+				text-align: left;
+			}
+			margin-bottom: 15px;
+		}
 
-		input,
 		textarea {
 			border: 2.5px solid;
 			border-radius: 18px;
 			border-color: #d4b886;
 		}
-
-		#post-gender-input,
-		#post-neutering-input {
-			display: flex;
-			flex-direction: row;
-			.radio-input label {
-				width: 150px;
-				padding-left: 20px;
-			}
+		#post-title-input{
+		    border: 2.5px solid;
+			border-radius: 18px;
+			border-color: #d4b886;
 		}
+
 	}
 }

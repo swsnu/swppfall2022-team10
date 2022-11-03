@@ -1,77 +1,73 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import { MdPhone, MdOutlineEmail, MdHomeFilled } from "react-icons/md";
+import { MdPhone, MdOutlineEmail, MdHomeFilled } from 'react-icons/md'
 import {
 	MDBFooter,
 	MDBContainer,
 	MDBRow,
 	MDBCol,
-	MDBIcon,
-} from "mdb-react-ui-kit";
+	MDBIcon
+} from 'mdb-react-ui-kit'
 
-import "./Footer.scss";
+import './Footer.scss'
 
 export interface IProps {
-	userId: number;
+	userId: number
 }
 
-export default function Footer(props: IProps) {
-	const navigate = useNavigate();
-
+export default function Footer() {
 	return (
 		<MDBFooter
-			bgColor="light"
-			className="text-center text-lg-start text-muted"
+			bgColor='light'
+			className='text-center text-lg-start text-muted'
 		>
-			<section className="footer">
-				<MDBContainer className="text-center text-md-start mt-5">
-					<MDBRow className="mt-3">
-						<MDBCol md="3" lg="4" xl="3" className="mx-auto mb-4">
-							<h4 className="text-uppercase fw-bold mb-4">
-								<MDBIcon icon="gem" className="me-3" />
+			<section className='footer'>
+				<MDBContainer className='text-center text-md-start mt-5'>
+					<MDBRow className='mt-3'>
+						<MDBCol md='3' lg='4' xl='3' className='mx-auto mb-4'>
+							<h4 className='text-uppercase fw-bold mb-4'>
+								<MDBIcon icon='gem' className='me-3' />
 								Be A Family
 							</h4>
 						</MDBCol>
 
-						<MDBCol md="2" lg="2" xl="2" className="mx-auto mb-4">
-							<h6 className="text-uppercase fw-bold mb-4">
+						<MDBCol md='2' lg='2' xl='2' className='mx-auto mb-4'>
+							<h6 className='text-uppercase fw-bold mb-4'>
 								Products
 							</h6>
 							<p>
-								<a href="#!" className="text-reset">
+								<a href='#!' className='text-reset'>
 									이용약관
 								</a>
 							</p>
 							<p>
-								<a href="#!" className="text-reset">
+								<a href='#!' className='text-reset'>
 									개인정보처리방침
 								</a>
 							</p>
 						</MDBCol>
 
-						<MDBCol md="3" lg="2" xl="2" className="mx-auto mb-4">
-							<h6 className="text-uppercase fw-bold mb-4">
+						<MDBCol md='3' lg='2' xl='2' className='mx-auto mb-4'>
+							<h6 className='text-uppercase fw-bold mb-4'>
 								Useful links
 							</h6>
 							<p>
-								<a href="#!" className="text-reset">
+								<a href='#!' className='text-reset'>
 									About Us
 								</a>
 							</p>
 							<p>
-								<a href="#!" className="text-reset">
+								<a href='#!' className='text-reset'>
 									Help
 								</a>
 							</p>
 						</MDBCol>
 
 						<MDBCol
-							md="4"
-							lg="3"
-							xl="3"
-							className="mx-auto mb-md-0 mb-4"
+							md='4'
+							lg='3'
+							xl='3'
+							className='mx-auto mb-md-0 mb-4'
 						>
-							<h6 className="text-uppercase fw-bold mb-4">
+							<h6 className='text-uppercase fw-bold mb-4'>
 								Contact
 							</h6>
 							<p>
@@ -91,5 +87,5 @@ export default function Footer(props: IProps) {
 				</MDBContainer>
 			</section>
 		</MDBFooter>
-	);
+	)
 }
