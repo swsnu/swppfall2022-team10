@@ -22,16 +22,16 @@ export interface postType {
 
 export interface postCreateType {
 	author_id: number
+  title: string
 	name: string
+  animal_type: string
+	species: string
+  age: number
+	gender: boolean
 	vaccination: boolean
 	neutering: boolean
-	title: string
-	animal_type: string
-	photo_path: string[]
-	species: string
-	age: number
-	gender: boolean
 	character: string
+	photo_path: string[]
 }
 
 export interface postState {

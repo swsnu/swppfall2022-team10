@@ -130,6 +130,7 @@ export default function PostCreate() {
 							<div className='input-container'>
 								<label htmlFor='post-type-input'>동물:</label>
 								<DropdownList
+
                                     // ref={animalType}
 									defaultValue=""
 									id='post-type-input'
