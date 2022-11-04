@@ -9,10 +9,6 @@ import {
 
 import './Footer.scss'
 
-export interface IProps {
-	userId: number
-}
-
 export default function Footer() {
 	return (
 		<MDBFooter

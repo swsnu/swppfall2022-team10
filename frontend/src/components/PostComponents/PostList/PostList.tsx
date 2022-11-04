@@ -32,7 +32,6 @@ export default function PostList() {
 						<Form.Control
 							type='search'
 							placeholder='종        |         보호기간        |        나이/성별'
-							onfocus="this.placeholder=''"
 							className='me-2'
 							id='search-input'
 							aria-label='Search'

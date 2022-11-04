@@ -1,10 +1,3 @@
-// @use "react-widgets/scss/styles.scss" with (
-// 	$components: ('DropdownList'),
-// 	$border: 2.5px solid,
-// 	$border-radius: 18px !default,
-// 	$border-color: #d4b886,
-// );
-
 .CreateContainer {
 	padding-top: 10px;
 	padding-bottom: 50px;
@@ -22,7 +15,7 @@
 	display: flex;
 	flex-direction: column;
 
-	button {
+	#back-create-post-button, #confirm-create-post-button {
 		width: fit-content;
 		padding: 10px 15px;
 		margin: 3px;
@@ -75,7 +68,7 @@
 			label {
 				text-align: left;
 			}
-			.post-input, .post-dropbox {
+			.post-input, .post-dropbox, .post-combobox {
 				width: 350px;
 			}
 			margin-bottom: 15px;
@@ -98,6 +91,9 @@
 			border-radius: 18px;
 			border-color: #d4b886;
 			text-align: center;
+			.rw-combobox-input {
+				text-align: center;
+			}
 			box-shadow: none;
 		}
 

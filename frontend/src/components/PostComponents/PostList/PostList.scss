@@ -21,6 +21,10 @@
 	padding-bottom: 48px;
 	overflow-y: auto;
 
+	.search-bar #search-input:focus::placeholder {
+		color: transparent;
+	}
+
 	.posts {
 		display: flex;
 		flex-direction: row;

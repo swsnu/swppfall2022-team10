@@ -20,11 +20,7 @@ export default function Layout({ children }: IProps) {
 				}
 			/>
 			<main>{children}</main>
-			<Footer
-				userId={
-					userState.currentUser != null ? userState.currentUser.id : 0
-				}
-			/>
+			<Footer />
 		</div>
 	)
 }
