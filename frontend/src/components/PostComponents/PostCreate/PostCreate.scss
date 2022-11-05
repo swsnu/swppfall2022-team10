@@ -1,0 +1,114 @@
+.CreateContainer {
+	padding-top: 10px;
+	padding-bottom: 50px;
+	margin: 0 50px;
+	display: flex;
+	flex-direction: column;
+	font-family: 'Pretendard-Regular', sans-serif;
+}
+
+.PostCreate {
+	padding: 10px 20px 20px 20px;
+	position: relative;
+	margin-top: 20px;
+	margin-bottom: 32px;
+	display: flex;
+	flex-direction: column;
+
+	#back-create-post-button, #confirm-create-post-button {
+		width: fit-content;
+		padding: 10px 15px;
+		margin: 3px;
+		background-color: #211f1e;
+		color: whitesmoke;
+		border: none;
+		border-radius: 15px;
+		box-shadow: 0 5px 10px rgb(0 0 0 / 20%);
+		transition: 0.25s;
+		font-size: 20px;
+
+		&:hover {
+			letter-spacing: 1px;
+			transform: scale(1.1);
+			cursor: pointer;
+		}
+
+		&:active {
+			transform: scale(1.2);
+		}
+	}
+
+	#back-create-post-button {
+		align-self: flex-start;
+	}
+	.create-header {
+		padding: 20px 32px 10px 32px;
+		text-align: left;
+		border-bottom: 2px solid #e9ecef;
+	}
+	#confirm-create-post-button {
+		align-self: flex-end;
+	}
+
+	.create-post-container {
+		display: flex;
+		flex-direction: column;
+		justify-content: left;
+		padding: 50px;
+		font-size: 23px;
+		line-height: 40px;
+
+		.input-container {
+			display: flex;
+			flex-direction: row;
+			align-self: flex-start;
+			padding: 0 20px;
+			width: 650px;
+			justify-content: space-between;
+			label {
+				text-align: left;
+			}
+			.post-input, .post-dropbox, .post-combobox {
+				width: 350px;
+			}
+			margin-bottom: 15px;
+		}
+
+		.content-container {
+			display: flex;
+			flex-direction: column;
+			text-align: left;
+			padding: 0 20px;
+			#post-content-input {
+				border-radius: 50px;
+				margin: 10px 100px 30px 100px;
+				height: 400px;
+			}
+		}
+
+		.post-input, .rw-widget-container {
+			border: 2.5px solid;
+			border-radius: 18px;
+			border-color: #d4b886;
+			text-align: center;
+			.rw-combobox-input {
+				text-align: center;
+			}
+			box-shadow: none;
+		}
+
+		#post-gender-input,
+		#post-neutering-input {
+			display: flex;
+			flex-direction: row;
+			.radio-input label {
+				width: 150px;
+				padding-left: 20px;
+			}
+		}
+
+		#post-species-input {
+			all: unset;
+		}
+	}
+}

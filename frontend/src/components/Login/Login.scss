@@ -1,31 +1,33 @@
 .Login {
-	width: 512px;
-	height: 300px;
+	width: 1000px;
+	height: 500px;
 
-	position: relative; /* 추후 박스 하단에 추가 버튼을 위치시키기 위한 설정 */
-	border-radius: 16px;
-	box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.02);
+	position: relative;
+	border-radius: 5px;
 
-	margin: auto; /* 페이지 중앙에 나타나도록 설정 */
-
-	margin-top: 96px;
-	margin-bottom: 32px;
+	margin: auto;
+	margin-top: 100px;
+	margin-bottom: 200px;
 	display: flex;
 	flex-direction: column;
-	background: whitesmoke;
+
+	border: 2px solid rgb(181, 177, 173);
+	padding: 60px;
 
 	.login-header {
 		padding: 20px 0px;
-		margin: 0px 32px;
-		border-bottom: 2px solid #dadde0;
+		border-bottom: 2px solid rgb(181, 177, 173);
+		h1 {
+			font-weight: 600;
+		}
 	}
 	.login-form {
 		display: flex;
 		flex-direction: row;
 		justify-content: space-between;
-		width: 400px;
+		width: 600px;
 		height: auto;
-		padding: 50px 20px;
+		padding: 60px 20px;
 		margin: 0 auto;
 	}
 	.login-input {
@@ -34,18 +36,22 @@
 		padding: 5px 20px 5px 10px;
 		width: 100%;
 		font-size: 18px;
-	}
-	#email-input {
-		margin-bottom: 10px;
-		line-height: 20px;
-	}
-	#pw-input {
-		line-height: 20px;
+		#email-input {
+			margin-bottom: 10px;
+			line-height: 30px;
+			text-align: center;
+		}
+		#pw-input {
+			margin-top: 10px;
+			line-height: 30px;
+			text-align: center;
+		}
 	}
 	button {
 		display: block;
 		box-sizing: border-box;
 		height: 100%;
+		width: 20%;
 		margin: 0 auto;
 		margin-left: 5px;
 		margin-right: 10px;
@@ -60,6 +66,15 @@
 		&:hover {
 			background-color: rgb(61 58 55);
 			cursor: pointer;
+		}
+	}
+	#login-signup {
+		a {
+			all: unset;
+			font-weight: bold;
+			&:hover {
+				cursor: pointer;
+			}
 		}
 	}
 }

@@ -4,23 +4,16 @@
 	margin: 0 50px;
 	display: flex;
 	flex-direction: column;
-	font-family: "Pretendard-Regular";
+	font-family: 'Pretendard-Regular';
 }
 
 .PostDetail {
 	padding: 10px 20px 20px 20px;
-	position: relative; /* 추후 박스 하단에 추가 버튼을 위치시키기 위한 설정 */
-
+	position: relative;
 	margin-top: 20px;
 	margin-bottom: 32px;
 	display: flex;
 	flex-direction: column;
-	.post-image {
-		height: 400px;
-		padding: 20px;
-		border-radius: 10px;
-		margin-bottom: 20px;
-	}
 
 	button {
 		width: fit-content;
@@ -48,37 +41,6 @@
 		align-self: flex-start;
 	}
 
-	.row {
-		display: flex;
-		padding: 0 20px;
-		height: fit-content;
-		text-align: center;
-	}
-
-	.post-header-container {
-		display: flex;
-		flex-direction: row;
-		justify-content: flex-start;
-	}
-
-	.post-title-container {
-		flex: 25%;
-		padding: 0 50px;
-		text-align: left;
-	}
-
-	.post-adoption-status {
-		width: fit-content;
-		height: fit-content;
-		font-size: 20px;
-		padding: 10px 15px;
-		margin: 3px;
-		background-color: #ffcd29;
-		color: black;
-		border: 2px;
-		border-color: #c99b04;
-		border-radius: 15px;
-	}
 	.post-content-container {
 		padding: 50px;
 	}
@@ -87,6 +49,7 @@
 		text-align: left;
 		font-size: 20px;
 		padding: 0 20px;
+		line-height: 45px;
 	}
 	.post-buttons {
 		display: flex;
