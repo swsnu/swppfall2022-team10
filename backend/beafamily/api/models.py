@@ -1,41 +1,97 @@
-import uuid
 from django.db import models
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
 
 # Create your models here.
 
-
 class Post(models.Model):
-    # post_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    post_id = models.IntegerField(primary_key=True, default=0)
-    user_id = models.IntegerField(default=0)  # TODO: ForeignKey User
-    post_date = models.DateField(auto_now=True)
-    post_time = models.TimeField(auto_now=True)
-    post_detail = models.FilePathField()  # path to post info json
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    datetime = models.DateTimeField(auto_now=True)
+    animal_type = models.CharField(max_length=10)
+    neutering = models.BooleanField()
+    vaccination = models.BooleanField()
+    age = models.IntegerField()
+    name = models.CharField(max_length=50)
+    gender = models.BooleanField()
+    species = models.CharField(max_length=30)
+    title = models.CharField(max_length=100)
+    is_active = models.BooleanField()
+    content = models.JSONField()  # photo and texts
+
+
+def post_serializer(post: Post):
+    photo_list = post.content["photo_list"]
+    photo_list = Image.objects.filter(id__in=photo_list)
+    photo_list = [p.image.url for p in photo_list]
+    response = {
+        "id": post.id,
+        "author_id": post.author.id,
+        "created_at": str(post.datetime),
+        "title": post.title,
+        "animal_type": post.animal_type,
+        "vaccination": post.vaccination,
+        "neutering": post.neutering,
+        "age": post.age,
+        "gender": post.gender,
+        "character": post.content["text"],
+        "photo_path": photo_list
+    }
+    return response
 
 
 class Application(models.Model):
-    # post_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    apply_id = models.IntegerField(primary_key=True, default=0)
-    user_id = models.IntegerField(default=0)  # TODO: ForeignKey User
-    apply_date = models.DateField(auto_now=True)
-    apply_time = models.TimeField(auto_now=True)
-    apply_detail = models.FilePathField()
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    datetime = models.DateTimeField(auto_now=True)
+    content = models.JSONField()
     acceptance = models.IntegerField(default=0)
 
 
 class Question(models.Model):
-    # question_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    question_id = models.IntegerField(primary_key=True, default=0)
-    user_id = models.IntegerField(default=0)  # TODO: ForeignKey User
-    question_date = models.DateField(auto_now=True)
-    question_time = models.TimeField(auto_now=True)
-    question_content = models.FilePathField()
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    datetime = models.DateTimeField(auto_now=True)
+    content = models.JSONField()
 
 
 class Review(models.Model):
-    # review_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    review_id = models.IntegerField(primary_key=True, default=0)
-    user_id = models.IntegerField(default=0)  # TODO: ForeignKey User
-    review_date = models.DateField()
-    review_time = models.DateTimeField()
-    review_content = models.FilePathField()
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    datetime = models.DateTimeField(auto_now=True)
+    title = models.CharField(max_length=100)
+    content = models.JSONField()
+
+
+def review_serializer(review: Review):
+    photo_list = review.content["photo_list"]
+    photo_list = Image.objects.filter(id__in=photo_list)
+    photo_list = [p.image.url for p in photo_list]
+
+    response = {
+        "author_id": review.author.id,
+        "id": review.id,
+        "title": review.title,
+        "photo_path": photo_list,
+        "character": review.content['text']
+    }
+    return response
+
+
+class Comment(models.Model):
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    datetime = models.DateTimeField(auto_now=True)
+    content = models.CharField(max_length=500)
+
+
+def image_upload_to(instance, filename):
+    # such as post/1/cat2.jpg
+    return f'{instance.category}/{instance.number}/{filename}'
+
+
+class Image(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    category = models.CharField(max_length=20)
+    number = models.IntegerField()
+    image = models.ImageField(upload_to=image_upload_to)
+    datetime = models.DateTimeField(auto_now=True)

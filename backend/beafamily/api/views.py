@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.db import models
-from .models import Post
+from .models import *
 from django.http.response import (
     HttpResponseBadRequest,
     JsonResponse,
@@ -29,20 +29,13 @@ import json
 #   },
 
 
+
 def getPost(request, pid=0):
     if request.method == "GET":
         try:
-            # print(pid)
-            post = Post.objects.get(post_id=pid)
-            file_path = post.post_detail
-            with open(f"{file_path}/info.json", "r", encoding='UTF-8') as f:
-                info = json.loads(f.read())
-                info_response = {
-                    "id": post.post_id,
-                    "author_id": post.user_id,
-                    "created_at": str(post.post_date),
-                    **info,
-                }
+            post = Post.objects.get(id=pid)
+            info_response = post_serializer(post)
+
             return JsonResponse(info_response, safe=False)
 
         except:
@@ -55,21 +48,43 @@ def getPostList(request):
     if request.method == "GET":
         post_list = Post.objects.all()
         response_list = []
-        # print(len(list(post_list.iterator())))
         for post in post_list.iterator():
-            file_path = post.post_detail
-            with open(f"{file_path}/info.json", "r", encoding='UTF-8') as f:
-                info = json.loads(f.read())
-                info_response = {
-                    "id": post.post_id,
-                    "author_id": post.user_id,
-                    "created_at": str(post.post_date),
-                    **info,
-                }
-                response_list.append(info_response)
+            response = post_serializer(post)
+            response_list.append(response)
 
-        # response_json = json.dumps(response_list)
         return JsonResponse(response_list, safe=False)
+
+    else:
+        return HttpResponseBadRequest()
+
+def getReviewList(request):
+
+    if request.method == "GET":
+
+        response_list = []
+        review_list = Review.objects.all()
+        for review in review_list.iterator():
+            response = review_serializer(review)
+            response_list.append(response)
+
+        return JsonResponse(response_list, safe=False)
+
+    else:
+        return HttpResponseBadRequest()
+
+
+def getReview(request, rid: int):
+    if request.method == "GET":
+
+        try:
+            review = Review.objects.get(id=rid)
+            response = review_serializer(review)
+            return JsonResponse(response)
+
+
+        except:
+            return HttpResponseNotFound()
+
 
     else:
         return HttpResponseBadRequest()
