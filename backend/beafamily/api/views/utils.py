@@ -11,3 +11,4 @@ class HttpStatus(enum.IntEnum):
     CREATED = 201
     ACCEPTED = 202
     NO_CONTENT = 204
+    INTERNAL_SERVER_ERROR=500

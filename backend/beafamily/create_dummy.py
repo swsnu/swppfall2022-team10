@@ -35,7 +35,7 @@ def get_model_name(model_id):
 
 def create_image(path, user, category='post', number=1):
 
-    img = Image(
+    img = Photo(
         user=user,
         category=category,
         number=number,
@@ -135,7 +135,7 @@ if __name__ == '__main__':
     n_review = len(Review.objects.all())
     n_application = len(Application.objects.all())
     n_question = len(Question.objects.all())
-    n_image = len(Image.objects.all())
+    n_image = len(Photo.objects.all())
     n_user = len(User.objects.all())
 
 

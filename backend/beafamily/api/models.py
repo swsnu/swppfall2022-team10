@@ -23,7 +23,7 @@ class Post(models.Model):
 
 def post_serializer(post: Post):
     photo_list = post.content["photo_list"]
-    photo_list = Image.objects.filter(id__in=photo_list)
+    photo_list = Photo.objects.filter(id__in=photo_list)
     photo_list = [p.image.url for p in photo_list]
     response = {
         "id": post.id,
@@ -64,7 +64,7 @@ class Review(models.Model):
 
 def review_serializer(review: Review):
     photo_list = review.content["photo_list"]
-    photo_list = Image.objects.filter(id__in=photo_list)
+    photo_list = Photo.objects.filter(id__in=photo_list)
     photo_list = [p.image.url for p in photo_list]
 
     response = {
@@ -89,7 +89,7 @@ def image_upload_to(instance, filename):
     return f'{instance.category}/{instance.number}/{filename}'
 
 
-class Image(models.Model):
+class Photo(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     category = models.CharField(max_length=20)
     number = models.IntegerField()
