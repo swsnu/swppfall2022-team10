@@ -1,4 +1,11 @@
 from django.urls import path
 from . import views
 
-urlpatterns = [path("", views.getPostList), path("<int:pid>/", views.getPost)]
+urlpatterns = [
+    path("posts/", views.posts),
+    path("posts/<int:pid>/", views.post_id),
+    path("reviews/", views.reviews),
+    path("reviews/<int:rid>/", views.review_id),
+    path("signin/", views.signin),
+    path("signout/", views.signout)
+]
