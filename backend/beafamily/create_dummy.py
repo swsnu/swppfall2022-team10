@@ -71,7 +71,7 @@ def create(a, b, model_id):
             shutil.copytree(BASE_DIR / f'dummy/{model_name}/{animal_type}_dummy', DATA_DIR / f'{model_name}/{i}')
 
         info_filename = DATA_DIR / f'{model_name}/{i}/info.json'
-        with open(info_filename, "r") as f:
+        with open(info_filename, "r", encoding='UTF-8') as f:
             j = json.loads(f.read())
 
         if model_id == 'p':
