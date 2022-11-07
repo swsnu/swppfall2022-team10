@@ -51,4 +51,12 @@
 			transform: scale(1.2);
 		}
 	}
+	.review-container {
+		border-radius: 5px;
+		border-width: 2px;
+		border-color: black;
+		all: unset;
+		flex: 1;
+		cursor: pointer;
+	}
 }
