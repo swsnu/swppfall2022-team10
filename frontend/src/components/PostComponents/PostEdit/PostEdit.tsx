@@ -31,7 +31,7 @@ export default function PostCreate() {
 	const [gender, setGender] = useState<string>('')
 	const [vaccination, setVaccination] = useState<string>('')
 	const [neutering, setNeutering] = useState<string>('')
-	const [character, setCharacter] = useState<string>('')
+	const [content, setContent] = useState<string>('')
 	const [file, setFile] = useState<{}>({ selectedFiles: null })
 
 	const navigate = useNavigate()
@@ -52,7 +52,7 @@ export default function PostCreate() {
 			setGender(currentPost.gender ? '수컷' : '암컷');
 			setVaccination(currentPost.vaccination ? 'O' : 'X');
 			setNeutering(currentPost.neutering ? 'O' : 'X');
-			setCharacter(currentPost.character);
+			setContent(currentPost.content);
 			setFile(currentPost.photo_path);
 		}
 	}, [id]);
@@ -79,7 +79,7 @@ export default function PostCreate() {
 			gender: gender === '수컷' ? true : false,
 			neutering: neutering === 'O' ? true : false,
 			vaccination: vaccination === 'O' ? true : false,
-			character: character,
+			content: content,
 			photo_path: [],
 			author_id: 0,
 		};
@@ -219,8 +219,8 @@ export default function PostCreate() {
 									className='post-input'
 									id='post-content-input'
 									name='content'
-									onChange={event => setCharacter(event.target.value)}
-									value={character}
+									onChange={event => setContent(event.target.value)}
+									value={content}
 								/>
 							</div>
 							<div className='input-container'>

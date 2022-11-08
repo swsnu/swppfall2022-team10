@@ -18,7 +18,7 @@ export interface postType {
 	species: string
 	age: number
 	gender: boolean
-	character: string
+	content: string
 	created_at: string
 	is_active: boolean
 }
@@ -33,7 +33,7 @@ export interface postCreateType {
 	gender: boolean
 	vaccination: boolean
 	neutering: boolean
-	character: string
+	content: string
 	// photo_path: string[]
 }
 
@@ -97,7 +97,7 @@ export const editPost = createAsyncThunk(
 				photo_path: post.photo_path,
 				age: post.age,
 				gender: post.gender,
-				character: post.character
+				content: post.content
 			})
 		)
 		return response.data
@@ -121,7 +121,7 @@ export const postSlice = createSlice({
 				photo_path: string[]
 				age: number
 				gender: boolean
-				character: string
+				content: string
 			}>
 		) => {
 			const post = state.posts.find(
@@ -137,7 +137,7 @@ export const postSlice = createSlice({
 				post.photo_path = action.payload.photo_path
 				post.age = action.payload.age
 				post.gender = action.payload.gender
-				post.character = action.payload.character
+				post.content = action.payload.content
 			}
 		},
 		deletePost: (state, action: PayloadAction<{ targetId: number }>) => {
@@ -161,7 +161,7 @@ export const postSlice = createSlice({
 				photo_path: string[]
 				age: number
 				gender: boolean
-				character: string
+				content: string
 			}>
 		) => {
 			const newPost = {
@@ -177,7 +177,7 @@ export const postSlice = createSlice({
 				photo_path: action.payload.photo_path,
 				age: action.payload.age,
 				gender: action.payload.gender,
-				character: action.payload.character,
+				content: action.payload.content,
 				created_at: '',
 				is_active: true
 			}

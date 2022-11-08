@@ -67,7 +67,7 @@ const PostDetail = (props: IProps) => {
 							{postState.selectedPost?.name}에 대해 알려드려요 <br />
 						</div>
 						<div className='det2'>
-							{postState.selectedPost?.character
+							{postState.selectedPost?.content
 								.split('\n')
 								.map((line) => {
 									return (
