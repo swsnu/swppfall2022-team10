@@ -6,10 +6,10 @@ import { useEffect } from 'react'
 import Post from '../Post/Post'
 import { getPosts, postType, selectPost } from '../../../store/slices/post'
 import { AppDispatch } from '../../../store'
-import { MdFilterList, MdOutlineAddBox, MdSearch } from 'react-icons/md'
+import { MdOutlineAddBox, MdSearch } from 'react-icons/md'
+
 
 import Button from 'react-bootstrap/Button'
-import Form from 'react-bootstrap/Form'
 
 import './PostList.scss'
 
@@ -28,21 +28,31 @@ export default function PostList() {
 		<Layout>
 			<div className='ListContainer'>
 				<div className='PostList'>
-					<Form className='d-flex search-bar'>
-						<Form.Control
-							type='search'
-							placeholder='종        |         보호기간        |        나이/성별'
-							className='me-2'
-							id='search-input'
-							aria-label='Search'
-						/>
-						<Button id='search-button' variant='outline-success'>
-							<MdSearch size={50} />
-						</Button>
-					</Form>
-					<button id='list-filter-button'>
-						<MdFilterList size='25' />
-					</button>
+
+					<div className="user-input-container">
+						<div className="category animal-container">
+							<div className="title">종</div>
+							<input className="type-space" placeholder="종" />
+						</div>
+						<div className="category date-container">
+							<div className="title">보호 기간</div>
+							<input className="type-space" placeholder="보호 기간" />
+						</div>
+						<div className="category age-container">
+							<div className="title">나이</div>
+							<input className="type-space" placeholder="나이" />
+						</div>
+						<div className="category sex-container">
+							<div className="title">성별</div>
+							<input className="type-space" placeholder="성별" />
+						</div>
+						<div className="search-button">
+							<Button id='search-button' variant='outline-success'>
+								<MdSearch size={20} />
+							</Button>
+						</div>
+					</div>
+
 					<div className='posts'>
 						{postState.posts.map((post: postType) => {
 							return (
