@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom'
 import { AppDispatch } from '../../../store'
 import { selectPost, getPost, deletePost } from '../../../store/slices/post'
 import { selectUser, getUser } from '../../../store/slices/user'
-import { IoList } from 'react-icons/io5'
+import { FaSyringe, FaRegMeh } from 'react-icons/fa'
 import PostHeader from '../PostHeader/PostHeader'
 
 import './PostDetail.scss'
@@ -37,73 +37,71 @@ const PostDetail = (props: IProps) => {
 		<Layout>
 			<div className='DetailContainer'>
 				<div className='PostDetail'>
-					<button
-						id='back-detail-post-button'
-						onClick={() => navigate('/')}
-					>
-						<IoList />
-						{/* &nbsp; 목록 */}
-					</button>
 					<PostHeader is_author={props.is_author} />
 					<div className='post-content-container'>
-						<ul className='post-content'>
-							<li>이름: {postState.selectedPost?.name}</li>
-							<li>나이: {postState.selectedPost?.age}세</li>
-							<li>
-								성별:{' '}
-								{postState.selectedPost?.gender
-									? '암컷'
-									: '수컷'}
-							</li>
-							<li>품종: {postState.selectedPost?.species}</li>
-							<li>
-								백신접종여부:{' '}
-								{postState.selectedPost?.vaccination
-									? 'O'
-									: 'X'}
-							</li>
-							<li>
-								중성화여부:{' '}
-								{postState.selectedPost?.neutering ? 'O' : 'X'}
-							</li>
-							<br />
-							<li>
-								특징: <br />
-								{postState.selectedPost?.character
-									.split('\n')
-									.map((line) => {
-										return (
-											<span>
-												{line}
-												<br />
-											</span>
-										)
-									})}
-							</li>
-						</ul>
+						<div className='first-line'>
+							새로운 집을 찾고 있는, {postState.selectedPost?.name}
+						</div>
+						<div className='second-line'>
+							{postState.selectedPost?.age}세 {' '}
+							{postState.selectedPost?.gender
+								? '암컷'
+								: '수컷'} {' '}
+							{postState.selectedPost?.species}
+						</div>
+						<div className='injection'>
+							<FaSyringe /> {' '}
+							{postState.selectedPost?.vaccination
+								? '백신 접종 완료한 동물입니다.'
+								: '백신 접종을 하지 않았습니다.'}
+						</div>
+						<div className='neuter'>
+							<FaRegMeh /> {' '}
+							{postState.selectedPost?.neutering
+								? '중성화 완료한 동물입니다.'
+								: '중성화 하지 않은 동물입니다.'}
+						</div>
+
+						<br />
+						<div className='det1'>
+							{postState.selectedPost?.name}에 대해 알려드려요 <br />
+						</div>
+						<div className='det2'>
+							{postState.selectedPost?.character
+								.split('\n')
+								.map((line) => {
+									return (
+										<span>
+											{line}
+											<br />
+										</span>
+									)
+								})}
+						</div>
+
 					</div>
 					{postState.selectedPost?.author_id ===
 						userState.currentUser?.id && (
-						<div className='post-buttons'>
-							<button
-								id='edit-post-button'
-								onClick={() => {
-									navigate(`/post/${id}/edit`)
-								}}
-							>
-								수정
-							</button>
-							<button
-								id='delete-post-button'
-								onClick={() => {
-									dispatch(deletePost(Number(id)))
-									navigate('/')
-								}}
-							>
-								삭제
-							</button>
-						</div>
-					)}
+							<div className='post-buttons'>
+								<button
+									id='edit-post-button'
+									onClick={() => {
+										navigate(`/post/${id}/edit`)
+									}}
+								>
+									수정
+								</button>
+								<button
+									id='delete-post-button'
+									onClick={() => {
+										dispatch(deletePost(Number(id)))
+										navigate('/')
+									}}
+								>
+									삭제
+								</button>
+							</div>
+						)}
 				</div>
 			</div>
 		</Layout>
