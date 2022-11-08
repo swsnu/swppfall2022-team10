@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
+/* eslint-disable no-unneeded-ternary */
+/* eslint-disable object-shorthand */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -43,6 +46,7 @@ export default function ReviewCreate() {
 		formData.append('content', JSON.stringify(data))
 		file.forEach((f, i) => formData.append('photos', f))
 		dispatch(createReview(formData))
+		navigate("/review");
 	};
 
 	// if (!userState.currentUser) {
@@ -100,7 +104,7 @@ export default function ReviewCreate() {
 									/>
 								</div>
 							</div>
-							{file && file.map((singleFile: File)=> {
+							{file.map((singleFile: File)=> {
 							    return(
 							        <div id="filenameList" key = {singleFile.name}>{singleFile.name}</div>
 							    )
