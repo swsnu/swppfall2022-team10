@@ -112,7 +112,7 @@ def posts(request):
                 "neutering": content_dict["neutering"],
                 "vaccination": content_dict["vaccination"],
                 "content": {
-                    "text": content_dict["character"],
+                    "text": content_dict["content"],
                 }
             }
 

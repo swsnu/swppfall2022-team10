@@ -38,7 +38,7 @@ def post_serializer(post: Post):
         "neutering": post.neutering,
         "age": post.age,
         "gender": post.gender,
-        "character": post.content["text"],
+        "content": post.content["text"],
         "photo_path": photo_list
     }
     return response
@@ -76,7 +76,7 @@ def review_serializer(review: Review):
         "id": review.id,
         "title": review.title,
         "photo_path": photo_list,
-        "character": review.content['text']
+        "content": review.content['text']
     }
     return response
 
