@@ -5,8 +5,10 @@ import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch } from '../../store'
 import {
+	checkLogin,
 	getUsers,
 	loginUser,
+	logoutUser,
 	selectUser,
 	UserLoginType,
 	UserType
@@ -22,10 +24,17 @@ export default function LogIn() {
 	const dispatch = useDispatch<AppDispatch>()
 	const navigate = useNavigate()
 
+	// useEffect(() => {
+	// 	// eslint-disable-next-line @typescript-eslint/no-floating-promises
+	// 	dispatch(logoutUser(0))
+	// })
+
 	useEffect(() => {
 		// eslint-disable-next-line @typescript-eslint/no-floating-promises
-		dispatch(getUsers())
+		dispatch(checkLogin())
 	}, [])
+
+	if (userState.logged_in) navigate('/')
 
 	const logInHandler = async () => {
 		const userData: UserLoginType = {
@@ -33,9 +42,20 @@ export default function LogIn() {
 			password
 		}
 
-		await dispatch(loginUser(userData))
+		dispatch(loginUser(userData))
+			.unwrap()
+			.then((result) => {
+				navigate('/')
+				// else alert('ID or Password Wrong')
+			})
+			.catch((err) => {
+				console.log(err)
+				alert('ID or Password wrong')
+				setUserName('')
+				setPassword('')
+			})
 
-		if (userState.currentUser !== null) navigate('/')
+		// if (userState.currentUser !== null) navigate('/')
 
 		// const verifiedUser = userState.users.find((user: UserType) => {
 		// 	return user.email === username && user.password === password
@@ -50,52 +70,48 @@ export default function LogIn() {
 		// 	setPassword('')
 		// }
 	}
-	if (userState.currentUser != null) {
-		return <Navigate to='/posts' />
-	} else {
-		return (
-			<Layout>
-				<div className='Login'>
-					<div className='login-header'>
-						<h1>로그인</h1>
-					</div>
-					<form className='login-form'>
-						<div className='login-input'>
-							<input
-								id='email-input'
-								type='text'
-								placeholder='아이디'
-								value={username}
-								onChange={(event) =>
-									setUserName(event.target.value)
-								}
-							/>
-							<input
-								id='pw-input'
-								type='password'
-								placeholder='비밀번호'
-								value={password}
-								onChange={(event) =>
-									setPassword(event.target.value)
-								}
-							/>
-						</div>
-						<button
-							id='login-button'
-							onClick={(e) => {
-								e.preventDefault()
-								// eslint-disable-next-line @typescript-eslint/no-floating-promises
-								logInHandler()
-							}}
-						>
-							로그인
-						</button>
-					</form>
-					<span id='login-signup'>
-						계정이 없으신가요? <a href='/signup'>회원가입</a>하기
-					</span>
+	return (
+		<Layout>
+			<div className='Login'>
+				<div className='login-header'>
+					<h1>로그인</h1>
 				</div>
-			</Layout>
-		)
-	}
+				<form className='login-form'>
+					<div className='login-input'>
+						<input
+							id='email-input'
+							type='text'
+							placeholder='아이디'
+							value={username}
+							onChange={(event) =>
+								setUserName(event.target.value)
+							}
+						/>
+						<input
+							id='pw-input'
+							type='password'
+							placeholder='비밀번호'
+							value={password}
+							onChange={(event) =>
+								setPassword(event.target.value)
+							}
+						/>
+					</div>
+					<button
+						id='login-button'
+						onClick={(e) => {
+							e.preventDefault()
+							// eslint-disable-next-line @typescript-eslint/no-floating-promises
+							logInHandler()
+						}}
+					>
+						로그인
+					</button>
+				</form>
+				<span id='login-signup'>
+					계정이 없으신가요? <a href='/signup'>회원가입</a>하기
+				</span>
+			</div>
+		</Layout>
+	)
 }

@@ -146,7 +146,9 @@ def posts(request):
         except Exception as e:
             return HttpResponse(status=HttpStatus.INTERNAL_SERVER_ERROR)
 
-        return HttpResponse(status=HttpStatus.CREATED)
+        return HttpResponse(status=HttpStatus.CREATED, content=json.dumps({
+            "id": post.id
+        }), content_type='application/json')
 
     else:
         return HttpResponse(status=HttpStatus.NOT_ALLOWED)

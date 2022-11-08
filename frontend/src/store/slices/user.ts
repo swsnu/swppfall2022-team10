@@ -1,10 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { RootState } from '..'
-
-axios.defaults.xsrfCookieName = 'csrftoken'
-axios.defaults.xsrfHeaderName = 'X-CSRFToken'
-
 export interface UserType {
 	id: number
 	email: string
@@ -20,12 +16,22 @@ export interface UserLoginType {
 export interface UserState {
 	users: UserType[]
 	currentUser: UserType | null
+	logged_in: boolean
 }
 
 const initialState: UserState = {
 	users: [],
-	currentUser: null
+	currentUser: null,
+	logged_in: false
 }
+
+export const checkLogin = createAsyncThunk(
+	'user/checkLogin',
+	async (x, { dispatch }) => {
+		const response = await axios.get<{ logged_in: boolean }>('/api/check/')
+		return response.data
+	}
+)
 
 export const getUsers = createAsyncThunk('user/getUsers', async () => {
 	const response = await axios.get<UserType[]>(`/api/user/`)
@@ -59,7 +65,7 @@ export const getUser = createAsyncThunk(
 
 export const loginUser = createAsyncThunk(
 	'user/loginUser',
-	async (userData: UserLoginType, { dispatch }): Promise<boolean> => {
+	async (userData: UserLoginType, { dispatch }) => {
 		await axios.get(`/api/token/`) // get csrf token
 		const response = await axios.post(
 			`/api/signin/`,
@@ -68,11 +74,12 @@ export const loginUser = createAsyncThunk(
 				auth: {
 					username: userData.username,
 					password: userData.password
-				},
-				withCredentials: true
+				}
 			}
 		)
-		return response.status === 200
+		// console.log(response)
+		dispatch(userActions.loginUser({ targetId: 0 }))
+		return response.status
 		// if (response.status === 200) return true
 		// else return false
 		// const user = await axios.get(`/api/user/${id}/`)
@@ -86,9 +93,10 @@ export const logoutUser = createAsyncThunk(
 	async (id: UserType['id'], { dispatch }) => {
 		// const user = await axios.get(`/api/user/${id}/`)
 		// await axios.put(`/api/user/${id}/`, { ...user.data, logged_in: false })
+
 		const response = await axios.get(`/api/signout/`)
+		dispatch(userActions.logoutUser({ targetId: id }))
 		return response.status === 204
-		// dispatch(userActions.logoutUser({ targetId: id }))
 	}
 )
 
@@ -103,6 +111,7 @@ export const userSlice = createSlice({
 			if (user != null) {
 				user.logged_in = !user.logged_in
 				state.currentUser = user
+				state.logged_in = true
 			}
 		},
 		logoutUser: (state, action: PayloadAction<{ targetId: number }>) => {
@@ -115,6 +124,7 @@ export const userSlice = createSlice({
 				)
 				if (user != null) user.logged_in = !user.logged_in
 				state.currentUser = null
+				state.logged_in = false
 			}
 		}
 	},
@@ -123,6 +133,9 @@ export const userSlice = createSlice({
 		builder.addCase(getUsers.fulfilled, (state, action) => {
 			// Add user to the state array
 			state.users = action.payload
+		})
+		builder.addCase(checkLogin.fulfilled, (state, action) => {
+			state.logged_in = action.payload.logged_in
 		})
 	}
 })

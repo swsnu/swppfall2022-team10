@@ -2,13 +2,18 @@ import { configureStore } from '@reduxjs/toolkit'
 import userReducer from './slices/user'
 import postReducer from './slices/post'
 import reviewReducer from './slices/review'
+import axios from 'axios'
+
+axios.defaults.xsrfCookieName = 'csrftoken'
+axios.defaults.xsrfHeaderName = 'X-CSRFToken'
+axios.defaults.withCredentials = true
 
 export const store = configureStore({
 	reducer: {
 		user: userReducer,
 		post: postReducer,
-		review: reviewReducer,
-	},
+		review: reviewReducer
+	}
 })
 
 export type RootState = ReturnType<typeof store.getState>

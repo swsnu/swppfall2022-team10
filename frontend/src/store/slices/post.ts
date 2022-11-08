@@ -2,9 +2,6 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { RootState } from '..'
 
-axios.defaults.xsrfCookieName = 'csrftoken'
-axios.defaults.xsrfHeaderName = 'X-CSRFToken'
-
 export interface postType {
 	id: number
 	author_id: number
@@ -65,11 +62,7 @@ export const getPost = createAsyncThunk(
 export const createPost = createAsyncThunk(
 	'post/createPost',
 	async (post: FormData, { dispatch }) => {
-		// const signin = await axios.post('/api/signin/')
-		// console.log(signin.data)
-		const response = await axios.post('/api/posts/', post, {
-			withCredentials: true
-		})
+		const response = await axios.post('/api/posts/', post)
 		dispatch(postActions.addPost(response.data))
 		return response.data
 	}

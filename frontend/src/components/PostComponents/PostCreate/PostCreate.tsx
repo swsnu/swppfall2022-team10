@@ -102,6 +102,14 @@ export default function PostCreate() {
 		file.forEach((f, i) => formData.append('photos', f))
 
 		dispatch(createPost(formData))
+			.then((result) => {
+				const id: number = result.payload.id
+				navigate(`/post/${id}`)
+			})
+			.catch((err) => {
+				console.log(err)
+				alert('ERROR')
+			})
 
 		// console.log(data)
 

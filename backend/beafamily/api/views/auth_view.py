@@ -1,3 +1,5 @@
+import json
+
 from django.contrib.auth import get_user_model
 from django.contrib.auth import authenticate, login, logout
 from django.http.response import JsonResponse, HttpResponse
@@ -27,3 +29,12 @@ def signout(request):
 @api_view(["GET"])
 def token(request):
     return HttpResponse(status=HttpStatus.NO_CONTENT)
+
+
+@api_view(["GET"])
+def check_login(request):
+    is_logged_in = request.user and request.user.is_authenticated
+    print(is_logged_in)
+    return HttpResponse(status=HttpStatus.OK, content=json.dumps({
+        "logged_in": is_logged_in
+    }), content_type="application/json")
