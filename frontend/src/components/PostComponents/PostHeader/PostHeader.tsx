@@ -24,39 +24,56 @@ const PostHeader = (props: IProps) => {
 
 	return (
 		<div className='PostHeaderContainer'>
-			<div className='post-images'>
-				{postState.selectedPost?.photo_path.map((img_path) => {
-					return (
-						<img
-							className='post-image'
-							src={img_path}
-							alt={postState.selectedPost?.animal_type}
-						/>
-					)
-				})}
+			<div className='post-title-container'>
+				<h2 id='post-title' className='left'>
+					{postState.selectedPost?.title}
+				</h2>
+				<div className='post-title-specs'>
+					{postState.selectedPost?.species}, {' '}
+					{postState.selectedPost?.gender
+						? '암컷'
+						: '수컷'}, {' '}
+					{postState.selectedPost?.author_name},
+
+					{postState.selectedPost?.created_at}
+				</div>
 			</div>
-			<div className='post-header-container'>
-				<div className='post-header-bookmark'>
-					<div className='post-header'>
-						<div className='post-title-container'>
-							<h2 id='post-title' className='left'>
-								{postState.selectedPost?.title}
-							</h2>
-							<p>
-								{postState.selectedPost?.author_name},
-								{postState.selectedPost?.created_at}
-							</p>
-						</div>
-						{postState.selectedPost?.is_active ? (
-							<div className='post-adoption-status' id='active'>
-								입양상담 진행 중
-							</div>
-						) : (
-							<div className='post-adoption-status' id='unactive'>
-								입양상담 마감
-							</div>
-						)}
+
+			<div className='post-status'>
+				{postState.selectedPost?.is_active ? (
+					<div className='post-adoption-status' id='active'>
+						입양상담 진행 중
 					</div>
+				) : (
+					<div className='post-adoption-status' id='unactive'>
+						입양상담 마감
+					</div>
+				)}
+
+
+				<div className='bookmark-button-container'>
+					<button
+						id='bookmark-button'
+						onClick={() => {
+							setIsBookmark(!isBookmark)
+						}}
+					>
+						{isBookmark ? (
+							<IoPaw size={40} />
+						) : (
+							<IoPawOutline size={40} />
+						)}
+					</button>
+				</div>
+
+
+			</div>
+
+
+			{/*<div className='post-header-container'>
+
+
+				<div className='post-header-bookmark'>
 					<div className='bookmark-button-container'>
 						<button
 							id='bookmark-button'
@@ -72,11 +89,26 @@ const PostHeader = (props: IProps) => {
 						</button>
 					</div>
 				</div>
-				{!props.is_author && (
-					<div className='post-button-container'>
-						<button id='adopt-button'>입양하기</button>
-					</div>
-				)}
+							</div> */}
+
+			{!props.is_author && (
+				<div className='post-button-container'>
+					<button id='adopt-button'>입양하기</button>
+				</div>
+			)}
+
+			<div className='post-images'>
+				{postState.selectedPost?.photo_path.map((img_path) => {
+					return (
+
+						<img
+							className='post-image'
+							src={img_path}
+							alt={postState.selectedPost?.animal_type}
+						/>
+
+					)
+				})}
 			</div>
 		</div>
 	)

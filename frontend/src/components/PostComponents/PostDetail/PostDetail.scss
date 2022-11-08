@@ -1,5 +1,5 @@
 .DetailContainer {
-	padding-top: 10px;
+	padding-top: 0px;
 	padding-bottom: 50px;
 	margin: 0 50px;
 	display: flex;
@@ -8,7 +8,7 @@
 }
 
 .PostDetail {
-	padding: 10px 20px 20px 20px;
+	padding: 0px 20px 20px 20px;
 	position: relative;
 	margin-top: 20px;
 	margin-bottom: 32px;
@@ -42,8 +42,57 @@
 	}
 
 	.post-content-container {
-		padding: 50px;
+		padding: 30px;
 	}
+
+	.first-line {
+		flex: 25%;
+		text-align: left;
+		font-size: 20px;
+		font-weight: 600;
+		line-height: 45px;
+	}
+
+	.second-line {
+		flex: 25%;
+		text-align: left;
+		font-size: 15px;
+		color: grey;
+		line-height: 45px;
+	}
+
+	.injection {
+		flex: 25%;
+		text-align: left;
+		font-size: 15px;
+		color: grey;
+		line-height: 45px;
+	}
+
+	.neuter {
+		flex: 25%;
+		text-align: left;
+		font-size: 15px;
+		color: grey;
+		line-height: 45px;
+	}
+
+	.det1 {
+		flex: 25%;
+		text-align: left;
+		font-size: 20px;
+		font-weight: 600;
+		line-height: 45px;
+	}
+
+	.det2 {
+		flex: 25%;
+		text-align: left;
+		font-size: 15px;
+		color: grey;
+		line-height: 45px;
+	}
+
 	.post-content {
 		flex: 25%;
 		text-align: left;
@@ -51,6 +100,7 @@
 		padding: 0 20px;
 		line-height: 45px;
 	}
+
 	.post-buttons {
 		display: flex;
 		flex-direction: row;
