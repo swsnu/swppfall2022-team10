@@ -3,56 +3,46 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import Layout from "../../Layout/Layout";
 
-import { useState} from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate, Navigate } from "react-router-dom";
+import { AppDispatch } from '../../../store'
+import { createReview } from '../../../store/slices/review'
+import { selectUser } from '../../../store/slices/user'
 import { MdArrowBack } from "react-icons/md";
 
 import "./ReviewCreate.scss";
 
 export default function ReviewCreate() {
-	const [title, setTitle] = useState<string>("");
-	const [content] = useState<string>("");
-	// const [file, setFile] = useState<FileList|null>(null)
-	const [array, setArray] = useState<File[] | null>(null)
+	const [title, setTitle] = useState<string>("")
+	const [content] = useState<string>("")
+	const [file, setFile] = useState<File[]>([])
 
-	const navigate = useNavigate();
+	const navigate = useNavigate()
+	const dispatch = useDispatch<AppDispatch>()
 
 	// useEffect(() => {
 	// 	if (!userState.currentUser) navigate("/login");
 	// }, [userState.currentUser, navigate]);
 
 	const fileChangedHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const target = event.currentTarget;
-    	// const files = (target.files as FileList);
-        // setFile(files);
-        const uploadFile = Array.from(target.files as FileList)
-	    setArray(uploadFile);
+        const files = event.target.files
+		if (files !== null) setFile(file.concat(Array.from(files)))
     };
 
-	const createReviewHandler = async (
+	const createReviewHandler = (
 		event: React.FormEvent<HTMLFormElement>
 	) => {
 		event.preventDefault();
-		console.log(event.target);
-		// const data = {
-		// 	title: event.target.form.title.value,
-		// 	name: event.target.name.value,
-		// 	animal_type: event.target.animal_type.value,
-		// 	species: event.target.species.value,
-		// 	age: event.target.age.value,
-		// 	gender: event.target.gender.value,
-		// 	neutering: event.target.neutering.value,
-		// 	vaccination: event.target.vaccination.value,
-		// 	character: event.target.content.value,
-		// 	photo_path: [],
-		// 	author_id: userState.currentUser ? userState.currentUser.id : 0,
-		// };
-		// const result = await dispatch(createPost(data));
-		// if (result.type === `${createPost.typePrefix}/fulfilled`) {
-		// 	navigate(`/posts/${result.payload.id}`);
-		// } else {
-		// 	alert("Error on create Post");
-		// }
+
+		if (title.length === 0) return
+		if (file.length === 0) return
+
+		const data = {title: title}
+		const formData = new FormData()
+		formData.append('content', JSON.stringify(data))
+		file.forEach((f, i) => formData.append('photos', f))
+		dispatch(createReview(formData))
 	};
 
 	// if (!userState.currentUser) {
@@ -63,7 +53,7 @@ export default function ReviewCreate() {
 			<div className="CreateContainer">
 				<div className="ReviewCreate">
 					<button
-						id="back-create-post-button"
+						id="back-create-review-button"
 						onClick={(event) => {
 							event.preventDefault();
 							navigate("/review");
@@ -76,24 +66,24 @@ export default function ReviewCreate() {
 							<h1>입양후기 올리기</h1>
 						</div>
 						<form
-							className="create-post-container"
+							className="create-review-container"
 							onSubmit={createReviewHandler}
 						>
 							<div className="input-container">
-								<label htmlFor="post-title-input">제목:</label>
+								<label htmlFor="review-title-input">제목:</label>
 								<input
-									id="post-title-input"
+									id="review-title-input"
 									type="text"
 									name="title"
 								/>
 							</div>
 							<div className="content-container">
-								<label htmlFor="post-content-input">
+								<label htmlFor="review-content-input">
 									입양 후기를 알려주세요! 자세한 후기는
 									입양에 도움이 됩니다:&#41;
 								</label>
 								<textarea
-									id="post-content-input"
+									id="review-content-input"
 									name="content"
 								/>
 							</div>
@@ -110,13 +100,13 @@ export default function ReviewCreate() {
 									/>
 								</div>
 							</div>
-							{array && array.map((singleFile: File)=> {
+							{file && file.map((singleFile: File)=> {
 							    return(
 							        <div id="filenameList" key = {singleFile.name}>{singleFile.name}</div>
 							    )
 							})}
 							<button
-								id="confirm-create-post-button"
+								id="confirm-create-review-button"
 								type="submit"
 								disabled={!(title && content)}
 							>

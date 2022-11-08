@@ -5,13 +5,14 @@ export interface IProps {
 	title: string
 	photo_path: string[]
 	author: string
+	content: string
 }
 
 const ReviewDetail = (props: IProps) => {
 	return (
 		<div className='ReviewDetail'>
 		    <div className='review-images'>
-                <Carousel>
+                <Carousel interval={null}>
                     {props.photo_path.map((path:string) => {
 					    return (
 						    <Carousel.Item key={`${path}`}>
@@ -23,12 +24,15 @@ const ReviewDetail = (props: IProps) => {
 					})}
 			    </Carousel>
 			</div>
-		    <h2 id='review-title' className='left'>
-				{props.title}
-			</h2>
-			<p>
-				작성자: {props.author}
-			</p>
+			<div id='header'>
+		        <h2 id='review-title' className='left'>
+				    {props.title}
+			    </h2>
+			    <p>
+				    작성자: {props.author}
+			    </p>
+			</div>
+			<div id = "content">{props.content}</div>
 		</div>
 	)
 }

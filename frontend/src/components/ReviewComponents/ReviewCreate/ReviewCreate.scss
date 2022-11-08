@@ -38,7 +38,7 @@
 		}
 	}
 
-	#back-create-post-button {
+	#back-create-review-button {
 		align-self: flex-start;
 	}
 	.create-header {
@@ -46,11 +46,11 @@
 		text-align: left;
 		border-bottom: 2px solid #e9ecef;
 	}
-	#confirm-create-post-button {
+	#confirm-create-review-button {
 		align-self: flex-end;
 	}
 
-	.create-post-container {
+	.create-review-container {
 		display: flex;
 		flex-direction: column;
 		justify-content: left;
@@ -74,10 +74,11 @@
 			flex-direction: column;
 			text-align: left;
 			padding: 0 20px;
-			#post-content-input {
+			#review-content-input {
 				border-radius: 50px;
 				margin: 10px 100px 30px 100px;
 				height: 400px;
+				text-align: center;
 			}
 		}
 		.photo-container {
@@ -113,10 +114,11 @@
 			border-radius: 18px;
 			border-color: #d4b886;
 		}
-		#post-title-input{
+		#review-title-input{
 		    border: 2.5px solid;
 			border-radius: 18px;
 			border-color: #d4b886;
+			text-align: center;
 		}
 		#filenameList{
 		    text-align: left;

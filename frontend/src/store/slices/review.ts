@@ -39,7 +39,9 @@ export const getReview = createAsyncThunk(
 
 export const createReview = createAsyncThunk(
 	'review/createReview',
-	async (review: reviewType, { dispatch }) => {
+	async (review: FormData, { dispatch }) => {
+	    const signin = await axios.post('/api/signin/')
+		console.log(signin.data)
 		const response = await axios.post('/api/reviews/', review)
 		dispatch(reviewActions.addReview(response.data))
 		return response.data

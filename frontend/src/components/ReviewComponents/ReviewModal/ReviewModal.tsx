@@ -1,4 +1,5 @@
-import { PropsWithChildren } from "react";
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
+import { PropsWithChildren, useEffect } from "react";
 import './ReviewModal.scss'
 
 interface ModalDefaultType {
@@ -9,6 +10,18 @@ function Modal({
     onClickToggleModal,
     children,
 }: PropsWithChildren<ModalDefaultType>) {
+    useEffect(() => {
+        document.body.style.cssText = `
+        position: fixed;
+        top: -${window.scrollY}px;
+        overflow-y: scroll;
+        width: 100%;`;
+        return () => {
+            const scrollY = document.body.style.top;
+            document.body.style.cssText = '';
+            window.scrollTo(0, parseInt(scrollY || '0', 10) * -1);
+        };
+    }, []);
 
     function closeModal() {
         onClickToggleModal();
@@ -20,7 +33,7 @@ function Modal({
                 <button id="modalCloseBtn" onClick={closeModal}>
                 ✖
                 </button>
-                {children}
+                <div id = "modalContent">{children}</div>
             </div>
         </div>
     );
