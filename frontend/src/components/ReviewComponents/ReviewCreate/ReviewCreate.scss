@@ -4,7 +4,7 @@
 	margin: 0 50px;
 	display: flex;
 	flex-direction: column;
-	font-family: "Pretendard-Regular", sans-serif;
+	font-family: "Pretendard-Regular";
 }
 
 .ReviewCreate {
@@ -89,7 +89,23 @@
 				width: 300px;
 				text-align: left;
 			}
-			margin-bottom: 15px;
+		}
+		#filebox #photo {
+			display: inline-block;
+			color: #fff;
+			vertical-align: middle;
+			background-color: #d4b886;
+			cursor: pointer;
+			height: 40px;
+			margin-left: 0px;
+			text-align:center;
+		}
+		#filebox input[type="file"] {
+			width: 0;
+			height: 0;
+			padding: 0;
+			overflow: hidden;
+			border: 0;
 		}
 
 		textarea {
@@ -102,6 +118,14 @@
 			border-radius: 18px;
 			border-color: #d4b886;
 		}
+		#filenameList{
+		    text-align: left;
+		    margin-left: 160px;
+	    }
+	    #photoLabel{
+			width: 150px;
+			text-align: left;
+	    }
 
 	}
 }

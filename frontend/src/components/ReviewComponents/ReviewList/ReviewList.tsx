@@ -11,7 +11,7 @@ import {
 	selectReview
 } from '../../../store/slices/review'
 import { AppDispatch } from '../../../store'
-import { MdFilterList, MdOutlineAddBox } from 'react-icons/md'
+import { MdOutlineAddBox } from 'react-icons/md'
 import './ReviewList.scss'
 import Modal from "../ReviewModal/ReviewModal"
 import ReviewDetail from '../ReviewDetail/ReviewDetail'
@@ -40,13 +40,10 @@ export default function ReviewList() {
 		<Layout>
 			<div className='ListContainer'>
 				<div className='ReviewList'>
-					<div id='list-filter-button'>
-						<MdFilterList size='25' />
-					</div>
 					<div className='reviews'>
 						{reviewState.reviews.map((review: reviewType) => {
 							return (
-							    <button className = 'review-container' onClick={()=>onClickReview(review)}>
+							    <button className = 'review-container' onClick={()=>onClickReview(review)} key={`${review.id}`}>
 								    <Review
 									    key={`${review.id}_review`}
 									    title={review.title}

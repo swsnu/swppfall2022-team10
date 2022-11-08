@@ -8,14 +8,13 @@ export interface IProps {
 }
 
 const ReviewDetail = (props: IProps) => {
-
 	return (
 		<div className='ReviewDetail'>
 		    <div className='review-images'>
                 <Carousel>
                     {props.photo_path.map((path:string) => {
 					    return (
-						    <Carousel.Item>
+						    <Carousel.Item key={`${path}`}>
                                 <img
                                     src={path}
                                 />

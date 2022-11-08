@@ -10,9 +10,10 @@ import { MdArrowBack } from "react-icons/md";
 import "./ReviewCreate.scss";
 
 export default function ReviewCreate() {
-	const [title] = useState<string>("");
+	const [title, setTitle] = useState<string>("");
 	const [content] = useState<string>("");
-	const [file, setFile] = useState<{}>({ selectedFiles: null })
+	// const [file, setFile] = useState<FileList|null>(null)
+	const [array, setArray] = useState<File[] | null>(null)
 
 	const navigate = useNavigate();
 
@@ -21,11 +22,11 @@ export default function ReviewCreate() {
 	// }, [userState.currentUser, navigate]);
 
 	const fileChangedHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const files = event.target.files;
-        console.log(files);
-        setFile({
-            selectedFiles: files
-        });
+        const target = event.currentTarget;
+    	// const files = (target.files as FileList);
+        // setFile(files);
+        const uploadFile = Array.from(target.files as FileList)
+	    setArray(uploadFile);
     };
 
 	const createReviewHandler = async (
@@ -97,15 +98,23 @@ export default function ReviewCreate() {
 								/>
 							</div>
 							<div className="photo-container">
-								<label htmlFor="post-age-input">사진:</label>
-								<input
-									id="review-photo-input"
-									type="file" multiple
-									name="photo"
-									accept = 'image/*'
-									onChange={fileChangedHandler}
-								/>
+								<label htmlFor="review-photo-input" id="photoLabel">사진:</label>
+								<div id = "filebox">
+									<label htmlFor="review-photo-input" id = "photo">파일 찾기</label>
+									<input
+										id="review-photo-input"
+										type="file" multiple
+										name="photo"
+										accept = 'image/*'
+										onChange={fileChangedHandler}
+									/>
+								</div>
 							</div>
+							{array && array.map((singleFile: File)=> {
+							    return(
+							        <div id="filenameList" key = {singleFile.name}>{singleFile.name}</div>
+							    )
+							})}
 							<button
 								id="confirm-create-post-button"
 								type="submit"
