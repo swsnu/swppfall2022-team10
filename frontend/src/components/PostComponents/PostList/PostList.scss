@@ -22,7 +22,7 @@
 	overflow-y: auto;
 
 	.search-bar #search-input:focus::placeholder {
-		color: transparent;
+		color: grey;
 	}
 
 	.posts {
@@ -35,13 +35,16 @@
 
 	.create-post {
 		text-align: right;
+
 		#create-post-button {
 			all: unset;
 			transition: 0.25s;
+
 			&:hover {
 				cursor: pointer;
 				transform: scale(1.1);
 			}
+
 			&:active {
 				transform: scale(1.2);
 			}
@@ -51,15 +54,20 @@
 	.search-bar {
 		margin: auto;
 
+		z-index: 1;
+
 		margin-bottom: 20px;
 		width: 80%;
+
 		#search-input {
 			line-height: 1;
 			text-align: center;
 		}
+
 		#search-button {
 			color: #c19565;
 			border-color: #c19565;
+
 			&:hover {
 				background-color: #c19565;
 				color: white;
@@ -75,9 +83,24 @@
 		padding: 10px 10px;
 		margin-left: auto;
 		margin-right: 120px;
+
 		&:hover {
 			cursor: pointer;
 			transform: scale(1.2);
 		}
+	}
+}
+
+
+@keyframes slideUp {
+	from {
+		transform: scale(1, 1) translateY(0px);
+		opacity: 0.5;
+	}
+
+	to {
+		transform: scale(0.3, 0.75) translateY(-80px);
+		opacity: 0;
+		visibility: hidden;
 	}
 }

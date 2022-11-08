@@ -1,15 +1,61 @@
 .PostHeaderContainer {
-	.post-image {
-		height: 400px;
-		padding: 20px;
-		border-radius: 10px;
-		margin-bottom: 20px;
+	.post-title-container {
+		padding: 0 20px 0 20px;
 	}
 
-	.post-header-container {
+	.left {
+		text-align: left;
+		font-size: 400;
+		font-weight: 600;
+	}
+
+	.post-title-specs {
+		text-align: left;
+		text-decoration: underline;
+	}
+
+	.post-images {
+		flex-direction: row;
+
+		.post-image {
+			height: 300px;
+			padding: 10px;
+			border-radius: 10px;
+			margin-bottom: 20px;
+			flex-direction: row;
+		}
+
+	}
+
+
+	.post-status {
 		display: flex;
 		flex-direction: row;
-		justify-content: space-between;
+		justify-content: flex-end;
+		font-size: 20px;
+		color: white;
+		border-radius: 10px;
+
+		.post-adoption-status {
+			right: 10%;
+			width: fit-content;
+			font-size: 20px;
+			padding: 10px 25px;
+			margin: 3px;
+			color: black;
+			border-radius: 10px;
+		}
+
+		#active {
+			background-color: #ffcd29;
+			border: 2.5px solid #d6a80f;
+		}
+
+		#unactive {
+			background-color: #bbb9ac;
+			border: 2.5px solid #9c9b94;
+		}
+
 		.post-header-bookmark {
 			display: flex;
 			flex-direction: row;
@@ -17,42 +63,19 @@
 			margin: 0 30px;
 			margin-bottom: 20px;
 			padding-right: 10px;
-			justify-content: space-between;
+			justify-content: flex-end;
 			border-bottom: 2px solid rgb(35, 22, 22);
 
-			.post-header {
-				display: flex;
-				flex-direction: row;
-
-				.post-title-container {
-					padding: 0 20px 0 20px;
-					text-align: left;
-				}
-
-				.post-adoption-status {
-					width: fit-content;
-					height: fit-content;
-					font-size: 20px;
-					padding: 10px 25px;
-					margin: 3px;
-					color: black;
-					border-radius: 22px;
-				}
-				#active {
-					background-color: #ffcd29;
-					border: 2.5px solid #d6a80f;
-				}
-				#unactive {
-					background-color: #bbb9ac;
-					border: 2.5px solid #9c9b94;
-				}
-			}
 
 			.bookmark-button-container {
 				margin: auto 0;
+				background: white;
+
+
 				#bookmark-button {
 					all: unset;
 					transition: 0.25s;
+
 					&:hover {
 						cursor: pointer;
 						transform: scale(1.2);
@@ -60,16 +83,64 @@
 				}
 			}
 		}
-		.post-button-container {
-			margin: auto;
-			margin-top: 50px;
-			width: fit-content;
-			#adopt-button {
-				min-width: 140px;
-				border-radius: 10px;
-				padding: 13px 30px;
-				font-size: 20px;
+
+	}
+
+	.post-header-container {
+		display: flex;
+		flex-direction: row;
+		justify-content: flex-end;
+
+		.post-header-bookmark {
+			display: flex;
+			flex-direction: row;
+			width: stretch;
+			margin: 0 30px;
+			margin-bottom: 20px;
+			padding-right: 10px;
+			justify-content: flex-end;
+			border-bottom: 2px solid rgb(35, 22, 22);
+
+
+			.bookmark-button-container {
+				margin: auto 0;
+
+
+				#bookmark-button {
+					all: unset;
+					transition: 0.25s;
+
+					&:hover {
+						cursor: pointer;
+						transform: scale(1.2);
+					}
+				}
 			}
 		}
+
 	}
+}
+
+.post-button-container {
+	top: 85%;
+	right: 55%;
+	height: 50px;
+	width: fit-content;
+	position: fixed;
+
+	#adopt-button {
+		position: fixed;
+		margin-left: auto;
+		margin-right: auto;
+		min-width: 140px;
+		border-radius: 10px;
+		padding: 13px 30px;
+		font-size: 20px;
+
+		&:hover {
+			cursor: pointer;
+			transform: scale(1.05);
+		}
+	}
+
 }
