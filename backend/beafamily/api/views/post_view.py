@@ -88,7 +88,6 @@ def posts(request):
         return JsonResponse(response_list, safe=False)
 
     elif request.method == "POST":
-        print(request)
 
         # validate uploaded data
         try:

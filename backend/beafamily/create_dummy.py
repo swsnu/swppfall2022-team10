@@ -48,6 +48,8 @@ def create_image(path, user, category='post', number=1):
 
 
 def create(a, b, model_id):
+    if model_id in ['q', 'a']:
+        raise NotImplementedError("Not implemented Yet")
     model_name = get_model_name(model_id)
 
     if not os.path.exists(DATA_DIR):
@@ -97,7 +99,7 @@ def create(a, b, model_id):
                 is_active=j['is_active'],
                 content={
                     'photo_list': [i.id for i in photos],
-                    'text': j['text']
+                    'text': j['content']
                 }
             )
         elif model_id == 'q':
@@ -118,7 +120,7 @@ def create(a, b, model_id):
                 title=j['title'],
                 content= {
                     'photo_list': [i.id for i in photos],
-                    'text': j['text']
+                    'text': j['content']
                 }
             )
         elif model_id == 'a':
@@ -150,22 +152,26 @@ if __name__ == '__main__':
     print('-' * 30)
 
     if n_user == 0:
-        alphabets = string.ascii_lowercase + string.ascii_uppercase + string.digits
+        yn = input("Create user? [Y/n]")
+        if yn.lower() == "y" or yn == '':
+            usernames = ["yeomjy", "seorin55", "lenyakim", "jhpyun"]
+            passwords = ["1q2w3e4r", "password", "12345678", "qwerty"]
 
-        for _ in range(5):
-            length = random.randint(4, 12)
-            random_name = ''.join(random.choices(alphabets, k=length))
 
-            user = User.objects.create_user(username=random_name)
+            for un, pw in zip(usernames, passwords):
+                u = User.objects.create(username=un)
+                u.set_password(pw)
+                u.save()
 
-            print(f"Created random user with username: {random_name}")
+        else:
+            print("You should first create user...")
+            exit()
+
     model = input("Please type which model to create dummy\n"
                   "p: Post, r: Review, a: Application, q: Question, d: Default, otherwise: Quit\n"
                   "Default: create every model which has zero element\n")
 
     if model in ['p', 'q', 'r', 'a']:
-        if model in ['q', 'a']:
-            raise NotImplementedError("Not implemented Yet")
         create(1, 12, model)
     elif model == 'd':
         if n_post == 0:
