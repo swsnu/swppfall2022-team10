@@ -28,9 +28,12 @@ def post_serializer(post: Post):
     response = {
         "id": post.id,
         "author_id": post.author.id,
+        "author_name": post.author.username,
         "created_at": str(post.datetime),
         "title": post.title,
         "animal_type": post.animal_type,
+        "name": post.name,
+        "species": post.species,
         "vaccination": post.vaccination,
         "neutering": post.neutering,
         "age": post.age,
@@ -69,6 +72,7 @@ def review_serializer(review: Review):
 
     response = {
         "author_id": review.author.id,
+        "author_name": review.author.username,
         "id": review.id,
         "title": review.title,
         "photo_path": photo_list,

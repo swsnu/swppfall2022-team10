@@ -2,6 +2,9 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { RootState } from '..'
 
+axios.defaults.xsrfCookieName = 'csrftoken'
+axios.defaults.xsrfHeaderName = 'X-CSRFToken'
+
 export interface postType {
 	id: number
 	author_id: number
@@ -22,16 +25,16 @@ export interface postType {
 
 export interface postCreateType {
 	author_id: number
-  title: string
+	title: string
 	name: string
-  animal_type: string
+	animal_type: string
 	species: string
-  age: number
+	age: number
 	gender: boolean
 	vaccination: boolean
 	neutering: boolean
 	character: string
-	photo_path: string[]
+	// photo_path: string[]
 }
 
 export interface postState {
@@ -41,7 +44,7 @@ export interface postState {
 
 const initialState: postState = {
 	posts: [],
-	selectedPost: null,
+	selectedPost: null
 }
 
 export const getPosts = createAsyncThunk('post/getPosts', async () => {
@@ -61,7 +64,9 @@ export const getPost = createAsyncThunk(
 
 export const createPost = createAsyncThunk(
 	'post/createPost',
-	async (post: postCreateType, { dispatch }) => {
+	async (post: FormData, { dispatch }) => {
+		const signin = await axios.post('/api/signin/')
+		console.log(signin.data)
 		const response = await axios.post('/api/posts/', post)
 		dispatch(postActions.addPost(response.data))
 		return response.data
@@ -92,7 +97,7 @@ export const editPost = createAsyncThunk(
 				photo_path: post.photo_path,
 				age: post.age,
 				gender: post.gender,
-				character: post.character,
+				character: post.character
 			})
 		)
 		return response.data
@@ -174,10 +179,10 @@ export const postSlice = createSlice({
 				gender: action.payload.gender,
 				character: action.payload.character,
 				created_at: '',
-				is_active: true,
+				is_active: true
 			}
 			state.posts.push(newPost)
-		},
+		}
 	},
 	extraReducers: (builder) => {
 		// Add reducers for additional action types here, and handle loading state as needed
@@ -191,7 +196,7 @@ export const postSlice = createSlice({
 		builder.addCase(createPost.rejected, (_state, action) => {
 			console.error(action.error)
 		})
-	},
+	}
 })
 
 export const postActions = postSlice.actions

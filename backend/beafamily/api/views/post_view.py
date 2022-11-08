@@ -101,18 +101,18 @@ def posts(request):
                 img.verify()
 
             content_dict = json.loads(content_json[0])
+            print(content_dict)
             content = {
                 "animal_type": content_dict["animal_type"],
                 "age": content_dict["age"],
                 "name": content_dict["name"],
                 "gender": content_dict["gender"],
                 "title": content_dict["title"],
-                "is_active": content_dict["is_active"],
                 "species": content_dict["species"],
                 "neutering": content_dict["neutering"],
                 "vaccination": content_dict["vaccination"],
                 "content": {
-                    "text": content_dict["text"],
+                    "text": content_dict["character"],
                 }
             }
 
@@ -126,6 +126,7 @@ def posts(request):
             with transaction.atomic():
                 post = Post.objects.create(
                     author=request.user,
+                    is_active=True,
                     **content
                 )
                 photo_list = []
