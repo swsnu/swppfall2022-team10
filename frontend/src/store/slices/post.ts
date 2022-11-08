@@ -65,9 +65,11 @@ export const getPost = createAsyncThunk(
 export const createPost = createAsyncThunk(
 	'post/createPost',
 	async (post: FormData, { dispatch }) => {
-		const signin = await axios.post('/api/signin/')
-		console.log(signin.data)
-		const response = await axios.post('/api/posts/', post)
+		// const signin = await axios.post('/api/signin/')
+		// console.log(signin.data)
+		const response = await axios.post('/api/posts/', post, {
+			withCredentials: true
+		})
 		dispatch(postActions.addPost(response.data))
 		return response.data
 	}

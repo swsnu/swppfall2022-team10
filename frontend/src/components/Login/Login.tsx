@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import Layout from '../Layout/Layout'
 
 import { useEffect, useState } from 'react'
@@ -7,13 +8,14 @@ import {
 	getUsers,
 	loginUser,
 	selectUser,
+	UserLoginType,
 	UserType
 } from '../../store/slices/user'
 import { Navigate, useNavigate } from 'react-router-dom'
 import './Login.scss'
 
 export default function LogIn() {
-	const [email, setEmail] = useState<string>('')
+	const [username, setUserName] = useState<string>('')
 	const [password, setPassword] = useState<string>('')
 
 	const userState = useSelector(selectUser)
@@ -26,18 +28,27 @@ export default function LogIn() {
 	}, [])
 
 	const logInHandler = async () => {
-		const verifiedUser = userState.users.find((user: UserType) => {
-			return user.email === email && user.password === password
-		})
-
-		if (verifiedUser != null) {
-			await dispatch(loginUser(verifiedUser.id))
-			navigate('/')
-		} else {
-			alert('Email or password is wrong')
-			setEmail('')
-			setPassword('')
+		const userData: UserLoginType = {
+			username,
+			password
 		}
+
+		await dispatch(loginUser(userData))
+
+		if (userState.currentUser !== null) navigate('/')
+
+		// const verifiedUser = userState.users.find((user: UserType) => {
+		// 	return user.email === username && user.password === password
+		// })
+
+		// if (verifiedUser != null) {
+		// 	await dispatch(loginUser(verifiedUser.id))
+		// 	navigate('/')
+		// } else {
+		// 	alert('Email or password is wrong')
+		// 	setUserName('')
+		// 	setPassword('')
+		// }
 	}
 	if (userState.currentUser != null) {
 		return <Navigate to='/posts' />
@@ -54,9 +65,9 @@ export default function LogIn() {
 								id='email-input'
 								type='text'
 								placeholder='아이디'
-								value={email}
+								value={username}
 								onChange={(event) =>
-									setEmail(event.target.value)
+									setUserName(event.target.value)
 								}
 							/>
 							<input

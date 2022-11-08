@@ -29,7 +29,7 @@ export default function PostCreate() {
 	const [gender, setGender] = useState<string>('')
 	const [vaccination, setVaccination] = useState<string>('')
 	const [neutering, setNeutering] = useState<string>('')
-	const [character, setCharacter] = useState<string>('')
+	const [content, setContent] = useState<string>('')
 	// const title = useRef<HTMLInputElement>(null)
 	// const name = useRef<HTMLInputElement>(null)
 	// const animalType = useRef<HTMLInputElement>(null)
@@ -54,9 +54,8 @@ export default function PostCreate() {
 		gender,
 		vaccination,
 		neutering,
-		character
+		content
 	]
-
 
 	// useEffect(() => {
 	// 	if (!userState.currentUser) navigate("/login");
@@ -94,7 +93,7 @@ export default function PostCreate() {
 			gender: gender === '수컷',
 			neutering: neutering === 'O',
 			vaccination: vaccination === 'O',
-			character: character
+			content: content
 			// photo_path: [],
 			// author_id: 0
 		}
@@ -141,7 +140,6 @@ export default function PostCreate() {
 		]
 	}
 
-
 	// if (!userState.currentUser) {
 	// 	return <Navigate to="/login" />;
 	// } else {
@@ -174,11 +172,9 @@ export default function PostCreate() {
 									id='post-title-input'
 									type='text'
 									name='title'
-
 									onChange={(event) =>
 										setTitle(event.target.value)
 									}
-
 									value={title}
 								/>
 							</div>
@@ -190,11 +186,9 @@ export default function PostCreate() {
 									id='post-name-input'
 									type='text'
 									name='name'
-
 									onChange={(event) =>
 										setName(event.target.value)
 									}
-
 									value={name}
 								/>
 							</div>
@@ -205,7 +199,6 @@ export default function PostCreate() {
 									id='post-type-input'
 									className='post-combobox'
 									name='type'
-
 									data={[
 										'개',
 										'고양이',
@@ -215,7 +208,6 @@ export default function PostCreate() {
 										'기타'
 									]}
 									onChange={(event) => setAnimalType(event)}
-
 									value={animalType}
 								/>
 							</div>
@@ -226,14 +218,12 @@ export default function PostCreate() {
 									id='post-species-input'
 									className='post-combobox'
 									name='species'
-
 									data={
 										speciesList[animalType]
 											? speciesList[animalType]
 											: []
 									}
 									onChange={(event) => setSpecies(event)}
-
 									value={species}
 								/>
 							</div>
@@ -245,11 +235,9 @@ export default function PostCreate() {
 									id='post-age-input'
 									type='text'
 									name='age'
-
 									onChange={(event) =>
 										setAge(event.target.value)
 									}
-
 									value={age}
 								/>
 							</div>
@@ -260,10 +248,8 @@ export default function PostCreate() {
 									id='post-gender-input'
 									className='post-dropbox'
 									name='gender'
-
 									data={['암컷', '수컷']}
 									onChange={(event) => setGender(event)}
-
 									value={gender}
 								/>
 							</div>
@@ -276,10 +262,8 @@ export default function PostCreate() {
 									id='post-vaccination-input'
 									className='post-dropbox'
 									name='vaccination'
-
 									data={['O', 'X']}
 									onChange={(event) => setVaccination(event)}
-
 									value={vaccination}
 								/>
 							</div>
@@ -292,10 +276,8 @@ export default function PostCreate() {
 									id='post-neutering-input'
 									className='post-dropbox'
 									name='neutering'
-
 									data={['O', 'X']}
 									onChange={(event) => setNeutering(event)}
-
 									value={neutering}
 								/>
 							</div>
@@ -309,12 +291,10 @@ export default function PostCreate() {
 									className='post-input'
 									id='post-content-input'
 									name='content'
-
 									onChange={(event) =>
-										setCharacter(event.target.value)
+										setContent(event.target.value)
 									}
-
-									value={character}
+									value={content}
 								/>
 							</div>
 							<div className='input-container'>
