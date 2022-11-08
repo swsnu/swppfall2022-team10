@@ -11,17 +11,15 @@ export interface IProps {
 const Review = (props: IProps) => {
 	return (
 		<div className='Review'>
-			<button className='review-container' onClick={props.clickDetail}>
-				<Card style={{ width: '17rem' }}>
-					<Card.Img variant='top' src={props.photo_path[0]} />
-					<Card.Body>
-						<Card.Title>{props.title}</Card.Title>
-						<Card.Text id='review-author'>
-							작성자: {props.author}
-						</Card.Text>
-					</Card.Body>
-				</Card>
-			</button>
+			<Card style={{ width: '17rem' }}>
+				<Card.Img variant='top' src={props.photo_path[0]} />
+				<Card.Body>
+					<Card.Title>{props.title}</Card.Title>
+					<Card.Text id='review-author'>
+						작성자: {props.author}
+					</Card.Text>
+				</Card.Body>
+			</Card>
 		</div>
 	)
 }
