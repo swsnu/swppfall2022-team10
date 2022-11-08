@@ -6,7 +6,9 @@ from django.http.response import (
 from .utils import HttpStatus
 import json
 from rest_framework.parsers import MultiPartParser, JSONParser, FileUploadParser
-from rest_framework.decorators import api_view, parser_classes
+from rest_framework.decorators import api_view, parser_classes, permission_classes, authentication_classes
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.authentication import SessionAuthentication
 from PIL import Image
 from django.db import transaction
 
@@ -72,6 +74,8 @@ def post_id(request, pid=0):
 
 
 @api_view(['GET', "POST"])
+@authentication_classes([SessionAuthentication])
+@permission_classes([IsAuthenticatedOrReadOnly])
 @parser_classes([MultiPartParser])
 def posts(request):
     if request.method == "GET":
@@ -84,6 +88,7 @@ def posts(request):
         return JsonResponse(response_list, safe=False)
 
     elif request.method == "POST":
+        print(request)
 
         # validate uploaded data
         try:
@@ -119,8 +124,6 @@ def posts(request):
         except Exception as e:
             print(e)
             return HttpResponse(status=HttpStatus.BAD_REQUEST)
-        if not request.user.is_authenticated:
-            return HttpResponse(status=HttpStatus.UNAUTHORIZED)
 
         try:
             with transaction.atomic():

@@ -33,6 +33,23 @@ export const getUser = createAsyncThunk(
 	}
 )
 
+// example for login request
+const sendLoginRequest = async (username: string, password: string) => {
+	await axios.get(`/api/token/`) // get csrf token
+	const response = await axios.post(
+		`/api/signin/`,
+		{},
+		{
+			auth: {
+				username: username,
+				password: password
+			}
+		}
+	)
+	if (response.status === 200) return true
+	else return false
+}
+
 export const loginUser = createAsyncThunk(
 	'user/loginUser',
 	async (id: UserType['id'], { dispatch }) => {

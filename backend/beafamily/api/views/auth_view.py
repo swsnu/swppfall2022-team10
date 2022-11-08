@@ -2,18 +2,18 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth import authenticate, login, logout
 from django.http.response import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
-from rest_framework.decorators import api_view
-
+from rest_framework.decorators import api_view, authentication_classes
+from rest_framework.authentication import BasicAuthentication, SessionAuthentication, BaseAuthentication
 from .utils import HttpStatus
 
 User = get_user_model()
 
 
-@csrf_exempt
 @api_view(["POST"])
+@authentication_classes([BasicAuthentication])
 def signin(request):
-    user = User.objects.get(id=2)
-    login(request, user)
+    print(request.user)
+    login(request, user=request.user)
     return HttpResponse(status=HttpStatus.OK)
 
 

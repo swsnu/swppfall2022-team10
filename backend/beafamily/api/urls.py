@@ -7,5 +7,6 @@ urlpatterns = [
     path("reviews/", views.reviews),
     path("reviews/<int:rid>/", views.review_id),
     path("signin/", views.signin),
-    path("signout/", views.signout)
+    path("signout/", views.signout),
+    path("token/", views.token)
 ]
