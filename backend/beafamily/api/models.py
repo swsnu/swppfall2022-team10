@@ -36,6 +36,7 @@ def post_serializer(post: Post):
         "species": post.species,
         "vaccination": post.vaccination,
         "neutering": post.neutering,
+        "is_active": post.is_active,
         "age": post.age,
         "gender": post.gender,
         "content": post.content["text"],

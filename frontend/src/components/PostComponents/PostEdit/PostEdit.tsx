@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable no-unneeded-ternary */
 /* eslint-disable object-shorthand */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
@@ -10,18 +11,23 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router'
 import { Navigate, useNavigate } from 'react-router-dom'
 import { AppDispatch } from '../../../store'
-import { getPost, editPost, selectPost, postCreateType } from '../../../store/slices/post'
+import {
+	getPost,
+	editPost,
+	selectPost,
+	postCreateType
+} from '../../../store/slices/post'
 import { selectUser } from '../../../store/slices/user'
 import { MdArrowBack } from 'react-icons/md'
-import Combobox from "react-widgets/Combobox";
-import DropdownList from "react-widgets/DropdownList";
-import "react-widgets/scss/styles.scss";
+import Combobox from 'react-widgets/Combobox'
+import DropdownList from 'react-widgets/DropdownList'
+import 'react-widgets/scss/styles.scss'
 import './PostEdit.scss'
 import { Dictionary } from '@reduxjs/toolkit'
 import { List } from 'reselect/es/types'
 
 export default function PostCreate() {
-	const { id } = useParams();
+	const { id } = useParams()
 
 	const [title, setTitle] = useState<string>('')
 	const [name, setName] = useState<string>('')
@@ -36,26 +42,26 @@ export default function PostCreate() {
 
 	const navigate = useNavigate()
 	const dispatch = useDispatch<AppDispatch>()
-	const postState = useSelector(selectPost);
+	const postState = useSelector(selectPost)
 
 	useEffect(() => {
-		dispatch(getPost(Number(id)));
+		dispatch(getPost(Number(id)))
 		const currentPost = postState.posts.find((post) => {
-			return post.id === Number(id);
-		});
+			return post.id === Number(id)
+		})
 		if (currentPost) {
-			setTitle(currentPost.title);
-			setName(currentPost.name);
-			setAnimalType(currentPost.animal_type);
-			setSpecies(currentPost.species);
-			setAge(String(currentPost.age));
-			setGender(currentPost.gender ? '수컷' : '암컷');
-			setVaccination(currentPost.vaccination ? 'O' : 'X');
-			setNeutering(currentPost.neutering ? 'O' : 'X');
-			setContent(currentPost.content);
-			setFile(currentPost.photo_path);
+			setTitle(currentPost.title)
+			setName(currentPost.name)
+			setAnimalType(currentPost.animal_type)
+			setSpecies(currentPost.species)
+			setAge(String(currentPost.age))
+			setGender(currentPost.gender ? '수컷' : '암컷')
+			setVaccination(currentPost.vaccination ? 'O' : 'X')
+			setNeutering(currentPost.neutering ? 'O' : 'X')
+			setContent(currentPost.content)
+			setFile(currentPost.photo_path)
 		}
-	}, [id]);
+	}, [id])
 
 	const fileChangedHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const files = event.target.files
@@ -81,8 +87,8 @@ export default function PostCreate() {
 			vaccination: vaccination === 'O' ? true : false,
 			content: content,
 			photo_path: [],
-			author_id: 0,
-		};
+			author_id: 0
+		}
 		console.log(data)
 		// const result = await dispatch(editPost(data));
 		// if (result.type === `${editPost.typePrefix}/fulfilled`) {
@@ -93,8 +99,30 @@ export default function PostCreate() {
 	}
 
 	const speciesList: Dictionary<List> = {
-		"개": ['포메라니안', '치와와', '파피용', '닥스훈트', '요크셔테리어', '말티즈', '슈나우저', '시츄', '푸들', '웰시코기'],
-		"고양이": ['러시안 블루', '페르시안', '뱅갈', '봄베이', '샴', '메인쿤', '스코티쉬폴드', '아메리칸 숏헤이', '캘리포니아 스팽글드', '이집트안마우']
+		개: [
+			'포메라니안',
+			'치와와',
+			'파피용',
+			'닥스훈트',
+			'요크셔테리어',
+			'말티즈',
+			'슈나우저',
+			'시츄',
+			'푸들',
+			'웰시코기'
+		],
+		고양이: [
+			'러시안 블루',
+			'페르시안',
+			'뱅갈',
+			'봄베이',
+			'샴',
+			'메인쿤',
+			'스코티쉬폴드',
+			'아메리칸 숏헤이',
+			'캘리포니아 스팽글드',
+			'이집트안마우'
+		]
 	}
 
 	return (
@@ -125,7 +153,9 @@ export default function PostCreate() {
 									id='post-title-input'
 									type='text'
 									name='title'
-									onChange={event => setTitle(event.target.value)}
+									onChange={(event) =>
+										setTitle(event.target.value)
+									}
 									value={title}
 								/>
 							</div>
@@ -136,7 +166,9 @@ export default function PostCreate() {
 									id='post-name-input'
 									type='text'
 									name='name'
-									onChange={event => setName(event.target.value)}
+									onChange={(event) =>
+										setName(event.target.value)
+									}
 									value={name}
 								/>
 							</div>
@@ -146,8 +178,15 @@ export default function PostCreate() {
 									id='post-type-input'
 									className='post-combobox'
 									name='type'
-									data={["개", "고양이", "새", "토끼", "거북이", "기타"]}
-									onChange={event => setAnimalType(event)}
+									data={[
+										'개',
+										'고양이',
+										'새',
+										'토끼',
+										'거북이',
+										'기타'
+									]}
+									onChange={(event) => setAnimalType(event)}
 									value={animalType}
 								/>
 							</div>
@@ -157,8 +196,12 @@ export default function PostCreate() {
 									id='post-species-input'
 									className='post-combobox'
 									name='species'
-									data={speciesList[animalType] ? speciesList[animalType] : []}
-									onChange={event => setSpecies(event)}
+									data={
+										speciesList[animalType]
+											? speciesList[animalType]
+											: []
+									}
+									onChange={(event) => setSpecies(event)}
 									value={species}
 								/>
 							</div>
@@ -169,7 +212,9 @@ export default function PostCreate() {
 									id='post-age-input'
 									type='text'
 									name='age'
-									onChange={event => setAge(event.target.value)}
+									onChange={(event) =>
+										setAge(event.target.value)
+									}
 									value={age}
 								/>
 							</div>
@@ -179,8 +224,8 @@ export default function PostCreate() {
 									id='post-gender-input'
 									className='post-dropbox'
 									name='gender'
-									data={["암컷", "수컷"]}
-									onChange={event => setGender(event)}
+									data={['암컷', '수컷']}
+									onChange={(event) => setGender(event)}
 									value={gender}
 								/>
 							</div>
@@ -192,8 +237,8 @@ export default function PostCreate() {
 									id='post-vaccination-input'
 									className='post-dropbox'
 									name='vaccination'
-									data={["O", "X"]}
-									onChange={event => setVaccination(event)}
+									data={['O', 'X']}
+									onChange={(event) => setVaccination(event)}
 									value={vaccination}
 								/>
 							</div>
@@ -205,8 +250,8 @@ export default function PostCreate() {
 									id='post-neutering-input'
 									className='post-dropbox'
 									name='neutering'
-									data={["O", "X"]}
-									onChange={event => setNeutering(event)}
+									data={['O', 'X']}
+									onChange={(event) => setNeutering(event)}
 									value={neutering}
 								/>
 							</div>
@@ -219,7 +264,9 @@ export default function PostCreate() {
 									className='post-input'
 									id='post-content-input'
 									name='content'
-									onChange={event => setContent(event.target.value)}
+									onChange={(event) =>
+										setContent(event.target.value)
+									}
 									value={content}
 								/>
 							</div>
@@ -237,8 +284,8 @@ export default function PostCreate() {
 							<button
 								id='confirm-create-post-button'
 								type='submit'
-							// disabled={!(title && name && animalType && species && age 
-							//     && gender && vaccination && neutering && character)}
+								// disabled={!(title && name && animalType && species && age
+								//     && gender && vaccination && neutering && character)}
 							>
 								게시하기
 							</button>

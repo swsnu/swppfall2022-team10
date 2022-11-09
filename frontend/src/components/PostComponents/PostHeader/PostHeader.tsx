@@ -1,3 +1,4 @@
+/* eslint-disable spaced-comment */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 /* eslint-disable react/jsx-key */
@@ -29,12 +30,9 @@ const PostHeader = (props: IProps) => {
 					{postState.selectedPost?.title}
 				</h2>
 				<div className='post-title-specs'>
-					{postState.selectedPost?.species}, {' '}
-					{postState.selectedPost?.gender
-						? '암컷'
-						: '수컷'}, {' '}
+					{postState.selectedPost?.species},{' '}
+					{postState.selectedPost?.gender ? '암컷' : '수컷'},{' '}
 					{postState.selectedPost?.author_name},
-
 					{postState.selectedPost?.created_at}
 				</div>
 			</div>
@@ -50,7 +48,6 @@ const PostHeader = (props: IProps) => {
 					</div>
 				)}
 
-
 				<div className='bookmark-button-container'>
 					<button
 						id='bookmark-button'
@@ -65,10 +62,7 @@ const PostHeader = (props: IProps) => {
 						)}
 					</button>
 				</div>
-
-
 			</div>
-
 
 			{/*<div className='post-header-container'>
 
@@ -100,13 +94,11 @@ const PostHeader = (props: IProps) => {
 			<div className='post-images'>
 				{postState.selectedPost?.photo_path.map((img_path) => {
 					return (
-
 						<img
 							className='post-image'
 							src={img_path}
 							alt={postState.selectedPost?.animal_type}
 						/>
-
 					)
 				})}
 			</div>

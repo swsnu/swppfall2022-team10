@@ -1,10 +1,11 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import axios from "axios";
-import { MemoryRouter, Navigate, Route, Routes } from "react-router";
-import PostCreate from "./PostCreate";
-import { getMockStore } from "../../../test-utils/mock";
-import { Provider } from "react-redux";
-import * as postSlice from "../../../store/slices/post";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import axios from 'axios'
+import { MemoryRouter, Navigate, Route, Routes } from 'react-router'
+import PostCreate from './PostCreate'
+import { getMockStore } from '../../../test-utils/mock'
+import { Provider } from 'react-redux'
+import * as postSlice from '../../../store/slices/post'
 import { MdArrowBack } from 'react-icons/md'
 
 const tempState = {
@@ -12,22 +13,22 @@ const tempState = {
 		posts: [
 			{
 				id: 1,
-				title: "POST_TEST_TITLE",
-				author_id: 1,
-			},
+				title: 'POST_TEST_TITLE',
+				author_id: 1
+			}
 		],
-		selectedPost: null,
+		selectedPost: null
 	},
 	user: { users: [], currentUser: null },
-	review: { reviews: [], selectedReview: null },
-};
-const mockNavigate = jest.fn();
-jest.mock("react-router", () => ({
-	...jest.requireActual("react-router"),
-	useNavigate: () => mockNavigate,
-}));
+	review: { reviews: [], selectedReview: null }
+}
+const mockNavigate = jest.fn()
+jest.mock('react-router', () => ({
+	...jest.requireActual('react-router'),
+	useNavigate: () => mockNavigate
+}))
 
-describe("<PostCreate />", () => {
+describe('<PostCreate />', () => {
 	// let postCreate: JSX.Element;
 	// beforeEach(() => {
 	// 	jest.clearAllMocks();
@@ -57,7 +58,6 @@ describe("<PostCreate />", () => {
 	// 	const titleInput = await screen.findByLabelText("Title:");
 	// 	const contentInput = await screen.findByLabelText("Content:");
 	// 	await screen.findByText("Post");
-
 	// 	await waitFor(() =>
 	// 		expect(titleInput).toHaveValue("ARTICLE_TEST_TITLE")
 	// 	);
@@ -95,4 +95,4 @@ describe("<PostCreate />", () => {
 	// 		expect(mockNavigate).toHaveBeenCalledWith("/")
 	// 	);
 	// });
-});
+})
