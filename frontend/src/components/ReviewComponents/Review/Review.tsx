@@ -11,8 +11,8 @@ export interface IProps {
 const Review = (props: IProps) => {
 	return (
 		<div className='Review'>
-			<Card style={{ width: '17rem' }}>
-				<Card.Img variant='top' src={props.photo_path[0]} />
+			<Card style={{ width: '17rem', height: '25rem' }}>
+				<Card.Img variant='top' src={props.photo_path[0]} style={{ height: '15rem' }} />
 				<Card.Body>
 					<Card.Title>{props.title}</Card.Title>
 					<Card.Text id='review-author'>

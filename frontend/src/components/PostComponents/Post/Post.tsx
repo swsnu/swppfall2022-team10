@@ -17,8 +17,8 @@ const Post = (props: IProps) => {
 	return (
 		<div className='Post'>
 			<button className='post-container' onClick={props.clickDetail}>
-				<Card style={{ width: '17rem' }}>
-					<Card.Img variant='top' src={props.photo_path[0]} />
+				<Card style={{ width: '17rem', height: '30rem' }}>
+					<Card.Img variant='top' src={props.photo_path[0]} style={{ height: '15rem' }} />
 					<Card.Body>
 						<Card.Title>{props.title}</Card.Title>
 						<Card.Text>

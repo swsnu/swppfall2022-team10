@@ -91,6 +91,83 @@
 	}
 }
 
+.user-input-container {
+
+
+	padding: 0 10px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	border-radius: 32px;
+	//border-color: blue;
+	border: solid #c19565;
+	border-width: 1px;
+	//background: red;
+	height: 60px;
+
+	margin: auto;
+
+	z-index: 1;
+
+	margin-bottom: 20px;
+	width: 80%;
+	box-shadow: 5px 5px 5px rgb(173, 169, 169);
+}
+
+.user-input-container input {
+	border: none;
+}
+
+.user-input-container .title {
+	display: flex;
+	flex-direction: row;
+	color: black;
+	padding: 0 0;
+}
+
+.user-input-container .category {
+	padding: 0 20px;
+	border-left: 1px solid black;
+	width: 25%;
+}
+
+.type-space {
+	justify-content: flex-start;
+	//width: 95%;
+}
+
+.user-input-container .category:first-child {
+	border: none;
+}
+
+.user-input-container .sex-container {
+	width: 18%;
+}
+
+.user-input-container #search-button {
+	z-index: 1;
+
+	color: #c19565;
+	border-color: #c19565;
+
+	&:hover {
+		background-color: #c19565;
+		color: white;
+	}
+
+}
+
+/*.user-input-container .search-button {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	background-color: #FF385C;
+	margin: 0 10px;
+	height: 40px;
+	width: 40px;
+	border-radius: 50%;
+}*/
 
 @keyframes slideUp {
 	from {

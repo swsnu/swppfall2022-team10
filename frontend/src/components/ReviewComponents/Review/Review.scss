@@ -12,11 +12,14 @@
 		font-weight: bold;
 		cursor: pointer;
 	}
+
 	.review-image {
 		justify-content: flex-start;
 		width: 200px;
 		border-radius: 5px;
+		object-fit: contain;
 	}
+
 	.review-container {
 		border-radius: 5px;
 		border-width: 2px;
@@ -25,6 +28,7 @@
 		flex: 1;
 		cursor: pointer;
 	}
+
 	#review-author {
 		text-align: right;
 	}
