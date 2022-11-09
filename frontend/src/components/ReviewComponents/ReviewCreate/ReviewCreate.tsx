@@ -18,7 +18,7 @@ import "./ReviewCreate.scss";
 
 export default function ReviewCreate() {
 	const [title, setTitle] = useState<string>("")
-	const [content] = useState<string>("")
+	const [content, setContent] = useState<string>("")
 	const [file, setFile] = useState<File[]>([])
 
 	const navigate = useNavigate()
@@ -79,6 +79,10 @@ export default function ReviewCreate() {
 									id="review-title-input"
 									type="text"
 									name="title"
+									onChange={(event) =>
+										setTitle(event.target.value)
+									}
+									value={title}
 								/>
 							</div>
 							<div className="content-container">
@@ -89,6 +93,10 @@ export default function ReviewCreate() {
 								<textarea
 									id="review-content-input"
 									name="content"
+									onChange={(event) =>
+										setContent(event.target.value)
+									}
+									value={content}
 								/>
 							</div>
 							<div className="photo-container">
