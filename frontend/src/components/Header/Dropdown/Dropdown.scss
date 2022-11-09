@@ -28,12 +28,9 @@
 		}
 	}
 
-	.dropdown-non-user {
+	.dropdown-non-user, .dropdown-user {
 		display: flex;
 		flex-direction: column;
 	}
-	.dropdown-user {
-		display: flex;
-		flex-direction: column;
-	}
+	
 }

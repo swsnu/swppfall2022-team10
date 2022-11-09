@@ -30,16 +30,6 @@ export default function PostCreate() {
 	const [vaccination, setVaccination] = useState<string>('')
 	const [neutering, setNeutering] = useState<string>('')
 	const [content, setContent] = useState<string>('')
-	// const title = useRef<HTMLInputElement>(null)
-	// const name = useRef<HTMLInputElement>(null)
-	// const animalType = useRef<HTMLInputElement>(null)
-	// const species = useRef<HTMLInputElement>(null)
-	// const age = useRef<HTMLInputElement>(null)
-	// const gender = useRef<HTMLInputElement>(null)
-	// const vaccination = useRef<HTMLInputElement>(null)
-	// const neutering = useRef<HTMLInputElement>(null)
-	// const character = useRef<HTMLTextAreaElement>(null)
-	// const [file, setFile] = useState<{}>({ selectedFiles: null })
 	const [file, setFile] = useState<File[]>([])
 
 	const navigate = useNavigate()
@@ -58,10 +48,6 @@ export default function PostCreate() {
 		content
 	]
 
-	// useEffect(() => {
-	// 	if (!userState.currentUser) navigate("/login");
-	// }, [userState.currentUser, navigate]);
-
 	const fileChangedHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const files = event.target.files
 		if (files !== null) setFile(file.concat(Array.from(files)))
@@ -73,7 +59,6 @@ export default function PostCreate() {
 	}
 
 	const createPostHandler = (event: React.FormEvent<HTMLFormElement>) => {
-		// console.log('createPost')
 		event.preventDefault()
 		if (!userState.logged_in) {
 			alert('You should log in')
@@ -153,9 +138,6 @@ export default function PostCreate() {
 		]
 	}
 
-	// if (!userState.currentUser) {
-	// 	return <Navigate to="/login" />;
-	// } else {
 	return (
 		<Layout>
 			<div className='CreateContainer'>
@@ -180,7 +162,6 @@ export default function PostCreate() {
 							<div className='input-container'>
 								<label htmlFor='post-title-input'>제목:</label>
 								<input
-									// ref={title}
 									className='post-input'
 									id='post-title-input'
 									type='text'
@@ -194,7 +175,6 @@ export default function PostCreate() {
 							<div className='input-container'>
 								<label htmlFor='post-name-input'>이름:</label>
 								<input
-									// ref={name}
 									className='post-input'
 									id='post-name-input'
 									type='text'
@@ -208,7 +188,6 @@ export default function PostCreate() {
 							<div className='input-container'>
 								<label htmlFor='post-type-input'>동물:</label>
 								<Combobox
-									// ref={animalType}
 									id='post-type-input'
 									className='post-combobox'
 									name='type'
@@ -227,7 +206,6 @@ export default function PostCreate() {
 							<div className='input-container'>
 								<label htmlFor='post-species-input'>종:</label>
 								<Combobox
-									// ref={species}
 									id='post-species-input'
 									className='post-combobox'
 									name='species'
@@ -243,7 +221,6 @@ export default function PostCreate() {
 							<div className='input-container'>
 								<label htmlFor='post-age-input'>나이:</label>
 								<input
-									// ref={age}
 									className='post-input'
 									id='post-age-input'
 									type='text'
@@ -257,7 +234,6 @@ export default function PostCreate() {
 							<div className='input-container'>
 								<label htmlFor='post-gender-input'>성별:</label>
 								<DropdownList
-									// ref={gender}
 									id='post-gender-input'
 									className='post-dropbox'
 									name='gender'
@@ -271,7 +247,6 @@ export default function PostCreate() {
 									백신 접종 여부:
 								</label>
 								<DropdownList
-									// ref={vaccination}
 									id='post-vaccination-input'
 									className='post-dropbox'
 									name='vaccination'
@@ -285,7 +260,6 @@ export default function PostCreate() {
 									중성화 여부:
 								</label>
 								<DropdownList
-									// ref={neutering}
 									id='post-neutering-input'
 									className='post-dropbox'
 									name='neutering'
@@ -300,7 +274,6 @@ export default function PostCreate() {
 									입양에 도움이 됩니다:&#41;
 								</label>
 								<textarea
-									// ref={character}
 									className='post-input'
 									id='post-content-input'
 									name='content'
@@ -336,5 +309,4 @@ export default function PostCreate() {
 			</div>
 		</Layout>
 	)
-	// }
 }
