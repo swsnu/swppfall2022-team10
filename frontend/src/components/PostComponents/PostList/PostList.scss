@@ -9,9 +9,8 @@
 
 .PostList {
 	position: relative;
-
 	margin: 0 auto;
-
+	z-index: 1;
 	margin-top: 10px;
 	margin-bottom: 32px;
 	display: flex;
@@ -20,7 +19,6 @@
 	padding: 20px 32px;
 	padding-bottom: 48px;
 	overflow-y: auto;
-    z-index: -1;
 
 	.search-bar #search-input:focus::placeholder {
 		color: grey;
