@@ -46,4 +46,7 @@ backend/beafamily/data/application/*
 backend/beafamily/data/question/*
 backend/beafamily/data/review/*
 
-
+# IDE Cache 
+*.code-workspace
+.idea/
+.vscode/
