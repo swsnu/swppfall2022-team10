@@ -34,7 +34,10 @@ export default function LogIn() {
 		dispatch(checkLogin())
 	}, [])
 
-	if (userState.logged_in) navigate('/')
+	if (userState.logged_in)
+		useEffect(() => {
+			navigate('/')
+		}, [])
 
 	const logInHandler = async () => {
 		const userData: UserLoginType = {

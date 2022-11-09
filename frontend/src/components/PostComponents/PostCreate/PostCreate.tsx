@@ -44,6 +44,7 @@ export default function PostCreate() {
 
 	const navigate = useNavigate()
 	const dispatch = useDispatch<AppDispatch>()
+	const userState = useSelector(selectUser)
 
 	const fields = [
 		title,
@@ -74,6 +75,10 @@ export default function PostCreate() {
 	const createPostHandler = (event: React.FormEvent<HTMLFormElement>) => {
 		// console.log('createPost')
 		event.preventDefault()
+		if (!userState.logged_in) {
+			alert('You should log in')
+			return
+		}
 
 		const emptyField = fields.filter((x) => x === '')
 		if (emptyField.length !== 0) return

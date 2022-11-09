@@ -22,7 +22,7 @@ export default function Dropdown(props: IProps) {
 		dispatch(checkLogin())
 	}, [])
 
-	const logOutHandler = async () => {
+	const logOutHandler = () => {
 		dispatch(logoutUser(props.userId)).then((result) => navigate('/login'))
 	}
 

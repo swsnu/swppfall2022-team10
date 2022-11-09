@@ -79,7 +79,7 @@ def post_id(request, pid=0):
 @parser_classes([MultiPartParser])
 def posts(request):
     if request.method == "GET":
-        post_list = Post.objects.all()
+        post_list = Post.objects.all().order_by('-datetime')
         response_list = []
         for post in post_list.iterator():
             response = post_serializer(post)
