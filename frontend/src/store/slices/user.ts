@@ -29,6 +29,7 @@ export const checkLogin = createAsyncThunk(
 	'user/checkLogin',
 	async (x, { dispatch }) => {
 		const response = await axios.get<{ logged_in: boolean }>('/api/check/')
+		dispatch(userActions.checkLogin(response.data))
 		return response.data
 	}
 )
@@ -126,6 +127,9 @@ export const userSlice = createSlice({
 				state.currentUser = null
 				state.logged_in = false
 			}
+		},
+		checkLogin: (state, action: PayloadAction<{ logged_in: boolean }>) => {
+			state.logged_in = action.payload.logged_in
 		}
 	},
 	extraReducers: (builder) => {

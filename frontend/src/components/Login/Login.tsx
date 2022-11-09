@@ -31,13 +31,17 @@ export default function LogIn() {
 
 	useEffect(() => {
 		// eslint-disable-next-line @typescript-eslint/no-floating-promises
-		dispatch(checkLogin())
+		dispatch(checkLogin()).then((result) => {
+			const loggedIn: boolean = (result.payload as { logged_in: boolean })
+				.logged_in
+			if (loggedIn) navigate('/')
+		})
 	}, [])
 
-	if (userState.logged_in)
-		useEffect(() => {
-			navigate('/')
-		}, [])
+	// if (userState.logged_in)
+	// 	useEffect(() => {
+	// 		navigate('/')
+	// 	}, [])
 
 	const logInHandler = async () => {
 		const userData: UserLoginType = {
