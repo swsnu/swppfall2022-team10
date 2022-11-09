@@ -28,9 +28,15 @@ const PostDetail = (props: IProps) => {
 	const navigate = useNavigate()
 
 	useEffect(() => {
-		dispatch(getPost(Number(id)))
-		if (postState.selectedPost != null)
-			dispatch(getUser(postState.selectedPost.author_id))
+		dispatch(getPost(Number(id))).then((result)=> {
+			if (postState.selectedPost != null) {
+				dispatch(getUser(postState.selectedPost.author_id))
+				console.log(postState.selectedPost.author_id)
+			}
+			console.log(userState.currentUser)
+		})
+
+
 	}, [id])
 
 	return (
