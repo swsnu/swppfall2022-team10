@@ -4,13 +4,12 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 import Layout from '../../Layout/Layout'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router'
 import { useNavigate } from 'react-router-dom'
 import { AppDispatch } from '../../../store'
 import { selectPost, getPost, deletePost } from '../../../store/slices/post'
-import { selectUser, getUser } from '../../../store/slices/user'
 import { FaSyringe, FaRegMeh } from 'react-icons/fa'
 import PostHeader from '../PostHeader/PostHeader'
 
@@ -23,20 +22,15 @@ interface IProps {
 const PostDetail = (props: IProps) => {
 	const { id } = useParams()
 	const dispatch = useDispatch<AppDispatch>()
-	const userState = useSelector(selectUser)
 	const postState = useSelector(selectPost)
 	const navigate = useNavigate()
+	const [editable, setEditable] = useState<boolean>(false)
 
 	useEffect(() => {
 		dispatch(getPost(Number(id))).then((result)=> {
-			if (postState.selectedPost != null) {
-				dispatch(getUser(postState.selectedPost.author_id))
-				console.log(postState.selectedPost.author_id)
-			}
-			console.log(userState.currentUser)
+			// setEditable(result.payload.editable)
+			setEditable(true)
 		})
-
-
 	}, [id])
 
 	return (
@@ -86,8 +80,7 @@ const PostDetail = (props: IProps) => {
 						</div>
 
 					</div>
-					{postState.selectedPost?.author_id ===
-						userState.currentUser?.id && (
+					{editable && (
 							<div className='post-buttons'>
 								<button
 									id='edit-post-button'

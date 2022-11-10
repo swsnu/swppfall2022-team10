@@ -21,7 +21,6 @@ describe("<Header />", () => {
 		render(
 			<Provider store={mockStore}>
 				<Header 
-					userId={1}
 				/>
 			</Provider>
 		);
@@ -34,7 +33,6 @@ describe("<Header />", () => {
 		render(
 			<Provider store={mockStore}>
 				<Header 
-					userId={1}
 				/>
 			</Provider>
 		);
@@ -63,7 +61,6 @@ describe("<Header />", () => {
 		render(
 			<Provider store={mockStore}>
 				<Header 
-					userId={1}
 				/>
 			</Provider>
 		);
