@@ -298,8 +298,8 @@ export default function PostCreate() {
 								id='confirm-create-post-button'
 								type='submit'
 
-								// disabled={!(title && name && animalType && species && age
-								//     && gender && vaccination && neutering && character)}
+							// disabled={!(title && name && animalType && species && age
+							//     && gender && vaccination && neutering && character)}
 							>
 								게시하기
 							</button>
