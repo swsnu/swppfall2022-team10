@@ -14,6 +14,8 @@ from django.db import transaction
 
 
 @api_view(['GET', "PUT", "DELETE"])
+@authentication_classes([SessionAuthentication])
+@permission_classes([IsAuthenticatedOrReadOnly])
 @parser_classes([MultiPartParser, JSONParser, FileUploadParser])
 def post_id(request, pid=0):
     if request.method == "GET":
@@ -27,15 +29,6 @@ def post_id(request, pid=0):
 
     elif request.method == 'PUT':
 
-        # try:
-        #     # TODO: use parser from django-rest-framework
-        #     request_data = json.loads(request.body.decode())
-        # except Exception as e:
-        #     return HttpResponse(status=HttpStatus.BAD_REQUEST)
-
-        if not request.user.is_authenticated:
-            return HttpResponse(status=HttpStatus.UNAUTHORIZED)
-
         try:
             post = Post.objects.get(id=pid)
         except Post.DoesNotExist as e:
@@ -48,15 +41,7 @@ def post_id(request, pid=0):
 
         return HttpResponse(status=HttpStatus.OK)
 
-    elif request.method == 'DELETE':
-        # try:
-        #     # TODO: use parser from django-rest-framework
-        #     request_data = json.loads(request.body.decode())
-        # except Exception as e:
-        #     return HttpResponse(status=HttpStatus.BAD_REQUEST)
-
-        if not request.user.is_authenticated:
-            return HttpResponse(status=HttpStatus.UNAUTHORIZED)
+    else:
 
         try:
             post = Post.objects.get(id=pid)
@@ -68,9 +53,6 @@ def post_id(request, pid=0):
 
         post.delete()
         return HttpResponse(status=HttpStatus.OK)
-
-    else:
-        return HttpResponse(status=HttpStatus.NOT_ALLOWED)
 
 
 @api_view(['GET', "POST"])
@@ -87,8 +69,7 @@ def posts(request):
 
         return JsonResponse(response_list, safe=False)
 
-    elif request.method == "POST":
-
+    else:
         # validate uploaded data
         try:
             photos = request.data.pop("photos")
@@ -105,7 +86,6 @@ def posts(request):
                 img.verify()
 
             content_dict = json.loads(content_json[0])
-            print(content_dict)
             content = {
                 "animal_type": content_dict["animal_type"],
                 "age": content_dict["age"],
@@ -121,7 +101,6 @@ def posts(request):
             }
 
         except Exception as e:
-            print(e)
             return HttpResponse(status=HttpStatus.BAD_REQUEST)
 
         try:
@@ -143,12 +122,10 @@ def posts(request):
 
                 post.content["photo_list"] = photo_list
                 post.save()
+
         except Exception as e:
             return HttpResponse(status=HttpStatus.INTERNAL_SERVER_ERROR)
 
         return HttpResponse(status=HttpStatus.CREATED, content=json.dumps(
             post_serializer(post)
         ), content_type='application/json')
-
-    else:
-        return HttpResponse(status=HttpStatus.NOT_ALLOWED)
