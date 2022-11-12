@@ -6,12 +6,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch } from '../../store'
 import {
 	checkLogin,
-	getUsers,
 	loginUser,
-	logoutUser,
-	selectUser,
 	UserLoginType,
-	UserType
 } from '../../store/slices/user'
 import { Navigate, useNavigate } from 'react-router-dom'
 import './Login.scss'
@@ -20,14 +16,8 @@ export default function LogIn() {
 	const [username, setUserName] = useState<string>('')
 	const [password, setPassword] = useState<string>('')
 
-	const userState = useSelector(selectUser)
 	const dispatch = useDispatch<AppDispatch>()
 	const navigate = useNavigate()
-
-	// useEffect(() => {
-	// 	// eslint-disable-next-line @typescript-eslint/no-floating-promises
-	// 	dispatch(logoutUser(0))
-	// })
 
 	useEffect(() => {
 		// eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -37,11 +27,6 @@ export default function LogIn() {
 			if (loggedIn) navigate('/')
 		})
 	}, [])
-
-	// if (userState.logged_in)
-	// 	useEffect(() => {
-	// 		navigate('/')
-	// 	}, [])
 
 	const logInHandler = async () => {
 		const userData: UserLoginType = {
@@ -53,7 +38,6 @@ export default function LogIn() {
 			.unwrap()
 			.then((result) => {
 				navigate('/')
-				// else alert('ID or Password Wrong')
 			})
 			.catch((err) => {
 				console.log(err)
@@ -61,21 +45,6 @@ export default function LogIn() {
 				setUserName('')
 				setPassword('')
 			})
-
-		// if (userState.currentUser !== null) navigate('/')
-
-		// const verifiedUser = userState.users.find((user: UserType) => {
-		// 	return user.email === username && user.password === password
-		// })
-
-		// if (verifiedUser != null) {
-		// 	await dispatch(loginUser(verifiedUser.id))
-		// 	navigate('/')
-		// } else {
-		// 	alert('Email or password is wrong')
-		// 	setUserName('')
-		// 	setPassword('')
-		// }
 	}
 	return (
 		<Layout>

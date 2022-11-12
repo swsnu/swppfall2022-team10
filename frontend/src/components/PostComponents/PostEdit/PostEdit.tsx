@@ -143,6 +143,7 @@ export default function PostEdit() {
 				<div className='PostEdit'>
 					<button
 						id='back-edit-post-button'
+						aria-label='back-button'
 						onClick={(event) => {
 							event.preventDefault()
 							navigate('/')

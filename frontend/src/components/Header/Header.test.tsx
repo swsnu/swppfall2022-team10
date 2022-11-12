@@ -1,6 +1,6 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { MemoryRouter, Navigate, Route, Routes } from "react-router";
 import { getMockStore } from "../../test-utils/mock";
+import axios from "axios";
 import Header from "./Header";
 import { Provider } from "react-redux";
 
@@ -18,6 +18,7 @@ const mockStore = getMockStore({
 
 describe("<Header />", () => {
 	it("should render without errors", () => {
+		jest.spyOn(axios, "get").mockResolvedValue({ data: { logged_in:false }});
 		render(
 			<Provider store={mockStore}>
 				<Header 
@@ -30,6 +31,7 @@ describe("<Header />", () => {
         screen.getByText("Q&A");
 	});
 	it("should navigate to corresponding pages", async () => {
+		jest.spyOn(axios, "get").mockResolvedValue({ data: { logged_in:false }});
 		render(
 			<Provider store={mockStore}>
 				<Header 
@@ -58,6 +60,7 @@ describe("<Header />", () => {
 		);
 	});
 	it("should show/hide dropdown menu", async () => {
+		jest.spyOn(axios, "get").mockResolvedValue({ data: { logged_in:true }});
 		render(
 			<Provider store={mockStore}>
 				<Header 

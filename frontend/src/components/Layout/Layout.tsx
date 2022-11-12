@@ -1,7 +1,5 @@
-import { useSelector } from 'react-redux'
 import Header from '../Header/Header'
 import Footer from '../Footer/Footer'
-import { selectUser } from '../../store/slices/user'
 import { ReactNode } from 'react'
 import ScrollToTop from "./ScrollToTop";
 
@@ -12,7 +10,6 @@ interface IProps {
 }
 
 export default function Layout({ children }: IProps) {
-	const userState = useSelector(selectUser)
 	return (
 	    <>
 	        <ScrollToTop />

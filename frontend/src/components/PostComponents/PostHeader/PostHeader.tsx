@@ -51,6 +51,7 @@ const PostHeader = (props: IProps) => {
 				<div className='bookmark-button-container'>
 					<button
 						id='bookmark-button'
+						aria-label='bookmark-button'
 						onClick={() => {
 							setIsBookmark(!isBookmark)
 						}}
@@ -63,27 +64,6 @@ const PostHeader = (props: IProps) => {
 					</button>
 				</div>
 			</div>
-
-			{/*<div className='post-header-container'>
-
-
-				<div className='post-header-bookmark'>
-					<div className='bookmark-button-container'>
-						<button
-							id='bookmark-button'
-							onClick={() => {
-								setIsBookmark(!isBookmark)
-							}}
-						>
-							{isBookmark ? (
-								<IoPaw size={40} />
-							) : (
-								<IoPawOutline size={40} />
-							)}
-						</button>
-					</div>
-				</div>
-							</div> */}
 
 			{!props.is_author && (
 				<div className='post-button-container'>

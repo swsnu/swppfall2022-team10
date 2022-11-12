@@ -29,7 +29,6 @@ export const checkLogin = createAsyncThunk(
 	'user/checkLogin',
 	async (x, { dispatch }) => {
 		const response = await axios.get<{ logged_in: boolean }>('/api/check/')
-		dispatch(userActions.checkLogin(response.data))
 		return response.data
 	}
 )

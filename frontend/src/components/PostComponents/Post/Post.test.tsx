@@ -15,9 +15,9 @@ describe("<Post />", () => {
 			/>
 		);
 		screen.getByText("POST_TITLE");
-		screen.getByText("POST_ANIMAL_TYPE");
-		screen.getByText("POST_SPECIES");
-		screen.getByText("POST_AUTHOR");
-		screen.getByText("1");
+		screen.getByText(/POST_ANIMAL_TYPE/);
+		screen.getByText(/POST_SPECIES/);
+		screen.getByText(/POST_AUTHOR/);
+		screen.getByText(/1/);
 	});
 });

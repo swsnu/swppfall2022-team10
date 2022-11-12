@@ -144,6 +144,7 @@ export default function PostCreate() {
 				<div className='PostCreate'>
 					<button
 						id='back-create-post-button'
+						aria-label='back-button'
 						onClick={(event) => {
 							event.preventDefault()
 							navigate('/')
@@ -186,7 +187,7 @@ export default function PostCreate() {
 								/>
 							</div>
 							<div className='input-container'>
-								<label htmlFor='post-type-input'>동물:</label>
+								<label htmlFor='post-type-input_input'>동물:</label>
 								<Combobox
 									id='post-type-input'
 									className='post-combobox'
@@ -204,7 +205,7 @@ export default function PostCreate() {
 								/>
 							</div>
 							<div className='input-container'>
-								<label htmlFor='post-species-input'>종:</label>
+								<label htmlFor='post-species-input_input'>종:</label>
 								<Combobox
 									id='post-species-input'
 									className='post-combobox'
@@ -235,6 +236,7 @@ export default function PostCreate() {
 								<label htmlFor='post-gender-input'>성별:</label>
 								<DropdownList
 									id='post-gender-input'
+									aria-label='post-gender-input'
 									className='post-dropbox'
 									name='gender'
 									data={['암컷', '수컷']}

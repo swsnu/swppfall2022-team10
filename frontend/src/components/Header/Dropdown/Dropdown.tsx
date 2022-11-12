@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { AppDispatch } from '../../../store'
-import { checkLogin, logoutUser, selectUser } from '../../../store/slices/user'
+import { checkLogin, logoutUser } from '../../../store/slices/user'
 import { useNavigate } from 'react-router-dom'
 import './Dropdown.scss'
 import { useState, useEffect } from 'react'
@@ -14,9 +14,7 @@ export interface IProps {
 export default function Dropdown(props: IProps) {
 	const dispatch = useDispatch<AppDispatch>()
 	const navigate = useNavigate()
-	const userState = useSelector(selectUser)
 	const [loggedIn, setLoggedIn] = useState<boolean>(false);
-	const [userId, setUserId] = useState<number>(0);
 
 	useEffect(() => {
 		dispatch(checkLogin()).then((result) => {
@@ -33,7 +31,7 @@ export default function Dropdown(props: IProps) {
 		<div className='Dropdown'>
 			{props.visibility && (
 				<div>
-					{userState.logged_in ? (
+					{loggedIn ? (
 						<div className='dropdown-user dropdown-content'>
 							<button
 								className='dropdown-button'
@@ -56,7 +54,6 @@ export default function Dropdown(props: IProps) {
 							<button
 								className='dropdown-button'
 								onClick={(event) => {
-									console.log('clicked')
 									event.preventDefault()
 									logOutHandler()
 								}}

@@ -22,7 +22,9 @@ describe("<Layout />", () => {
 						<Route
 							path="/"
 							element={
-                                <Layout children={<div>통과</div>} />
+                                <Layout>
+									<div>통과</div>
+								</Layout>
 							}
 						/>
 					</Routes>
