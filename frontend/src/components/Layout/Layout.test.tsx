@@ -10,6 +10,8 @@ const mockStore = getMockStore({
 	review: { reviews: [], selectedReview: null },
 })
 
+const scrollToSpy = jest.fn();
+global.scrollTo = scrollToSpy;
 
 describe("<Layout />", () => {
 	it("should render without errors", () => {
