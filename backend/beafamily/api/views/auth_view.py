@@ -14,7 +14,6 @@ User = get_user_model()
 @api_view(["POST"])
 @authentication_classes([BasicAuthentication])
 def signin(request):
-    print(request.user)
     login(request, user=request.user)
     return HttpResponse(status=HttpStatus.OK)
 
@@ -34,7 +33,6 @@ def token(request):
 @api_view(["GET"])
 def check_login(request):
     is_logged_in = request.user and request.user.is_authenticated
-    print(is_logged_in)
     return HttpResponse(status=HttpStatus.OK, content=json.dumps({
         "logged_in": is_logged_in
     }), content_type="application/json")
