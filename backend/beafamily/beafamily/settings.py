@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "api.apps.APIConfig",
-    "request_test.apps.RequestTestConfig",
     "rest_framework"
 ]
 
