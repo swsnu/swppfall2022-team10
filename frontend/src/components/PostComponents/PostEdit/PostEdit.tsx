@@ -15,9 +15,8 @@ import {
 	getPost,
 	editPost,
 	selectPost,
-	postCreateType
 } from '../../../store/slices/post'
-import { selectUser } from '../../../store/slices/user'
+import { selectUser, checkLogin } from '../../../store/slices/user'
 import { MdArrowBack } from 'react-icons/md'
 import Combobox from 'react-widgets/Combobox'
 import DropdownList from 'react-widgets/DropdownList'
@@ -26,7 +25,7 @@ import './PostEdit.scss'
 import { Dictionary } from '@reduxjs/toolkit'
 import { List } from 'reselect/es/types'
 
-export default function PostCreate() {
+export default function PostEdit() {
 	const { id } = useParams()
 
 	const [title, setTitle] = useState<string>('')
@@ -39,29 +38,44 @@ export default function PostCreate() {
 	const [neutering, setNeutering] = useState<string>('')
 	const [content, setContent] = useState<string>('')
 	const [file, setFile] = useState<{}>({ selectedFiles: null })
+	const [editable, setEditable] = useState<boolean>(true)
 
 	const navigate = useNavigate()
 	const dispatch = useDispatch<AppDispatch>()
 	const postState = useSelector(selectPost)
 
 	useEffect(() => {
-		dispatch(getPost(Number(id)))
-		const currentPost = postState.posts.find((post) => {
-			return post.id === Number(id)
+		dispatch(checkLogin()).then((result) => {
+			const loggedIn: boolean = (result.payload as { logged_in: boolean }).logged_in
+			if (!loggedIn) {
+				navigate('/login')
+			}
 		})
-		if (currentPost) {
-			setTitle(currentPost.title)
-			setName(currentPost.name)
-			setAnimalType(currentPost.animal_type)
-			setSpecies(currentPost.species)
-			setAge(String(currentPost.age))
-			setGender(currentPost.gender ? '수컷' : '암컷')
-			setVaccination(currentPost.vaccination ? 'O' : 'X')
-			setNeutering(currentPost.neutering ? 'O' : 'X')
-			setContent(currentPost.content)
-			setFile(currentPost.photo_path)
-		}
+		dispatch(getPost(Number(id))).then((result)=> {
+				const currentPost = result.payload
+				if (currentPost) {
+					setTitle(currentPost.title)
+					setName(currentPost.name)
+					setAnimalType(currentPost.animal_type)
+					setSpecies(currentPost.species)
+					setAge(String(currentPost.age))
+					setGender(currentPost.gender ? '수컷' : '암컷')
+					setVaccination(currentPost.vaccination ? 'O' : 'X')
+					setNeutering(currentPost.neutering ? 'O' : 'X')
+					setContent(currentPost.content)
+					setFile(currentPost.photo_path)
+					// setEditable(currentPost.editable)
+					setEditable(true)
+				}
+			}
+		)
 	}, [id])
+
+	useEffect(() => {
+		if (!editable) {
+			navigate('/login')
+		}
+	}, [editable])
 
 	const fileChangedHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const files = event.target.files
@@ -71,10 +85,10 @@ export default function PostCreate() {
 		})
 	}
 
-	const createPostHandler = async (
+	const editPostHandler = async (
 		event: React.FormEvent<HTMLFormElement>
 	) => {
-		console.log('createPost')
+		console.log('editPost')
 		event.preventDefault()
 		const data = {
 			title: title,
@@ -86,16 +100,14 @@ export default function PostCreate() {
 			neutering: neutering === 'O' ? true : false,
 			vaccination: vaccination === 'O' ? true : false,
 			content: content,
-			photo_path: [],
 			author_id: 0
 		}
 		console.log(data)
-		// const result = await dispatch(editPost(data));
-		// if (result.type === `${editPost.typePrefix}/fulfilled`) {
-		// 	navigate(`/posts/${result.payload.id}`);
-		// } else {
-		// 	alert("Error on edit Post");
-		// }
+			// const result = await dispatch(editPost(data));
+			// if (result.type === `${editPost.typePrefix}/fulfilled`) {
+			// 	navigate(`/post/${result.payload.id}`);
+			// } else {
+			// 	alert("Error on edit Post");
 	}
 
 	const speciesList: Dictionary<List> = {
@@ -127,10 +139,10 @@ export default function PostCreate() {
 
 	return (
 		<Layout>
-			<div className='CreateContainer'>
-				<div className='PostCreate'>
+			<div className='EditContainer'>
+				<div className='PostEdit'>
 					<button
-						id='back-create-post-button'
+						id='back-edit-post-button'
 						onClick={(event) => {
 							event.preventDefault()
 							navigate('/')
@@ -139,12 +151,12 @@ export default function PostCreate() {
 						<MdArrowBack />
 					</button>
 					<div>
-						<div className='create-header'>
+						<div className='edit-header'>
 							<h1>입양게시글 수정하기</h1>
 						</div>
 						<form
-							className='create-post-container'
-							onSubmit={createPostHandler}
+							className='edit-post-container'
+							onSubmit={editPostHandler}
 						>
 							<div className='input-container'>
 								<label htmlFor='post-title-input'>제목:</label>
@@ -282,12 +294,12 @@ export default function PostCreate() {
 								/>
 							</div>
 							<button
-								id='confirm-create-post-button'
+								id='confirm-edit-post-button'
 								type='submit'
 								// disabled={!(title && name && animalType && species && age
 								//     && gender && vaccination && neutering && character)}
 							>
-								게시하기
+								수정하기
 							</button>
 						</form>
 					</div>

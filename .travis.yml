@@ -34,7 +34,7 @@ jobs:
         - python manage.py makemigrations
         - python manage.py migrate
         - pylint **/*.py --load-plugins pylint_django
-        - coverage run --source='.' manage.py test
+        - coverage run --source='./api' manage.py test
         - coverage xml
         - coveralls --merge=../../frontend/coverage.json
         - cd ../..  && sonar-scanner

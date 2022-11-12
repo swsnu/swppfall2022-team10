@@ -9,6 +9,7 @@ node_modules/
 /coverage
 coverage.xml
 .coverage
+/frontend/coverage
 
 # production
 /build

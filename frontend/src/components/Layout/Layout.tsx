@@ -17,11 +17,7 @@ export default function Layout({ children }: IProps) {
 	    <>
 	        <ScrollToTop />
 		    <div className='Layout'>
-			    <Header
-				    userId={
-					    userState.currentUser != null ? userState.currentUser.id : 0
-				    }
-			    />
+			    <Header />
 			    <main>{children}</main>
 			    <Footer />
 		    </div>

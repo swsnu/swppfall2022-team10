@@ -14,6 +14,7 @@ from django.db import transaction
 
 import json
 
+
 @api_view(["GET", "POST"])
 @authentication_classes([SessionAuthentication])
 @permission_classes([IsAuthenticatedOrReadOnly])
@@ -29,7 +30,8 @@ def reviews(request):
 
         return JsonResponse(response_list, safe=False)
 
-    elif request.method == "POST":
+    # elif request.method == "POST":
+    else:
         try:
             photos = request.data.pop("photos")
             content_json = request.data.pop("content")
@@ -80,21 +82,12 @@ def reviews(request):
         ), content_type='application/json')
 
 
-
-    else:
-        return HttpResponse(status=HttpStatus.NOT_ALLOWED)
-
-
+@api_view(["GET"])
 def review_id(request, rid: int):
-    if request.method == "GET":
+    try:
+        review = Review.objects.get(id=rid)
+    except Review.DoesNotExist as e:
+        return HttpResponse(status=HttpStatus.NOT_FOUND)
 
-        try:
-            review = Review.objects.get(id=rid)
-        except Review.DoesNotExist as e:
-            return HttpResponse(status=HttpStatus.NOT_FOUND)
-
-        response = review_serializer(review)
-        return JsonResponse(response)
-
-    else:
-        return HttpResponse(status=HttpStatus.NOT_ALLOWED)
+    response = review_serializer(review)
+    return JsonResponse(response)

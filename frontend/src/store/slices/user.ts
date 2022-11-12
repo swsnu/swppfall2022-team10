@@ -91,12 +91,12 @@ export const loginUser = createAsyncThunk(
 
 export const logoutUser = createAsyncThunk(
 	'user/logoutUser',
-	async (id: UserType['id'], { dispatch }) => {
+	async (x, { dispatch }) => {
 		// const user = await axios.get(`/api/user/${id}/`)
 		// await axios.put(`/api/user/${id}/`, { ...user.data, logged_in: false })
 
 		const response = await axios.get(`/api/signout/`)
-		dispatch(userActions.logoutUser({ targetId: id }))
+		dispatch(userActions.logoutUser({ targetId: 0 }))
 		return response.status === 204
 	}
 )

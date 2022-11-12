@@ -4,12 +4,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch } from '../../../store'
 import { checkLogin, logoutUser, selectUser } from '../../../store/slices/user'
 import { useNavigate } from 'react-router-dom'
-
 import './Dropdown.scss'
-import { useEffect } from 'react'
+import { useState, useEffect } from 'react'
 
 export interface IProps {
-	userId: number
 	visibility: boolean
 }
 
@@ -17,13 +15,18 @@ export default function Dropdown(props: IProps) {
 	const dispatch = useDispatch<AppDispatch>()
 	const navigate = useNavigate()
 	const userState = useSelector(selectUser)
+	const [loggedIn, setLoggedIn] = useState<boolean>(false);
+	const [userId, setUserId] = useState<number>(0);
 
 	useEffect(() => {
-		dispatch(checkLogin())
+		dispatch(checkLogin()).then((result) => {
+			setLoggedIn((result.payload as { logged_in: boolean })
+				.logged_in)
+		})
 	}, [])
 
 	const logOutHandler = () => {
-		dispatch(logoutUser(props.userId)).then((result) => navigate('/login'))
+		dispatch(logoutUser()).then((result) => navigate('/login'))
 	}
 
 	return (

@@ -5,11 +5,7 @@ import Dropdown from './Dropdown/Dropdown'
 
 import './Header.scss'
 
-export interface IProps {
-	userId: number
-}
-
-export default function Header(props: IProps) {
+export default function Header() {
 	const navigate = useNavigate()
 	const [dropdownVisibility, setDropdownVisibility] = useState(false)
 
@@ -61,15 +57,15 @@ export default function Header(props: IProps) {
 					</button>
 					<button
 						className='header-buttons'
+						aria-label='menu-button'
 						onClick={() => {
 							setDropdownVisibility(!dropdownVisibility)
 						}}
 					>
-						<MdMenu />
+						<MdMenu/>
 					</button>
 					<Dropdown
 						visibility={dropdownVisibility}
-						userId={props.userId}
 					/>
 				</div>
 			</div>
