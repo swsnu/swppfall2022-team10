@@ -6,13 +6,13 @@ node_modules/
 .pnp.js
 
 # testing
-/coverage
+coverage
 coverage.xml
 .coverage
-/frontend/coverage
+frontend/coverage/
 
 # production
-/build
+build/
 
 # misc
 .DS_Store
