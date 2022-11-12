@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>16/16</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>7/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>16/16</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -158,35 +158,33 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -205,7 +203,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -233,34 +233,34 @@ import './ReviewList.scss'
 import Modal from "../ReviewModal/ReviewModal"
 import ReviewDetail from '../ReviewDetail/ReviewDetail'
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >ReviewList(</span>) {
-	const navigate = <span class="cstat-no" title="statement not covered" >useNavigate()</span>
+export default function ReviewList() {
+	const navigate = useNavigate()
 &nbsp;
-	const reviewState = <span class="cstat-no" title="statement not covered" >useSelector(selectReview)</span>
-	const dispatch = <span class="cstat-no" title="statement not covered" >useDispatch&lt;AppDispatch&gt;()</span>
+	const reviewState = useSelector(selectReview)
+	const dispatch = useDispatch&lt;AppDispatch&gt;()
 &nbsp;
-<span class="cstat-no" title="statement not covered" >	useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >		dispatch(getReviews())</span>
+	useEffect(() =&gt; {
+		dispatch(getReviews())
 	}, [])
 &nbsp;
-	const [modalOpen, setModalOpen] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
-	const onClickToggleModal = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >        setModalOpen(!modalOpen);</span>
+	const [modalOpen, setModalOpen] = useState&lt;boolean&gt;(false);
+	const onClickToggleModal = useCallback(() =&gt; {
+        setModalOpen(!modalOpen);
     }, [modalOpen]);
-    const [clickedReview, setClickedReview] = <span class="cstat-no" title="statement not covered" >useState&lt;reviewType&gt;(reviewState.reviews[0])</span>
-    const onClickReview = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >(r</span>eview: reviewType) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >        setModalOpen(!modalOpen);</span>
-<span class="cstat-no" title="statement not covered" >        setClickedReview(review)</span>
+    const [clickedReview, setClickedReview] = useState&lt;reviewType&gt;(reviewState.reviews[0])
+    const onClickReview = useCallback((review: reviewType) =&gt; {
+        setModalOpen(!modalOpen);
+        setClickedReview(review)
     }, [modalOpen, clickedReview]);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >	return (</span>
+	return (
 		&lt;Layout&gt;
 			&lt;div className='ListContainer'&gt;
 				&lt;div className='ReviewList'&gt;
 					&lt;div className='reviews'&gt;
-						{reviewState.reviews.map(<span class="fstat-no" title="function not covered" >(r</span>eview: reviewType) =&gt; {
-<span class="cstat-no" title="statement not covered" >							return (</span>
-							    &lt;button className = 'review-container' onClick={<span class="fstat-no" title="function not covered" >()</span>=&gt;<span class="cstat-no" title="statement not covered" >onClickReview(review)}</span> key={`${review.id}`}&gt;
+						{reviewState.reviews.map((review: reviewType) =&gt; {
+							return (
+							    &lt;button className = 'review-container' onClick={()=&gt;onClickReview(review)} key={`${review.id}`}&gt;
 								    &lt;Review
 									    key={`${review.id}_review`}
 									    title={review.title}
@@ -281,7 +281,7 @@ export default function <span class="fstat-no" title="function not covered" >Rev
 					&lt;div className='create-review'&gt;
 						&lt;button
 							id='create-review-button'
-							onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >navigate('/reviews/create')}</span>
+							onClick={() =&gt; navigate('/reviews/create')}
 						&gt;
 							&lt;MdOutlineAddBox size='50' /&gt;
 						&lt;/button&gt;
@@ -298,7 +298,7 @@ export default function <span class="fstat-no" title="function not covered" >Rev
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2022-11-12T12:42:11.872Z
+                at 2022-11-12T15:42:44.914Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

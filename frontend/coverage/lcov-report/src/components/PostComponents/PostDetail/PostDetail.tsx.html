@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">6.66% </span>
+                <span class="strong">7.14% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>1/15</span>
+                <span class='fraction'>1/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">6.66% </span>
+                <span class="strong">7.14% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>1/15</span>
+                <span class='fraction'>1/14</span>
             </div>
         
             
@@ -172,9 +172,7 @@
 <a name='L107'></a><a href='#L107'>107</a>
 <a name='L108'></a><a href='#L108'>108</a>
 <a name='L109'></a><a href='#L109'>109</a>
-<a name='L110'></a><a href='#L110'>110</a>
-<a name='L111'></a><a href='#L111'>111</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L110'></a><a href='#L110'>110</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -204,14 +202,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -246,7 +245,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -289,13 +287,12 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 import Layout from '../../Layout/Layout'
 &nbsp;
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router'
 import { useNavigate } from 'react-router-dom'
 import { AppDispatch } from '../../../store'
 import { selectPost, getPost, deletePost } from '../../../store/slices/post'
-import { selectUser, getUser } from '../../../store/slices/user'
 import { FaSyringe, FaRegMeh } from 'react-icons/fa'
 import PostHeader from '../PostHeader/PostHeader'
 &nbsp;
@@ -308,14 +305,15 @@ interface IProps {
 const PostDetail = <span class="fstat-no" title="function not covered" >(p</span>rops: IProps) =&gt; {
 	const { id } = <span class="cstat-no" title="statement not covered" >useParams()</span>
 	const dispatch = <span class="cstat-no" title="statement not covered" >useDispatch&lt;AppDispatch&gt;()</span>
-	const userState = <span class="cstat-no" title="statement not covered" >useSelector(selectUser)</span>
 	const postState = <span class="cstat-no" title="statement not covered" >useSelector(selectPost)</span>
 	const navigate = <span class="cstat-no" title="statement not covered" >useNavigate()</span>
+	const [editable, setEditable] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false)</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >	useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >		dispatch(getPost(Number(id)))</span>
-<span class="cstat-no" title="statement not covered" >		if (postState.selectedPost != null)</span>
-<span class="cstat-no" title="statement not covered" >			dispatch(getUser(postState.selectedPost.author_id))</span>
+<span class="cstat-no" title="statement not covered" >		dispatch(getPost(Number(id))).then(<span class="fstat-no" title="function not covered" >(r</span>esult)=&gt; {</span>
+			// setEditable(result.payload.editable)
+<span class="cstat-no" title="statement not covered" >			setEditable(true)</span>
+		})
 	}, [id])
 &nbsp;
 <span class="cstat-no" title="statement not covered" >	return (</span>
@@ -365,8 +363,7 @@ const PostDetail = <span class="fstat-no" title="function not covered" >(p</span
 						&lt;/div&gt;
 &nbsp;
 					&lt;/div&gt;
-					{postState.selectedPost?.author_id ===
-						userState.currentUser?.id &amp;&amp; (
+					{editable &amp;&amp; (
 							&lt;div className='post-buttons'&gt;
 								&lt;button
 									id='edit-post-button'
@@ -400,7 +397,7 @@ export default PostDetail
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2022-11-12T12:42:11.872Z
+                at 2022-11-12T15:42:44.914Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

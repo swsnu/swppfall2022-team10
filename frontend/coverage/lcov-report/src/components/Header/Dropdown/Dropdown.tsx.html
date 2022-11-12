@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">35% </span>
+                <span class="strong">39.13% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>7/20</span>
+                <span class='fraction'>9/23</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">25% </span>
+                <span class="strong">75% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>1/4</span>
+                <span class='fraction'>3/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">22.22% </span>
+                <span class="strong">20% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>2/9</span>
+                <span class='fraction'>2/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">36.84% </span>
+                <span class="strong">40.9% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>7/19</span>
+                <span class='fraction'>9/22</span>
             </div>
         
             
@@ -153,7 +153,10 @@
 <a name='L88'></a><a href='#L88'>88</a>
 <a name='L89'></a><a href='#L89'>89</a>
 <a name='L90'></a><a href='#L90'>90</a>
-<a name='L91'></a><a href='#L91'>91</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L91'></a><a href='#L91'>91</a>
+<a name='L92'></a><a href='#L92'>92</a>
+<a name='L93'></a><a href='#L93'>93</a>
+<a name='L94'></a><a href='#L94'>94</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -167,21 +170,24 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -249,12 +255,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch } from '../../../store'
 import { checkLogin, logoutUser, selectUser } from '../../../store/slices/user'
 import { useNavigate } from 'react-router-dom'
-&nbsp;
 import './Dropdown.scss'
-import { useEffect } from 'react'
+import { useState, useEffect } from 'react'
 &nbsp;
 export interface IProps {
-	userId: number
 	visibility: boolean
 }
 &nbsp;
@@ -262,19 +266,24 @@ export default function Dropdown(props: IProps) {
 	const dispatch = useDispatch&lt;AppDispatch&gt;()
 	const navigate = useNavigate()
 	const userState = useSelector(selectUser)
+	const [loggedIn, setLoggedIn] = useState&lt;boolean&gt;(false);
+	const [userId, setUserId] = useState&lt;number&gt;(0);
 &nbsp;
 	useEffect(() =&gt; {
-		dispatch(checkLogin())
+		dispatch(checkLogin()).then(<span class="fstat-no" title="function not covered" >(r</span>esult) =&gt; {
+<span class="cstat-no" title="statement not covered" >			setLoggedIn((result.payload as { logged_in: boolean })</span>
+				.logged_in)
+		})
 	}, [])
 &nbsp;
 	const logOutHandler = <span class="fstat-no" title="function not covered" >()</span> =&gt; {
-<span class="cstat-no" title="statement not covered" >		dispatch(logoutUser(props.userId)).then(<span class="fstat-no" title="function not covered" >(r</span>esult) =&gt; <span class="cstat-no" title="statement not covered" >navigate('/login'))</span></span>
+<span class="cstat-no" title="statement not covered" >		dispatch(logoutUser()).then(<span class="fstat-no" title="function not covered" >(r</span>esult) =&gt; <span class="cstat-no" title="statement not covered" >navigate('/login'))</span></span>
 	}
 &nbsp;
 	return (
 		&lt;div className='Dropdown'&gt;
 			{props.visibility &amp;&amp; (
-<span class="branch-1 cbranch-no" title="branch not covered" >				&lt;div&gt;</span>
+				&lt;div&gt;
 					{userState.logged_in ? (
 						&lt;div className='dropdown-user dropdown-content'&gt;
 							&lt;button
@@ -307,7 +316,7 @@ export default function Dropdown(props: IProps) {
 							&lt;/button&gt;
 						&lt;/div&gt;
 					) : (
-						&lt;div className='dropdown-non-user dropdown-content'&gt;
+<span class="branch-1 cbranch-no" title="branch not covered" >						&lt;div className='dropdown-non-user dropdown-content'&gt;</span>
 							&lt;button
 								className='dropdown-button'
 								onClick={<span class="fstat-no" title="function not covered" >(e</span>vent) =&gt; {
@@ -340,7 +349,7 @@ export default function Dropdown(props: IProps) {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2022-11-12T12:42:11.872Z
+                at 2022-11-12T15:42:44.914Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
