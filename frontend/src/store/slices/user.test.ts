@@ -58,7 +58,7 @@ describe("user reducer", () => {
     });
     it("should handle logoutUser", async () => {
         axios.get = jest.fn().mockResolvedValue({ data: fakeUser });
-        await store.dispatch(logoutUser(1));
+        await store.dispatch(logoutUser());
         expect(store.getState().user.currentUser).toEqual(null);
     });
 });
