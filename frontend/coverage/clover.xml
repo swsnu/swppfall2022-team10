@@ -1,0 +1,517 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1668256932343" clover="3.2.0">
+  <project timestamp="1668256932344" name="All files">
+    <metrics statements="388" coveredstatements="113" conditionals="89" coveredconditionals="10" methods="144" coveredmethods="42" elements="621" coveredelements="165" complexity="0" loc="388" ncloc="388" packages="19" files="22" classes="22"/>
+    <package name="src">
+      <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+      <file name="App.tsx" path="C:\Users\user\OneDrive\Desktop\2022-2\secondteam10\frontend\src\App.tsx">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="13" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.components.Footer">
+      <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+      <file name="Footer.tsx" path="C:\Users\user\OneDrive\Desktop\2022-2\secondteam10\frontend\src\components\Footer\Footer.tsx">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="13" count="2" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.components.Header">
+      <metrics statements="12" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="6" coveredmethods="1"/>
+      <file name="Header.tsx" path="C:\Users\user\OneDrive\Desktop\2022-2\secondteam10\frontend\src\components\Header\Header.tsx">
+        <metrics statements="12" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="6" coveredmethods="1"/>
+        <line num="13" count="6" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="16" count="1" type="stmt"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
+        <line num="57" count="0" type="stmt"/>
+        <line num="65" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.components.Header.Dropdown">
+      <metrics statements="19" coveredstatements="7" conditionals="4" coveredconditionals="1" methods="9" coveredmethods="2"/>
+      <file name="Dropdown.tsx" path="C:\Users\user\OneDrive\Desktop\2022-2\secondteam10\frontend\src\components\Header\Dropdown\Dropdown.tsx">
+        <metrics statements="19" coveredstatements="7" conditionals="4" coveredconditionals="1" methods="9" coveredmethods="2"/>
+        <line num="17" count="6" type="stmt"/>
+        <line num="18" count="1" type="stmt"/>
+        <line num="19" count="1" type="stmt"/>
+        <line num="21" count="1" type="stmt"/>
+        <line num="22" count="1" type="stmt"/>
+        <line num="25" count="1" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="29" count="1" type="stmt"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
+        <line num="57" count="0" type="stmt"/>
+        <line num="58" count="0" type="stmt"/>
+        <line num="69" count="0" type="stmt"/>
+        <line num="70" count="0" type="stmt"/>
+        <line num="78" count="0" type="stmt"/>
+        <line num="79" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.components.Layout">
+      <metrics statements="6" coveredstatements="6" conditionals="2" coveredconditionals="1" methods="3" coveredmethods="3"/>
+      <file name="Layout.tsx" path="C:\Users\user\OneDrive\Desktop\2022-2\secondteam10\frontend\src\components\Layout\Layout.tsx">
+        <metrics statements="2" coveredstatements="2" conditionals="2" coveredconditionals="1" methods="1" coveredmethods="1"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="16" count="1" type="stmt"/>
+      </file>
+      <file name="ScrollToTop.tsx" path="C:\Users\user\OneDrive\Desktop\2022-2\secondteam10\frontend\src\components\Layout\ScrollToTop.tsx">
+        <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.components.Login">
+      <metrics statements="22" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="9" coveredmethods="0"/>
+      <file name="Login.tsx" path="C:\Users\user\OneDrive\Desktop\2022-2\secondteam10\frontend\src\components\Login\Login.tsx">
+        <metrics statements="22" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="9" coveredmethods="0"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="32" count="0" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="37" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="55" count="0" type="stmt"/>
+        <line num="59" count="0" type="stmt"/>
+        <line num="60" count="0" type="stmt"/>
+        <line num="61" count="0" type="stmt"/>
+        <line num="62" count="0" type="stmt"/>
+        <line num="80" count="0" type="stmt"/>
+        <line num="94" count="0" type="stmt"/>
+        <line num="103" count="0" type="stmt"/>
+        <line num="110" count="0" type="stmt"/>
+        <line num="112" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.components.PostComponents.Post">
+      <metrics statements="2" coveredstatements="2" conditionals="2" coveredconditionals="1" methods="1" coveredmethods="1"/>
+      <file name="Post.tsx" path="C:\Users\user\OneDrive\Desktop\2022-2\secondteam10\frontend\src\components\PostComponents\Post\Post.tsx">
+        <metrics statements="2" coveredstatements="2" conditionals="2" coveredconditionals="1" methods="1" coveredmethods="1"/>
+        <line num="16" count="2" type="stmt"/>
+        <line num="17" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.components.PostComponents.PostCreate">
+      <metrics statements="50" coveredstatements="0" conditionals="15" coveredconditionals="0" methods="17" coveredmethods="0"/>
+      <file name="PostCreate.tsx" path="C:\Users\user\OneDrive\Desktop\2022-2\secondteam10\frontend\src\components\PostComponents\PostCreate\PostCreate.tsx">
+        <metrics statements="50" coveredstatements="0" conditionals="15" coveredconditionals="0" methods="17" coveredmethods="0"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="32" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="53" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="54" count="0" type="stmt"/>
+        <line num="61" count="0" type="stmt"/>
+        <line num="62" count="0" type="stmt"/>
+        <line num="63" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="64" count="0" type="stmt"/>
+        <line num="65" count="0" type="stmt"/>
+        <line num="68" count="0" type="stmt"/>
+        <line num="69" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="71" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="73" count="0" type="stmt"/>
+        <line num="74" count="0" type="cond" truecount="0" falsecount="5"/>
+        <line num="76" count="0" type="stmt"/>
+        <line num="90" count="0" type="stmt"/>
+        <line num="91" count="0" type="stmt"/>
+        <line num="92" count="0" type="stmt"/>
+        <line num="94" count="0" type="stmt"/>
+        <line num="96" count="0" type="stmt"/>
+        <line num="97" count="0" type="stmt"/>
+        <line num="100" count="0" type="stmt"/>
+        <line num="101" count="0" type="stmt"/>
+        <line num="114" count="0" type="stmt"/>
+        <line num="141" count="0" type="stmt"/>
+        <line num="148" count="0" type="stmt"/>
+        <line num="149" count="0" type="stmt"/>
+        <line num="170" count="0" type="stmt"/>
+        <line num="183" count="0" type="stmt"/>
+        <line num="202" count="0" type="stmt"/>
+        <line num="217" count="0" type="stmt"/>
+        <line num="229" count="0" type="stmt"/>
+        <line num="241" count="0" type="stmt"/>
+        <line num="254" count="0" type="stmt"/>
+        <line num="267" count="0" type="stmt"/>
+        <line num="281" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.components.PostComponents.PostDetail">
+      <metrics statements="15" coveredstatements="1" conditionals="10" coveredconditionals="0" methods="5" coveredmethods="0"/>
+      <file name="PostDetail.tsx" path="C:\Users\user\OneDrive\Desktop\2022-2\secondteam10\frontend\src\components\PostComponents\PostDetail\PostDetail.tsx">
+        <metrics statements="15" coveredstatements="1" conditionals="10" coveredconditionals="0" methods="5" coveredmethods="0"/>
+        <line num="23" count="1" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="28" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="32" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="73" count="0" type="stmt"/>
+        <line num="89" count="0" type="stmt"/>
+        <line num="97" count="0" type="stmt"/>
+        <line num="98" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.components.PostComponents.PostEdit">
+      <metrics statements="51" coveredstatements="0" conditionals="16" coveredconditionals="0" methods="15" coveredmethods="0"/>
+      <file name="PostEdit.tsx" path="C:\Users\user\OneDrive\Desktop\2022-2\secondteam10\frontend\src\components\PostComponents\PostEdit\PostEdit.tsx">
+        <metrics statements="51" coveredstatements="0" conditionals="16" coveredconditionals="0" methods="15" coveredmethods="0"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="32" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="38" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="41" count="0" type="stmt"/>
+        <line num="43" count="0" type="stmt"/>
+        <line num="44" count="0" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="50" count="0" type="stmt"/>
+        <line num="52" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="54" count="0" type="stmt"/>
+        <line num="55" count="0" type="stmt"/>
+        <line num="56" count="0" type="stmt"/>
+        <line num="57" count="0" type="stmt"/>
+        <line num="58" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="59" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="60" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="61" count="0" type="stmt"/>
+        <line num="62" count="0" type="stmt"/>
+        <line num="66" count="0" type="stmt"/>
+        <line num="67" count="0" type="stmt"/>
+        <line num="68" count="0" type="stmt"/>
+        <line num="69" count="0" type="stmt"/>
+        <line num="74" count="0" type="stmt"/>
+        <line num="77" count="0" type="stmt"/>
+        <line num="78" count="0" type="stmt"/>
+        <line num="79" count="0" type="stmt"/>
+        <line num="92" count="0" type="stmt"/>
+        <line num="101" count="0" type="stmt"/>
+        <line num="128" count="0" type="stmt"/>
+        <line num="135" count="0" type="stmt"/>
+        <line num="136" count="0" type="stmt"/>
+        <line num="157" count="0" type="stmt"/>
+        <line num="170" count="0" type="stmt"/>
+        <line num="189" count="0" type="stmt"/>
+        <line num="204" count="0" type="stmt"/>
+        <line num="216" count="0" type="stmt"/>
+        <line num="228" count="0" type="stmt"/>
+        <line num="241" count="0" type="stmt"/>
+        <line num="254" count="0" type="stmt"/>
+        <line num="268" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.components.PostComponents.PostHeader">
+      <metrics statements="7" coveredstatements="1" conditionals="8" coveredconditionals="0" methods="3" coveredmethods="0"/>
+      <file name="PostHeader.tsx" path="C:\Users\user\OneDrive\Desktop\2022-2\secondteam10\frontend\src\components\PostComponents\PostHeader\PostHeader.tsx">
+        <metrics statements="7" coveredstatements="1" conditionals="8" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="55" count="0" type="stmt"/>
+        <line num="96" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.components.PostComponents.PostList">
+      <metrics statements="9" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="5" coveredmethods="2"/>
+      <file name="PostList.tsx" path="C:\Users\user\OneDrive\Desktop\2022-2\secondteam10\frontend\src\components\PostComponents\PostList\PostList.tsx">
+        <metrics statements="9" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="5" coveredmethods="2"/>
+        <line num="17" count="1" type="stmt"/>
+        <line num="19" count="1" type="stmt"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="22" count="1" type="stmt"/>
+        <line num="24" count="1" type="stmt"/>
+        <line num="27" count="1" type="stmt"/>
+        <line num="58" count="0" type="stmt"/>
+        <line num="69" count="0" type="stmt"/>
+        <line num="78" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.components.ReviewComponents.Review">
+      <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+      <file name="Review.tsx" path="C:\Users\user\OneDrive\Desktop\2022-2\secondteam10\frontend\src\components\ReviewComponents\Review\Review.tsx">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="11" count="2" type="stmt"/>
+        <line num="12" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.components.ReviewComponents.ReviewCreate">
+      <metrics statements="33" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="10" coveredmethods="0"/>
+      <file name="ReviewCreate.tsx" path="C:\Users\user\OneDrive\Desktop\2022-2\secondteam10\frontend\src\components\ReviewComponents\ReviewCreate\ReviewCreate.tsx">
+        <metrics statements="33" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="10" coveredmethods="0"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="32" count="0" type="stmt"/>
+        <line num="33" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="37" count="0" type="stmt"/>
+        <line num="38" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="39" count="0" type="stmt"/>
+        <line num="40" count="0" type="stmt"/>
+        <line num="42" count="0" type="stmt"/>
+        <line num="43" count="0" type="stmt"/>
+        <line num="44" count="0" type="stmt"/>
+        <line num="46" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="47" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="49" count="0" type="stmt"/>
+        <line num="50" count="0" type="stmt"/>
+        <line num="51" count="0" type="stmt"/>
+        <line num="52" count="0" type="stmt"/>
+        <line num="53" count="0" type="stmt"/>
+        <line num="55" count="0" type="stmt"/>
+        <line num="58" count="0" type="stmt"/>
+        <line num="59" count="0" type="stmt"/>
+        <line num="67" count="0" type="stmt"/>
+        <line num="74" count="0" type="stmt"/>
+        <line num="75" count="0" type="stmt"/>
+        <line num="98" count="0" type="stmt"/>
+        <line num="112" count="0" type="stmt"/>
+        <line num="141" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.components.ReviewComponents.ReviewDetail">
+      <metrics statements="3" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
+      <file name="ReviewDetail.tsx" path="C:\Users\user\OneDrive\Desktop\2022-2\secondteam10\frontend\src\components\ReviewComponents\ReviewDetail\ReviewDetail.tsx">
+        <metrics statements="3" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <line num="11" count="1" type="stmt"/>
+        <line num="12" count="0" type="stmt"/>
+        <line num="17" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.components.ReviewComponents.ReviewList">
+      <metrics statements="16" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="7" coveredmethods="0"/>
+      <file name="ReviewList.tsx" path="C:\Users\user\OneDrive\Desktop\2022-2\secondteam10\frontend\src\components\ReviewComponents\ReviewList\ReviewList.tsx">
+        <metrics statements="16" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="7" coveredmethods="0"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="26" count="0" type="stmt"/>
+        <line num="29" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="31" count="0" type="stmt"/>
+        <line num="33" count="0" type="stmt"/>
+        <line num="34" count="0" type="stmt"/>
+        <line num="35" count="0" type="stmt"/>
+        <line num="36" count="0" type="stmt"/>
+        <line num="39" count="0" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="67" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.components.ReviewComponents.ReviewModal">
+      <metrics statements="9" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="5" coveredmethods="0"/>
+      <file name="ReviewModal.tsx" path="C:\Users\user\OneDrive\Desktop\2022-2\secondteam10\frontend\src\components\ReviewComponents\ReviewModal\ReviewModal.tsx">
+        <metrics statements="9" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="5" coveredmethods="0"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="14" count="0" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="22" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="27" count="0" type="stmt"/>
+        <line num="30" count="0" type="stmt"/>
+        <line num="32" count="0" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.store">
+      <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="index.ts" path="C:\Users\user\OneDrive\Desktop\2022-2\secondteam10\frontend\src\store\index.ts">
+        <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="9" count="1" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.store.slices">
+      <metrics statements="126" coveredstatements="78" conditionals="16" coveredconditionals="7" methods="44" coveredmethods="30"/>
+      <file name="post.ts" path="C:\Users\user\OneDrive\Desktop\2022-2\secondteam10\frontend\src\store\slices\post.ts">
+        <metrics statements="45" coveredstatements="23" conditionals="4" coveredconditionals="2" methods="15" coveredmethods="9"/>
+        <line num="42" count="2" type="stmt"/>
+        <line num="47" count="2" type="stmt"/>
+        <line num="48" count="2" type="stmt"/>
+        <line num="51" count="1" type="stmt"/>
+        <line num="54" count="2" type="stmt"/>
+        <line num="57" count="2" type="stmt"/>
+        <line num="58" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="62" count="2" type="stmt"/>
+        <line num="65" count="0" type="stmt"/>
+        <line num="66" count="0" type="stmt"/>
+        <line num="67" count="0" type="stmt"/>
+        <line num="71" count="2" type="stmt"/>
+        <line num="74" count="1" type="stmt"/>
+        <line num="75" count="1" type="stmt"/>
+        <line num="79" count="2" type="stmt"/>
+        <line num="82" count="0" type="stmt"/>
+        <line num="83" count="0" type="stmt"/>
+        <line num="98" count="0" type="stmt"/>
+        <line num="102" count="2" type="stmt"/>
+        <line num="122" count="0" type="stmt"/>
+        <line num="123" count="0" type="stmt"/>
+        <line num="125" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="126" count="0" type="stmt"/>
+        <line num="127" count="0" type="stmt"/>
+        <line num="128" count="0" type="stmt"/>
+        <line num="129" count="0" type="stmt"/>
+        <line num="130" count="0" type="stmt"/>
+        <line num="131" count="0" type="stmt"/>
+        <line num="132" count="0" type="stmt"/>
+        <line num="133" count="0" type="stmt"/>
+        <line num="134" count="0" type="stmt"/>
+        <line num="135" count="0" type="stmt"/>
+        <line num="139" count="1" type="stmt"/>
+        <line num="140" count="1" type="stmt"/>
+        <line num="142" count="1" type="stmt"/>
+        <line num="162" count="0" type="stmt"/>
+        <line num="179" count="0" type="stmt"/>
+        <line num="184" count="2" type="stmt"/>
+        <line num="186" count="1" type="stmt"/>
+        <line num="188" count="2" type="stmt"/>
+        <line num="189" count="2" type="stmt"/>
+        <line num="191" count="2" type="stmt"/>
+        <line num="192" count="0" type="stmt"/>
+        <line num="197" count="2" type="stmt"/>
+        <line num="198" count="2" type="stmt"/>
+      </file>
+      <file name="review.ts" path="C:\Users\user\OneDrive\Desktop\2022-2\secondteam10\frontend\src\store\slices\review.ts">
+        <metrics statements="41" coveredstatements="28" conditionals="4" coveredconditionals="3" methods="15" coveredmethods="10"/>
+        <line num="22" count="2" type="stmt"/>
+        <line num="27" count="2" type="stmt"/>
+        <line num="28" count="1" type="stmt"/>
+        <line num="29" count="1" type="stmt"/>
+        <line num="32" count="2" type="stmt"/>
+        <line num="35" count="2" type="stmt"/>
+        <line num="36" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="40" count="2" type="stmt"/>
+        <line num="45" count="0" type="stmt"/>
+        <line num="46" count="0" type="stmt"/>
+        <line num="47" count="0" type="stmt"/>
+        <line num="48" count="0" type="stmt"/>
+        <line num="52" count="2" type="stmt"/>
+        <line num="55" count="1" type="stmt"/>
+        <line num="56" count="1" type="stmt"/>
+        <line num="60" count="2" type="stmt"/>
+        <line num="63" count="1" type="stmt"/>
+        <line num="64" count="1" type="stmt"/>
+        <line num="74" count="1" type="stmt"/>
+        <line num="78" count="2" type="stmt"/>
+        <line num="93" count="1" type="stmt"/>
+        <line num="94" count="0" type="stmt"/>
+        <line num="96" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="97" count="0" type="stmt"/>
+        <line num="98" count="0" type="stmt"/>
+        <line num="99" count="0" type="stmt"/>
+        <line num="100" count="0" type="stmt"/>
+        <line num="101" count="0" type="stmt"/>
+        <line num="105" count="1" type="stmt"/>
+        <line num="106" count="1" type="stmt"/>
+        <line num="108" count="1" type="stmt"/>
+        <line num="123" count="0" type="stmt"/>
+        <line num="134" count="0" type="stmt"/>
+        <line num="138" count="2" type="stmt"/>
+        <line num="139" count="1" type="stmt"/>
+        <line num="141" count="2" type="stmt"/>
+        <line num="142" count="2" type="stmt"/>
+        <line num="144" count="2" type="stmt"/>
+        <line num="145" count="0" type="stmt"/>
+        <line num="150" count="2" type="stmt"/>
+        <line num="151" count="2" type="stmt"/>
+      </file>
+      <file name="user.ts" path="C:\Users\user\OneDrive\Desktop\2022-2\secondteam10\frontend\src\store\slices\user.ts">
+        <metrics statements="40" coveredstatements="27" conditionals="8" coveredconditionals="2" methods="14" coveredmethods="11"/>
+        <line num="22" count="4" type="stmt"/>
+        <line num="28" count="4" type="stmt"/>
+        <line num="31" count="2" type="stmt"/>
+        <line num="32" count="1" type="stmt"/>
+        <line num="33" count="1" type="stmt"/>
+        <line num="37" count="4" type="stmt"/>
+        <line num="38" count="1" type="stmt"/>
+        <line num="39" count="1" type="stmt"/>
+        <line num="42" count="4" type="stmt"/>
+        <line num="45" count="1" type="stmt"/>
+        <line num="46" count="1" type="stmt"/>
+        <line num="67" count="4" type="stmt"/>
+        <line num="70" count="1" type="stmt"/>
+        <line num="71" count="1" type="stmt"/>
+        <line num="82" count="0" type="stmt"/>
+        <line num="83" count="0" type="stmt"/>
+        <line num="92" count="4" type="stmt"/>
+        <line num="98" count="1" type="stmt"/>
+        <line num="99" count="1" type="stmt"/>
+        <line num="100" count="1" type="stmt"/>
+        <line num="104" count="4" type="stmt"/>
+        <line num="109" count="0" type="stmt"/>
+        <line num="110" count="0" type="stmt"/>
+        <line num="112" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="113" count="0" type="stmt"/>
+        <line num="114" count="0" type="stmt"/>
+        <line num="115" count="0" type="stmt"/>
+        <line num="119" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="123" count="0" type="stmt"/>
+        <line num="124" count="0" type="stmt"/>
+        <line num="126" count="0" type="cond" truecount="0" falsecount="2"/>
+        <line num="127" count="0" type="stmt"/>
+        <line num="128" count="0" type="stmt"/>
+        <line num="132" count="1" type="stmt"/>
+        <line num="137" count="2" type="stmt"/>
+        <line num="139" count="2" type="stmt"/>
+        <line num="141" count="2" type="stmt"/>
+        <line num="142" count="1" type="stmt"/>
+        <line num="147" count="4" type="stmt"/>
+        <line num="148" count="4" type="stmt"/>
+      </file>
+    </package>
+  </project>
+</coverage>

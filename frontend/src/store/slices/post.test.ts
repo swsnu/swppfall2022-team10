@@ -59,7 +59,7 @@ describe("post reducer", () => {
         await store.dispatch(getPosts());
         expect(store.getState().post.posts).toEqual([fakePost]);
     });
-    it("should handle getTodo", async () => {
+    it("should handle getPost", async () => {
         axios.get = jest.fn().mockResolvedValue({ data: fakePost });
         await store.dispatch(getPost(1));
         expect(store.getState().post.selectedPost).toEqual(fakePost);
@@ -73,10 +73,15 @@ describe("post reducer", () => {
         /* jest.spyOn(axios, "post").mockResolvedValue({
             data: fakePost,
         });
-        await store.dispatch(FormData);
-        expect(store.getState().post.posts).toEqual([fakePost]); */
+        await store.dispatch(createPost(FormData)));
+    expect(store.getState().post.posts).toEqual([fakePost]); */
     });
     it("should handle editPost", async () => {
+        jest.spyOn(axios, "put").mockResolvedValue({
+            data: fakePost,
+        });
+        await store.dispatch(editPost(fakePost));
+        expect(store.getState().post.posts.find((v) => v.id === fakePost.id)?.id).toEqual(1);
 
     });
 
