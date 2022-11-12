@@ -1,0 +1,17 @@
+img {
+	width: 440px;
+	align-items: center;
+	padding: 0px;
+	position: relative;
+}
+#header{
+    text-align: left;
+}
+#review-title{
+    padding: 20px 0px 0px 0px;
+}
+#content{
+    text-align: left;
+    overflow-y: auto;
+    max-height: 100%;
+}

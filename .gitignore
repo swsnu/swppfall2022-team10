@@ -6,12 +6,13 @@ node_modules/
 .pnp.js
 
 # testing
-/coverage
+coverage
 coverage.xml
 .coverage
+frontend/coverage/
 
 # production
-/build
+build/
 
 # misc
 .DS_Store
@@ -31,6 +32,7 @@ frontend/api
 frontend/README.md
 frontend/src/store/slices/comment.ts
 frontend/src/data/*.jpg
+frontend/node_modules
 
 
 # django
@@ -45,4 +47,7 @@ backend/beafamily/data/application/*
 backend/beafamily/data/question/*
 backend/beafamily/data/review/*
 
-
+# IDE Cache 
+*.code-workspace
+.idea/
+.vscode/

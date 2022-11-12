@@ -1,49 +1,45 @@
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import { MdMenu } from "react-icons/md";
-import Dropdown from "./Dropdown/Dropdown";
+import { useNavigate } from 'react-router-dom'
+import { useState } from 'react'
+import { MdMenu } from 'react-icons/md'
+import Dropdown from './Dropdown/Dropdown'
 
-import "./Header.scss";
+import './Header.scss'
 
-export interface IProps {
-	userId: number;
-}
-
-export default function Header(props: IProps) {
-	const navigate = useNavigate();
-	const [dropdownVisibility, setDropdownVisibility] = useState(false);
+export default function Header() {
+	const navigate = useNavigate()
+	const [dropdownVisibility, setDropdownVisibility] = useState(false)
 
 	return (
-		<div className="Header">
-			<div className="menu-bar-header">
-				<div id="logo">
+		<div className='Header'>
+			<div className='menu-bar-header'>
+				<div id='logo'>
 					Be A<br />
 					Family
 				</div>
 				<div>
 					<button
-						className="header-buttons"
+						className='header-buttons'
 						onClick={(event) => {
-							event.preventDefault();
-							navigate("/");
+							event.preventDefault()
+							navigate('/')
 						}}
 					>
 						입양 절차 소개
 					</button>
 					<button
-						className="header-buttons"
+						className='header-buttons'
 						onClick={(event) => {
-							event.preventDefault();
-							navigate("/");
+							event.preventDefault()
+							navigate('/')
 						}}
 					>
 						입양 게시글
 					</button>
 					<button
-						className="header-buttons"
+						className='header-buttons'
 						onClick={(event) => {
-							event.preventDefault();
-							navigate("/review");
+							event.preventDefault()
+							navigate('/review')
 						}}
 					>
 						입양 후기
@@ -51,29 +47,29 @@ export default function Header(props: IProps) {
 				</div>
 				<div>
 					<button
-						className="header-buttons"
+						className='header-buttons'
 						onClick={(event) => {
-							event.preventDefault();
-							navigate("/qna");
+							event.preventDefault()
+							navigate('/qna')
 						}}
 					>
 						Q&A
 					</button>
 					<button
-						className="header-buttons"
-						onClick={(event) => {
-							setDropdownVisibility(!dropdownVisibility);
+						className='header-buttons'
+						aria-label='menu-button'
+						onClick={() => {
+							setDropdownVisibility(!dropdownVisibility)
 						}}
 					>
-						<MdMenu />
+						<MdMenu/>
 					</button>
 					<Dropdown
 						visibility={dropdownVisibility}
-						userId={props.userId}
 					/>
 				</div>
 			</div>
-			<div className="list-header"></div>
+			<div className='list-header'></div>
 		</div>
-	);
+	)
 }

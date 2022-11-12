@@ -1,0 +1,18 @@
+{
+    "animal_type": "고양이",
+    "neutering": true,
+    "vaccination": true,
+    "age": 2,
+    "author_name": "yeomjy111",
+    "name": "나비",
+    "gender": false,
+    "species": "고양이",
+    "title": "고양이 입양하실 분 찾아요",
+    "content": "밥을 아주 잘 먹어요!\n처음 보는 사람은 조금 낯가려요.\n안 보이는 곳에서 나는 소리에 대해 살짝 겁이 있지만 대체로 무던해요",
+    "is_active": true,
+    "photo_list": [
+        "cat.webp",
+        "cat2.jpg",
+        "cat3.jpg"
+    ]
+}

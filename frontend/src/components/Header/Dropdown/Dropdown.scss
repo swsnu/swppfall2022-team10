@@ -1,4 +1,6 @@
 .Dropdown {
+	position: relative;
+	z-index: 2;
 	display: flex;
 	flex-direction: column;
 	background-color: whitesmoke;
@@ -6,7 +8,6 @@
 	.dropdown-content {
 		display: none;
 		position: absolute;
-		// z-index: 1; /*다른 요소들보다 앞에 배치*/
 		font-weight: 400;
 		background-color: #f9f9f9;
 		min-width: 150px;
@@ -28,8 +29,9 @@
 		}
 	}
 
-	.dropdown-non-user {
+	.dropdown-non-user, .dropdown-user {
 		display: flex;
 		flex-direction: column;
 	}
+	
 }

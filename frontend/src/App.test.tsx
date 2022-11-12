@@ -1,13 +1,15 @@
-import React from "react";
-import { render } from "@testing-library/react";
-import { Provider } from "react-redux";
-import App from "./App";
-import { store } from "./store";
+import { render } from '@testing-library/react'
+import { Provider } from 'react-redux'
+import App from './App'
+import { store } from './store'
 
-test("renders App.tsx", () => {
+const scrollToSpy = jest.fn();
+global.scrollTo = scrollToSpy;
+
+test('renders App.tsx', () => {
 	render(
 		<Provider store={store}>
 			<App />
 		</Provider>
-	);
-});
+	)
+})

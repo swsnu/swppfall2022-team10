@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "api.apps.APIConfig",
+    "rest_framework"
 ]
 
 MIDDLEWARE = [
@@ -123,4 +124,6 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-POST_DIR = BASE_DIR / "data"
+DATA_DIR = BASE_DIR / "data"
+MEDIA_ROOT  = BASE_DIR / 'data'
+MEDIA_URL = '/media/'
