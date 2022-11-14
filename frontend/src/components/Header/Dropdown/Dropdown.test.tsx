@@ -16,6 +16,9 @@ const mockStore = getMockStore({
 	review: { reviews: [], selectedReview: null },
 })
 describe("<Dropdown />", () => {
+	beforeEach(() => {
+		jest.clearAllMocks();
+	})
 	it("should render without errors when logged in", async () => {
         jest.spyOn(axios, "get").mockResolvedValue({ data: { logged_in:true }});
 		
@@ -52,7 +55,7 @@ describe("<Dropdown />", () => {
 		await waitFor(() =>
 			expect(mockNavigate).toHaveBeenCalledWith("/myinfo")
 		);
-		const postButton = screen.getByText("내 포스트");
+		const postButton = await screen.findByText("내 포스트");
 		fireEvent.click(postButton);
 		await waitFor(() =>
 			expect(mockNavigate).toHaveBeenCalledWith("/mypost")

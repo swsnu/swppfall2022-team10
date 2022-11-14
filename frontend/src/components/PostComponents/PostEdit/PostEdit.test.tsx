@@ -7,6 +7,7 @@ import { getMockStore } from '../../../test-utils/mock'
 import { Provider } from 'react-redux'
 import * as postSlice from '../../../store/slices/post'
 import { MdArrowBack } from 'react-icons/md'
+import { act } from "react-dom/test-utils";
 
 const tempState = {
     post: { 
@@ -76,8 +77,58 @@ describe('<PostEdit />', () => {
 		await waitFor(() => {
 			expect(titleInput).toHaveValue("POST_TEST_TITLE");
 			expect(nameInput).toHaveValue("POST_TEST_NAME");
-
 		});
+    });
+    it("should render navigate to /post/:id when submitted", async () => {
+        jest.spyOn(axios, "post").mockResolvedValueOnce({
+            data: testPostFormat,
+        });
+        const {container} = render(postEdit);
+        const titleInput = await screen.findByLabelText("제목:");
+		fireEvent.change(titleInput, { target: { value: "POST_TEST_TITLE_NEW" } });
+
+        const nameInput = await screen.findByLabelText("이름:");
+		fireEvent.change(nameInput, { target: { value: "POST_TEST_NAME_NEW" } });
+
+        const animalTypeInput = await screen.findByLabelText("동물:");
+		fireEvent.change(animalTypeInput, { target: { value: "POST_TEST_ANIMAL_TYPE_NEW" } });
+
+        const speciesInput = await screen.findByLabelText("종:");
+		fireEvent.change(speciesInput, { target: { value: "POST_TEST_SPECIES_NEW" } });
+
+        const ageInput = await screen.findByLabelText("나이:");
+		fireEvent.change(ageInput, { target: { value: "6" } });
+
+        const genderInput = container.querySelector('input[name="gender"]');
+        if (genderInput !== null)
+            fireEvent.change(genderInput, {target:{value:"수컷"}});
+
+        const vaccinationInput = container.querySelector('input[name="vaccination"]');
+        if (vaccinationInput !== null)
+            fireEvent.change(vaccinationInput, {target:{value:"X"}});
+
+        const neuteringInput = container.querySelector('input[name="neutering"]');
+        if (neuteringInput !== null)
+            fireEvent.change(neuteringInput, {target:{value:"X"}});
+
+        const contentInput = await screen.findByLabelText("동물에 대해 추가로 알려주세요! 자세한 설명은 입양에 도움이 됩니다:)");
+		fireEvent.change(contentInput, { target: { value: "POST_TEST_CONTENT_NEW" } });
+
+        const file : Partial<File> = {
+            name: 'myimage_new.png', 
+            lastModified: 1580400631732, 
+            size: 703786, 
+            type: 'image/png'
+        };
+        const fileInput = container.querySelector('input[name="photo"]');
+        if (fileInput !== null)
+		    fireEvent.change(fileInput, { target: {files: [file]} });
+
+        const postButton = await screen.findByText("수정하기");
+        fireEvent.click(postButton);
+        await waitFor(() =>
+            expect(mockNavigate).toHaveBeenCalledWith("/post/1")
+        );
     });
     it("should render navigate to / when back Button clicked", async () => {
         render(postEdit);

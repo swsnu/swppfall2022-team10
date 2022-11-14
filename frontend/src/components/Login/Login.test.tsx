@@ -86,4 +86,20 @@ describe("<Login />", () => {
             expect(mockNavigate).toHaveBeenCalledWith("/")
         );
 	});
+	it("should handle login error", async () => {
+		window.alert = jest.fn();
+        jest.spyOn(axios, "get").mockResolvedValue({ data: { logged_in:false }});
+
+        jest.spyOn(axios, "post").mockRejectedValueOnce({});
+		render(logIn);
+		const loginButton = screen.getAllByText('로그인')[1];
+		fireEvent.click(loginButton);
+        
+		// await waitFor(() =>
+        //     expect(mockDispatch).toHaveBeenCalledTimes(1)
+		// );
+        await waitFor(()=>
+            expect(window.alert).toHaveBeenCalledWith("ID or Password wrong")
+        );
+	});
 });
