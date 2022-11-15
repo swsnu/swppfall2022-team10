@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import {act, fireEvent, render, screen, waitFor} from "@testing-library/react";
 import axios from "axios";
 import { Provider } from "react-redux";
 import { MemoryRouter, Navigate, Route, Routes } from "react-router";
@@ -69,7 +69,10 @@ describe("<PostDetail />", () => {
 					editable: true,
 				},
 		});
-		render(postDetail);
+		await act(() => {
+			render(postDetail)
+		})
+		// render(postDetail);
 		await screen.findByText("POST_TEST_TITLE");
 		await screen.findByText("POST_TEST_CONTENT");
 	});
@@ -84,7 +87,10 @@ describe("<PostDetail />", () => {
 				editable: true,
 			},
 		});
-		render(postDetail);
+		await act(() => {
+			render(postDetail)
+		})
+		// render(postDetail);
 		const editButton = await screen.findByText("수정");
 		await waitFor(() => {
 			expect(editButton).toBeInTheDocument();
@@ -105,7 +111,10 @@ describe("<PostDetail />", () => {
 					editable: true,
 				},
 		});
-		render(postDetail);
+		await act(() => {
+			render(postDetail)
+		})
+		// render(postDetail);
 		const editButton = await screen.findByText("수정");
 		fireEvent.click(editButton);
 		await waitFor(() =>
@@ -125,7 +134,10 @@ describe("<PostDetail />", () => {
 		});
 		jest.spyOn(axios, "delete").mockResolvedValue({});
 		const mockDeleteArticle = jest.spyOn(postSlice, "deletePost");
-		render(postDetail);
+		await act(() => {
+			render(postDetail)
+		})
+		// render(postDetail);
 		const deleteButton = await screen.findByText("삭제");
 		fireEvent.click(deleteButton);
 		await waitFor(() => expect(mockDeleteArticle).toHaveBeenCalled());
@@ -134,7 +146,10 @@ describe("<PostDetail />", () => {
 		);
 	});
 	it("should not render if there is no post", async () => {
-		render(postDetail);
+		await act(() => {
+			render(postDetail)
+		})
+		// render(postDetail);
 		jest.spyOn(axios, "get").mockRejectedValue({});
 		await waitFor(() => {
 			expect(screen.queryAllByText("POST_TEST_TITLE")).toHaveLength(

@@ -69,9 +69,9 @@ const PostDetail = (props: IProps) => {
 						<div className='det2'>
 							{postState.selectedPost?.content
 								.split('\n')
-								.map((line) => {
+								.map((line, index) => {
 									return (
-										<span>
+										<span key={index}>
 											{line}
 											<br />
 										</span>

@@ -11,11 +11,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router'
 import { Navigate, useNavigate } from 'react-router-dom'
 import { AppDispatch } from '../../../store'
-import {
-	getPost,
-	editPost,
-	selectPost,
-} from '../../../store/slices/post'
+import { getPost, editPost, selectPost } from '../../../store/slices/post'
 import { selectUser, checkLogin } from '../../../store/slices/user'
 import { MdArrowBack } from 'react-icons/md'
 import Combobox from 'react-widgets/Combobox'
@@ -27,8 +23,7 @@ import { List } from 'reselect/es/types'
 
 export default function PostEdit() {
 	const { id } = useParams()
-	console.log(id)
-
+	// console.log(id)
 
 	const [title, setTitle] = useState<string>('')
 	const [name, setName] = useState<string>('')
@@ -48,29 +43,29 @@ export default function PostEdit() {
 
 	useEffect(() => {
 		dispatch(checkLogin()).then((result) => {
-			const loggedIn: boolean = (result.payload as { logged_in: boolean }).logged_in
+			const loggedIn: boolean = (result.payload as { logged_in: boolean })
+				.logged_in
 			if (!loggedIn) {
 				navigate('/login')
 			}
 		})
-		dispatch(getPost(Number(id))).then((result)=> {
-				const currentPost = result.payload
-				if (currentPost) {
-					setTitle(currentPost.title)
-					setName(currentPost.name)
-					setAnimalType(currentPost.animal_type)
-					setSpecies(currentPost.species)
-					setAge(String(currentPost.age))
-					setGender(currentPost.gender ? '수컷' : '암컷')
-					setVaccination(currentPost.vaccination ? 'O' : 'X')
-					setNeutering(currentPost.neutering ? 'O' : 'X')
-					setContent(currentPost.content)
-					setFile(currentPost.photo_path)
-					// setEditable(currentPost.editable)
-					setEditable(true)
-				}
+		dispatch(getPost(Number(id))).then((result) => {
+			const currentPost = result.payload
+			if (currentPost) {
+				setTitle(currentPost.title)
+				setName(currentPost.name)
+				setAnimalType(currentPost.animal_type)
+				setSpecies(currentPost.species)
+				setAge(String(currentPost.age))
+				setGender(currentPost.gender ? '수컷' : '암컷')
+				setVaccination(currentPost.vaccination ? 'O' : 'X')
+				setNeutering(currentPost.neutering ? 'O' : 'X')
+				setContent(currentPost.content)
+				setFile(currentPost.photo_path)
+				// setEditable(currentPost.editable)
+				setEditable(true)
 			}
-		)
+		})
 	}, [id])
 
 	useEffect(() => {
@@ -81,16 +76,14 @@ export default function PostEdit() {
 
 	const fileChangedHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const files = event.target.files
-		console.log(files)
+		// console.log(files)
 		setFile({
 			selectedFiles: files
 		})
 	}
 
-	const editPostHandler = async (
-		event: React.FormEvent<HTMLFormElement>
-	) => {
-		console.log('editPost')
+	const editPostHandler = async (event: React.FormEvent<HTMLFormElement>) => {
+		// console.log('editPost')
 		event.preventDefault()
 		const data = {
 			title: title,
@@ -104,13 +97,13 @@ export default function PostEdit() {
 			content: content,
 			author_id: 0
 		}
-		console.log(data)
-		navigate(`/post/1`); // for test
-			// const result = await dispatch(editPost(data));
-			// if (result.type === `${editPost.typePrefix}/fulfilled`) {
-			// 	navigate(`/post/${result.payload.id}`);
-			// } else {
-			// 	alert("Error on edit Post");
+		// console.log(data)
+		navigate(`/post/1`) // for test
+		// const result = await dispatch(editPost(data));
+		// if (result.type === `${editPost.typePrefix}/fulfilled`) {
+		// 	navigate(`/post/${result.payload.id}`);
+		// } else {
+		// 	alert("Error on edit Post");
 	}
 
 	const speciesList: Dictionary<List> = {
@@ -189,7 +182,9 @@ export default function PostEdit() {
 								/>
 							</div>
 							<div className='input-container'>
-								<label htmlFor='post-type-input_input'>동물:</label>
+								<label htmlFor='post-type-input_input'>
+									동물:
+								</label>
 								<Combobox
 									id='post-type-input'
 									className='post-combobox'
@@ -207,7 +202,9 @@ export default function PostEdit() {
 								/>
 							</div>
 							<div className='input-container'>
-								<label htmlFor='post-species-input_input'>종:</label>
+								<label htmlFor='post-species-input_input'>
+									종:
+								</label>
 								<Combobox
 									id='post-species-input'
 									className='post-combobox'

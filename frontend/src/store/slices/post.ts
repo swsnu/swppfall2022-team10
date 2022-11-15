@@ -190,7 +190,8 @@ export const postSlice = createSlice({
 			state.selectedPost = action.payload
 		})
 		builder.addCase(createPost.rejected, (_state, action) => {
-			console.error(action.error)
+			// console.error(action.error)
+			alert('ERROR')
 		})
 	}
 })

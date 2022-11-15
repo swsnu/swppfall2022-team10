@@ -4,11 +4,7 @@ import Layout from '../Layout/Layout'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch } from '../../store'
-import {
-	checkLogin,
-	loginUser,
-	UserLoginType,
-} from '../../store/slices/user'
+import { checkLogin, loginUser, UserLoginType } from '../../store/slices/user'
 import { Navigate, useNavigate } from 'react-router-dom'
 import './Login.scss'
 
@@ -40,7 +36,7 @@ export default function LogIn() {
 				navigate('/')
 			})
 			.catch((err) => {
-				console.log(err)
+				// console.log(err)
 				alert('ID or Password wrong')
 				setUserName('')
 				setPassword('')

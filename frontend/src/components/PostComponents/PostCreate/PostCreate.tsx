@@ -51,11 +51,6 @@ export default function PostCreate() {
 	const fileChangedHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const files = event.target.files
 		if (files !== null) setFile(file.concat(Array.from(files)))
-		console.log(file)
-		// console.log(files)
-		// setFile({
-		// 	selectedFiles: files
-		// })
 	}
 
 	const createPostHandler = (event: React.FormEvent<HTMLFormElement>) => {
@@ -188,7 +183,9 @@ export default function PostCreate() {
 								/>
 							</div>
 							<div className='input-container'>
-								<label htmlFor='post-type-input_input'>동물:</label>
+								<label htmlFor='post-type-input_input'>
+									동물:
+								</label>
 								<Combobox
 									id='post-type-input'
 									className='post-combobox'
@@ -206,7 +203,9 @@ export default function PostCreate() {
 								/>
 							</div>
 							<div className='input-container'>
-								<label htmlFor='post-species-input_input'>종:</label>
+								<label htmlFor='post-species-input_input'>
+									종:
+								</label>
 								<Combobox
 									id='post-species-input'
 									className='post-combobox'
@@ -300,8 +299,8 @@ export default function PostCreate() {
 								id='confirm-create-post-button'
 								type='submit'
 
-							// disabled={!(title && name && animalType && species && age
-							//     && gender && vaccination && neutering && character)}
+								// disabled={!(title && name && animalType && species && age
+								//     && gender && vaccination && neutering && character)}
 							>
 								게시하기
 							</button>

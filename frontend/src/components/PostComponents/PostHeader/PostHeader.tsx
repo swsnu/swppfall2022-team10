@@ -72,11 +72,12 @@ const PostHeader = (props: IProps) => {
 			)}
 
 			<div className='post-images'>
-				{postState.selectedPost?.photo_path.map((img_path) => {
+				{postState.selectedPost?.photo_path.map((img_path, index) => {
 					return (
 						<img
 							className='post-image'
 							src={img_path}
+							key={index}
 							alt={postState.selectedPost?.animal_type}
 						/>
 					)

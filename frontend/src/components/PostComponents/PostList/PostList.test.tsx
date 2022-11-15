@@ -5,7 +5,7 @@ import { postState } from "../../../store/slices/post";
 import { getMockStore } from "../../../test-utils/mock";
 import PostList from "./PostList";
 import { IProps as PostProps } from "../Post/Post";
-import axios from "axios";
+import assert from "assert";
 
 jest.mock("../Post/Post", () => (props: PostProps) => (
     <div data-testid="spyPost">
@@ -91,13 +91,15 @@ describe("<PostList />", () => {
         const posts = screen.getAllByTestId("spyPost");
         const post = posts[0]
         const button = post.querySelector(".post-container");
-        fireEvent.click(button!);
+        assert(button !== null)
+        fireEvent.click(button);
         expect(mockNavigate).toHaveBeenCalledTimes(1);
     });
     it("should handle createPostButton", () => {
         render(postList);
         const createPostButton = document.querySelector("#create-post-button");
-        fireEvent.click(createPostButton!);
+        assert(createPostButton !== null)
+        fireEvent.click(createPostButton);
         expect(mockNavigate).toHaveBeenCalledTimes(1);
     });
 });
