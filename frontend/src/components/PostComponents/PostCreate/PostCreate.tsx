@@ -62,6 +62,7 @@ export default function PostCreate() {
 		event.preventDefault()
 		if (!userState.logged_in) {
 			alert('You should log in')
+			navigate('/login')
 			return
 		}
 
@@ -236,7 +237,6 @@ export default function PostCreate() {
 								<label htmlFor='post-gender-input'>성별:</label>
 								<DropdownList
 									id='post-gender-input'
-									aria-label='post-gender-input'
 									className='post-dropbox'
 									name='gender'
 									data={['암컷', '수컷']}

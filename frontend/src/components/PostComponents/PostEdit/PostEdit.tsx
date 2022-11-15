@@ -27,6 +27,8 @@ import { List } from 'reselect/es/types'
 
 export default function PostEdit() {
 	const { id } = useParams()
+	console.log(id)
+
 
 	const [title, setTitle] = useState<string>('')
 	const [name, setName] = useState<string>('')
@@ -103,6 +105,7 @@ export default function PostEdit() {
 			author_id: 0
 		}
 		console.log(data)
+		navigate(`/post/1`); // for test
 			// const result = await dispatch(editPost(data));
 			// if (result.type === `${editPost.typePrefix}/fulfilled`) {
 			// 	navigate(`/post/${result.payload.id}`);
@@ -186,7 +189,7 @@ export default function PostEdit() {
 								/>
 							</div>
 							<div className='input-container'>
-								<label htmlFor='post-type-input'>동물:</label>
+								<label htmlFor='post-type-input_input'>동물:</label>
 								<Combobox
 									id='post-type-input'
 									className='post-combobox'
@@ -204,7 +207,7 @@ export default function PostEdit() {
 								/>
 							</div>
 							<div className='input-container'>
-								<label htmlFor='post-species-input'>종:</label>
+								<label htmlFor='post-species-input_input'>종:</label>
 								<Combobox
 									id='post-species-input'
 									className='post-combobox'
