@@ -56,14 +56,6 @@ describe("review reducer", () => {
         await store.dispatch(fakeReview);
         expect(store.getState().review.reviews).toEqual([fakeReview]); */
     });
-    it("should handle editReview", async () => {
-        jest.spyOn(axios, "put").mockResolvedValue({
-            data: fakeReview,
-        });
-        await store.dispatch(editReview(fakeReview));
-        expect(store.getState().review.reviews.find((v) => v.id === fakeReview.id)?.id).toEqual(1);
-
-    });
 
     it("should handle error on createReview", async () => {
         /* const mockConsoleError = jest.fn();

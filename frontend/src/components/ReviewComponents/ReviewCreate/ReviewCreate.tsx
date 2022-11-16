@@ -70,6 +70,7 @@ export default function ReviewCreate() {
 				<div className='ReviewCreate'>
 					<button
 						id='back-create-review-button'
+						aria-label='back-button'
 						onClick={(event) => {
 							event.preventDefault()
 							navigate('/review')

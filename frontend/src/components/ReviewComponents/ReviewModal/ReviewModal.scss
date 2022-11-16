@@ -1,39 +1,23 @@
-.Modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.4);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 /* modal창 */
-.modalBody {
-  position: absolute;
-  width: 500px;
-  height: 600px;
-  padding: 50px 30px 30px 30px;
-  background-color: rgb(255, 255, 255);
-  border-radius: 10px;
-  box-shadow: 0 2px 3px 0 rgba(34, 36, 38, 0.15);
-  overflow-y: auto;
+.modal-content{
+    position: absolute;
+    width: 500px;
+    height: 600px;
 }
-
-#modalCloseBtn {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  border: none;
-  color: rgba(0, 0, 0, 0.7);
-  background-color: transparent;
-  font-size: 20px;
+.modal-header {
+    color: red;
+    padding: 10px;
+    height: 30px;
 }
-
+.modal-body {
+    padding: 30px 30px 30px 30px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 10px;
+    box-shadow: 0 2px 3px 0 rgba(34, 36, 38, 0.15);
+    overflow-y: auto;
+}
 #modalCloseBtn:hover {
-  cursor: pointer;
+    cursor: pointer;
 }
 .modalContent{
     position: relative;

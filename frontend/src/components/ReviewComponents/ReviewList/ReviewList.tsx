@@ -13,7 +13,7 @@ import {
 import { AppDispatch } from '../../../store'
 import { MdOutlineAddBox } from 'react-icons/md'
 import './ReviewList.scss'
-import Modal from "../ReviewModal/ReviewModal"
+import ReviewModal from "../ReviewModal/ReviewModal"
 import ReviewDetail from '../ReviewDetail/ReviewDetail'
 
 export default function ReviewList() {
@@ -53,13 +53,13 @@ export default function ReviewList() {
 								</button>
 							)
 						})}
-						{modalOpen && (<Modal onClickToggleModal={onClickToggleModal}>
+						{modalOpen && (<ReviewModal onClickToggleModal={onClickToggleModal}>
 						    <ReviewDetail key={`${clickedReview.id}_review`}
 									    title={clickedReview.title}
 									    photo_path={clickedReview.photo_path}
 									    author={clickedReview.author_name}
 									    content = {clickedReview.content}/>
-						</Modal>)}
+						</ReviewModal>)}
 					</div>
 					<div className='create-review'>
 						<button

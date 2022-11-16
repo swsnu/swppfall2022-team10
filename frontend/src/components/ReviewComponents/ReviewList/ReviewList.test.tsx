@@ -83,7 +83,8 @@ describe("<ReviewList />", () => {
         // fireEvent.scroll(window, { target: { scrollY: 100 } });
         const top = ("-".concat(global.window.scrollY.toString())).concat("px");
         fireEvent.click(button!);
-        const modal = document.querySelector(".Modal");
+        const button = await screen.findByText('진희');
+        const modal = document.querySelector(".modal-content");
         const closeButton = (modal!).querySelector("#modalCloseBtn");
         fireEvent.click(closeButton!);
         !document.querySelector(".Modal");

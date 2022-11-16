@@ -1,42 +1,24 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import { PropsWithChildren, useEffect } from "react";
+import { PropsWithChildren } from "react";
 import './ReviewModal.scss'
+import Modal from 'react-bootstrap/Modal';
 
 interface ModalDefaultType {
     onClickToggleModal: () => void;
 }
 
-function Modal({
+export default function ReviewModal({
     onClickToggleModal,
     children,
 }: PropsWithChildren<ModalDefaultType>) {
-    useEffect(() => {
-        document.body.style.cssText = `
-        position: fixed;
-        top: -${window.scrollY}px;
-        overflow-y: scroll;
-        width: 100%;`;
-        return () => {
-            const scrollY = document.body.style.top;
-            document.body.style.cssText = '';
-            window.scrollTo(0, parseInt(scrollY || '0', 10) * -1);
-        };
-    }, []);
-
     function closeModal() {
         onClickToggleModal();
     }
 
     return (
-        <div className= "Modal">
-            <div className="modalBody" onClick={(e) => e.stopPropagation()}>
-                <button id="modalCloseBtn" onClick={closeModal}>
-                ✖
-                </button>
-                <div id = "modalContent">{children}</div>
-            </div>
-        </div>
+        <Modal show={true} onHide={closeModal}>
+            <Modal.Header closeButton></Modal.Header>
+            <Modal.Body>{children}</Modal.Body>
+        </Modal>
     );
 }
-
-export default Modal;

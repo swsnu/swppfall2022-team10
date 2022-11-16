@@ -11,6 +11,6 @@ describe("<Review />", () => {
             />
         );
         screen.getByText("REVIEW_TITLE");
-        screen.getByText("REVIEW_AUTHOR");
+        screen.getByText(/REVIEW_AUTHOR/);
     });
 });
