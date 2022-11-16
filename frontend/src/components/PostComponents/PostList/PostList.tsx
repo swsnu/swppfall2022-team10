@@ -8,7 +8,6 @@ import { getPosts, postType, selectPost } from '../../../store/slices/post'
 import { AppDispatch } from '../../../store'
 import { MdOutlineAddBox, MdSearch } from 'react-icons/md'
 
-
 import Button from 'react-bootstrap/Button'
 
 import './PostList.scss'
@@ -28,26 +27,31 @@ export default function PostList() {
 		<Layout>
 			<div className='ListContainer'>
 				<div className='PostList'>
-
-					<div className="user-input-container">
-						<div className="category animal-container">
-							<div className="title">종</div>
-							<input className="type-space" placeholder="종" />
+					<div className='user-input-container'>
+						<div className='category animal-container'>
+							<div className='title'>종</div>
+							<input className='type-space' placeholder='종' />
 						</div>
-						<div className="category date-container">
-							<div className="title">보호 기간</div>
-							<input className="type-space" placeholder="보호 기간" />
+						<div className='category date-container'>
+							<div className='title'>보호 기간</div>
+							<input
+								className='type-space'
+								placeholder='보호 기간'
+							/>
 						</div>
-						<div className="category age-container">
-							<div className="title">나이</div>
-							<input className="type-space" placeholder="나이" />
+						<div className='category age-container'>
+							<div className='title'>나이</div>
+							<input className='type-space' placeholder='나이' />
 						</div>
-						<div className="category sex-container">
-							<div className="title">성별</div>
-							<input className="type-space" placeholder="성별" />
+						<div className='category sex-container'>
+							<div className='title'>성별</div>
+							<input className='type-space' placeholder='성별' />
 						</div>
-						<div className="search-button">
-							<Button id='search-button' variant='outline-success'>
+						<div className='search-button'>
+							<Button
+								id='search-button'
+								variant='outline-success'
+							>
 								<MdSearch size={20} />
 							</Button>
 						</div>

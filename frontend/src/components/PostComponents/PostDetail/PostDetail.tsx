@@ -27,7 +27,7 @@ const PostDetail = (props: IProps) => {
 	const [editable, setEditable] = useState<boolean>(false)
 
 	useEffect(() => {
-		dispatch(getPost(Number(id))).then((result)=> {
+		dispatch(getPost(Number(id))).then((result) => {
 			// setEditable(result.payload.editable)
 			setEditable(true)
 		})
@@ -40,23 +40,22 @@ const PostDetail = (props: IProps) => {
 					<PostHeader is_author={props.is_author} />
 					<div className='post-content-container'>
 						<div className='first-line'>
-							새로운 집을 찾고 있는, {postState.selectedPost?.name}
+							새로운 집을 찾고 있는,{' '}
+							{postState.selectedPost?.name}
 						</div>
 						<div className='second-line'>
-							{postState.selectedPost?.age}세 {' '}
-							{postState.selectedPost?.gender
-								? '암컷'
-								: '수컷'} {' '}
+							{postState.selectedPost?.age}세{' '}
+							{postState.selectedPost?.gender ? '암컷' : '수컷'}{' '}
 							{postState.selectedPost?.species}
 						</div>
 						<div className='injection'>
-							<FaSyringe /> {' '}
+							<FaSyringe />{' '}
 							{postState.selectedPost?.vaccination
 								? '백신 접종 완료한 동물입니다.'
 								: '백신 접종을 하지 않았습니다.'}
 						</div>
 						<div className='neuter'>
-							<FaRegMeh /> {' '}
+							<FaRegMeh />{' '}
 							{postState.selectedPost?.neutering
 								? '중성화 완료한 동물입니다.'
 								: '중성화 하지 않은 동물입니다.'}
@@ -64,7 +63,8 @@ const PostDetail = (props: IProps) => {
 
 						<br />
 						<div className='det1'>
-							{postState.selectedPost?.name}에 대해 알려드려요 <br />
+							{postState.selectedPost?.name}에 대해 알려드려요{' '}
+							<br />
 						</div>
 						<div className='det2'>
 							{postState.selectedPost?.content
@@ -78,29 +78,28 @@ const PostDetail = (props: IProps) => {
 									)
 								})}
 						</div>
-
 					</div>
 					{editable && (
-							<div className='post-buttons'>
-								<button
-									id='edit-post-button'
-									onClick={() => {
-										navigate(`/post/${id}/edit`)
-									}}
-								>
-									수정
-								</button>
-								<button
-									id='delete-post-button'
-									onClick={() => {
-										dispatch(deletePost(Number(id)))
-										navigate('/')
-									}}
-								>
-									삭제
-								</button>
-							</div>
-						)}
+						<div className='post-buttons'>
+							<button
+								id='edit-post-button'
+								onClick={() => {
+									navigate(`/post/${id}/edit`)
+								}}
+							>
+								수정
+							</button>
+							<button
+								id='delete-post-button'
+								onClick={() => {
+									dispatch(deletePost(Number(id)))
+									navigate('/')
+								}}
+							>
+								삭제
+							</button>
+						</div>
+					)}
 				</div>
 			</div>
 		</Layout>

@@ -1,5 +1,5 @@
 import './ReviewDetail.scss'
-import Carousel from 'react-bootstrap/Carousel';
+import Carousel from 'react-bootstrap/Carousel'
 
 export interface IProps {
 	title: string
@@ -11,28 +11,24 @@ export interface IProps {
 const ReviewDetail = (props: IProps) => {
 	return (
 		<div className='ReviewDetail'>
-		    <div className='review-images'>
-                <Carousel interval={null}>
-                    {props.photo_path.map((path:string) => {
-					    return (
-						    <Carousel.Item key={`${path}`}>
-                                <img
-                                    src={path}
-                                />
-                            </Carousel.Item>
-					    )
+			<div className='review-images'>
+				<Carousel interval={null}>
+					{props.photo_path.map((path: string) => {
+						return (
+							<Carousel.Item key={`${path}`}>
+								<img src={path} />
+							</Carousel.Item>
+						)
 					})}
-			    </Carousel>
+				</Carousel>
 			</div>
 			<div id='header'>
-		        <h2 id='review-title' className='left'>
-				    {props.title}
-			    </h2>
-			    <p>
-				    작성자: {props.author}
-			    </p>
+				<h2 id='review-title' className='left'>
+					{props.title}
+				</h2>
+				<p>작성자: {props.author}</p>
 			</div>
-			<div id = "content">{props.content}</div>
+			<div id='content'>{props.content}</div>
 		</div>
 	)
 }

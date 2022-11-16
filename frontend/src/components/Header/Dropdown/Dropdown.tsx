@@ -14,12 +14,11 @@ export interface IProps {
 export default function Dropdown(props: IProps) {
 	const dispatch = useDispatch<AppDispatch>()
 	const navigate = useNavigate()
-	const [loggedIn, setLoggedIn] = useState<boolean>(false);
+	const [loggedIn, setLoggedIn] = useState<boolean>(false)
 
 	useEffect(() => {
 		dispatch(checkLogin()).then((result) => {
-			setLoggedIn((result.payload as { logged_in: boolean })
-				.logged_in)
+			setLoggedIn((result.payload as { logged_in: boolean }).logged_in)
 		})
 	}, [])
 

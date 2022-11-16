@@ -62,11 +62,9 @@ export default function Header() {
 							setDropdownVisibility(!dropdownVisibility)
 						}}
 					>
-						<MdMenu/>
+						<MdMenu />
 					</button>
-					<Dropdown
-						visibility={dropdownVisibility}
-					/>
+					<Dropdown visibility={dropdownVisibility} />
 				</div>
 			</div>
 			<div className='list-header'></div>
