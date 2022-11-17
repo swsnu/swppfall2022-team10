@@ -21,14 +21,8 @@ function App() {
 						path='/post/:id'
 						element={<PostDetail is_author={false} />}
 					/>
-					<Route
-						path='/post/:id/edit'
-						element={<PostEdit />}
-					/>
-					<Route
-						path='/post/:id/submit'
-						element={<PostApply />}
-					/>
+					<Route path='/post/:id/edit' element={<PostEdit />} />
+					<Route path='/post/:id/submit' element={<PostApply />} />
 					<Route path='/post/create' element={<PostCreate />} />
 					{/* <Route path="/post/:id/submit" element={<ApplyCreate />} /> */}
 					<Route
