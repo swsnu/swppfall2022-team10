@@ -1,11 +1,10 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth import authenticate, login, logout
-from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
+from django.views.decorators.csrf import ensure_csrf_cookie
 from rest_framework.decorators import api_view, authentication_classes
 from rest_framework.authentication import (
     BasicAuthentication,
     SessionAuthentication,
-    BaseAuthentication,
 )
 from rest_framework.response import Response
 from rest_framework import status

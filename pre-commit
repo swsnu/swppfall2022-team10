@@ -1,0 +1,116 @@
+#!/bin/sh
+
+# reference: https://stackoverflow.com/questions/31057527/git-pre-commit-hook-to-format-and-re-add-files-at-the-same-time
+# https://medium.com/@harshitbangar/automatic-code-formatting-with-git-66c3c5c26798
+# Python format
+# Regexp for grep to only choose some file extensions for formatting
+exts="\.\(py\)$"
+
+formatter=`which black`
+
+# Format staged files
+change_list=`git diff --cached --name-only --diff-filter=ACMR | grep $exts | xargs`
+if [ ! -z $change_list ]
+then
+    "$formatter" --check "$change_list"
+    ret=$?
+    if [ $ret -ne 0 ]
+    then
+        echo "formatting $change_list"
+        "$formatter" "$change_list"
+        "git add $change_list"
+        ret=$?
+        
+        if [ $ret -ne 0 ]
+        then
+            exit 1
+        else
+            echo "python formatting finished!"
+        fi
+    else
+        echo "we don't need to format any python files!"
+    fi
+else
+    echo "we don't need to format any python files!"
+fi
+
+
+
+
+# ts/tsx format
+# Regexp for grep to only choose some file extensions for formatting
+exts="\.\(ts\|tsx\)$"
+
+# The formatter to use
+formatter="frontend/node_modules/.bin/prettier"
+
+change_list=`git diff --cached --name-only --diff-filter=ACMR | grep $exts | xargs`
+if [ ! -z $change_list ]
+then
+    "$formatter" --check "$change_list"
+    ret=$?
+    if [ $ret -ne 0 ]
+    then
+        echo "formatting $change_list"
+        "$formatter" "$change_list"
+        "git add $change_list"
+        ret=$?
+        
+        if [ $ret -ne 0 ]
+        then
+            exit 1
+        else
+            echo "typescript/react formatting finished!"
+        fi
+    else
+        echo "we don't need to format any typescript/react files!"
+    fi
+else
+    echo "we don't need to format any typescript/react files!"
+fi
+
+# run pylint & test
+#
+cd backend/beafamily
+pylint --load-plugins pylint_django --rcfile .pylintrc **/*.py
+ret=$?
+if [ $ret -ne 0 ]
+then
+    exit 1
+else
+    echo "pylint passed!"
+fi
+
+coverage run --source="./api" manage.py "test"
+ret=$?
+if [ $ret -ne 0 ]
+then
+    exit 1
+else
+    echo "backend test passed!"
+fi
+coverage report -m
+
+# run eslint & test
+cd ../..
+cd frontend
+./node_modules/.bin/eslint src
+
+ret=$?
+if [ $ret -ne 0 ]
+then
+    exit 1
+else
+    echo "eslint passed!"
+fi
+yarn "test" --coverage --watchAll=false
+
+ret=$?
+if [ $ret -ne 0 ]
+then
+    exit 1
+else
+    echo "frontend test passed!"
+fi
+
+cd ..
