@@ -1,19 +1,24 @@
-from ..models import Post, post_serializer, Photo
-from django.http.response import (
-    JsonResponse,
-    HttpResponse,
-)
-from .utils import HttpStatus
+from ..models import Post, post_serializer, PostImage
+from .utils import verify_image, verify_json, log_error
 import json
 from rest_framework.parsers import MultiPartParser, JSONParser, FileUploadParser
-from rest_framework.decorators import api_view, parser_classes, permission_classes, authentication_classes
+from rest_framework.decorators import (
+    api_view,
+    parser_classes,
+    permission_classes,
+    authentication_classes,
+)
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.authentication import SessionAuthentication
-from PIL import Image
+from rest_framework.response import Response
+from rest_framework import status
 from django.db import transaction
+import logging
+
+logger = logging.getLogger("post_view")
 
 
-@api_view(['GET', "PUT", "DELETE"])
+@api_view(["GET", "PUT", "DELETE"])
 @authentication_classes([SessionAuthentication])
 @permission_classes([IsAuthenticatedOrReadOnly])
 @parser_classes([MultiPartParser, JSONParser, FileUploadParser])
@@ -22,68 +27,64 @@ def post_id(request, pid=0):
         try:
             post = Post.objects.get(id=pid)
         except Post.DoesNotExist as e:
-            return HttpResponse(status=HttpStatus.NOT_FOUND)
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
         info_response = post_serializer(post)
-        return JsonResponse(info_response, safe=False)
+        return Response(info_response)
 
-    elif request.method == 'PUT':
+    elif request.method == "PUT":
 
         try:
             post = Post.objects.get(id=pid)
         except Post.DoesNotExist as e:
-            return HttpResponse(status=HttpStatus.NOT_FOUND)
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
         if post.author != request.user:
-            return HttpResponse(status=HttpStatus.FORBIDDEN)
+            return Response(status=status.HTTP_403_FORBIDDEN)
 
         # TODO: edit post
 
-        return HttpResponse(status=HttpStatus.OK)
+        return Response(status=status.HTTP_200_OK)
 
     else:
 
         try:
             post = Post.objects.get(id=pid)
         except Post.DoesNotExist as e:
-            return HttpResponse(status=HttpStatus.NOT_FOUND)
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
         if post.author != request.user:
-            return HttpResponse(status=HttpStatus.FORBIDDEN)
+            return Response(status=status.HTTP_403_FORBIDDEN)
 
         post.delete()
-        return HttpResponse(status=HttpStatus.OK)
+        return Response(status=status.HTTP_200_OK)
 
 
-@api_view(['GET', "POST"])
+@api_view(["GET", "POST"])
 @authentication_classes([SessionAuthentication])
 @permission_classes([IsAuthenticatedOrReadOnly])
 @parser_classes([MultiPartParser])
+@verify_image(["POST"])
+@verify_json(["POST"])
+@log_error(logger)
 def posts(request):
     if request.method == "GET":
-        post_list = Post.objects.all().order_by('-datetime')
+        post_list = Post.objects.all().order_by("-created_at")
         response_list = []
         for post in post_list.iterator():
             response = post_serializer(post)
             response_list.append(response)
 
-        return JsonResponse(response_list, safe=False)
+        return Response(response_list)
 
     else:
-        # validate uploaded data
+        photos = request.data.pop("photos")
+        content_json = request.data.pop("content")
+
+        if len(request.data) != 0:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
         try:
-            photos = request.data.pop("photos")
-            content_json = request.data.pop("content")
-
-            if len(request.data) != 0:
-                raise Exception("Invalid data")
-
-            if len(content_json) != 1:
-                raise Exception("Invalid Data")
-
-            for photo in photos:
-                img = Image.open(photo)
-                img.verify()
 
             content_dict = json.loads(content_json[0])
             content = {
@@ -95,37 +96,17 @@ def posts(request):
                 "species": content_dict["species"],
                 "neutering": content_dict["neutering"],
                 "vaccination": content_dict["vaccination"],
-                "content": {
-                    "text": content_dict["content"],
-                }
+                "content": content_dict["content"],
             }
 
-        except Exception as e:
-            return HttpResponse(status=HttpStatus.BAD_REQUEST)
+        except KeyError as e:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        try:
-            with transaction.atomic():
-                post = Post.objects.create(
-                    author=request.user,
-                    is_active=True,
-                    **content
+        with transaction.atomic():
+            post = Post.objects.create(author=request.user, is_active=True, **content)
+            for photo in photos:
+                image = PostImage.objects.create(
+                    author=request.user, post=post, image=photo
                 )
-                photo_list = []
-                for photo in photos:
-                    image = Photo.objects.create(
-                        user=request.user,
-                        category='post',
-                        number=post.id,
-                        image=photo
-                    )
-                    photo_list.append(image.id)
 
-                post.content["photo_list"] = photo_list
-                post.save()
-
-        except Exception as e:
-            return HttpResponse(status=HttpStatus.INTERNAL_SERVER_ERROR)
-
-        return HttpResponse(status=HttpStatus.CREATED, content=json.dumps(
-            post_serializer(post)
-        ), content_type='application/json')
+        return Response(status=status.HTTP_201_CREATED, data=post_serializer(post))
