@@ -1,0 +1,28 @@
+on:
+    push:
+        branches:
+            - dev
+
+jobs:
+    dev_deploy:
+        name: Deploy to Development Server
+
+        permissions:
+            contents: "read"
+            id-token: "write"
+
+        steps:
+            - id: "auth"
+              uses: "google-github-actions/auth@v1"
+              with:
+                  workload_identity_provider: ${{ secrets.DEV_DEPLOY_PROVIDER }}
+                  service_account: ${{ secrets.DEV_DEPLOY_ACCOUNT }}
+
+            - name: "Set up Cloud SDK"
+              uses: "google-github-actions/setup-gcloud@v1"
+
+            - name: "Use gcloud CLI"
+              run: "gcloud info"
+
+            - name: "Deploy"
+              run: gcloud compute ssh dev-deploy@dev-deploy --command="./deploy.sh"
