@@ -141,6 +141,9 @@ LOGGING = {
             "style": "{",
         },
         "standard": {"format": "%(asctime)s [%(levelname)s] %(name)s: %(message)s"},
+        "error": {
+            "format": "%(asctime)s [%(levelname)s] [%(name)s/%(funcName)s: %(lineno)s]: %(message)s"
+        },
     },
     "handlers": {
         "console": {
@@ -160,7 +163,7 @@ LOGGING = {
         },
         "standard_log": {
             "level": "INFO",
-            "filters": ["require_debug_false"],
+            "filters": [],
             "class": "logging.handlers.RotatingFileHandler",
             "filename": BASE_DIR / "logs" / "beafamily.log",
             "maxBytes": 1024 * 1024 * 5,  # 5 MB
@@ -169,12 +172,12 @@ LOGGING = {
         },
         "error_log": {
             "level": "DEBUG",
-            "filters": ["require_debug_false"],
+            "filters": [],
             "class": "logging.handlers.RotatingFileHandler",
             "filename": BASE_DIR / "logs" / "error.log",
             "maxBytes": 1024 * 1024 * 5,  # 5 MB
             "backupCount": 5,
-            "formatter": "standard",
+            "formatter": "error",
         },
     },
     "loggers": {
