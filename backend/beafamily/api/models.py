@@ -5,7 +5,7 @@ from django.contrib.contenttypes.models import ContentType
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, username: str, password: str | None = None):
+    def create_user(self, username: str, password = None):
         if username is None:
             raise ValueError("Username is required")
 
