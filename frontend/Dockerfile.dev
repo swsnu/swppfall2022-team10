@@ -1,0 +1,12 @@
+FROM node:18
+WORKDIR /frontend
+COPY src /frontend/src
+COPY package.json /frontend/package.json
+COPY yarn.lock /frontend/yarn.lock
+COPY tsconfig.json /frontend/tsconfig.json
+COPY public /frontend/public
+COPY .eslintrc.js /frontend/.eslintrc.js
+COPY .prettierrc /frontend/.prettierrc
+
+RUN yarn install 
+RUN sed -i 's/127.0.0.1:8000/backend:8000/g' package.json
