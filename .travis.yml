@@ -20,6 +20,7 @@ jobs:
         - cd backend/beafamily
         - pip install coveralls 
         - pip install -r requirements.txt
+        - mkdir -p logs
         - cd ../../frontend
         - yarn global add coveralls
         - yarn install

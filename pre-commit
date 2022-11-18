@@ -23,6 +23,7 @@ then
         
         if [ $ret -ne 0 ]
         then
+            echo "ERROR on python formatting"
             exit 1
         else
             echo "python formatting finished!"
@@ -58,6 +59,7 @@ then
         
         if [ $ret -ne 0 ]
         then
+            echo "ERROR on typescript/react formatting"
             exit 1
         else
             echo "typescript/react formatting finished!"
@@ -69,29 +71,21 @@ else
     echo "we don't need to format any typescript/react files!"
 fi
 
-# run pylint & test
+# run pylint 
 #
 cd backend/beafamily
 pylint --load-plugins pylint_django --rcfile .pylintrc **/*.py
 ret=$?
 if [ $ret -ne 0 ]
 then
+    echo "ERROR on pylint"
     exit 1
 else
     echo "pylint passed!"
 fi
 
-coverage run --source="./api" manage.py "test"
-ret=$?
-if [ $ret -ne 0 ]
-then
-    exit 1
-else
-    echo "backend test passed!"
-fi
-coverage report -m
 
-# run eslint & test
+# run eslint
 cd ../..
 cd frontend
 ./node_modules/.bin/eslint src
@@ -101,16 +95,8 @@ if [ $ret -ne 0 ]
 then
     exit 1
 else
+    echo "ERROR on eslint"
     echo "eslint passed!"
-fi
-yarn "test" --coverage --watchAll=false
-
-ret=$?
-if [ $ret -ne 0 ]
-then
-    exit 1
-else
-    echo "frontend test passed!"
 fi
 
 cd ..
