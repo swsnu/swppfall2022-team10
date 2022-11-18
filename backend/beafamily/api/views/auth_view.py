@@ -8,6 +8,7 @@ from rest_framework.authentication import (
 )
 from rest_framework.response import Response
 from rest_framework import status
+from .utils import log_error
 import logging
 
 logger = logging.getLogger("auth_view")
@@ -17,12 +18,14 @@ User = get_user_model()
 
 @api_view(["POST"])
 @authentication_classes([BasicAuthentication])
+@log_error(logger)
 def signin(request):
     login(request, user=request.user)
     return Response(status=status.HTTP_200_OK)
 
 
 @api_view(["GET"])
+@log_error(logger)
 def signout(request):
     logout(request)
     return Response(status=status.HTTP_204_NO_CONTENT)
@@ -30,11 +33,13 @@ def signout(request):
 
 @ensure_csrf_cookie
 @api_view(["GET"])
+@log_error(logger)
 def token(request):
     return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 @api_view(["GET"])
+@log_error(logger)
 def check_login(request):
     is_logged_in = request.user and request.user.is_authenticated
     return Response(status=status.HTTP_200_OK, data={"logged_in": is_logged_in})

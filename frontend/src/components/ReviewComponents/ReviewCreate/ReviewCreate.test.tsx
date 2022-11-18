@@ -16,7 +16,13 @@ const tempState = {
 			{
 				id: 1,
 				title: 'REVIEW_TEST_TITLE',
-				author_id: 1
+				author_id: 1,
+				author_name: 'REVIEW_TEST_AUTHOR',
+				content: 'REVIEW_TEST_CONTENT',
+				animal_type: '강아지',
+				photo_path: [],
+				species: '치와와',
+				created_at: '2022-11-18'
 			}
 		],
 		selectedReview: null

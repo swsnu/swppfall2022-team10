@@ -10,27 +10,28 @@ formatter=`which black`
 
 # Format staged files
 change_list=`git diff --cached --name-only --diff-filter=ACMR | grep $exts | xargs`
-if [ ! -z $change_list ]
+if [ ! -z "$change_list" ]
 then
-    "$formatter" --check "$change_list"
-    ret=$?
-    if [ $ret -ne 0 ]
-    then
-        echo "formatting $change_list"
-        "$formatter" "$change_list"
-        "git add $change_list"
+    for file in $change_list
+    do
+        "$formatter" --check "$file"
         ret=$?
-        
         if [ $ret -ne 0 ]
         then
-            echo "ERROR on python formatting"
-            exit 1
-        else
-            echo "python formatting finished!"
+            echo "formatting $file"
+            "$formatter" "$file"
+            "git add $file"
+            ret=$?
+        
+            if [ $ret -ne 0 ]
+            then
+                echo "ERROR on python formatting"
+                exit 1
+            else
+                echo "python formatting finished!"
+            fi
         fi
-    else
-        echo "we don't need to format any python files!"
-    fi
+    done
 else
     echo "we don't need to format any python files!"
 fi
@@ -46,29 +47,30 @@ exts="\.\(ts\|tsx\)$"
 formatter="frontend/node_modules/.bin/prettier"
 
 change_list=`git diff --cached --name-only --diff-filter=ACMR | grep $exts | xargs`
-if [ ! -z $change_list ]
+if [ ! -z "$change_list" ]
 then
-    "$formatter" --check "$change_list"
-    ret=$?
-    if [ $ret -ne 0 ]
-    then
-        echo "formatting $change_list"
-        "$formatter" "$change_list"
-        "git add $change_list"
+    for file in $change_list
+    do
+        "$formatter" --check "$file"
         ret=$?
-        
         if [ $ret -ne 0 ]
         then
-            echo "ERROR on typescript/react formatting"
-            exit 1
-        else
-            echo "typescript/react formatting finished!"
+            echo "formatting $file"
+            "$formatter" --write "$file"
+            "git add $file"
+            ret=$?
+        
+            if [ $ret -ne 0 ]
+            then
+                echo "ERROR on python formatting"
+                exit 1
+            else
+                echo "python formatting finished!"
+            fi
         fi
-    else
-        echo "we don't need to format any typescript/react files!"
-    fi
+    done
 else
-    echo "we don't need to format any typescript/react files!"
+    echo "we don't need to format any python files!"
 fi
 
 # run pylint 
@@ -93,9 +95,9 @@ cd frontend
 ret=$?
 if [ $ret -ne 0 ]
 then
+    echo "ERROR on eslint"
     exit 1
 else
-    echo "ERROR on eslint"
     echo "eslint passed!"
 fi
 

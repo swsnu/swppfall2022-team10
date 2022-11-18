@@ -162,7 +162,7 @@ LOGGING = {
             "level": "INFO",
             "filters": ["require_debug_false"],
             "class": "logging.handlers.RotatingFileHandler",
-            "filename": BASE_DIR / "logs/beafamily.log",
+            "filename": BASE_DIR / "logs" / "beafamily.log",
             "maxBytes": 1024 * 1024 * 5,  # 5 MB
             "backupCount": 5,
             "formatter": "standard",
@@ -171,7 +171,7 @@ LOGGING = {
             "level": "DEBUG",
             "filters": ["require_debug_false"],
             "class": "logging.handlers.RotatingFileHandler",
-            "filename": BASE_DIR / "logs/error.log",
+            "filename": BASE_DIR / "logs" / "error.log",
             "maxBytes": 1024 * 1024 * 5,  # 5 MB
             "backupCount": 5,
             "formatter": "standard",
