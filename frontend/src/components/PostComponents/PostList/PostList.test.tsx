@@ -51,7 +51,8 @@ const stubInitialState: postState = {
 const mockStore = getMockStore({
 	post: stubInitialState,
 	user: { users: [], currentUser: null, logged_in: false },
-	review: { reviews: [], selectedReview: null }
+	review: { reviews: [], selectedReview: null },
+	qna: { qnas: [], selectedQna: null },
 })
 
 const mockNavigate = jest.fn()

@@ -14,7 +14,8 @@ const tempState = {
 		selectedPost: null
 	},
 	user: { users: [], currentUser: null, logged_in: true },
-	review: { reviews: [], selectedReview: null }
+	review: { reviews: [], selectedReview: null },
+	qna: { qnas: [], selectedQna: null },
 }
 
 const tempLoggedOutState = {
@@ -23,7 +24,8 @@ const tempLoggedOutState = {
 		selectedPost: null
 	},
 	user: { users: [], currentUser: null, logged_in: false },
-	review: { reviews: [], selectedReview: null }
+	review: { reviews: [], selectedReview: null },
+	qna: { qnas: [], selectedQna: null },
 }
 
 const testPostFormat = {
