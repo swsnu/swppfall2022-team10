@@ -61,7 +61,6 @@ jest.mock('../../Header/Dropdown/Dropdown', () => () => 'Dropdown')
 describe('<ReviewList />', () => {
 	let reviewList: JSX.Element
 	beforeEach(() => {
-		Object.defineProperty(global.window, 'scrollTo', { value: scrollToSpy })
 		jest.clearAllMocks()
 		reviewList = (
 			<Provider store={mockStore}>
@@ -93,17 +92,11 @@ describe('<ReviewList />', () => {
 	it('should handle modal open and close', async () => {
 		render(reviewList)
 		const button = document.querySelector('.review-container')
-		// fireEvent.scroll(window, { target: { scrollY: 100 } });
-		const top = '-'.concat(global.window.scrollY.toString()).concat('px')
 		fireEvent.click(button!)
 		const closeButton = await screen.findByRole('button', {
 			name: /Close/i
 		})
 		fireEvent.click(closeButton!)
-		!document.querySelector('.Modal')
-		expect(scrollToSpy).toHaveBeenCalledWith(
-			0,
-			parseInt(top || '0', 10) * -1
-		)
+		!document.querySelector('Modal')
 	})
 })

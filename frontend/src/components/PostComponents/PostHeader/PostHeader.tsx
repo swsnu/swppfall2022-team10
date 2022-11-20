@@ -67,7 +67,7 @@ const PostHeader = (props: IProps) => {
 
 			{!props.is_author && (
 				<div className='post-button-container'>
-					<button id='adopt-button'>입양하기</button>
+					<button id='adopt-button' onClick={() => navigate('./submit')}>입양하기</button>
 				</div>
 			)}
 
