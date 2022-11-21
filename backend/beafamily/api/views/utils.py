@@ -1,8 +1,10 @@
-import enum
 from functools import wraps
 from rest_framework import status
 from rest_framework.response import Response
 from PIL import Image
+from ..models import post_serializer
+
+from django.core.paginator import Paginator
 
 
 def verify_image(methods):
@@ -68,3 +70,56 @@ def log_error(logger):
         return error_handler
 
     return decorator
+
+
+def pagination(request, data_list, api_url, serializer):
+    page_size = request.GET.get("page_size")
+
+    if page_size:
+        try:
+            page_size = int(page_size)
+
+            if page_size <= 0:
+                raise ValueError()
+        except (ValueError, TypeError):
+            return None
+    else:
+        page_size = 20
+
+    paginator = Paginator(data_list, page_size)
+
+    page_num = request.GET.get("page")
+    page = paginator.get_page(page_num)
+
+    response_list = []
+    for post in page.object_list:
+        response = serializer(post)
+        response_list.append(response)
+
+    response = {
+        "results": response_list,
+        "count": paginator.count,
+        "page_num": paginator.num_pages,
+    }
+
+    if page.has_next():
+        if request.GET.get("page_size"):
+            response[
+                "next"
+            ] = f"{api_url}?page={page.next_page_number()}?page_size={page_size}"
+        else:
+            response["next"] = f"{api_url}?page={page.next_page_number()}"
+    else:
+        response["next"] = None
+
+    if page.has_previous():
+        if request.GET.get("page_size"):
+            response[
+                "previous"
+            ] = f"{api_url}?page={page.previous_page_number()}?page_size={page_size}"
+        else:
+            response["previous"] = f"{api_url}?page={page.previous_page_number()}"
+    else:
+        response["previous"] = None
+
+    return response

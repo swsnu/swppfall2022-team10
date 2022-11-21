@@ -1,5 +1,5 @@
 from ..models import Post, post_serializer, PostImage
-from .utils import verify_image, verify_json, log_error
+from .utils import verify_image, verify_json, log_error, pagination
 import json
 from rest_framework.parsers import MultiPartParser, JSONParser, FileUploadParser
 from rest_framework.decorators import (
@@ -13,6 +13,7 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.response import Response
 from rest_framework import status
 from django.db import transaction
+from django.urls import reverse
 import logging
 
 logger = logging.getLogger("post_view")
@@ -70,12 +71,13 @@ def post_id(request, pid=0):
 def posts(request):
     if request.method == "GET":
         post_list = Post.objects.all().order_by("-created_at")
-        response_list = []
-        for post in post_list.iterator():
-            response = post_serializer(post)
-            response_list.append(response)
 
-        return Response(response_list)
+        api_url = reverse(posts)
+        response = pagination(request, post_list, api_url, post_serializer)
+        if not response:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(response)
 
     else:
         photos = request.data.pop("photos")

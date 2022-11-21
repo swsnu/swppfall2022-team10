@@ -1,13 +1,13 @@
 import base64
 
-import django.contrib.auth.models
+from django.contrib.auth.models import AbstractBaseUser
 from django.test import TestCase, Client
 from django.contrib.auth import get_user_model
 from .models import *
 from rest_framework import status
 import json
 
-User: django.contrib.auth.models.AbstractUser = get_user_model()
+User: AbstractBaseUser = get_user_model()
 
 
 def basic_auth_encoder(username, password):
@@ -71,6 +71,8 @@ class PostTestCase(TestCase):
     def setUp(self):
         u1 = User.objects.create_user(username="abc", password="1234")
         u2 = User.objects.create_user(username="pqr", password="3456")
+        self.u1 = u1
+        self.u2 = u2
         p1 = Post.objects.create(
             author=u1,
             animal_type="강아지",
@@ -125,13 +127,62 @@ class PostTestCase(TestCase):
         self.p2 = p2
         self.client = Client(enforce_csrf_checks=True)
 
+    def test_pagination(self):
+        post_list = []
+        for i in range(100):
+            if i % 2 == 0:
+                p = Post.objects.create(
+                    author=self.u1,
+                    animal_type="강아지",
+                    neutering=True,
+                    vaccination=True,
+                    age=12,
+                    name="나비",
+                    gender=True,
+                    species="치와와",
+                    title="AAA",
+                    is_active=True,
+                    content="bbb",
+                )
+            else:
+                p = Post.objects.create(
+                    author=self.u2,
+                    animal_type="고양이",
+                    neutering=False,
+                    vaccination=False,
+                    age=12,
+                    name="나비",
+                    gender=True,
+                    species="치와와",
+                    title="AAA",
+                    is_active=True,
+                    content="bbb",
+                )
+            post_list.append(p)
+
+        reversed_list = [post_serializer(i) for i in reversed(post_list)]
+
+        response = self.client.get("/api/posts/?page=1")
+        self.assertEqual(response.json()["results"], reversed_list[0:20])
+        response = self.client.get("/api/posts/?page=2")
+        self.assertEqual(response.json()["results"], reversed_list[20:40])
+        response = self.client.get("/api/posts/?page=1&page_size=10")
+        self.assertEqual(response.json()["results"], reversed_list[0:10])
+        response = self.client.get("/api/posts/?page=2&page_size=10")
+        self.assertEqual(response.json()["results"], reversed_list[10:20])
+
+        response = self.client.get("/api/posts/?page=2&page_size=x")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        response = self.client.get("/api/posts/?page=2&page_size=-1")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_post(self):
         response = self.client.get("/api/posts/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data = response.json()
         p1 = post_serializer(self.p1)
         p2 = post_serializer(self.p2)
-        self.assertEqual(data, [p2, p1])
+        self.assertEqual(data["results"], [p2, p1])
 
         response = self.client.get("/api/posts/1/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -335,7 +386,7 @@ class ReviewTestCase(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         r1 = review_serializer(self.r1)
         r2 = review_serializer(self.r2)
-        self.assertEqual(response.json(), [r2, r1])
+        self.assertEqual(response.json()["results"], [r2, r1])
 
         response = self.client.get("/api/reviews/1/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -343,6 +394,9 @@ class ReviewTestCase(TestCase):
 
         response = self.client.get("/api/reviews/11/")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+        response = self.client.get("/api/reviews/?page=1&page_size=-1")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_createreview(self):
         response = self.client.get("/api/token/")

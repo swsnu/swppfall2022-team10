@@ -156,15 +156,24 @@ if __name__ == "__main__":
     )
 
     if model in ["p", "q", "r", "a"]:
-        create(1, 12, model)
+        n = 0
+        if model == "p":
+            n = n_post
+        elif model == "q":
+            n = n_question
+        elif model == "r":
+            n = n_review
+        elif model == "a":
+            n = n_application
+        create(n + 1, n + 100, model)
     elif model == "d":
         if n_post == 0:
-            create(1, 12, "p")
+            create(n_post + 1, n_post + 100, "p")
         # if n_application == 0:
         #     create(1, 12, "a")
         # if n_question == 0:
         #     create(1, 12, "q")
         if n_review == 0:
-            create(1, 12, "r")
+            create(n_review + 1, n_review + 100, "r")
     else:
         print("Quit...")

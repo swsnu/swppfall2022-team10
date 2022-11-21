@@ -1,11 +1,10 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
-from django.contrib.contenttypes.models import ContentType
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, username: str, password = None):
+    def create_user(self, username: str, password=None):
         if username is None:
             raise ValueError("Username is required")
 

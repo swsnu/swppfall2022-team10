@@ -1,5 +1,5 @@
 from ..models import Review, review_serializer, ReviewImage
-from .utils import verify_image, verify_json, log_error
+from .utils import verify_image, verify_json, log_error, pagination
 
 from rest_framework.parsers import MultiPartParser, JSONParser, FileUploadParser
 from rest_framework.decorators import (
@@ -18,6 +18,7 @@ from django.db import transaction
 
 import json
 import logging
+from django.urls import reverse
 
 logger = logging.getLogger("review_view")
 
@@ -31,14 +32,14 @@ logger = logging.getLogger("review_view")
 @log_error(logger)
 def reviews(request):
     if request.method == "GET":
-
-        response_list = []
         review_list = Review.objects.all().order_by("-created_at")
-        for review in review_list.iterator():
-            response = review_serializer(review)
-            response_list.append(response)
 
-        return Response(response_list)
+        api_url = reverse(reviews)
+        response = pagination(request, review_list, api_url, review_serializer)
+        if not response:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(response)
 
     else:
         photos = request.data.pop("photos")
