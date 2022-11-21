@@ -28,8 +28,10 @@ jobs:
             - name: "Set up Cloud SDK"
               uses: "google-github-actions/setup-gcloud@v1"
 
-            - name: "Use gcloud CLI"
-              run: "gcloud info"
-
             - name: "Deploy"
-              run: gcloud compute ssh --zone "asia-northeast3-a" --project "swpp22-team10" "dev-deploy@dev-deploy" --command="./deploy.sh"
+              uses: "google-github-actions/ssh-compute@v0"
+              with:
+                  instance_name: "dev-deploy@dev-deploy"
+                  zone: "asia-northeast3-a"
+                  ssh_private_key: "${{ secrets.DEV_DEPLOY_KEY }}"
+                  command: "$HOME/deploy.sh"
