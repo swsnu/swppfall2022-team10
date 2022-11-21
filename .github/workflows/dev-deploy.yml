@@ -8,6 +8,7 @@ on:
 
 jobs:
     dev_deploy:
+        runs-on: ubuntu-latest
         name: Deploy to Development Server
 
         permissions:
