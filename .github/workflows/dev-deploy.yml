@@ -32,4 +32,4 @@ jobs:
               run: "gcloud info"
 
             - name: "Deploy"
-              run: gcloud compute ssh --zone "asia-northeast3-a" "dev-deploy" --project "swpp22-team10" "dev-deploy@dev-deploy" --command="./deploy.sh"
+              run: gcloud compute ssh --zone "asia-northeast3-a" --project "swpp22-team10" "dev-deploy@dev-deploy" --command="./deploy.sh"
