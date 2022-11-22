@@ -1,0 +1,84 @@
+on: [push, pull_request]
+
+jobs:
+    test:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: "actions/checkout@v3"
+
+            - run: |
+                  export BASEDIR=${PWD}
+
+            - name: "frontend setup"
+              run: |
+                  cd $BASEDIR/frontend 
+                  yarn install
+                  yarn global add coveralls
+                  gem install coveralls-lcov
+
+            - name: "frontend test"
+              run: |
+                  cd $BASEDIR/frontend 
+                  yarn test --coverage --watchAll=false
+                  coveralls-lcov -v -n coverage/lcov.info > coverage.json
+
+            - name: "backend setup"
+              run: |
+                  cd $BASEDIR/backend/beafamily
+                  pip install -r requirments
+                  python manage.py makemigrations
+                  python manage.py migrate
+
+            - name: "backend test"
+              run: |
+                  cd $BASEDIR/backend/beafamily
+                  coverage run --source="./api" manage.py test 
+                  coverage xml
+                  coveralls --merge=$BASE_DIR/frontend/coverage.json
+
+    frontend_check:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: "actions/checkout@v3"
+            - uses: actions/setup-node@v3
+              with:
+                  node-version: 16
+
+            - name: "frontend lint/format"
+              run: |
+                  export BASE_DIR=${PWD}
+                  export NODEPATH=${PWD}/frontend/node_modules/.bin
+                  cd frontend 
+                  yarn install
+                  $NODEPATH/prettier --check src
+                  $NODEPATH/.bin/eslint src
+
+    backend_check:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: "actions/checkout@v3"
+            - uses: actions/setup-python@v4
+              with:
+                  python-version: "3.9"
+
+            - name: "backend lint/format"
+              run: |
+                  cd backend/beafamily
+                  pip install -r requirments
+                  python manage.py makemigrations
+                  python manage.py migrate
+                  black --check **/*.py
+                  pylint **/*.py --load-plugins pylint_django
+
+    sonarcloud:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+              with:
+                  # Disabling shallow clone is recommended for improving relevancy of reporting
+                  fetch-depth: 0
+            - name: SonarCloud Scan
+              uses: sonarsource/sonarcloud-github-action@master
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
