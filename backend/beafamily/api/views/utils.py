@@ -1,17 +1,57 @@
 from functools import wraps
 from rest_framework import status
 from rest_framework.response import Response
+from rest_framework.parsers import (
+    BaseParser,
+    JSONParser,
+    MultiPartParser,
+    ParseError,
+    MultiPartParserError,
+)
 from PIL import Image
 from ..models import post_serializer
 
 from django.core.paginator import Paginator
+import json
+
+writable_methods = ["POST", "PUT"]
 
 
-def verify_image(methods):
+def get_required_keys_and_types(view, method):
+    key_type_set = dict()
+
+    if view == "post":
+        if method in writable_methods:
+            key_type_set["animal_type"] = str
+            key_type_set["age"] = int
+            key_type_set["name"] = str
+            key_type_set["gender"] = bool
+            key_type_set["title"] = str
+            key_type_set["species"] = str
+            key_type_set["neutering"] = bool
+            key_type_set["vaccination"] = bool
+            key_type_set["content"] = str
+        elif method == "GET":
+            key_type_set["animal_type"] = str
+            key_type_set["date"] = list
+            key_type_set["species"] = str
+            key_type_set["age"] = list
+            key_type_set["gender"] = bool
+    elif view == "review":
+        if method in writable_methods:
+            key_type_set["title"] = str
+            key_type_set["content"] = str
+
+    return key_type_set
+
+
+def verify(view):
     def decorator(func):
         @wraps(func)
-        def verified_func(request, *args, **kwargs):
-            if request.method in methods:
+        def verified_view(request, *args, **kwargs):
+            key_type_set = get_required_keys_and_types(view, request.method)
+            data_set = dict()
+            if request.method in writable_methods:
 
                 if "photos" not in request.data:
                     return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -22,22 +62,8 @@ def verify_image(methods):
                     for photo in photos:
                         img = Image.open(photo)
                         img.verify()
-
                 except:
                     return Response(status=status.HTTP_400_BAD_REQUEST)
-
-            return func(request, *args, **kwargs)
-
-        return verified_func
-
-    return decorator
-
-
-def verify_json(methods):
-    def decorator(func):
-        @wraps(func)
-        def verified_func(request, *args, **kwargs):
-            if request.method in methods:
 
                 if "content" not in request.data:
                     return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -47,9 +73,42 @@ def verify_json(methods):
                 if len(content_json) != 1:
                     return Response(status=status.HTTP_400_BAD_REQUEST)
 
+                content_json = json.loads(content_json[0])
+
+                for key, required_type in key_type_set.items():
+                    if (
+                        key not in content_json
+                        or type(content_json[key]) != required_type
+                    ):
+                        return Response(status=status.HTTP_400_BAD_REQUEST)
+                    data_set[key] = content_json[key]
+
+                request.data.setlist("parsed", [data_set])
+
+            elif request.method == "GET":
+                content_json = request.data
+
+                for key, required_type in key_type_set.items():
+                    if key in content_json and (
+                        content_json[key] and type(content_json[key]) != required_type
+                    ):
+                        return Response(status=status.HTTP_400_BAD_REQUEST)
+                    elif key in content_json:
+                        if required_type == list:
+                            try:
+                                a, b = map(int, content_json[key])
+                                if a > b:
+                                    raise ValueError()
+                            except:
+                                return Response(status=status.HTTP_400_BAD_REQUEST)
+                        data_set[key] = content_json[key]
+                    else:
+                        data_set[key] = None
+                request.data["parsed"] = data_set
+
             return func(request, *args, **kwargs)
 
-        return verified_func
+        return verified_view
 
     return decorator
 

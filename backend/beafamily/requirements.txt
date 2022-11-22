@@ -5,3 +5,4 @@ pylint-django==2.5.3
 pillow==9.3.0
 djangorestframework
 black
+tqdm

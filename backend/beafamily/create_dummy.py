@@ -1,9 +1,11 @@
 #!/usr/bin/env python
+import datetime
 import os
 import shutil
 import random
 import json
 import string
+import tqdm
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.dev_settings")
 from django.core.wsgi import get_wsgi_application
@@ -54,13 +56,17 @@ def create(a, b, model_id):
 
     users = list(User.objects.all().iterator())
 
-    for i in range(a, b + 1):
+    for i in tqdm.tqdm(range(a, b + 1)):
 
         ri = random.randint(0, 100)
         if ri % 2 == 0:
             animal_type = "dog"
         else:
             animal_type = "cat"
+
+        delta = datetime.timedelta(random.randint(0, 10))
+        gender = random.randint(0, 100) % 2 == 0
+        age = random.randint(1, 25)
 
         # user = User.objects.get(username="yeomjy")
         user = random.choice(users)
@@ -83,13 +89,14 @@ def create(a, b, model_id):
                 animal_type=j["animal_type"],
                 neutering=j["neutering"],
                 vaccination=j["vaccination"],
-                age=j["age"],
+                age=age,
                 name=j["name"],
-                gender=j["gender"],
+                gender=gender,
                 species=j["species"],
                 title=j["title"],
                 is_active=j["is_active"],
                 content=j["content"],
+                created_at=datetime.date.today() - delta,
             )
             photos = [f"{model_name}/{i}/{p}" for p in j["photo_list"]]
             photos = [
@@ -104,6 +111,7 @@ def create(a, b, model_id):
                 author=user,
                 title=j["title"],
                 content=j["content"],
+                created_at=datetime.date.today() - delta,
             )
             photos = [f"{model_name}/{i}/{p}" for p in j["photo_list"]]
             photos = [
@@ -154,6 +162,16 @@ if __name__ == "__main__":
         "p: Post, r: Review, a: Application, q: Question, d: Default, otherwise: Quit\n"
         "Default: create every model which has zero element\n"
     )
+    a = input("Please type how many data to create(per model)\n" "Default is 100")
+
+    print(model)
+    print(a)
+
+    try:
+        a = int(a)
+    except:
+        print("HERE")
+        a = 100
 
     if model in ["p", "q", "r", "a"]:
         n = 0
@@ -165,15 +183,15 @@ if __name__ == "__main__":
             n = n_review
         elif model == "a":
             n = n_application
-        create(n + 1, n + 100, model)
+        create(n + 1, n + a, model)
     elif model == "d":
         if n_post == 0:
-            create(n_post + 1, n_post + 100, "p")
+            create(n_post + 1, n_post + a, "p")
         # if n_application == 0:
         #     create(1, 12, "a")
         # if n_question == 0:
         #     create(1, 12, "q")
         if n_review == 0:
-            create(n_review + 1, n_review + 100, "r")
+            create(n_review + 1, n_review + a, "r")
     else:
         print("Quit...")

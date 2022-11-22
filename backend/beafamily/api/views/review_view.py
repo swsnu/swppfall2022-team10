@@ -1,5 +1,5 @@
 from ..models import Review, review_serializer, ReviewImage
-from .utils import verify_image, verify_json, log_error, pagination
+from .utils import verify, log_error, pagination
 
 from rest_framework.parsers import MultiPartParser, JSONParser, FileUploadParser
 from rest_framework.decorators import (
@@ -26,11 +26,11 @@ logger = logging.getLogger("review_view")
 @api_view(["GET", "POST"])
 @authentication_classes([SessionAuthentication])
 @permission_classes([IsAuthenticatedOrReadOnly])
-@parser_classes([MultiPartParser])
-@verify_image(["POST"])
-@verify_json(["POST"])
+@parser_classes([MultiPartParser, JSONParser])
+@verify("review")
 @log_error(logger)
 def reviews(request):
+    content = request.data.get("parsed")
     if request.method == "GET":
         review_list = Review.objects.all().order_by("-created_at")
 
@@ -43,17 +43,6 @@ def reviews(request):
 
     else:
         photos = request.data.pop("photos")
-        content_json = request.data.pop("content")
-        if len(request.data) != 0:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-        try:
-            content_dict = json.loads(content_json[0])
-            content = {
-                "title": content_dict["title"],
-                "content": content_dict["content"],
-            }
-        except KeyError:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
 
         with transaction.atomic():
             review = Review.objects.create(author=request.user, **content)
