@@ -14,7 +14,6 @@ jobs:
               run: |
                   cd $GITHUB_WORKSPACE/frontend 
                   yarn install
-                  yarn global add coveralls
                   gem install coveralls-lcov
 
             - name: "frontend test"
@@ -34,6 +33,7 @@ jobs:
             - name: "backend test"
               run: |
                   cd $GITHUB_WORKSPACE/backend/beafamily
+                  pip install coveralls
                   coverage run --source="./api" manage.py test 
                   coverage xml
                   coveralls --merge=$GITHUB_WORKSPACE/frontend/coverage.json
