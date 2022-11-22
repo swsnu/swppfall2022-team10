@@ -37,7 +37,7 @@ jobs:
                   cd $GITHUB_WORKSPACE
                   sed 's/SF:src\//SF:frontend\/src\//g' frontend/coverage/lcov.info > lcov.info
                   coverage lcov --data-file=backend/beafamily/.coverage -o backend_cov.lcov
-                  backend_cov.lcov >> lcov.info
+                  cat backend_cov.lcov >> lcov.info
 
             - name: Coveralls
               uses: coverallsapp/github-action@master
