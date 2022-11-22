@@ -36,7 +36,7 @@ jobs:
                   cd $GITHUB_WORKSPACE/backend/beafamily
                   coverage run --source="./api" manage.py test 
                   coverage xml
-                  coveralls --merge=$BASE_DIR/frontend/coverage.json
+                  coveralls --merge=$GITHUB_WORKSPACE/frontend/coverage.json
 
     frontend_check:
         runs-on: ubuntu-latest
