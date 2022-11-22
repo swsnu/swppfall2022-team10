@@ -1,9 +1,10 @@
+name: Dev-deploy
 on:
     workflow_run:
-        workflows: [ci]
-        branches: dev
+        workflows: ["CI"]
         types:
             - completed
+        branches: dev
 
 jobs:
     dev_deploy:
