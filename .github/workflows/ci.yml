@@ -34,6 +34,7 @@ jobs:
               run: |
                   cd $GITHUB_WORKSPACE/backend/beafamily
                   coverage run --source="./api" manage.py test 
+                  coverage xml
                   cd $GITHUB_WORKSPACE
                   sed 's/SF:src\//SF:frontend\/src\//g' frontend/coverage/lcov.info > lcov.info
                   coverage lcov --data-file=backend/beafamily/.coverage -o backend_cov.lcov
