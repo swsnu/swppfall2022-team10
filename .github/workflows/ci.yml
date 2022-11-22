@@ -6,6 +6,10 @@ jobs:
         steps:
             - uses: "actions/checkout@v3"
 
+            - uses: actions/setup-ruby@v1
+              with:
+                  ruby-version: 2.6
+
             - name: "frontend setup"
               run: |
                   cd $GITHUB_WORKSPACE/frontend 
@@ -23,6 +27,7 @@ jobs:
               run: |
                   cd $GITHUB_WORKSPACE/backend/beafamily
                   pip install -r requirements.txt
+                  mkdir -p logs
                   python manage.py makemigrations
                   python manage.py migrate
 
@@ -48,7 +53,7 @@ jobs:
                   yarn install
                   $NODEPATH/prettier --check src/**/*.tsx
                   $NODEPATH/prettier --check src/**/*.ts
-                  $NODEPATH/.bin/eslint src
+                  $NODEPATH/eslint src
 
     backend_check:
         runs-on: ubuntu-latest
@@ -62,6 +67,7 @@ jobs:
               run: |
                   cd backend/beafamily
                   pip install -r requirements.txt
+                  mkdir -p logs
                   python manage.py makemigrations
                   python manage.py migrate
                   black --check **/*.py
