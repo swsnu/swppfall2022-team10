@@ -1,9 +1,6 @@
-# This is a basic workflow that is manually triggered
-
 name: Deploy on Development Server
 
-# Controls when the action will run. Workflow runs when manually triggered using the UI
-# or API.
+# runs when CI build for new commits to dev branch passed
 on:
   workflow_run:
       workflows: [CI]
@@ -11,19 +8,7 @@ on:
         - completed
       branches: 
         - dev
-  
-  workflow_dispatch:
-    # Inputs the workflow accepts.
-    inputs:
-      name:
-        # Friendly description to be shown in the UI instead of 'name'
-        description: 'Person to greet'
-        # Default value if no value is explicitly provided
-        default: 'World'
-        # Input has to be provided for the workflow to run
-        required: true
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
     dev-deploy:
         runs-on: ubuntu-latest
@@ -36,6 +21,7 @@ jobs:
         steps:
           - uses: "actions/checkout@v3"
           
+          # authenticate to google cloud with iam service account
           - id: "auth"
             uses: "google-github-actions/auth@v1"
             with:
@@ -51,6 +37,5 @@ jobs:
                 instance_name: "dev-deploy@dev-deploy"
                 zone: "asia-northeast3-a"
                 ssh_private_key: "${{ secrets.DEV_DEPLOY_KEY }}"
-                command: "$HOME/deploy.sh"
-
+                command: "source $HOME/deploy.sh"
             
