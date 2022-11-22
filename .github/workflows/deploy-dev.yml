@@ -1,3 +1,4 @@
+name: "Development deploy"
 on:
     workflow_run:
         workflows: ["CI"]
