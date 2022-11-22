@@ -7,7 +7,8 @@ import Layout from './Layout'
 const mockStore = getMockStore({
 	post: { posts: [], selectedPost: null },
 	user: { users: [], currentUser: null, logged_in: true },
-	review: { reviews: [], selectedReview: null }
+	review: { reviews: [], selectedReview: null },
+	application: { applications: [], selectedApplication: null }
 })
 
 const scrollToSpy = jest.fn()

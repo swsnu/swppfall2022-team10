@@ -1,0 +1,57 @@
+.application-list {
+	padding: 30px;
+
+	.title {
+		flex: 25%;
+		text-align: left;
+		font-size: 20px;
+		font-weight: 600;
+		line-height: 45px;
+		padding-bottom: 20px;
+	}
+	.lists {
+		#index {
+			width: 10%;
+		}
+		#date {
+			width: 20%;
+		}
+		button {
+			all: unset;
+			&:hover {
+				letter-spacing: 1px;
+				transform: scale(1);
+				cursor: pointer;
+			}
+		}
+		border: 2.5px solid;
+		border-radius: 2px;
+		border-color: #bbbbbb;
+		width: 1100px;
+		height: 500px;
+		overflow-y: auto;
+	}
+}
+.app-content {
+	height: 200px;
+
+	.modal-header {
+		font-weight: bold;
+		font-size: large;
+	}
+
+	.modal-body {
+		padding: 30px 30px 30px 30px;
+		background-color: rgb(255, 255, 255);
+		border-radius: 10px;
+		box-shadow: 0 2px 3px 0 rgba(34, 36, 38, 0.15);
+		overflow-y: auto;
+	}
+
+	#modalCloseBtn:hover {
+		cursor: pointer;
+	}
+	.modalContent {
+		position: relative;
+	}
+}

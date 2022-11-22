@@ -1,4 +1,4 @@
-.apply{
+.apply {
 	padding-top: 0px;
 	padding-bottom: 50px;
 	margin: 0 50px;
@@ -37,17 +37,17 @@
 		}
 	}
 	.apply-container {
-	    width: 800px;
+		width: 800px;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
-		padding: 20px 0px 20px 0px;
+		padding: 20px 0px 10px 0px;
 		margin: auto;
 		font-size: 23px;
 		line-height: 40px;
 		border-radius: 50px;
 		border: 2.5px solid;
-	    border-radius: 18px;
+		border-radius: 18px;
 		border-color: #d4b886;
 		align: center;
 
@@ -61,33 +61,20 @@
 			label {
 				text-align: left;
 			}
-			.apply-input, .apply-dropbox{
-				width: 350px;
-			}
 			margin-bottom: 15px;
 		}
 
-		.apply-input, .rw-widget-container {
+		.apply-input {
 			text-align: center;
-			.rw-combobox-input {
-				text-align: center;
-			}
 			box-shadow: none;
 		}
 
-		#apply-gender-input,
-		#apply-marriage-input {
-			display: flex;
-			flex-direction: row;
-			.radio-input label {
-				width: 150px;
-				padding-left: 20px;
-			}
+		h2 {
+			padding-bottom: 20px;
 		}
-
 	}
 	#apply-button {
 		align-self: center;
 		margin-top: 20px;
-    }
+	}
 }

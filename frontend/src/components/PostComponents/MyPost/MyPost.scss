@@ -1,0 +1,36 @@
+.ListContainer {
+	padding-top: 10px;
+	padding-bottom: 50px;
+	margin: 0 50px;
+	display: flex;
+	flex-direction: column;
+	font-family: 'Pretendard-Regular';
+}
+
+.MyPost,
+.MyLike,
+.MyApply {
+	position: relative;
+	z-index: 1;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	padding-top: 20px;
+	padding-bottom: 10px;
+	overflow-y: auto;
+
+	h1 {
+		text-align: left;
+	}
+
+	.posts,
+	h1 {
+		display: flex;
+		flex-direction: row;
+		justify-content: left;
+		flex-wrap: wrap;
+		padding: 20px 32px 10px 32px;
+	}
+}

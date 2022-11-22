@@ -16,7 +16,7 @@ export default function ReviewModal({
 	}
 
 	return (
-		<Modal show={true} onHide={closeModal}>
+		<Modal show={true} onHide={closeModal} contentClassName='review'>
 			<Modal.Header closeButton></Modal.Header>
 			<Modal.Body>{children}</Modal.Body>
 		</Modal>

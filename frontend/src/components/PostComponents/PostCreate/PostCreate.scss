@@ -15,7 +15,8 @@
 	display: flex;
 	flex-direction: column;
 
-	#back-create-post-button, #confirm-create-post-button {
+	#back-create-post-button,
+	#confirm-create-post-button {
 		width: fit-content;
 		padding: 10px 15px;
 		margin: 3px;
@@ -68,7 +69,9 @@
 			label {
 				text-align: left;
 			}
-			.post-input, .post-dropbox, .post-combobox {
+			.post-input,
+			.post-dropbox,
+			.post-combobox {
 				width: 350px;
 			}
 			margin-bottom: 15px;
@@ -86,7 +89,8 @@
 			}
 		}
 
-		.post-input, .rw-widget-container {
+		.post-input,
+		.rw-widget-container {
 			border: 2.5px solid;
 			border-radius: 18px;
 			border-color: #d4b886;

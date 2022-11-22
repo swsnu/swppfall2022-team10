@@ -26,7 +26,8 @@ const tempState = {
 			}
 		],
 		selectedReview: null
-	}
+	},
+	application: { applications: [], selectedApplication: null }
 }
 const mockNavigate = jest.fn()
 jest.mock('react-router', () => ({

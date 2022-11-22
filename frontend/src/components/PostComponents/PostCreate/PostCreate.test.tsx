@@ -14,7 +14,8 @@ const tempState = {
 		selectedPost: null
 	},
 	user: { users: [], currentUser: null, logged_in: true },
-	review: { reviews: [], selectedReview: null }
+	review: { reviews: [], selectedReview: null },
+	application: { applications: [], selectedApplication: null }
 }
 
 const tempLoggedOutState = {
