@@ -29,7 +29,8 @@ const tempState = {
 			neutering: true,
 			is_active: true,
 			editable: true
-		}
+		},
+		selectedAnimal: ''
 	},
 	user: { users: [], currentUser: null, logged_in: true },
 	review: { reviews: [], selectedReview: null }

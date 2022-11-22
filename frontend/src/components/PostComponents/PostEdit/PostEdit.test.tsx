@@ -12,7 +12,8 @@ import { act } from 'react-dom/test-utils'
 const tempState = {
 	post: {
 		posts: [],
-		selectedPost: null
+		selectedPost: null,
+		selectedAnimal: ''
 	},
 	user: { users: [], currentUser: null, logged_in: true },
 	review: { reviews: [], selectedReview: null }

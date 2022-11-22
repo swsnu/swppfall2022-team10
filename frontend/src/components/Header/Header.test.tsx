@@ -11,7 +11,7 @@ jest.mock('react-router', () => ({
 }))
 
 const mockStore = getMockStore({
-	post: { posts: [], selectedPost: null },
+	post: { posts: [], selectedPost: null, selectedAnimal: '' },
 	user: { users: [], currentUser: null, logged_in: true },
 	review: { reviews: [], selectedReview: null }
 })
@@ -23,7 +23,7 @@ describe('<Header />', () => {
 		})
 		render(
 			<Provider store={mockStore}>
-				<Header />
+				<Header animalOption={false} />
 			</Provider>
 		)
 		screen.getByText('입양 절차 소개')
@@ -37,7 +37,7 @@ describe('<Header />', () => {
 		})
 		render(
 			<Provider store={mockStore}>
-				<Header />
+				<Header animalOption={false} />
 			</Provider>
 		)
 		const introduceButton = screen.getByText('입양 절차 소개')
@@ -61,7 +61,7 @@ describe('<Header />', () => {
 		})
 		render(
 			<Provider store={mockStore}>
-				<Header />
+				<Header animalOption={false} />
 			</Provider>
 		)
 		const menuButton = screen.getByRole('button', { name: /menu-button/i })

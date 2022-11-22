@@ -11,7 +11,8 @@ import { MdArrowBack } from 'react-icons/md'
 const tempState = {
 	post: {
 		posts: [],
-		selectedPost: null
+		selectedPost: null,
+		selectedAnimal: ''
 	},
 	user: { users: [], currentUser: null, logged_in: true },
 	review: { reviews: [], selectedReview: null }
@@ -20,7 +21,8 @@ const tempState = {
 const tempLoggedOutState = {
 	post: {
 		posts: [],
-		selectedPost: null
+		selectedPost: null,
+		selectedAnimal: ''
 	},
 	user: { users: [], currentUser: null, logged_in: false },
 	review: { reviews: [], selectedReview: null }

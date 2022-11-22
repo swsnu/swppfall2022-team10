@@ -1,0 +1,40 @@
+.pagination {
+	justify-content: center;
+	list-style: none;
+	text-align: center;
+	border-radius: 3px;
+	color: white;
+	padding: 1px;
+}
+
+.page-item {
+	display: inline-block;
+	font-size: 17px;
+	font-weight: 600;
+	padding: 5px !important;
+	border-radius: 5px;
+	width: 25px;
+	&:hover {
+		cursor: pointer;
+	}
+	&:focus::after {
+		color: white;
+		background-color: #263a6c;
+	}
+}
+
+.page-link {
+	color: black !important;
+	border: none !important;
+	&:hover::after,
+	&:focus::after {
+		border-radius: 100%;
+		color: white;
+		background-color: #263a6c;
+	}
+}
+
+.clicked {
+	text-decoration: underline !important;
+	color: #454649 !important;
+}

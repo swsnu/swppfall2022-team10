@@ -55,7 +55,7 @@ describe('post reducer', () => {
 	})
 	it('should handle getPosts', async () => {
 		axios.get = jest.fn().mockResolvedValue({ data: [fakePost] })
-		await store.dispatch(getPosts())
+		await store.dispatch(getPosts(1))
 		expect(store.getState().post.posts).toEqual([fakePost])
 	})
 	it('should handle getPost', async () => {

@@ -9,7 +9,7 @@ import * as reviewSlice from '../../../store/slices/review'
 import { MdArrowBack } from 'react-icons/md'
 
 const tempState = {
-	post: { posts: [], selectedPost: null },
+	post: { posts: [], selectedPost: null, selectedAnimal: '' },
 	user: { users: [], currentUser: null, logged_in: true },
 	review: {
 		reviews: [

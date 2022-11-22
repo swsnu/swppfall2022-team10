@@ -46,7 +46,8 @@ const stubInitialState: postState = {
 			editable: false
 		}
 	],
-	selectedPost: null
+	selectedPost: null,
+	selectedAnimal: ''
 }
 const mockStore = getMockStore({
 	post: stubInitialState,
