@@ -33,10 +33,23 @@ jobs:
             - name: "backend test"
               run: |
                   cd $GITHUB_WORKSPACE/backend/beafamily
-                  pip install coveralls
                   coverage run --source="./api" manage.py test 
-                  coverage xml
-                  coveralls --merge=$GITHUB_WORKSPACE/frontend/coverage.json
+                  cd $GITHUB_WORKSPACE
+                  sed 's/SF:src\//SF:frontend\/src\//g' frontend/coverage/lcov.info > lcov.info
+                  coverage lcov --data-file=backend/beafamily/.coverage -o backend_cov.lcov
+                  backend_cov.lcov >> lcov.info
+
+            - name: Coveralls
+              uses: coverallsapp/github-action@master
+              with:
+                  github-token: ${{ secrets.GITHUB_TOKEN }}
+                  path-to-lcov: lcov.info
+
+            - name: SonarCloud Scan
+              uses: sonarsource/sonarcloud-github-action@master
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
     frontend_check:
         runs-on: ubuntu-latest
@@ -72,16 +85,3 @@ jobs:
                   python manage.py migrate
                   black --check **/*.py
                   pylint **/*.py --load-plugins pylint_django
-
-    sonarcloud:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v3
-              with:
-                  # Disabling shallow clone is recommended for improving relevancy of reporting
-                  fetch-depth: 0
-            - name: SonarCloud Scan
-              uses: sonarsource/sonarcloud-github-action@master
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
