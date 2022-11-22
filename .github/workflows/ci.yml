@@ -6,32 +6,29 @@ jobs:
         steps:
             - uses: "actions/checkout@v3"
 
-            - run: |
-                  export BASEDIR=${PWD}
-
             - name: "frontend setup"
               run: |
-                  cd $BASEDIR/frontend 
+                  cd $GITHUB_WORKSPACE/frontend 
                   yarn install
                   yarn global add coveralls
                   gem install coveralls-lcov
 
             - name: "frontend test"
               run: |
-                  cd $BASEDIR/frontend 
+                  cd $GITHUB_WORKSPACE/frontend 
                   yarn test --coverage --watchAll=false
                   coveralls-lcov -v -n coverage/lcov.info > coverage.json
 
             - name: "backend setup"
               run: |
-                  cd $BASEDIR/backend/beafamily
-                  pip install -r requirments
+                  cd $GITHUB_WORKSPACE/backend/beafamily
+                  pip install -r requirements.txt
                   python manage.py makemigrations
                   python manage.py migrate
 
             - name: "backend test"
               run: |
-                  cd $BASEDIR/backend/beafamily
+                  cd $GITHUB_WORKSPACE/backend/beafamily
                   coverage run --source="./api" manage.py test 
                   coverage xml
                   coveralls --merge=$BASE_DIR/frontend/coverage.json
@@ -46,11 +43,11 @@ jobs:
 
             - name: "frontend lint/format"
               run: |
-                  export BASE_DIR=${PWD}
-                  export NODEPATH=${PWD}/frontend/node_modules/.bin
+                  export NODEPATH=$GITHUB_WORKSPACE/frontend/node_modules/.bin
                   cd frontend 
                   yarn install
-                  $NODEPATH/prettier --check src
+                  $NODEPATH/prettier --check src/**/*.tsx
+                  $NODEPATH/prettier --check src/**/*.ts
                   $NODEPATH/.bin/eslint src
 
     backend_check:
@@ -64,7 +61,7 @@ jobs:
             - name: "backend lint/format"
               run: |
                   cd backend/beafamily
-                  pip install -r requirments
+                  pip install -r requirements.txt
                   python manage.py makemigrations
                   python manage.py migrate
                   black --check **/*.py
