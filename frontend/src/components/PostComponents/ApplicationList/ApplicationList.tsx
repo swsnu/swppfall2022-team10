@@ -1,3 +1,9 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
+/* eslint-disable no-unneeded-ternary */
+/* eslint-disable object-shorthand */
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
+/* eslint-disable @typescript-eslint/no-misused-promises */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useDispatch, useSelector } from 'react-redux'
 import { useState, useCallback } from 'react'
 import {
@@ -107,6 +113,10 @@ export default function ApplicationList(props: IProps) {
 					<div>신청자: {clickedApplication.author_name}</div>
 					<div>신청일시: {clickedApplication.created_at}</div>
 					<div>신청서:</div>
+					<div className='buttons'>
+						<button id='accept-button'>수락</button>
+						<button id='reject-button'>거절</button>
+					</div>
 				</Modal.Body>
 			</Modal>
 		</div>

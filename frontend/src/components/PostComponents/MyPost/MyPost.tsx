@@ -1,3 +1,10 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
+/* eslint-disable no-unneeded-ternary */
+/* eslint-disable object-shorthand */
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
+/* eslint-disable @typescript-eslint/no-misused-promises */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import Layout from '../../Layout/Layout'
 
 import { useEffect, useState, useMemo } from 'react'
@@ -15,28 +22,65 @@ export default function MyPost() {
 	const postState = useSelector(selectPost)
 	const dispatch = useDispatch<AppDispatch>()
 	const userState = useSelector(selectUser)
-	// const [mypostMore, setMypostMore] = useState<boolean>(false)
+	const [mypostMore, setMypostMore] = useState<boolean>(false)
 	const [mylikeMore, setMylikeMore] = useState<boolean>(false)
-	// 	const [myapplyMore, setMyapplyMore] = useState<boolean>(false)
+	const [myapplyMore, setMyapplyMore] = useState<boolean>(false)
 
 	const mypost = postState.posts.slice(0, 4)
 	const mylike = postState.posts.slice(4, 10)
 	const myapply = postState.posts.slice(4, 9)
-
-	const shortMyLike = mylike.slice(0, 4)
 
 	useEffect(() => {
 		// eslint-disable-next-line @typescript-eslint/no-floating-promises
 		dispatch(getPosts())
 	}, [])
 
+	const post = useMemo(() => {
+		const shortMypost: postType[] = mypost.slice(0, 4)
+		if (mypost.length > 4) {
+			if (mypostMore) {
+				return mypost
+			}
+			return shortMypost
+		}
+		return mypost
+	}, [mypostMore, mypost])
+
+	const like = useMemo(() => {
+		const shortMyLike: postType[] = mylike.slice(0, 4)
+		if (mylike.length > 4) {
+			if (mylikeMore) {
+				return mylike
+			}
+			return shortMyLike
+		}
+		return mylike
+	}, [mylikeMore, mylike])
+
+	const apply = useMemo(() => {
+		const shortMyapply: postType[] = myapply.slice(0, 4)
+		if (myapply.length > 4) {
+			if (myapplyMore) {
+				return myapply
+			}
+			return shortMyapply
+		}
+		return myapply
+	}, [myapplyMore, myapply])
+
 	return (
 		<Layout>
 			<div className='ListContainer'>
 				<div className='MyPost'>
 					<h1>입양 게시글</h1>
+					<div className='showMore'>
+						<button onClick={() => setMypostMore(!mypostMore)}>
+							{mypost.length > 4 &&
+								(mypostMore ? '닫기' : '전체보기')}
+						</button>
+					</div>
 					<div className='posts'>
-						{mypost.map((post: postType) => {
+						{post.map((post: postType) => {
 							return (
 								<Post
 									key={`${post.id}_post`}
@@ -57,12 +101,14 @@ export default function MyPost() {
 				</div>
 				<div className='MyLike'>
 					<h1>관심 게시글</h1>
-					<button onClick={() => setMylikeMore(!mylikeMore)}>
-						{mylike.length > 4 &&
-							(mylikeMore ? '닫기' : '전체보기')}
-					</button>
+					<div className='showMore'>
+						<button onClick={() => setMylikeMore(!mylikeMore)}>
+							{mylike.length > 4 &&
+								(mylikeMore ? '닫기' : '전체보기')}
+						</button>
+					</div>
 					<div className='posts'>
-						{mylike.map((post: postType) => {
+						{like.map((post: postType) => {
 							return (
 								<Post
 									key={`${post.id}_post`}
@@ -83,8 +129,14 @@ export default function MyPost() {
 				</div>
 				<div className='MyApply'>
 					<h1>입양 신청 게시글</h1>
+					<div className='showMore'>
+						<button onClick={() => setMyapplyMore(!myapplyMore)}>
+							{myapply.length > 4 &&
+								(myapplyMore ? '닫기' : '전체보기')}
+						</button>
+					</div>
 					<div className='posts'>
-						{myapply.map((post: postType) => {
+						{apply.map((post: postType) => {
 							return (
 								<Post
 									key={`${post.id}_post`}
