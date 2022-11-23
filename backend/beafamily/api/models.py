@@ -49,9 +49,6 @@ class AbstractMetaDataType(models.Model):
 
 
 class AbstractArticleType(AbstractMetaDataType):
-    author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
     title = models.CharField(max_length=50)
     content = models.TextField()
     type = models.CharField(max_length=10)
@@ -129,6 +126,9 @@ class AbstractCommentType(AbstractMetaDataType):
     author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     content = models.CharField(max_length=500)
 
+    class Meta:
+        abstract = True
+
 
 class PostComment(AbstractCommentType):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
@@ -138,11 +138,8 @@ class QuestionComment(AbstractCommentType):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
 
 
-class AbstractImageType(models.Model):
-    author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+class AbstractImageType(AbstractMetaDataType):
     image = models.ImageField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         abstract = True

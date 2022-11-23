@@ -65,39 +65,47 @@ def post_id(request, pid=0):
 @api_view(["GET", "POST"])
 @authentication_classes([SessionAuthentication])
 @permission_classes([IsAuthenticatedOrReadOnly])
-@parser_classes([JSONParser, MultiPartParser])
+@parser_classes([MultiPartParser])
 @verify("post")
 @log_error(logger)
 def posts(request):
-    content = request.data.get("parsed")
     if request.method == "GET":
         post_list = Post.objects.all()
+        content = request.GET
 
-        if content["date"]:
-            today = datetime.today()
-            s, e = content["date"]
+        today = datetime.today()
+
+        if content.get("date"):
+            day = int(content.get("date"))
+            day = today - timedelta(days=day)
+            post_list = post_list.filter(created_at__exact=day)
+
+        elif content.get("date_min", None) and content.get("date_max", None):
+            s, e = int(content.get("date_min")), int(content.get("date_max"))
             start = today - timedelta(days=e)
             end = today - timedelta(days=s)
-            if s == e:
-                post_list = post_list.filter(created_at__day=start)
-            else:
-                post_list = post_list.filter(created_at__range=[start, end])
+            post_list = post_list.filter(created_at__range=[start, end])
 
-        if content["age"]:
-            s, e = content["age"]
-            if s == e:
-                post_list = post_list.filter(age=s)
-            else:
-                post_list = post_list.filter(age__range=[s, e])
+        if content.get("age", None):
+            age = int(content.get("age"))
+            post_list = post_list.filter(age=age)
+        elif content.get("age_min", None) and content.get("age_max", None):
+            s, e = int(content.get("age_min")), int(content.get("age_max"))
+            post_list = post_list.filter(age__range=[s, e])
 
-        if content["gender"]:
-            post_list = post_list.filter(gender=content["gender"])
+        if content.get("is_active", None):
+            is_active = content.get("is_active") == "True"
+            post_list = post_list.filter(is_active=is_active)
 
-        if content["animal_type"]:
-            post_list = post_list.filter(animal_type=content["animal_type"])
+        if content.get("gender", None):
+            gender = content.get("gender") == "True"
+            post_list = post_list.filter(gender=gender)
 
-        if content["species"]:
-            post_list = post_list.filter(species=content["species"])
+        if content.get("animal_type", None):
+            post_list = post_list.filter(animal_type=content.get("animal_type"))
+
+        if content.get("species", None):
+            post_list = post_list.filter(species=content.get("species"))
 
         post_list = post_list.order_by("-created_at")
         api_url = reverse(posts)
@@ -108,6 +116,7 @@ def posts(request):
         return Response(response)
 
     else:
+        content = request.data.get("parsed")
         photos = request.data.pop("photos")
 
         with transaction.atomic():

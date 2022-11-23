@@ -33,10 +33,15 @@ def get_required_keys_and_types(view, method):
             key_type_set["content"] = str
         elif method == "GET":
             key_type_set["animal_type"] = str
-            key_type_set["date"] = list
+            key_type_set["date"] = int
+            key_type_set["date_min"] = int
+            key_type_set["date_max"] = int
             key_type_set["species"] = str
-            key_type_set["age"] = list
+            key_type_set["age"] = int
+            key_type_set["age_min"] = int
+            key_type_set["age_max"] = int
             key_type_set["gender"] = bool
+            key_type_set["is_active"] = bool
     elif view == "review":
         if method in writable_methods:
             key_type_set["title"] = str
@@ -86,25 +91,28 @@ def verify(view):
                 request.data.setlist("parsed", [data_set])
 
             elif request.method == "GET":
-                content_json = request.data
+                content_json = request.GET
 
                 for key, required_type in key_type_set.items():
-                    if key in content_json and (
-                        content_json[key] and type(content_json[key]) != required_type
-                    ):
-                        return Response(status=status.HTTP_400_BAD_REQUEST)
-                    elif key in content_json:
-                        if required_type == list:
+                    if key in content_json and content_json.get(key):
+                        val = content_json.get(key)
+                        if required_type == int:
                             try:
-                                a, b = map(int, content_json[key])
-                                if a > b:
+                                n = int(val)
+                                if n < 0:
                                     raise ValueError()
                             except:
                                 return Response(status=status.HTTP_400_BAD_REQUEST)
-                        data_set[key] = content_json[key]
-                    else:
-                        data_set[key] = None
-                request.data["parsed"] = data_set
+                        elif required_type == bool:
+                            if val not in ["True", "False"]:
+                                return Response(status=status.HTTP_400_BAD_REQUEST)
+
+                for int_var in ["age", "date"]:
+                    min_in = f"{int_var}_min" in content_json
+                    max_in = f"{int_var}_max" in content_json
+
+                    if min_in ^ max_in:
+                        return Response(status=status.HTTP_400_BAD_REQUEST)
 
             return func(request, *args, **kwargs)
 

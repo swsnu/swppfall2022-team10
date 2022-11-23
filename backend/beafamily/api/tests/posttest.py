@@ -13,10 +13,61 @@ from rest_framework.test import APIClient, APITestCase
 User: AbstractBaseUser = get_user_model()
 
 
-# def datebetween(start, end, date):
-#     diff1 = (end - date).totalseconds()
-#     diff2 = (date - end).totalseconds()
-#     return diff1 >= 0 and diff2 >= 0
+def check_exact(x, filter_dict):
+    for key, val in filter_dict.items():
+        if key not in x:
+            continue
+
+        if key != "date" and x[key] != val:
+            return False
+
+        if key == "date":
+            if (datetime.date.today() - datetime.timedelta(days=val)) != x[key]:
+                return False
+
+    return True
+
+
+def check_date_range(x, filter_dict):
+    for key, val in filter_dict.items():
+        if key not in x:
+            continue
+
+        if key != "date_min" and key != "date_max" and x[key] != val:
+            return False
+
+        if key == "date":
+            if (datetime.date.today() - datetime.timedelta(days=val)) != x[key]:
+                return False
+
+    return datebetween(filter_dict["date_min"], filter_dict["date_max"], x["date"])
+
+
+def check_age_range(x, filter_dict):
+    for key, val in filter_dict.items():
+        if key not in x:
+            continue
+
+        if (
+            key != "date"
+            and key != "age_min"
+            and key != "age_max"
+            and key != "age"
+            and x[key] != val
+        ):
+            return False
+
+        if key == "date":
+            if (datetime.date.today() - datetime.timedelta(days=val)) != x[key]:
+                return False
+
+    return filter_dict["age_max"] >= x["age"] >= filter_dict["age_min"]
+
+
+def datebetween(start, end, date):
+    diff1 = (end - date).totalseconds()
+    diff2 = (date - end).totalseconds()
+    return diff1 >= 0 and diff2 >= 0
 
 
 class PostTestCase(TestCase):
@@ -284,3 +335,88 @@ class PostTestCase(TestCase):
             )
 
             self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_invalid_query(self):
+
+        # negative
+        invalid = {"age": -1}
+
+        response = self.client.get("/api/posts/?page=1&page_size=40", invalid)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        # invalid type
+        invalid = {"age_max": "x", "age_min": 1}
+
+        response = self.client.get("/api/posts/?page=1&page_size=40", invalid)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        # only min
+        invalid = {"age_min": 1}
+
+        response = self.client.get("/api/posts/?page=1&page_size=40", invalid)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_valid_query(self):
+        reversed_list = [post_serializer(i) for i in reversed(self.post_list)]
+
+        valid = {
+            "age": 3,
+            "name": "해피",
+            "date": 2,
+            "species": "치와와",
+            "animal_type": "강아지",
+            "gender": True,
+        }
+
+        response = self.client.get("/api/posts/?page=1&page_size=100", valid)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        expected = list(filter(lambda x: check_exact(x, valid), reversed_list[0:100]))
+        self.assertEqual(response.json()["results"], expected)
+
+        valid = {
+            "age": 3,
+            "name": "해피",
+            "species": "치와와",
+            "animal_type": "강아지",
+            "gender": True,
+            "is_active": True,
+        }
+
+        response = self.client.get("/api/posts/?page=1&page_size=100", valid)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        expected = list(filter(lambda x: check_exact(x, valid), reversed_list[0:100]))
+        self.assertEqual(response.json()["results"], expected)
+
+        valid = {
+            "age_min": 2,
+            "age_max": 4,
+            "name": "해피",
+            "date": 2,
+            "species": "치와와",
+            "animal_type": "강아지",
+        }
+
+        response = self.client.get("/api/posts/?page=1&page_size=100", valid)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        expected = list(
+            filter(lambda x: check_age_range(x, valid), reversed_list[0:100])
+        )
+        self.assertEqual(response.json()["results"], expected)
+
+        valid = {
+            "date_min": 2,
+            "date_max": 4,
+            "name": "해피",
+            "species": "치와와",
+            "animal_type": "강아지",
+        }
+        response = self.client.get("/api/posts/?page=1&page_size=100", valid)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        expected = list(
+            filter(lambda x: check_date_range(x, valid), reversed_list[0:100])
+        )
+        self.assertEqual(response.json()["results"], expected)

@@ -26,11 +26,10 @@ logger = logging.getLogger("review_view")
 @api_view(["GET", "POST"])
 @authentication_classes([SessionAuthentication])
 @permission_classes([IsAuthenticatedOrReadOnly])
-@parser_classes([MultiPartParser, JSONParser])
+@parser_classes([MultiPartParser])
 @verify("review")
 @log_error(logger)
 def reviews(request):
-    content = request.data.get("parsed")
     if request.method == "GET":
         review_list = Review.objects.all().order_by("-created_at")
 
@@ -42,6 +41,7 @@ def reviews(request):
         return Response(response)
 
     else:
+        content = request.data.get("parsed")
         photos = request.data.pop("photos")
 
         with transaction.atomic():
