@@ -1,6 +1,6 @@
 import Layout from '../../Layout/Layout'
 
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectUser } from '../../../store/slices/user'
 import { useNavigate } from 'react-router-dom'
@@ -15,23 +15,15 @@ export default function MyPost() {
 	const postState = useSelector(selectPost)
 	const dispatch = useDispatch<AppDispatch>()
 	const userState = useSelector(selectUser)
-	// 	const [mypostMore, setMypostMore] = useState<boolean>(false)
-	// 	const [mylikeMore, setMylikeMore] = useState<boolean>(false)
+	// const [mypostMore, setMypostMore] = useState<boolean>(false)
+	const [mylikeMore, setMylikeMore] = useState<boolean>(false)
 	// 	const [myapplyMore, setMyapplyMore] = useState<boolean>(false)
-	//  const postLimit = useRef<number>(4);
-	//     const commenter = useMemo(() => { 		// 조건에 따라 게시글을 보여주는 함수
-	//         const shortMylike: string = mylike.slice(0, textLimit.current);
-	//
-	//         if (mylike.length > postLimit.current) {
-	//             if (mylikeMore) { return mylike; }
-	//             return shortMylike;
-	//         }
-	//         return mylike;
-	//     }, [mylikeMore]);
 
 	const mypost = postState.posts.slice(0, 4)
 	const mylike = postState.posts.slice(4, 10)
 	const myapply = postState.posts.slice(4, 9)
+
+	const shortMyLike = mylike.slice(0, 4)
 
 	useEffect(() => {
 		// eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -65,6 +57,10 @@ export default function MyPost() {
 				</div>
 				<div className='MyLike'>
 					<h1>관심 게시글</h1>
+					<button onClick={() => setMylikeMore(!mylikeMore)}>
+						{mylike.length > 4 &&
+							(mylikeMore ? '닫기' : '전체보기')}
+					</button>
 					<div className='posts'>
 						{mylike.map((post: postType) => {
 							return (
