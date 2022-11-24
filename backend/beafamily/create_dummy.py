@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import datetime
+# import datetime
 import pytz
 import json
 import os
@@ -20,13 +20,14 @@ from django.contrib.auth import get_user_model, models
 
 from api.models import *
 from config.dev_settings import BASE_DIR, DATA_DIR
+from django.utils import timezone
 
 User: models.User = get_user_model()
 
 
 def get_random_post():
     names = ["해피", "나비"]
-    delta = datetime.timedelta(random.randint(0, 10))
+    delta = timezone.timedelta(random.randint(0, 10))
     age = random.randint(1, 25)
     len_contents = random.randint(30, 200)
     contents = "".join(random.choices(ascii_letters, k=len_contents))
@@ -77,7 +78,7 @@ def get_random_post():
             is_active=is_active,
             content=contents,
         ),
-        datetime.date.today() - delta,
+        timezone.now() - delta,
     )
 
 
@@ -138,8 +139,7 @@ def create(a, b, model_id):
             # raise NotImplementedError()
             data, created_at = get_random_post()
 
-            data = Post(author=user, **data)
-            data.save()
+            data = Post.objects.create(author=user, **data)
             data.created_at = created_at
             data.save()
             photos = [f"{model_name}/{i}/{p}" for p in j["photo_list"]]
@@ -151,12 +151,12 @@ def create(a, b, model_id):
             data = Question(author=user, content=DATA_DIR / f"{model_name}/{i}")
         elif model_id == "r":
 
-            delta = datetime.timedelta(random.randint(0, 10))
+            delta = timezone.timedelta(random.randint(0, 10))
             data = Review.objects.create(
                 author=user,
                 title=j["title"],
                 content=j["content"],
-                created_at=datetime.date.today() - delta,
+                created_at=timezone.now() - delta,
             )
             photos = [f"{model_name}/{i}/{p}" for p in j["photo_list"]]
             photos = [

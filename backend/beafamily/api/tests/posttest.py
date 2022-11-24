@@ -1,9 +1,10 @@
-import datetime
 import json
+import random
 
 import requests
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractBaseUser
+from django.utils import timezone
 from django.test import Client, TestCase
 from rest_framework import status
 from rest_framework.test import APIClient, APITestCase
@@ -16,59 +17,83 @@ User: AbstractBaseUser = get_user_model()
 
 def check_exact(x, filter_dict):
     for key, val in filter_dict.items():
-        if key not in x:
-            continue
 
         if key != "date" and x[key] != val:
             return False
 
         if key == "date":
-            if (datetime.date.today() - datetime.timedelta(days=val)) != x[key]:
+            date1 = (
+                (timezone.now() - timezone.timedelta(days=val))
+                .date()
+                .strftime("%Y-%m-%d")
+            )
+            date2 = x["created_at"][0 : len("0000-00-00")]
+            if date1 != date2:
                 return False
+        if key not in x:
+            continue
 
     return True
 
 
 def check_date_range(x, filter_dict):
     for key, val in filter_dict.items():
-        if key not in x:
-            continue
 
-        if key != "date_min" and key != "date_max" and x[key] != val:
+        if key != "date_min" and key != "date_max" and key in x and x[key] != val:
             return False
 
         if key == "date":
-            if (datetime.date.today() - datetime.timedelta(days=val)) != x[key]:
+            date1 = (
+                (timezone.now() - timezone.timedelta(days=val))
+                .date()
+                .strftime("%Y-%m-%d")
+            )
+            date2 = x["created_at"][0 : len("0000-00-00")]
+            if date1 != date2:
                 return False
 
-    return datebetween(filter_dict["date_min"], filter_dict["date_max"], x["date"])
+        if key not in x:
+            continue
+    s = filter_dict["date_min"]
+    e = filter_dict["date_max"]
+    date_min = (timezone.now() - timezone.timedelta(days=e)).date().strftime("%Y-%m-%d")
+    date_max = (timezone.now() - timezone.timedelta(days=s)).date().strftime("%Y-%m-%d")
+    return date_max >= x["created_at"] >= date_min
 
 
 def check_age_range(x, filter_dict):
     for key, val in filter_dict.items():
-        if key not in x:
-            continue
 
         if (
             key != "date"
             and key != "age_min"
             and key != "age_max"
             and key != "age"
+            and key in x
             and x[key] != val
         ):
             return False
 
         if key == "date":
-            if (datetime.date.today() - datetime.timedelta(days=val)) != x[key]:
+            date1 = (
+                (timezone.now() - timezone.timedelta(days=val))
+                .date()
+                .strftime("%Y-%m-%d")
+            )
+            date2 = x["created_at"][0 : len("0000-00-00")]
+            if date1 != date2:
                 return False
+
+        if key not in x:
+            continue
 
     return filter_dict["age_max"] >= x["age"] >= filter_dict["age_min"]
 
 
 def datebetween(start, end, date):
-    diff1 = (end - date).totalseconds()
-    diff2 = (date - end).totalseconds()
-    return diff1 >= 0 and diff2 >= 0
+    start = start.strftime("%Y-%m-%d")
+    end = end.strftime("%Y-%m-%d")
+    return end >= date >= start
 
 
 class PostTestCase(TestCase):
@@ -133,20 +158,21 @@ class PostTestCase(TestCase):
         self.client = Client(enforce_csrf_checks=True)
         self.post_list = [p1, p2]
         for i in range(100):
+            age = random.randint(0, 5)
             if i % 2 == 0:
                 p = Post.objects.create(
                     author=self.u1,
                     animal_type="강아지",
                     neutering=True,
                     vaccination=True,
-                    age=12,
+                    age=age,
                     name="나비",
                     gender=True,
                     species="치와와",
                     title="AAA",
                     is_active=True,
                     content="bbb",
-                    created_at=datetime.date.today() - datetime.timedelta(i),
+                    created_at=timezone.now() - timezone.timedelta(i),
                 )
             else:
                 p = Post.objects.create(
@@ -154,14 +180,14 @@ class PostTestCase(TestCase):
                     animal_type="고양이",
                     neutering=False,
                     vaccination=False,
-                    age=12,
+                    age=age,
                     name="나비",
-                    gender=True,
+                    gender=False,
                     species="치와와",
                     title="AAA",
                     is_active=True,
                     content="bbb",
-                    created_at=datetime.date.today() - datetime.timedelta(i % 10),
+                    created_at=timezone.now() - timezone.timedelta(i % 10),
                 )
             self.post_list.append(p)
 
@@ -362,7 +388,6 @@ class PostTestCase(TestCase):
 
         valid = {
             "age": 3,
-            "name": "해피",
             "date": 2,
             "species": "치와와",
             "animal_type": "강아지",
@@ -377,7 +402,6 @@ class PostTestCase(TestCase):
 
         valid = {
             "age": 3,
-            "name": "해피",
             "species": "치와와",
             "animal_type": "강아지",
             "gender": True,
@@ -393,7 +417,6 @@ class PostTestCase(TestCase):
         valid = {
             "age_min": 2,
             "age_max": 4,
-            "name": "해피",
             "date": 2,
             "species": "치와와",
             "animal_type": "강아지",
@@ -410,7 +433,6 @@ class PostTestCase(TestCase):
         valid = {
             "date_min": 2,
             "date_max": 4,
-            "name": "해피",
             "species": "치와와",
             "animal_type": "강아지",
         }

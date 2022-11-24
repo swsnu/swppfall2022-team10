@@ -1,10 +1,10 @@
 import json
 import logging
-from datetime import datetime, timedelta
 import pytz
 
 from django.db import transaction
 from django.urls import reverse
+from django.utils import timezone
 from rest_framework import status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.decorators import (
@@ -74,20 +74,21 @@ def post_id(request, pid=0):
 @log_error(logger)
 def posts(request):
     if request.method == "GET":
-        post_list = Post.objects.prefetch_related("photo_path")
+        post_list = Post.objects.prefetch_related("photo_path").order_by("-created_at")
         content = request.GET
 
-        today = datetime.today()
+        today = timezone.now()
 
         if content.get("date", None):
             day = int(content.get("date"))
-            day = today - timedelta(days=day)
-            post_list = post_list.filter(created_at__exact=day)
+            day = today - timezone.timedelta(days=day)
+            day = day.date()
+            post_list = post_list.filter(created_at__date=day)
 
         elif content.get("date_min", None) and content.get("date_max", None):
             s, e = int(content.get("date_min")), int(content.get("date_max"))
-            start = today - timedelta(days=e)
-            end = today - timedelta(days=s)
+            start = today - timezone.timedelta(days=e)
+            end = today - timezone.timedelta(days=s)
             post_list = post_list.filter(created_at__range=[start, end])
 
         if content.get("age", None):
@@ -112,7 +113,6 @@ def posts(request):
         if content.get("species", None):
             post_list = post_list.filter(species=content.get("species"))
 
-        post_list = post_list.order_by("-created_at")
         api_url = reverse(posts)
         response = pagination(request, post_list, api_url, PostSerializer)
         if not response:
