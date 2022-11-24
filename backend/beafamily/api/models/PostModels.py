@@ -21,7 +21,7 @@ class Post(AbstractArticleType):
 
 def post_serializer(post: Post):
     photo_list = [p.image.url for p in post.postimage_set.all()]
-    comment_list = [comment_serializer(c) for c in post.postcomment_set.all()]
+    # comment_list = [comment_serializer(c) for c in post.postcomment_set.all()]
     response = {
         "id": post.id,
         "author_id": post.author.id,
@@ -47,8 +47,11 @@ def post_image_upload_to(instance, filename):
 
 
 class PostImage(AbstractImageType):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="photo_list")
     image = models.ImageField(upload_to=post_image_upload_to)
+
+    def __str__(self):
+        return self.image.url
 
 
 class PostComment(AbstractCommentType):
