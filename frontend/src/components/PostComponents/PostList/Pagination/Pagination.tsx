@@ -11,25 +11,37 @@ import './Pagination.scss'
 interface IProps {
 	postsPerPage: number
 	totalPosts: number
+	currentPage: number
 	paginate: Dispatch<SetStateAction<number>>
 }
 
 const Pagination = (props: IProps) => {
-	const [selectedPage, setSelectedPage] = useState<number>(1)
 	const pageNumbers = []
-	for (
-		let i = 1;
-		i <= Math.ceil(props.totalPosts / props.postsPerPage);
-		i++
-	) {
-		pageNumbers.push(i)
-	}
+	const totalPages = Math.ceil(props.totalPosts / props.postsPerPage)
+	if (totalPages <= 10)
+		for (let i = 1; i <= totalPages; i++) pageNumbers.push(i)
+	else if (props.currentPage <= 5)
+		for (let i = 1; i <= 9; i++) pageNumbers.push(i)
+	else if (props.currentPage >= totalPages - 4)
+		for (let i = totalPages - 8; i <= totalPages; i++) pageNumbers.push(i)
+	else
+		for (let i = props.currentPage - 4; i <= props.currentPage + 4; i++)
+			pageNumbers.push(i)
+
 	return (
 		<div>
 			<nav>
 				<ul className='pagination'>
 					<li className='page-item'>
-						<span className='page-link' id='prev'>
+						<span
+							className='page-link'
+							id='prev'
+							onClick={() => {
+								if (props.currentPage !== 1)
+									props.paginate(props.currentPage - 1)
+								window.scrollTo(0, 0)
+							}}
+						>
 							{'<'}
 						</span>
 					</li>
@@ -38,11 +50,10 @@ const Pagination = (props: IProps) => {
 							<span
 								onClick={() => {
 									props.paginate(number)
-									setSelectedPage(number)
 									window.scrollTo(0, 0)
 								}}
 								className={
-									selectedPage === number
+									props.currentPage === number
 										? 'page-link clicked'
 										: 'page-link'
 								}
@@ -52,7 +63,15 @@ const Pagination = (props: IProps) => {
 						</li>
 					))}
 					<li className='page-item'>
-						<span className='page-link' id='next'>
+						<span
+							className='page-link'
+							id='next'
+							onClick={() => {
+								if (props.currentPage !== totalPages)
+									props.paginate(props.currentPage + 1)
+								window.scrollTo(0, 0)
+							}}
+						>
 							{'>'}
 						</span>
 					</li>

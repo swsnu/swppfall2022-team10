@@ -88,7 +88,11 @@ export default function Header(props: IProps) {
 				{props.animalOption && (
 					<>
 						<button
-							className='list-header-buttons'
+							className={
+								animalType === '개'
+									? 'list-header-button-selected'
+									: 'list-header-button'
+							}
 							onClick={() => {
 								setAnimalType('개')
 							}}
@@ -96,7 +100,11 @@ export default function Header(props: IProps) {
 							개
 						</button>
 						<button
-							className='list-header-buttons'
+							className={
+								animalType === '고양이'
+									? 'list-header-button-selected'
+									: 'list-header-button'
+							}
 							onClick={() => {
 								setAnimalType('고양이')
 							}}
@@ -104,7 +112,11 @@ export default function Header(props: IProps) {
 							고양이
 						</button>
 						<button
-							className='list-header-buttons'
+							className={
+								animalType === '기타'
+									? 'list-header-button-selected'
+									: 'list-header-button'
+							}
 							onClick={() => {
 								setAnimalType('기타')
 							}}

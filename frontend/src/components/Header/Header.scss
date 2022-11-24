@@ -40,10 +40,19 @@
 		align-items: center;
 		/* padding: 20px 32px 10px 32px;
 		border-bottom: 2px solid #dadde0; */
-		.list-header-buttons {
+		.list-header-button {
 			all: unset;
 			cursor: pointer;
 			background-color: #e2dfdf;
+			height: 60px;
+			width: 60px;
+			border-radius: 50%;
+		}
+		.list-header-button-selected {
+			all: unset;
+			cursor: pointer;
+			background-color: #544b4b;
+			color: whitesmoke;
 			height: 60px;
 			width: 60px;
 			border-radius: 50%;
