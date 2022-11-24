@@ -11,7 +11,13 @@ import { useState, useEffect } from 'react'
 import Post from '../Post/Post'
 import { getPosts, postType, selectPost } from '../../../store/slices/post'
 import { AppDispatch } from '../../../store'
-import { MdOutlineAddBox, MdSearch } from 'react-icons/md'
+import {
+	MdOutlineAddBox,
+	MdSearch,
+	MdCheckBoxOutlineBlank,
+	MdCheckBox
+} from 'react-icons/md'
+import NumberPicker from 'react-widgets/NumberPicker'
 
 import Button from 'react-bootstrap/Button'
 
@@ -29,37 +35,54 @@ export default function PostList() {
 
 	const [headerAnimalType, setHeaderAnimalType] = useState<string>('')
 	const [searchAnimalType, setSearchAnimalType] = useState<string>('')
-	const [searchDate, setSearchDate] = useState<string>('')
+	const [searchMinDate, setSearchMinDate] = useState<number | null>()
+	const [searchMaxDate, setSearchMaxDate] = useState<number | null>()
 	const [searchSpecies, setSearchSpecies] = useState<string>('')
-	const [searchAge, setSearchAge] = useState<string>('')
+	const [searchMinAge, setSearchMinAge] = useState<number | null>()
+	const [searchMaxAge, setSearchMaxAge] = useState<number | null>()
 	const [searchGender, setSearchGender] = useState<string>('')
-	const [searchClicked, setSearchClicked] = useState<boolean>(false)
-	const navigate = useNavigate()
+	const [searchActive, setSearchActive] = useState<boolean>(false)
 
+	const navigate = useNavigate()
 	const postState = useSelector(selectPost)
 	const dispatch = useDispatch<AppDispatch>()
 
-	useEffect(() => {
-		// eslint-disable-next-line @typescript-eslint/no-floating-promises
+	const filterPostHandler = () => {
 		setLoading(true)
 
-		const ageInt = parseInt(searchAge)
-		if (searchAge && (isNaN(ageInt) || ageInt <= 0 || ageInt > 30)) return
+		const searchDate = searchMinDate
+			? searchMaxDate
+				? searchMinDate === searchMaxDate
+					? [searchMinDate]
+					: [searchMinDate, searchMaxDate]
+				: [null, searchMaxDate]
+			: searchMaxDate
+			? [searchMinDate, null]
+			: null
 
-		const dateInt = parseInt(searchDate)
-		if (searchDate && (isNaN(dateInt) || dateInt <= 0)) return
+		const searchAge = searchMinAge
+			? searchMaxAge
+				? searchMinAge === searchMaxAge
+					? [searchMinAge]
+					: [searchMinAge, searchMaxAge]
+				: [null, searchMaxAge]
+			: searchMaxAge
+			? [searchMinAge, null]
+			: null
 
 		const data = {
+			page_number: currentPage,
 			animal_type: searchAnimalType ? searchAnimalType : headerAnimalType,
-			date: searchDate ? [dateInt] : null,
+			date: searchDate,
 			species: searchSpecies,
-			age: searchAge ? [ageInt] : null,
-			gender: searchGender ? searchGender === '수컷' : null
+			age: searchAge,
+			gender: searchGender ? searchGender === '수컷' : null,
+			is_active: searchActive
 		}
 		console.log(data)
 
-		// dispatch(getPosts(currentPage, data)).then((result) => {
-		dispatch(getPosts(currentPage)).then((result) => {
+		dispatch(getPosts(data)).then((result) => {
+			// dispatch(getPosts(currentPage)).then((result) => {
 			const pageResult = result.payload
 			if (pageResult) {
 				// setPostList(pageResult.results)
@@ -69,13 +92,11 @@ export default function PostList() {
 			}
 		})
 		setLoading(false)
+	}
 
-		// setSearchAnimalType('')
-		// setSearchSpecies('')
-		// setSearchDate('')
-		// setSearchAge('')
-		// setSearchGender('')
-	}, [currentPage, headerAnimalType, searchClicked])
+	useEffect(() => {
+		filterPostHandler()
+	}, [currentPage, headerAnimalType, searchActive])
 
 	useEffect(() => {
 		// eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -83,15 +104,18 @@ export default function PostList() {
 		setCurrentPage(1)
 		setSearchAnimalType('')
 		setSearchSpecies('')
-		setSearchDate('')
-		setSearchAge('')
+		setSearchMinDate(null)
+		setSearchMaxDate(null)
+		setSearchMinAge(null)
+		setSearchMaxAge(null)
 		setSearchGender('')
+		setSearchActive(false)
 	}, [postState.selectedAnimal])
 
 	const searchPostHandler = (event: React.MouseEvent<HTMLElement>) => {
 		event.preventDefault()
 		setCurrentPage(1)
-		setSearchClicked((current) => !current)
+		filterPostHandler()
 	}
 
 	return (
@@ -128,25 +152,48 @@ export default function PostList() {
 
 						<div className='category date-container'>
 							<div className='title'>보호 기간</div>
-							<input
-								className='type-space'
-								placeholder='보호 기간'
-								onChange={(event) =>
-									setSearchDate(event.target.value)
-								}
-								value={searchDate}
-							/>
+							<div className='number-picker-wrapper'>
+								<NumberPicker
+									className='type-space'
+									placeholder='최소'
+									onChange={(value) =>
+										setSearchMinDate(value)
+									}
+									min={0}
+									max={
+										searchMaxDate
+											? searchMaxDate
+											: undefined
+									}
+								/>
+								<NumberPicker
+									className='type-space'
+									placeholder='최대'
+									onChange={(value) =>
+										setSearchMaxDate(value)
+									}
+									min={searchMinDate ? searchMinDate : 0}
+								/>
+							</div>
 						</div>
 						<div className='category age-container'>
 							<div className='title'>나이</div>
-							<input
-								className='type-space'
-								placeholder='나이'
-								onChange={(event) =>
-									setSearchAge(event.target.value)
-								}
-								value={searchAge}
-							/>
+							<div className='number-picker-wrapper'>
+								<NumberPicker
+									className='type-space'
+									placeholder='최소'
+									onChange={(value) => setSearchMinAge(value)}
+									min={0}
+									max={searchMaxAge ? searchMaxAge : 30}
+								/>
+								<NumberPicker
+									className='type-space'
+									placeholder='최대'
+									onChange={(value) => setSearchMaxAge(value)}
+									min={searchMinAge ? searchMinAge : 0}
+									max={30}
+								/>
+							</div>
 						</div>
 						<div className='category sex-container'>
 							<div className='title'>성별</div>
@@ -169,7 +216,23 @@ export default function PostList() {
 							</Button>
 						</div>
 					</div>
-
+					{searchActive ? (
+						<div className='user-input-checkbox'>
+							<MdCheckBox
+								size='20'
+								onClick={() => setSearchActive(false)}
+							/>
+							<span>&lsquo;입양신청 진행 중&lsquo;만 표시</span>
+						</div>
+					) : (
+						<div className='user-input-checkbox'>
+							<MdCheckBoxOutlineBlank
+								size='20'
+								onClick={() => setSearchActive(true)}
+							/>
+							<span>&lsquo;입양신청 진행 중&lsquo;만 표시</span>
+						</div>
+					)}
 					<div className='posts'>
 						{loading && <div> loading... </div>}
 						{postState.posts.map((post: postType) => {
@@ -202,6 +265,7 @@ export default function PostList() {
 				<Pagination
 					postsPerPage={postsPerPage}
 					totalPosts={postCount}
+					currentPage={currentPage}
 					paginate={setCurrentPage}
 				></Pagination>
 			</div>
