@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 import datetime
-import os
-import shutil
-import random
 import json
+import os
+import random
+import shutil
 import string
+
 import tqdm
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.dev_settings")
@@ -12,11 +13,12 @@ from django.core.wsgi import get_wsgi_application
 
 application = get_wsgi_application()
 
-from api.models import *
-from config.dev_settings import DATA_DIR, BASE_DIR
-from django.contrib.auth import get_user_model
-from django.contrib.auth import models
 from string import ascii_letters
+
+from django.contrib.auth import get_user_model, models
+
+from api.models import *
+from config.dev_settings import BASE_DIR, DATA_DIR
 
 User: models.User = get_user_model()
 

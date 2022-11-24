@@ -1,14 +1,15 @@
 import datetime
+import json
 
-from django.contrib.auth.models import AbstractBaseUser
+import requests
 from django.contrib.auth import get_user_model
-from django.test import TestCase, Client
+from django.contrib.auth.models import AbstractBaseUser
+from django.test import Client, TestCase
 from rest_framework import status
+from rest_framework.test import APIClient, APITestCase
+
 from ..models import *
 from .utils import *
-import json
-import requests
-from rest_framework.test import APIClient, APITestCase
 
 User: AbstractBaseUser = get_user_model()
 
