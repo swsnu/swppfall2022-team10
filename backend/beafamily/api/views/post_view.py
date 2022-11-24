@@ -1,6 +1,7 @@
 import json
 import logging
 from datetime import datetime, timedelta
+import pytz
 
 from django.db import transaction
 from django.urls import reverse
@@ -16,7 +17,8 @@ from rest_framework.parsers import FileUploadParser, JSONParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
-from ..models import Post, PostImage, post_serializer
+from ..models import Post, PostImage
+from ..serializers import PostSerializer
 from .utils import log_error, pagination, verify
 
 logger = logging.getLogger("post_view")
@@ -33,8 +35,8 @@ def post_id(request, pid=0):
         except Post.DoesNotExist as e:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-        info_response = post_serializer(post)
-        return Response(info_response)
+        info_response = PostSerializer(post)
+        return Response(info_response.data)
 
     elif request.method == "PUT":
 
@@ -72,12 +74,12 @@ def post_id(request, pid=0):
 @log_error(logger)
 def posts(request):
     if request.method == "GET":
-        post_list = Post.objects.all()
+        post_list = Post.objects.prefetch_related("photo_path")
         content = request.GET
 
         today = datetime.today()
 
-        if content.get("date"):
+        if content.get("date", None):
             day = int(content.get("date"))
             day = today - timedelta(days=day)
             post_list = post_list.filter(created_at__exact=day)
@@ -96,11 +98,12 @@ def posts(request):
             post_list = post_list.filter(age__range=[s, e])
 
         if content.get("is_active", None):
-            is_active = content.get("is_active") == "True"
-            post_list = post_list.filter(is_active=is_active)
+            is_active = content.get("is_active").lower() == "true"
+            if is_active:
+                post_list = post_list.filter(is_active=is_active)
 
         if content.get("gender", None):
-            gender = content.get("gender") == "True"
+            gender = content.get("gender").lower() == "true"
             post_list = post_list.filter(gender=gender)
 
         if content.get("animal_type", None):
@@ -111,7 +114,7 @@ def posts(request):
 
         post_list = post_list.order_by("-created_at")
         api_url = reverse(posts)
-        response = pagination(request, post_list, api_url, post_serializer)
+        response = pagination(request, post_list, api_url, PostSerializer)
         if not response:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
@@ -128,4 +131,4 @@ def posts(request):
                     author=request.user, post=post, image=photo
                 )
 
-        return Response(status=status.HTTP_201_CREATED, data=post_serializer(post))
+        return Response(status=status.HTTP_201_CREATED, data=PostSerializer(post).data)

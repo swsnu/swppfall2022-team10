@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import datetime
+import pytz
 import json
 import os
 import random
@@ -63,18 +64,20 @@ def get_random_post():
 
     gender, vaccination, neutering, is_active = random.choices([True, False], k=4)
 
-    return dict(
-        animal_type=animal_type,
-        neutering=neutering,
-        vaccination=vaccination,
-        age=age,
-        name=name,
-        gender=gender,
-        species=species,
-        title=f"{animal_type} {name} 입양하실 분 구해요",
-        is_active=is_active,
-        content=contents,
-        created_at=datetime.date.today() - delta,
+    return (
+        dict(
+            animal_type=animal_type,
+            neutering=neutering,
+            vaccination=vaccination,
+            age=age,
+            name=name,
+            gender=gender,
+            species=species,
+            title=f"{animal_type} {name} 입양하실 분 구해요",
+            is_active=is_active,
+            content=contents,
+        ),
+        datetime.date.today() - delta,
     )
 
 
@@ -133,9 +136,12 @@ def create(a, b, model_id):
         if model_id == "p":
 
             # raise NotImplementedError()
-            data = get_random_post()
+            data, created_at = get_random_post()
 
-            data = Post.objects.create(author=user, **data)
+            data = Post(author=user, **data)
+            data.save()
+            data.created_at = created_at
+            data.save()
             photos = [f"{model_name}/{i}/{p}" for p in j["photo_list"]]
             photos = [
                 PostImage.objects.create(author=user, post=data, image=p)

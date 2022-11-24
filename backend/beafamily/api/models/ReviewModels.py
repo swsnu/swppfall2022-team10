@@ -8,7 +8,7 @@ class Review(AbstractArticleType):
 
 
 def review_serializer(review: Review):
-    photo_list = [p.image.url for p in review.reviewimage_set.all()]
+    photo_list = [p.image.url for p in review.photo_path.all()]
 
     response = {
         "author_id": review.author.id,
@@ -26,5 +26,10 @@ def review_image_upload_to(instance, filename):
 
 
 class ReviewImage(AbstractImageType):
-    review = models.ForeignKey(Review, on_delete=models.CASCADE)
+    review = models.ForeignKey(
+        Review, on_delete=models.CASCADE, related_name="photo_path"
+    )
     image = models.ImageField(upload_to=review_image_upload_to)
+
+    def __str__(self):
+        return self.image.url

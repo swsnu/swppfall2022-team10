@@ -105,7 +105,7 @@ def verify(view):
                             except:
                                 return Response(status=status.HTTP_400_BAD_REQUEST)
                         elif required_type == bool:
-                            if val not in ["True", "False"]:
+                            if val.lower() not in ["true", "false"]:
                                 return Response(status=status.HTTP_400_BAD_REQUEST)
 
                 for int_var in ["age", "date"]:
@@ -159,13 +159,14 @@ def pagination(request, data_list, api_url, serializer):
     page_num = request.GET.get("page")
     page = paginator.get_page(page_num)
 
-    response_list = []
-    for post in page.object_list:
-        response = serializer(post)
-        response_list.append(response)
+    # response_list = []
+    # for post in page.object_list:
+    #     response = serializer(post)
+    #     response_list.append(response)
+    results = serializer(page.object_list, many=True).data
 
     response = {
-        "results": response_list,
+        "results": results,
         "count": paginator.count,
         "page_num": paginator.num_pages,
     }

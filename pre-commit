@@ -54,6 +54,7 @@ exts="\.\(ts\|tsx\)$"
 
 # The formatter to use
 formatter="frontend/node_modules/.bin/prettier"
+eslint="frontend/node_modules/.bin/eslint"
 
 change_list=`git diff --cached --name-only --diff-filter=ACMR | grep $exts | xargs`
 echo "$change_list"
@@ -80,7 +81,7 @@ then
         fi
     done
 
-    frontend/node_modules/.bin/eslint "$change_list"
+    "$eslint" $change_list
     ret=$?
     if [ $ret -ne 0 ]
     then

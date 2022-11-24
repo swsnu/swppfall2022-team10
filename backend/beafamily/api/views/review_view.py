@@ -17,6 +17,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
 from ..models import Review, ReviewImage, review_serializer
+from ..serializers import ReviewSerializer
 from .utils import log_error, pagination, verify
 
 logger = logging.getLogger("review_view")
@@ -33,7 +34,7 @@ def reviews(request):
         review_list = Review.objects.all().order_by("-created_at")
 
         api_url = reverse(reviews)
-        response = pagination(request, review_list, api_url, review_serializer)
+        response = pagination(request, review_list, api_url, ReviewSerializer)
         if not response:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
@@ -52,7 +53,9 @@ def reviews(request):
                     image=photo,
                 )
 
-        return Response(status=status.HTTP_201_CREATED, data=review_serializer(review))
+        return Response(
+            status=status.HTTP_201_CREATED, data=ReviewSerializer(review).data
+        )
 
 
 @api_view(["GET"])
@@ -62,5 +65,6 @@ def review_id(request, rid: int):
     except Review.DoesNotExist as e:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    response = review_serializer(review)
-    return Response(response)
+    # response = review_serializer(review)
+    response = ReviewSerializer(review)
+    return Response(response.data)

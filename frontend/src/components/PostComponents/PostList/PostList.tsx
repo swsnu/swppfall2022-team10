@@ -35,11 +35,11 @@ export default function PostList() {
 
 	const [headerAnimalType, setHeaderAnimalType] = useState<string>('')
 	const [searchAnimalType, setSearchAnimalType] = useState<string>('')
-	const [searchMinDate, setSearchMinDate] = useState<number | null>()
-	const [searchMaxDate, setSearchMaxDate] = useState<number | null>()
+	const [searchMinDate, setSearchMinDate] = useState<number | null>(null)
+	const [searchMaxDate, setSearchMaxDate] = useState<number | null>(null)
 	const [searchSpecies, setSearchSpecies] = useState<string>('')
-	const [searchMinAge, setSearchMinAge] = useState<number | null>()
-	const [searchMaxAge, setSearchMaxAge] = useState<number | null>()
+	const [searchMinAge, setSearchMinAge] = useState<number | null>(null)
+	const [searchMaxAge, setSearchMaxAge] = useState<number | null>(null)
 	const [searchGender, setSearchGender] = useState<string>('')
 	const [searchActive, setSearchActive] = useState<boolean>(false)
 
@@ -50,36 +50,46 @@ export default function PostList() {
 	const filterPostHandler = () => {
 		setLoading(true)
 
-		const searchDate = searchMinDate
-			? searchMaxDate
-				? searchMinDate === searchMaxDate
-					? [searchMinDate]
-					: [searchMinDate, searchMaxDate]
-				: [null, searchMaxDate]
-			: searchMaxDate
-			? [searchMinDate, null]
-			: null
+		// const searchDate = searchMinDate
+		// 	? searchMaxDate
+		// 		? searchMinDate === searchMaxDate
+		// 			? [searchMinDate]
+		// 			: [searchMinDate, searchMaxDate]
+		// 		: [null, searchMaxDate]
+		// 	: searchMaxDate
+		// 	? [searchMinDate, null]
+		// 	: null
+		//
+		// const searchAge = searchMinAge
+		// 	? searchMaxAge
+		// 		? searchMinAge === searchMaxAge
+		// 			? [searchMinAge]
+		// 			: [searchMinAge, searchMaxAge]
+		// 		: [null, searchMaxAge]
+		// 	: searchMaxAge
+		// 	? [searchMinAge, null]
+		// 	: null
 
-		const searchAge = searchMinAge
-			? searchMaxAge
-				? searchMinAge === searchMaxAge
-					? [searchMinAge]
-					: [searchMinAge, searchMaxAge]
-				: [null, searchMaxAge]
-			: searchMaxAge
-			? [searchMinAge, null]
-			: null
+		const animalType =
+			searchAnimalType !== ''
+				? searchAnimalType
+				: headerAnimalType !== ''
+				? headerAnimalType
+				: null
 
 		const data = {
-			page_number: currentPage,
-			animal_type: searchAnimalType ? searchAnimalType : headerAnimalType,
-			date: searchDate,
-			species: searchSpecies,
-			age: searchAge,
+			page: currentPage,
+			animal_type: animalType,
+			date: searchMinDate === searchMaxDate ? searchMinDate : null,
+			date_min: searchMinDate,
+			date_max: searchMaxDate,
+			age: searchMinAge === searchMaxAge ? searchMinAge : null,
+			age_min: searchMinAge,
+			age_max: searchMaxAge,
+			species: searchSpecies !== '' ? searchSpecies : null,
 			gender: searchGender ? searchGender === '수컷' : null,
 			is_active: searchActive
 		}
-		console.log(data)
 
 		dispatch(getPosts(data)).then((result) => {
 			// dispatch(getPosts(currentPage)).then((result) => {
