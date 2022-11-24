@@ -22,6 +22,7 @@ export default function MyPost() {
 	const postState = useSelector(selectPost)
 	const dispatch = useDispatch<AppDispatch>()
 	const userState = useSelector(selectUser)
+	
 	const [mypostMore, setMypostMore] = useState<boolean>(false)
 	const [mylikeMore, setMylikeMore] = useState<boolean>(false)
 	const [myapplyMore, setMyapplyMore] = useState<boolean>(false)
