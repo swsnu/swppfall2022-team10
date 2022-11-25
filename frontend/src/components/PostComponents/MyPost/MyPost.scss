@@ -39,7 +39,9 @@
 		margin-bottom: 0px;
 	}
 
-	.posts {
+	.posts-post,
+	.posts-apply,
+	.posts-like {
 		display: flex;
 		flex-direction: row;
 		justify-content: left;

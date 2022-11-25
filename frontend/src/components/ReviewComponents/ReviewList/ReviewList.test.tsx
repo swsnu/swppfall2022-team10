@@ -45,7 +45,8 @@ const mockStore = getMockStore({
 	user: { users: [], currentUser: null, logged_in: false },
 	post: { posts: [], selectedPost: null, selectedAnimal: '' },
 	application: { applications: [], selectedApplication: null },
-	qna: { qnas: [], selectedQna: null }
+	qna: { qnas: [], selectedQna: null },
+	mypost: { posts: [], likes: [], applys: [] }
 })
 
 const mockNavigate = jest.fn()

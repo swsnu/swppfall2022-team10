@@ -15,7 +15,7 @@ const Qna = (props: IProps) => {
 				<div>{props.created_at}</div>
 				<div>{props.hits}</div>
 			</div>
-		</div >
+		</div>
 	)
 }
 export default Qna

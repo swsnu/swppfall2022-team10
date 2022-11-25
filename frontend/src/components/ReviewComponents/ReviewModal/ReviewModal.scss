@@ -1,24 +1,24 @@
 /* modal창 */
-.modal-content {
+.review {
 	position: absolute;
 	width: 500px;
 	height: 600px;
-}
-.modal-header {
-	color: red;
-	padding: 10px;
-	height: 30px;
-}
-.modal-body {
-	padding: 30px 30px 30px 30px;
-	background-color: rgb(255, 255, 255);
-	border-radius: 10px;
-	box-shadow: 0 2px 3px 0 rgba(34, 36, 38, 0.15);
-	overflow-y: auto;
-}
-#modalCloseBtn:hover {
-	cursor: pointer;
-}
-.modalContent {
-	position: relative;
+	.modal-header {
+		color: red;
+		padding: 10px;
+		height: 30px;
+	}
+	.modal-body {
+		padding: 30px 30px 30px 30px;
+		background-color: rgb(255, 255, 255);
+		border-radius: 10px;
+		box-shadow: 0 2px 3px 0 rgba(34, 36, 38, 0.15);
+		overflow-y: auto;
+	}
+	#modalCloseBtn:hover {
+		cursor: pointer;
+	}
+	.modalContent {
+		position: relative;
+	}
 }

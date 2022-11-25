@@ -32,25 +32,40 @@ export default function QnaList() {
 					<div className='title'>FAQs</div>
 					<div className='Faqs'>
 						<Accordion>
-							<Accordion.Item eventKey="0">
-								<Accordion.Header>동물이 밥을 먹지 않아요.</Accordion.Header>
-								<Accordion.Body>병원에 데려가세요.</Accordion.Body>
+							<Accordion.Item eventKey='0'>
+								<Accordion.Header>
+									동물이 밥을 먹지 않아요.
+								</Accordion.Header>
+								<Accordion.Body>
+									병원에 데려가세요.
+								</Accordion.Body>
 							</Accordion.Item>
-							<Accordion.Item eventKey="1">
-								<Accordion.Header>동물이 우울해 해요.</Accordion.Header>
-								<Accordion.Body>저런. 병원에 데려가세요.</Accordion.Body>
+							<Accordion.Item eventKey='1'>
+								<Accordion.Header>
+									동물이 우울해 해요.
+								</Accordion.Header>
+								<Accordion.Body>
+									저런. 병원에 데려가세요.
+								</Accordion.Body>
 							</Accordion.Item>
-							<Accordion.Item eventKey="2">
-								<Accordion.Header>동물이 아파요.</Accordion.Header>
-								<Accordion.Body>병원에 데려가세요.</Accordion.Body>
+							<Accordion.Item eventKey='2'>
+								<Accordion.Header>
+									동물이 아파요.
+								</Accordion.Header>
+								<Accordion.Body>
+									병원에 데려가세요.
+								</Accordion.Body>
 							</Accordion.Item>
-							<Accordion.Item eventKey="3">
-								<Accordion.Header>동물이 자지 않아요.</Accordion.Header>
-								<Accordion.Body>병원에 데려가세요.</Accordion.Body>
+							<Accordion.Item eventKey='3'>
+								<Accordion.Header>
+									동물이 자지 않아요.
+								</Accordion.Header>
+								<Accordion.Body>
+									병원에 데려가세요.
+								</Accordion.Body>
 							</Accordion.Item>
 						</Accordion>
 					</div>
-
 				</div>
 				<div className='QnaContainer'>
 					<div className='title'>Q&As</div>
@@ -68,7 +83,12 @@ export default function QnaList() {
 							<tbody>
 								{qnaState.qnas.map((td: QnaType) => {
 									return (
-										<tr key={`${td.id}_qna`} onClick={() => navigate(`/qna/${td.id}`)}>
+										<tr
+											key={`${td.id}_qna`}
+											onClick={() =>
+												navigate(`/qna/${td.id}`)
+											}
+										>
 											<td>{td.id}</td>
 											<td>{td.title}</td>
 											<td>{td.created_at}</td>
@@ -78,8 +98,6 @@ export default function QnaList() {
 								})}
 							</tbody>
 						</Table>
-
-
 					</div>
 				</div>
 				<div className='create-qna'>
