@@ -39,9 +39,9 @@ export default function ReviewCreate() {
 			alert('You should login')
 			return
 		}
-		console.log(title)
-		console.log(content)
-		console.log(file)
+		// console.log(title)
+		// console.log(content)
+		// console.log(file)
 
 		if (title.length === 0) return
 		if (file.length === 0) return

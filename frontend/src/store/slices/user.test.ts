@@ -4,7 +4,7 @@ import { AnyAction, configureStore, EnhancedStore } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { ThunkMiddleware } from 'redux-thunk'
 import reducer, { UserState } from './user'
-import { checkLogin, getUsers, getUser, loginUser, logoutUser } from './user'
+import { checkLogin, loginUser, logoutUser } from './user'
 
 describe('user reducer', () => {
 	let store: EnhancedStore<
@@ -40,16 +40,16 @@ describe('user reducer', () => {
 		await store.dispatch(checkLogin())
 		// expect(store.getState().user.logged_in).toEqual(false);
 	})
-	it('should handle getUsers', async () => {
-		axios.get = jest.fn().mockResolvedValue({ data: [fakeUser] })
-		await store.dispatch(getUsers())
-		// expect(store.getState().user.users).toEqual([fakeUser]);
-	})
-	it('should handle getUser', async () => {
-		axios.get = jest.fn().mockResolvedValue({ data: fakeUser })
-		await store.dispatch(getUser(1))
-		// expect(store.getState().user.currentUser).toEqual(fakeUser);
-	})
+	// it('should handle getUsers', async () => {
+	// 	axios.get = jest.fn().mockResolvedValue({ data: [fakeUser] })
+	// 	await store.dispatch(getUsers())
+	// 	// expect(store.getState().user.users).toEqual([fakeUser]);
+	// })
+	// it('should handle getUser', async () => {
+	// 	axios.get = jest.fn().mockResolvedValue({ data: fakeUser })
+	// 	await store.dispatch(getUser(1))
+	// 	// expect(store.getState().user.currentUser).toEqual(fakeUser);
+	// })
 	it('should handle loginUser', async () => {
 		axios.get = jest.fn().mockResolvedValue({ data: fakeUserLogin })
 		await store.dispatch(loginUser(fakeUserLogin))

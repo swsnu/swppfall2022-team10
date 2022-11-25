@@ -76,24 +76,6 @@ export const deleteReview = createAsyncThunk(
 	}
 )
 
-export const editReview = createAsyncThunk(
-	'review/editReview',
-	async (review: reviewType, { dispatch }) => {
-		const response = await axios.put(`/api/reviews/${review.id}/`, review)
-		dispatch(
-			reviewActions.editReview({
-				targetId: review.id,
-				title: review.title,
-				content: review.content,
-				animal_type: review.animal_type,
-				species: review.species,
-				photo_path: review.photo_path
-			})
-		)
-		return response.data
-	}
-)
-
 export const reviewSlice = createSlice({
 	name: 'review',
 	initialState,
@@ -105,28 +87,6 @@ export const reviewSlice = createSlice({
 			}>
 		) => {
 			state.selectedAnimal = action.payload.animal_type
-		},
-		editReview: (
-			state,
-			action: PayloadAction<{
-				targetId: number
-				title: string
-				content: string
-				animal_type: string
-				species: string
-				photo_path: string[]
-			}>
-		) => {
-			const review = state.reviews.find(
-				(value: reviewType) => value.id === action.payload.targetId
-			)
-			if (review != null) {
-				review.title = action.payload.title
-				review.content = action.payload.content
-				review.animal_type = action.payload.animal_type
-				review.species = action.payload.species
-				review.photo_path = action.payload.photo_path
-			}
 		},
 		deleteReview: (state, action: PayloadAction<{ targetId: number }>) => {
 			const deleted = state.reviews.filter((review: reviewType) => {
@@ -169,7 +129,8 @@ export const reviewSlice = createSlice({
 			state.selectedReview = action.payload
 		})
 		builder.addCase(createReview.rejected, (_state, action) => {
-			console.error(action.error)
+			// console.error(action.error)
+			alert('ERROR')
 		})
 	}
 })

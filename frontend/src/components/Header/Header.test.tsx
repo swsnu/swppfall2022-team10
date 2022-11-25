@@ -1,15 +1,16 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { getMockStore } from '../../test-utils/mock'
-import axios from 'axios'
 import Header from './Header'
 import { Provider } from 'react-redux'
-// import React from 'react'
+import * as postSlice from '../../store/slices/post'
 
 const mockNavigate = jest.fn()
 jest.mock('react-router', () => ({
 	...jest.requireActual('react-router'),
 	useNavigate: () => mockNavigate
 }))
+
+jest.mock('./Dropdown/Dropdown', () => () => 'Dropdown')
 
 const mockStore = getMockStore({
 	post: { posts: [], selectedPost: null, selectedAnimal: '' },
@@ -20,10 +21,10 @@ const mockStore = getMockStore({
 })
 
 describe('<Header />', () => {
+	beforeEach(() => {
+		jest.clearAllMocks()
+	})
 	it('should render without errors', () => {
-		jest.spyOn(axios, 'get').mockResolvedValue({
-			data: { logged_in: false }
-		})
 		render(
 			<Provider store={mockStore}>
 				<Header animalOption={false} pageName={''} />
@@ -34,13 +35,20 @@ describe('<Header />', () => {
 		screen.getByText('입양 후기')
 		screen.getByText('Q&A')
 	})
-	it('should render animal type header without errors', () => {
-		jest.spyOn(axios, 'get').mockResolvedValue({
-			data: { logged_in: false }
-		})
+	it('should render animal type header without errors: post', () => {
 		render(
 			<Provider store={mockStore}>
-				<Header animalOption={true} pageName={''} />
+				<Header animalOption={true} pageName={'post'} />
+			</Provider>
+		)
+		screen.getByText('개')
+		screen.getByText('고양이')
+		screen.getByText('기타')
+	})
+	it('should render animal type header without errors: review', () => {
+		render(
+			<Provider store={mockStore}>
+				<Header animalOption={true} pageName={'review'} />
 			</Provider>
 		)
 		screen.getByText('개')
@@ -48,9 +56,6 @@ describe('<Header />', () => {
 		screen.getByText('기타')
 	})
 	it('should navigate to corresponding pages', async () => {
-		jest.spyOn(axios, 'get').mockResolvedValue({
-			data: { logged_in: false }
-		})
 		render(
 			<Provider store={mockStore}>
 				<Header animalOption={false} pageName={''} />
@@ -76,45 +81,50 @@ describe('<Header />', () => {
 		fireEvent.click(qnaButton)
 		await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith('/qna'))
 	})
-	it('should show/hide dropdown menu', async () => {
-		jest.spyOn(axios, 'get').mockResolvedValue({
-			data: { logged_in: true }
-		})
-		render(
-			<Provider store={mockStore}>
-				<Header animalOption={false} pageName={''} />
-			</Provider>
-		)
-		const menuButton = screen.getByRole('button', { name: /menu-button/i })
-		fireEvent.click(menuButton)
-		await waitFor(() => screen.getByText('로그아웃'))
-		fireEvent.click(menuButton)
-		await waitFor(() =>
-			expect(screen.queryAllByText('로그아웃')).toHaveLength(0)
-		)
-	})
-	// it('animal type should change when clicked', async () => {
+	// it('should show/hide dropdown menu', async () => {
 	// 	jest.spyOn(axios, 'get').mockResolvedValue({
 	// 		data: { logged_in: true }
 	// 	})
 	// 	render(
 	// 		<Provider store={mockStore}>
-	// 			<Header animalOption={true} pageName={'post'} />
+	// 			<Header animalOption={false} pageName={''} />
 	// 		</Provider>
 	// 	)
-	// 	jest.spyOn(React, 'useEffect').mockImplementation((f) => null)
-	// 	const setStateMock = jest.fn()
-	// 	const useStateMock: any = (useState: any) => [useState, setStateMock]
-	// 	jest.spyOn(React, 'useState').mockImplementation(useStateMock)
-
-	// 	const dogButton = screen.getByText('개')
-	// 	const catButton = screen.getByText('고양이')
-	// 	const etcButton = screen.getByText('기타')
-	// 	fireEvent.click(dogButton)
-	// 	await waitFor(() => expect(setStateMock).toHaveBeenCalledWith('개'))
-	// 	fireEvent.click(catButton)
-	// 	await waitFor(() => expect(setStateMock).toHaveBeenCalledWith('고양이'))
-	// 	fireEvent.click(etcButton)
-	// 	await waitFor(() => expect(setStateMock).toHaveBeenCalledWith('기타'))
+	// 	const menuButton = screen.getByRole('button', { name: /menu-button/i })
+	// 	fireEvent.click(menuButton)
+	// 	await waitFor(() => screen.getByText('로그인'))
+	// 	fireEvent.click(menuButton)
+	// 	await waitFor(() =>
+	// 		expect(screen.queryAllByText('로그인')).toHaveLength(0)
+	// 	)
 	// })
+	it('animal type should change when clicked', async () => {
+		const mockSelectAnimal = jest.spyOn(postSlice, 'selectAnimal')
+		jest.mock('./Dropdown/Dropdown', () => () => 'Dropdown')
+		render(
+			<Provider store={mockStore}>
+				<Header animalOption={true} pageName={'post'} />
+			</Provider>
+		)
+		// jest.spyOn(React, 'useEffect').mockImplementation((f) => null)
+		// const setStateMock = jest.fn()
+		// const useStateMock: any = (useState: any) => [useState, setStateMock]
+		// jest.spyOn(React, 'useState').mockImplementation(useStateMock)
+
+		const dogButton = screen.getByText('개')
+		const catButton = screen.getByText('고양이')
+		const etcButton = screen.getByText('기타')
+		fireEvent.click(dogButton)
+		await waitFor(() => {
+			expect(mockSelectAnimal).toHaveBeenCalled()
+		})
+		fireEvent.click(catButton)
+		await waitFor(() => {
+			expect(mockSelectAnimal).toHaveBeenCalled()
+		})
+		fireEvent.click(etcButton)
+		await waitFor(() => {
+			expect(mockSelectAnimal).toHaveBeenCalled()
+		})
+	})
 })
