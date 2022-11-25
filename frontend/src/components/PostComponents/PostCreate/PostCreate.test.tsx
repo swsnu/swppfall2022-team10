@@ -15,7 +15,7 @@ const tempState = {
 		selectedAnimal: ''
 	},
 	user: { users: [], currentUser: null, logged_in: true },
-	review: { reviews: [], selectedReview: null }
+	review: { reviews: [], selectedReview: null, selectedAnimal: '' }
 }
 
 const tempLoggedOutState = {
@@ -25,7 +25,7 @@ const tempLoggedOutState = {
 		selectedAnimal: ''
 	},
 	user: { users: [], currentUser: null, logged_in: false },
-	review: { reviews: [], selectedReview: null }
+	review: { reviews: [], selectedReview: null, selectedAnimal: '' }
 }
 
 const testPostFormat = {

@@ -69,60 +69,6 @@ export const selectAnimal = createAsyncThunk(
 export const getPosts = createAsyncThunk(
 	'post/getPosts',
 	async (data: postFilterType, { dispatch }) => {
-		// async (pgid: number, { dispatch }) => {
-		// let queryString = `?page=${data.page_number}`
-		//
-		// if (data.animal_type !== '')
-		// 	queryString = queryString.concat(
-		// 		`/?animal_type=${data.animal_type}`
-		// 	)
-		// if (data.species !== '')
-		// 	queryString = queryString.concat(`/?species=${data.species}`)
-		// if (data.gender !== null)
-		// 	queryString = data.gender
-		// 		? queryString.concat(`/?gender=True`)
-		// 		: queryString.concat(`/?gender=False`)
-		// if (data.is_active) queryString = queryString.concat(`/?is_active=True`)
-		// if (data.age !== null) {
-		// 	if (data.age.length === 1)
-		// 		queryString = queryString.concat(`/?age=${String(data.age[0])}`)
-		// 	else if (data.age[0] === null)
-		// 		queryString = queryString.concat(
-		// 			`/?age_max=${String(data.age[1])}`
-		// 		)
-		// 	else if (data.age[1] === null)
-		// 		queryString = queryString.concat(
-		// 			`/?age_min=${String(data.age[0])}`
-		// 		)
-		// 	else
-		// 		queryString = queryString.concat(
-		// 			`/?age_min=${String(data.age[0])}/?age_max=${String(
-		// 				data.age[1]
-		// 			)}`
-		// 		)
-		// }
-		// if (data.date !== null) {
-		// 	if (data.date.length === 1)
-		// 		queryString = queryString.concat(
-		// 			`/?date=${String(data.date[0])}`
-		// 		)
-		// 	else if (data.date[0] === null)
-		// 		queryString = queryString.concat(
-		// 			`/?date_max=${String(data.date[1])}`
-		// 		)
-		// 	else if (data.date[1] === null)
-		// 		queryString = queryString.concat(
-		// 			`/?date_min=${String(data.date[0])}`
-		// 		)
-		// 	else
-		// 		queryString = queryString.concat(
-		// 			`/?date_min=${String(data.date[0])}/?date_max=${String(
-		// 				data.date[1]
-		// 			)}`
-		// 		)
-		// }
-		// console.log(queryString)
-
 		const response = await axios.get(`/api/posts/`, {
 			params: data
 		})

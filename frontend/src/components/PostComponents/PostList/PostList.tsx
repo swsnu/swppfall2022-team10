@@ -22,7 +22,7 @@ import NumberPicker from 'react-widgets/NumberPicker'
 import Button from 'react-bootstrap/Button'
 
 import './PostList.scss'
-import Pagination from './Pagination/Pagination'
+import Pagination from '../../Pagination/Pagination'
 
 export default function PostList() {
 	// const [postList, setPostList] = useState<postType[]>([])
@@ -130,7 +130,7 @@ export default function PostList() {
 
 	return (
 		<Layout>
-			<div className='ListContainer'>
+			<div className='PostListContainer'>
 				<div className='PostList'>
 					<div className='user-input-container'>
 						{postState.selectedAnimal === '개' ||
@@ -273,8 +273,8 @@ export default function PostList() {
 					</div>
 				</div>
 				<Pagination
-					postsPerPage={postsPerPage}
-					totalPosts={postCount}
+					itemsPerPage={postsPerPage}
+					totalItems={postCount}
 					currentPage={currentPage}
 					paginate={setCurrentPage}
 				></Pagination>

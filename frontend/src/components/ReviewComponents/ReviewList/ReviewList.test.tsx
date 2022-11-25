@@ -35,7 +35,8 @@ const stubInitialState: reviewState = {
 			created_at: 'REVIEW_CREATED_AT'
 		}
 	],
-	selectedReview: null
+	selectedReview: null,
+	selectedAnimal: ''
 }
 const mockStore = getMockStore({
 	review: stubInitialState,

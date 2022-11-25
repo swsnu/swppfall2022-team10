@@ -4,23 +4,28 @@ import { useState, useEffect } from 'react'
 import { MdMenu } from 'react-icons/md'
 import Dropdown from './Dropdown/Dropdown'
 import { AppDispatch } from '../../store'
-import { selectAnimal } from '../../store/slices/post'
+import { selectAnimal as postSelectAnimal } from '../../store/slices/post'
+import { selectAnimal as reviewSelectAnimal } from '../../store/slices/review'
 
 import './Header.scss'
 
 interface IProps {
 	animalOption: boolean
+	pageName: string
 }
 
 export default function Header(props: IProps) {
+	const dispatch = useDispatch<AppDispatch>()
 	const navigate = useNavigate()
 	const [dropdownVisibility, setDropdownVisibility] = useState(false)
 	const [animalType, setAnimalType] = useState('')
-	const dispatch = useDispatch<AppDispatch>()
 
 	useEffect(() => {
 		// eslint-disable-next-line @typescript-eslint/no-floating-promises
-		dispatch(selectAnimal(animalType))
+		if (props.pageName === 'post') dispatch(postSelectAnimal(animalType))
+		else if (props.pageName === 'review')
+			// eslint-disable-next-line @typescript-eslint/no-floating-promises
+			dispatch(reviewSelectAnimal(animalType))
 	}, [animalType])
 
 	return (

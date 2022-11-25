@@ -33,7 +33,7 @@ const tempState = {
 		selectedAnimal: ''
 	},
 	user: { users: [], currentUser: null, logged_in: true },
-	review: { reviews: [], selectedReview: null }
+	review: { reviews: [], selectedReview: null, selectedAnimal: '' }
 }
 
 describe('<PostHeader />', () => {

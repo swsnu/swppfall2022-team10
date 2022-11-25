@@ -9,15 +9,15 @@ import React, { Dispatch, SetStateAction, useState } from 'react'
 import './Pagination.scss'
 
 interface IProps {
-	postsPerPage: number
-	totalPosts: number
+	itemsPerPage: number
+	totalItems: number
 	currentPage: number
 	paginate: Dispatch<SetStateAction<number>>
 }
 
 const Pagination = (props: IProps) => {
 	const pageNumbers = []
-	const totalPages = Math.ceil(props.totalPosts / props.postsPerPage)
+	const totalPages = Math.ceil(props.totalItems / props.itemsPerPage)
 	if (totalPages <= 10)
 		for (let i = 1; i <= totalPages; i++) pageNumbers.push(i)
 	else if (props.currentPage <= 5)

@@ -25,7 +25,8 @@ const tempState = {
 				created_at: '2022-11-18'
 			}
 		],
-		selectedReview: null
+		selectedReview: null,
+		selectedAnimal: ''
 	}
 }
 const mockNavigate = jest.fn()
