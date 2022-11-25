@@ -1,8 +1,9 @@
 from ..models import Post, PostImage, PostComment
 from rest_framework import serializers
 from django.utils import timezone
-from .ImageSerializer import ImageSerializer
+from .ImageSerializer import ImageURLField
 from .AbstractTypes import SerializerWithAuth, PaginationValidator
+from .utils import UserNameField
 
 
 def validate_nonnegative_int(x):
@@ -163,9 +164,9 @@ class PostCommentSerializer(SerializerWithAuth):
 
 class PostSerializer(SerializerWithAuth):
     created_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
-    author_name = serializers.StringRelatedField(source="author", read_only=True)
     comments = PostCommentSerializer(many=True)
-    photo_path = ImageSerializer(many=True)
+    photo_path = ImageURLField(read_only=True, many=True)
+    author_name = UserNameField(source="author")
 
     class Meta:
         model = Post
