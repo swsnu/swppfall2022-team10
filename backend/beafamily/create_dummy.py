@@ -25,6 +25,18 @@ from django.utils import timezone
 User: models.User = get_user_model()
 
 
+def get_random_review():
+    animal_type = random.choice(["고양이", "강아지"])
+    title = f"{animal_type}가 아주 귀여워요!"
+    content = title
+    delta = timezone.timedelta(random.randint(0, 10))
+
+    return (
+        dict(title=title, content=content, created_at=timezone.now() - delta),
+        animal_type,
+    )
+
+
 def get_random_post():
     names = ["해피", "나비"]
     delta = timezone.timedelta(random.randint(0, 10))
@@ -32,7 +44,8 @@ def get_random_post():
     len_contents = random.randint(30, 200)
     contents = "".join(random.choices(ascii_letters, k=len_contents))
     name = random.choice(names)
-    animal_type = random.choice(["개", "강아지"])
+    animal_type = random.choice(["고양이", "강아지"])
+
     dog_species = [
         "포메라니안",
         "치와와",
@@ -65,20 +78,18 @@ def get_random_post():
 
     gender, vaccination, neutering, is_active = random.choices([True, False], k=4)
 
-    return (
-        dict(
-            animal_type=animal_type,
-            neutering=neutering,
-            vaccination=vaccination,
-            age=age,
-            name=name,
-            gender=gender,
-            species=species,
-            title=f"{animal_type} {name} 입양하실 분 구해요",
-            is_active=is_active,
-            content=contents,
-        ),
-        timezone.now() - delta,
+    return dict(
+        animal_type=animal_type,
+        neutering=neutering,
+        vaccination=vaccination,
+        age=age,
+        name=name,
+        gender=gender,
+        species=species,
+        title=f"{animal_type} {name} 입양하실 분 구해요",
+        is_active=is_active,
+        content=contents,
+        created_at=timezone.now() - delta,
     )
 
 
@@ -95,15 +106,6 @@ def get_model_name(model_id):
     return ""
 
 
-# def create_image(path, user, category="post", number=1):
-#
-#     img = AbstractImageType(user=user, category=category, number=number, image=path)
-#
-#     img.save()
-#
-#     return img
-
-
 def create(a, b, model_id):
     if model_id in ["q", "a"]:
         raise NotImplementedError("Not implemented Yet")
@@ -118,49 +120,51 @@ def create(a, b, model_id):
 
     for i in tqdm.tqdm(range(a, b + 1)):
 
-        ri = random.randint(0, 100)
-        if ri % 2 == 0:
-            animal_type = "dog"
-        else:
-            animal_type = "cat"
-
         user = random.choice(users)
-        if not os.path.exists(DATA_DIR / f"{model_name}/{i}"):
-            shutil.copytree(
-                BASE_DIR / f"dummy/{model_name}/{animal_type}_dummy",
-                DATA_DIR / f"{model_name}/{i}",
-            )
-        info_filename = DATA_DIR / f"{model_name}/{i}/info.json"
-        with open(info_filename, "r", encoding="UTF-8") as f:
-            j = json.loads(f.read())
+        cat_list = [
+            "dummy/post/cat_dummy/cat.webp",
+            "dummy/post/cat_dummy/cat2.jpg",
+            "dummy/post/cat_dummy/cat3.jpg",
+        ]
+        dog_list = [
+            "dummy/post/dog_dummy/dog.jpeg",
+            "dummy/post/dog_dummy/golden-retriever.webp",
+        ]
 
         if model_id == "p":
+            data = get_random_post()
 
-            # raise NotImplementedError()
-            data, created_at = get_random_post()
+            post = Post.objects.create(author=user, **data)
+            post.created_at = data["created_at"]
+            post.save()
 
-            data = Post.objects.create(author=user, **data)
-            data.created_at = created_at
-            data.save()
-            photos = [f"{model_name}/{i}/{p}" for p in j["photo_list"]]
+            animal_type = post.animal_type == "강아지"
+
+            photos = dog_list if animal_type else cat_list
             photos = [
-                PostImage.objects.create(author=user, post=data, image=p)
+                PostImage.objects.create(author=user, post=post, image=p)
                 for p in photos
             ]
+            num_comments = random.randint(0, 10)
+            user_comment = random.choices(users, k=num_comments)
+            comments = [
+                PostComment.objects.create(author=u, content="comment", post=post)
+                for u in user_comment
+            ]
+
         elif model_id == "q":
             data = Question(author=user, content=DATA_DIR / f"{model_name}/{i}")
         elif model_id == "r":
 
-            delta = timezone.timedelta(random.randint(0, 10))
-            data = Review.objects.create(
-                author=user,
-                title=j["title"],
-                content=j["content"],
-                created_at=timezone.now() - delta,
-            )
-            photos = [f"{model_name}/{i}/{p}" for p in j["photo_list"]]
+            data, animal_type = get_random_review()
+
+            review = Review.objects.create(author=user, **data)
+            review.created_at = data["created_at"]
+            review.save()
+
+            photos = dog_list if animal_type == "강아지" else cat_list
             photos = [
-                ReviewImage.objects.create(author=user, review=data, image=p)
+                ReviewImage.objects.create(author=user, review=review, image=p)
                 for p in photos
             ]
         elif model_id == "a":

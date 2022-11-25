@@ -28,6 +28,8 @@ logger = logging.getLogger("post_view")
 @authentication_classes([SessionAuthentication])
 @permission_classes([IsAuthenticatedOrReadOnly])
 @parser_classes([MultiPartParser, JSONParser, FileUploadParser])
+@verify(["PUT"])
+@log_error(logger)
 def post_id(request, pid=0):
     if request.method == "GET":
         try:
@@ -35,8 +37,9 @@ def post_id(request, pid=0):
         except Post.DoesNotExist as e:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-        info_response = PostSerializer(post)
-        return Response(info_response.data)
+        info_response = PostSerializer(post, context={"user": request.user}).data
+
+        return Response(info_response)
 
     elif request.method == "PUT":
 
@@ -47,8 +50,6 @@ def post_id(request, pid=0):
 
         if post.author != request.user:
             return Response(status=status.HTTP_403_FORBIDDEN)
-
-        # TODO: edit post
 
         return Response(status=status.HTTP_200_OK)
 

@@ -55,4 +55,4 @@ class PostImage(AbstractImageType):
 
 
 class PostComment(AbstractCommentType):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
