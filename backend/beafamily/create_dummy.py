@@ -22,7 +22,7 @@ from api.models import *
 from config.dev_settings import BASE_DIR, DATA_DIR
 from django.utils import timezone
 
-User: models.User = get_user_model()
+# User: User = get_user_model()
 
 
 def get_random_review():
@@ -107,8 +107,6 @@ def get_model_name(model_id):
 
 
 def create(a, b, model_id):
-    if model_id in ["q", "a"]:
-        raise NotImplementedError("Not implemented Yet")
     model_name = get_model_name(model_id)
 
     if not os.path.exists(DATA_DIR):
@@ -153,7 +151,9 @@ def create(a, b, model_id):
             ]
 
         elif model_id == "q":
-            data = Question(author=user, content=DATA_DIR / f"{model_name}/{i}")
+            data = Question.objects.create(
+                author=user, content=f"content_{i}", title="title_{i}"
+            )
         elif model_id == "r":
 
             data, animal_type = get_random_review()
@@ -168,7 +168,12 @@ def create(a, b, model_id):
                 for p in photos
             ]
         elif model_id == "a":
-            data = Application(author=user, content=DATA_DIR / f"{model_name}/{i}")
+            posts = list(Post.objects.all().iterator())
+
+            post = random.choice(posts)
+            data = Application.objects.create(
+                author=user, content=f"content_{i}", title="title_{i}", post=post
+            )
 
 
 if __name__ == "__main__":
@@ -210,34 +215,41 @@ if __name__ == "__main__":
         "Please type which model to create dummy\n"
         "p: Post, r: Review, a: Application, q: Question, d: Default, otherwise: Quit\n"
         "Default: create every model which has zero element\n"
+        "Number to create: (80, 50, 30, 40)"
     )
-    a = input("Please type how many data to create(per model)\n" "Default is 100")
-
-    try:
-        a = int(a)
-    except:
-        print("HERE")
-        a = 100
 
     if model in ["p", "q", "r", "a"]:
         n = 0
+        a = 0
         if model == "p":
             n = n_post
+            a = 80
         elif model == "q":
             n = n_question
+            a = 50
         elif model == "r":
             n = n_review
+            a = 30
         elif model == "a":
             n = n_application
+            a = 20
         create(n + 1, n + a, model)
     elif model == "d":
         if n_post == 0:
-            create(n_post + 1, n_post + a, "p")
-        # if n_application == 0:
-        #     create(1, 12, "a")
-        # if n_question == 0:
-        #     create(1, 12, "q")
+            create(n_post + 1, n_post + 80, "p")
+        if n_application == 0:
+            create(n_application + 1, n_application + 50, "a")
+        if n_question == 0:
+            create(n_question + 1, n_question + 30, "q")
         if n_review == 0:
-            create(n_review + 1, n_review + a, "r")
+            create(n_review + 1, n_review + 40, "r")
+
+        users: list[User] = list(User.objects.all().iterator())
+        posts = list(Post.objects.all().iterator())
+
+        for u in users:
+            posts_to_like = random.choices(posts, k=3)
+            for p in posts_to_like:
+                u.likes.add(p)
     else:
         print("Quit...")

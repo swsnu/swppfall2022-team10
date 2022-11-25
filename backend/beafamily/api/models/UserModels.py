@@ -27,7 +27,7 @@ class User(AbstractBaseUser):
     is_active = models.BooleanField(default=True)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
-    post_bookmarks = models.ManyToManyField("Post")
+    likes = models.ManyToManyField("Post", related_name="likes")
 
     objects = UserManager()
 
