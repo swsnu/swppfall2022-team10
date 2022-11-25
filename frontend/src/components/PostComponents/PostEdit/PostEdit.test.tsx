@@ -12,11 +12,13 @@ import { act } from 'react-dom/test-utils'
 const tempState = {
 	post: {
 		posts: [],
-		selectedPost: null
+		selectedPost: null,
+		selectedAnimal: ''
 	},
 	user: { users: [], currentUser: null, logged_in: true },
-	review: { reviews: [], selectedReview: null },
-	qna: { qnas: [], selectedQna: null },
+	review: { reviews: [], selectedReview: null, selectedAnimal: '' },
+	application: { applications: [], selectedApplication: null },
+	qna: { qnas: [], selectedQna: null }
 }
 
 const testPostFormat = {

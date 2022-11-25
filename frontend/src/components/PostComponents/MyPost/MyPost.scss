@@ -1,0 +1,49 @@
+.ListContainer {
+	padding-top: 10px;
+	padding-bottom: 50px;
+	margin: 0 50px;
+	display: flex;
+	flex-direction: column;
+	font-family: 'Pretendard-Regular';
+}
+
+.MyPost,
+.MyLike,
+.MyApply {
+	position: relative;
+	z-index: 1;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	padding-top: 20px;
+	padding-bottom: 10px;
+	overflow-y: auto;
+
+	.showMore {
+		text-align: right;
+		padding-right: 200px;
+		button {
+			width: fit-content;
+			border: none;
+			background-color: #ffffff;
+			display: inline-block;
+		}
+	}
+	h1 {
+		text-align: left;
+		justify-content: left;
+		flex-wrap: wrap;
+		padding: 20px 32px 0px 32px;
+		margin-bottom: 0px;
+	}
+
+	.posts {
+		display: flex;
+		flex-direction: row;
+		justify-content: left;
+		flex-wrap: wrap;
+		padding: 20px 32px 10px 32px;
+	}
+}

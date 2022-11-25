@@ -41,7 +41,7 @@ describe('review reducer', () => {
 	})
 	it('should handle getReviews', async () => {
 		axios.get = jest.fn().mockResolvedValue({ data: [fakeReview] })
-		await store.dispatch(getReviews())
+		await store.dispatch(getReviews({ page: 1, animal_type: '' }))
 		expect(store.getState().review.reviews).toEqual([fakeReview])
 	})
 	it('should handle getReview', async () => {

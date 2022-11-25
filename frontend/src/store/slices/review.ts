@@ -14,20 +14,39 @@ export interface reviewType {
 	created_at: string
 }
 
+export interface reviewFilterType {
+	page: number
+	animal_type: string | null
+}
+
 export interface reviewState {
 	reviews: reviewType[]
 	selectedReview: reviewType | null
+	selectedAnimal: string
 }
 
 const initialState: reviewState = {
 	reviews: [],
-	selectedReview: null
+	selectedReview: null,
+	selectedAnimal: ''
 }
 
-export const getReviews = createAsyncThunk('review/getReviews', async () => {
-	const response = await axios.get<reviewType[]>('/api/reviews/')
-	return response.data
-})
+export const selectAnimal = createAsyncThunk(
+	'review/selectAnimal',
+	async (animalType: string, { dispatch }) => {
+		dispatch(reviewActions.selectAnimal({ animal_type: animalType }))
+	}
+)
+
+export const getReviews = createAsyncThunk(
+	'review/getReviews',
+	async (data: reviewFilterType, { dispatch }) => {
+		const response = await axios.get('/api/reviews/', {
+			params: data
+		})
+		return response.data
+	}
+)
 
 export const getReview = createAsyncThunk(
 	'review/getReview',
@@ -79,6 +98,14 @@ export const reviewSlice = createSlice({
 	name: 'review',
 	initialState,
 	reducers: {
+		selectAnimal: (
+			state,
+			action: PayloadAction<{
+				animal_type: string
+			}>
+		) => {
+			state.selectedAnimal = action.payload.animal_type
+		},
 		editReview: (
 			state,
 			action: PayloadAction<{
@@ -136,7 +163,7 @@ export const reviewSlice = createSlice({
 	},
 	extraReducers: (builder) => {
 		builder.addCase(getReviews.fulfilled, (state, action) => {
-			state.reviews = action.payload
+			state.reviews = action.payload.results
 		})
 		builder.addCase(getReview.fulfilled, (state, action) => {
 			state.selectedReview = action.payload

@@ -37,15 +37,15 @@ export default function QnaCreate() {
         const formData = new FormData()
 
         formData.append('content', JSON.stringify(data))
-        dispatch(createQna(formData))
+
+        /* dispatch(createReview(formData))
             .then((result) => {
                 navigate('/qna')
             })
             .catch((err) => {
                 console.log(err)
                 alert('ERROR')
-            })
-        console.log(data)
+            }) */
     }
 
     return (
@@ -71,9 +71,7 @@ export default function QnaCreate() {
                             onSubmit={createQnaHandler}
                         >
                             <div className='input-container'>
-                                <label htmlFor='qna-title-input'>
-                                    제목:
-                                </label>
+                                <label htmlFor='qna-title-input'>제목:</label>
                                 <input
                                     id='qna-title-input'
                                     type='text'

@@ -29,11 +29,13 @@ const tempState = {
 			neutering: true,
 			is_active: true,
 			editable: true
-		}
+		},
+		selectedAnimal: ''
 	},
 	user: { users: [], currentUser: null, logged_in: true },
-	review: { reviews: [], selectedReview: null },
-	qna: { qnas: [], selectedQna: null },
+	review: { reviews: [], selectedReview: null, selectedAnimal: '' },
+	application: { applications: [], selectedApplication: null },
+	qna: { qnas: [], selectedQna: null }
 }
 
 describe('<PostHeader />', () => {

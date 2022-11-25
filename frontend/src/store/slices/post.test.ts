@@ -44,6 +44,20 @@ describe('post reducer', () => {
 		content: 'test_content'
 	}
 
+	const fakePostFilter = {
+		page: 1,
+		is_active: false,
+		animal_type: 'test_animal_type',
+		species: 'test_species',
+		age: 1,
+		age_min: 1,
+		age_max: 1,
+		gender: false,
+		date: 10,
+		date_min: 10,
+		date_max: 10
+	}
+
 	beforeAll(() => {
 		store = configureStore({ reducer: { post: reducer } })
 	})
@@ -55,7 +69,7 @@ describe('post reducer', () => {
 	})
 	it('should handle getPosts', async () => {
 		axios.get = jest.fn().mockResolvedValue({ data: [fakePost] })
-		await store.dispatch(getPosts())
+		await store.dispatch(getPosts(fakePostFilter))
 		expect(store.getState().post.posts).toEqual([fakePost])
 	})
 	it('should handle getPost', async () => {

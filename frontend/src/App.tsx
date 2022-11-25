@@ -5,6 +5,8 @@ import PostList from './components/PostComponents/PostList/PostList'
 import PostDetail from './components/PostComponents/PostDetail/PostDetail'
 import PostCreate from './components/PostComponents/PostCreate/PostCreate'
 import PostEdit from './components/PostComponents/PostEdit/PostEdit'
+import PostApply from './components/PostComponents/PostApply/PostApply'
+import MyPost from './components/PostComponents/MyPost/MyPost'
 import ReviewList from './components/ReviewComponents/ReviewList/ReviewList'
 import ReviewCreate from './components/ReviewComponents/ReviewCreate/ReviewCreate'
 import QnaList from './components/QnaComponents/QnaList/QnaList'
@@ -24,8 +26,9 @@ function App() {
 						element={<PostDetail is_author={false} />}
 					/>
 					<Route path='/post/:id/edit' element={<PostEdit />} />
+					<Route path='/post/:id/submit' element={<PostApply />} />
 					<Route path='/post/create' element={<PostCreate />} />
-					{/* <Route path="/post/:id/submit" element={<ApplyCreate />} /> */}
+					<Route path='/mypost' element={<MyPost />} />
 					<Route
 						path='/mypost/:id'
 						element={<PostDetail is_author={true} />}
@@ -38,10 +41,7 @@ function App() {
 					<Route path='/reviews/create' element={<ReviewCreate />} />
 					<Route path='/qna' element={<QnaList />} />
 					<Route path='/qna/create' element={<QnaCreate />} />
-					<Route
-						path='/qna/:id'
-						element={<QnaDetail />}
-					/>
+					<Route path='/qna/:id' element={<QnaDetail />} />
 					<Route path='*' element={<h1>Not Found</h1>} />
 				</Routes>
 			</BrowserRouter>

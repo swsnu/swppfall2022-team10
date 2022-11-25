@@ -1,19 +1,25 @@
-from ..models import Post, post_serializer, PostImage
-from .utils import verify_image, verify_json, log_error
 import json
-from rest_framework.parsers import MultiPartParser, JSONParser, FileUploadParser
+import logging
+import pytz
+
+from django.db import transaction
+from django.urls import reverse
+from django.utils import timezone
+from rest_framework import status
+from rest_framework.authentication import SessionAuthentication
 from rest_framework.decorators import (
     api_view,
+    authentication_classes,
     parser_classes,
     permission_classes,
-    authentication_classes,
 )
+from rest_framework.parsers import FileUploadParser, JSONParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from rest_framework.authentication import SessionAuthentication
 from rest_framework.response import Response
-from rest_framework import status
-from django.db import transaction
-import logging
+
+from ..models import Post, PostImage
+from ..serializers import PostSerializer
+from .utils import log_error, pagination, verify
 
 logger = logging.getLogger("post_view")
 
@@ -29,8 +35,8 @@ def post_id(request, pid=0):
         except Post.DoesNotExist as e:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-        info_response = post_serializer(post)
-        return Response(info_response)
+        info_response = PostSerializer(post)
+        return Response(info_response.data)
 
     elif request.method == "PUT":
 
@@ -64,43 +70,59 @@ def post_id(request, pid=0):
 @authentication_classes([SessionAuthentication])
 @permission_classes([IsAuthenticatedOrReadOnly])
 @parser_classes([MultiPartParser])
-@verify_image(["POST"])
-@verify_json(["POST"])
+@verify("post")
 @log_error(logger)
 def posts(request):
     if request.method == "GET":
-        post_list = Post.objects.all().order_by("-created_at")
-        response_list = []
-        for post in post_list.iterator():
-            response = post_serializer(post)
-            response_list.append(response)
+        post_list = Post.objects.prefetch_related("photo_path").order_by("-created_at")
+        content = request.GET
 
-        return Response(response_list)
+        today = timezone.now()
+
+        if content.get("date", None):
+            day = int(content.get("date"))
+            day = today - timezone.timedelta(days=day)
+            day = day.date()
+            post_list = post_list.filter(created_at__date=day)
+
+        elif content.get("date_min", None) and content.get("date_max", None):
+            s, e = int(content.get("date_min")), int(content.get("date_max"))
+            start = today - timezone.timedelta(days=e)
+            end = today - timezone.timedelta(days=s)
+            post_list = post_list.filter(created_at__range=[start, end])
+
+        if content.get("age", None):
+            age = int(content.get("age"))
+            post_list = post_list.filter(age=age)
+        elif content.get("age_min", None) and content.get("age_max", None):
+            s, e = int(content.get("age_min")), int(content.get("age_max"))
+            post_list = post_list.filter(age__range=[s, e])
+
+        if content.get("is_active", None):
+            is_active = content.get("is_active").lower() == "true"
+            if is_active:
+                post_list = post_list.filter(is_active=is_active)
+
+        if content.get("gender", None):
+            gender = content.get("gender").lower() == "true"
+            post_list = post_list.filter(gender=gender)
+
+        if content.get("animal_type", None):
+            post_list = post_list.filter(animal_type=content.get("animal_type"))
+
+        if content.get("species", None):
+            post_list = post_list.filter(species=content.get("species"))
+
+        api_url = reverse(posts)
+        response = pagination(request, post_list, api_url, PostSerializer)
+        if not response:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(response)
 
     else:
+        content = request.data.get("parsed")
         photos = request.data.pop("photos")
-        content_json = request.data.pop("content")
-
-        if len(request.data) != 0:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-
-        try:
-
-            content_dict = json.loads(content_json[0])
-            content = {
-                "animal_type": content_dict["animal_type"],
-                "age": content_dict["age"],
-                "name": content_dict["name"],
-                "gender": content_dict["gender"],
-                "title": content_dict["title"],
-                "species": content_dict["species"],
-                "neutering": content_dict["neutering"],
-                "vaccination": content_dict["vaccination"],
-                "content": content_dict["content"],
-            }
-
-        except KeyError as e:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
 
         with transaction.atomic():
             post = Post.objects.create(author=request.user, is_active=True, **content)
@@ -109,4 +131,4 @@ def posts(request):
                     author=request.user, post=post, image=photo
                 )
 
-        return Response(status=status.HTTP_201_CREATED, data=post_serializer(post))
+        return Response(status=status.HTTP_201_CREATED, data=PostSerializer(post).data)

@@ -20,7 +20,7 @@ then
         then
             echo "formatting $file"
             "$formatter" "$file"
-            "git add $file"
+            git add $file
             ret=$?
         
             if [ $ret -ne 0 ]
@@ -32,6 +32,15 @@ then
             fi
         fi
     done
+    pylint --load-plugins pylint_django --rcfile backend/beafamily/.pylintrc "$change_list"
+    ret=$?
+    if [ $ret -ne 0 ]
+    then
+        echo "ERROR on pylint"
+        exit 1
+    else
+        echo "pylint passed!"
+    fi
 else
     echo "we don't need to format any python files!"
 fi
@@ -45,8 +54,10 @@ exts="\.\(ts\|tsx\)$"
 
 # The formatter to use
 formatter="frontend/node_modules/.bin/prettier"
+eslint="frontend/node_modules/.bin/eslint"
 
 change_list=`git diff --cached --name-only --diff-filter=ACMR | grep $exts | xargs`
+echo "$change_list"
 if [ ! -z "$change_list" ]
 then
     for file in $change_list
@@ -57,48 +68,29 @@ then
         then
             echo "formatting $file"
             "$formatter" --write "$file"
-            "git add $file"
+            git add $file
             ret=$?
         
             if [ $ret -ne 0 ]
             then
-                echo "ERROR on python formatting"
+                echo "ERROR on typescript/react formatting"
                 exit 1
             else
-                echo "python formatting finished!"
+                echo "typescript/react formatting finished!"
             fi
         fi
     done
+
+    "$eslint" $change_list
+    ret=$?
+    if [ $ret -ne 0 ]
+    then
+        echo "ERROR on eslint"
+        exit 1
+    else
+        echo "eslint passed!"
+    fi
 else
-    echo "we don't need to format any python files!"
+    echo "we don't need to format any typescript/react files!"
 fi
 
-# run pylint 
-#
-cd backend/beafamily
-pylint --load-plugins pylint_django --rcfile .pylintrc **/*.py
-ret=$?
-if [ $ret -ne 0 ]
-then
-    echo "ERROR on pylint"
-    exit 1
-else
-    echo "pylint passed!"
-fi
-
-
-# run eslint
-cd ../..
-cd frontend
-./node_modules/.bin/eslint src
-
-ret=$?
-if [ $ret -ne 0 ]
-then
-    echo "ERROR on eslint"
-    exit 1
-else
-    echo "eslint passed!"
-fi
-
-cd ..

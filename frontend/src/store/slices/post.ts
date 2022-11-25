@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { RootState } from '..'
 
@@ -21,6 +21,19 @@ export interface postType {
 	editable: boolean
 }
 
+export interface postFilterType {
+	page: number
+	animal_type: string | null
+	date: number | null
+	date_min: number | null
+	date_max: number | null
+	age: number | null
+	age_min: number | null
+	age_max: number | null
+	species: string | null
+	is_active: boolean
+}
+
 export interface postCreateType {
 	author_id: number
 	title: string
@@ -32,25 +45,36 @@ export interface postCreateType {
 	vaccination: boolean
 	neutering: boolean
 	content: string
-	// photo_path: string[]
 }
 
 export interface postState {
 	posts: postType[]
 	selectedPost: postType | null
+	selectedAnimal: string
 }
 
 const initialState: postState = {
 	posts: [],
-	selectedPost: null
+	selectedPost: null,
+	selectedAnimal: ''
 }
 
-export const getPosts = createAsyncThunk('post/getPosts', async () => {
-	const response = await axios.get<postType[]>('/api/posts/')
-	// console.log(typeof response.data);
-	// console.log(response.data);
-	return response.data
-})
+export const selectAnimal = createAsyncThunk(
+	'post/selectAnimal',
+	async (animalType: string, { dispatch }) => {
+		dispatch(postActions.selectAnimal({ animal_type: animalType }))
+	}
+)
+
+export const getPosts = createAsyncThunk(
+	'post/getPosts',
+	async (data: postFilterType, { dispatch }) => {
+		const response = await axios.get(`/api/posts/`, {
+			params: data
+		})
+		return response.data
+	}
+)
 
 export const getPost = createAsyncThunk(
 	'post/getPost',
@@ -104,6 +128,14 @@ export const postSlice = createSlice({
 	name: 'post',
 	initialState,
 	reducers: {
+		selectAnimal: (
+			state,
+			action: PayloadAction<{
+				animal_type: string
+			}>
+		) => {
+			state.selectedAnimal = action.payload.animal_type
+		}
 		// editPost: (
 		// 	state,
 		// 	action: PayloadAction<{
@@ -184,7 +216,7 @@ export const postSlice = createSlice({
 		// Add reducers for additional action types here, and handle loading state as needed
 		builder.addCase(getPosts.fulfilled, (state, action) => {
 			// Add post to the state array
-			state.posts = action.payload
+			state.posts = action.payload.results
 		})
 		builder.addCase(getPost.fulfilled, (state, action) => {
 			state.selectedPost = action.payload

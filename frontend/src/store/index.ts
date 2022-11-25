@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit'
 import userReducer from './slices/user'
 import postReducer from './slices/post'
 import reviewReducer from './slices/review'
+import applicationReducer from './slices/application'
 import qnaReducer from './slices/qna'
 import axios from 'axios'
 
@@ -14,7 +15,8 @@ export const store = configureStore({
 		user: userReducer,
 		post: postReducer,
 		review: reviewReducer,
-		qna: qnaReducer,
+		application: applicationReducer,
+		qna: qnaReducer
 	}
 })
 

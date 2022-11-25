@@ -10,7 +10,6 @@ import { useParams } from 'react-router'
 import { selectQna, qnaActions } from '../../../store/slices/qna'
 import './QnaDetail.scss'
 
-
 /* 
 import { useNavigate } from 'react-router-dom'
 import { AppDispatch } from '../../../store'
@@ -19,28 +18,23 @@ import { FaSyringe, FaRegMeh } from 'react-icons/fa'
 import PostHeader from '../PostHeader/PostHeader'
  */
 
-
 const QnaDetail = () => {
-    const { id } = useParams()
-    const dispatch = useDispatch()
-    const qnaState = useSelector(selectQna)
+	const { id } = useParams()
+	const dispatch = useDispatch()
+	const qnaState = useSelector(selectQna)
 
-    useEffect(() => {
-        dispatch(qnaActions.getQna({ targetId: Number(id) }));
-    }, [dispatch, id])
+	useEffect(() => {
+		dispatch(qnaActions.getQna({ targetId: Number(id) }))
+	}, [dispatch, id])
 
-    return (
-        <Layout>
-            <div className='DetailContainer'>
-                <div className='title'>
-                    {qnaState.selectedQna?.title}
-                </div>
-                <div className='content'>
-                    {qnaState.selectedQna?.content}
-                </div>
-            </div>
-        </Layout>
-    )
+	return (
+		<Layout>
+			<div className='DetailContainer'>
+				<div className='title'>{qnaState.selectedQna?.title}</div>
+				<div className='content'>{qnaState.selectedQna?.content}</div>
+			</div>
+		</Layout>
+	)
 }
 
 export default QnaDetail

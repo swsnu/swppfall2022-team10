@@ -1,17 +1,14 @@
 {
-    "animal_type": "개",
-    "neutering": true,
-    "vaccination": true,
-    "age": 2,
-    "author_name": "yeomjy111",
-    "name": "해피",
-    "gender": true,
-    "species": "골든 리트리버",
-    "title": "강아지가 아주 귀여워요!",
-    "content": "강아지가 아주 귀여워요!",
-    "is_active": true,
-    "photo_list": [
-        "dog.jpeg",
-        "golden-retriever.webp"
-    ]
+  "animal_type": "개",
+  "neutering": true,
+  "vaccination": true,
+  "age": 2,
+  "author_name": "yeomjy111",
+  "name": "해피",
+  "gender": true,
+  "species": "골든 리트리버",
+  "title": "강아지가 아주 귀여워요!",
+  "content": "강아지가 아주 귀여워요!",
+  "is_active": true,
+  "photo_list": ["dog.jpeg", "golden-retriever.webp"]
 }

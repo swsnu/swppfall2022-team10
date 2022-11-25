@@ -9,7 +9,7 @@ import * as reviewSlice from '../../../store/slices/review'
 import { MdArrowBack } from 'react-icons/md'
 
 const tempState = {
-	post: { posts: [], selectedPost: null },
+	post: { posts: [], selectedPost: null, selectedAnimal: '' },
 	user: { users: [], currentUser: null, logged_in: true },
 	review: {
 		reviews: [
@@ -25,9 +25,11 @@ const tempState = {
 				created_at: '2022-11-18'
 			}
 		],
-		selectedReview: null
+		selectedReview: null,
+		selectedAnimal: ''
 	},
-	qna: { qnas: [], selectedQna: null },
+	application: { applications: [], selectedApplication: null },
+	qna: { qnas: [], selectedQna: null }
 }
 const mockNavigate = jest.fn()
 jest.mock('react-router', () => ({
