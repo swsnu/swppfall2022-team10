@@ -10,7 +10,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, Navigate } from 'react-router-dom'
 import { AppDispatch } from '../../../store'
-import { createReview } from '../../../store/slices/review'
+import { createQna } from '../../../store/slices/qna'
 import { selectUser } from '../../../store/slices/user'
 import { MdArrowBack } from 'react-icons/md'
 
@@ -37,15 +37,15 @@ export default function QnaCreate() {
         const formData = new FormData()
 
         formData.append('content', JSON.stringify(data))
-
-        /* dispatch(createReview(formData))
+        dispatch(createQna(formData))
             .then((result) => {
-                navigate(`/review`)
+                navigate('/qna')
             })
             .catch((err) => {
                 console.log(err)
                 alert('ERROR')
-            }) */
+            })
+        console.log(data)
     }
 
     return (
