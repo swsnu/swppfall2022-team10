@@ -29,7 +29,8 @@ const tempState = {
 		selectedAnimal: ''
 	},
 	application: { applications: [], selectedApplication: null },
-	qna: { qnas: [], selectedQna: null }
+	qna: { qnas: [], selectedQna: null },
+	mypost: { posts: [], likes: [], applys: [] }
 }
 const mockNavigate = jest.fn()
 jest.mock('react-router', () => ({

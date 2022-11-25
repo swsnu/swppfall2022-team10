@@ -90,6 +90,7 @@ export default function ApplicationList(props: IProps) {
 									<td>{apply.id}</td>
 									<td>
 										<button
+											id='apply-button'
 											onClick={() => onClickApp(apply)}
 										>
 											{apply.author_name}님이 보낸 입양

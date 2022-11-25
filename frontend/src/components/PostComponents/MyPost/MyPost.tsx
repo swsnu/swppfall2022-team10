@@ -12,14 +12,15 @@ import { useDispatch, useSelector } from 'react-redux'
 import { selectUser } from '../../../store/slices/user'
 import { useNavigate } from 'react-router-dom'
 import Post from '../Post/Post'
-import { getPosts, postType, selectPost } from '../../../store/slices/post'
+import { postType } from '../../../store/slices/post'
+import { getMyPosts, selectMyPost } from '../../../store/slices/mypost'
 import { AppDispatch } from '../../../store'
 
 import './MyPost.scss'
 
 export default function MyPost() {
 	const navigate = useNavigate()
-	const postState = useSelector(selectPost)
+	const postState = useSelector(selectMyPost)
 	const dispatch = useDispatch<AppDispatch>()
 	const userState = useSelector(selectUser)
 
@@ -27,14 +28,14 @@ export default function MyPost() {
 	const [mylikeMore, setMylikeMore] = useState<boolean>(false)
 	const [myapplyMore, setMyapplyMore] = useState<boolean>(false)
 
-	const mypost = postState.posts.slice(0, 4)
-	const mylike = postState.posts.slice(4, 10)
-	const myapply = postState.posts.slice(4, 9)
+	const mypost = postState.posts
+	const mylike = postState.likes
+	const myapply = postState.applys
 
-	// useEffect(() => {
-	// 	// eslint-disable-next-line @typescript-eslint/no-floating-promises
-	// 	dispatch(getPosts())
-	// }, [])
+	useEffect(() => {
+		// eslint-disable-next-line @typescript-eslint/no-floating-promises
+		dispatch(getMyPosts())
+	}, [])
 
 	const post = useMemo(() => {
 		const shortMypost: postType[] = mypost.slice(0, 4)

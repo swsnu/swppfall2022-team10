@@ -35,7 +35,8 @@ const tempState = {
 	user: { users: [], currentUser: null, logged_in: true },
 	review: { reviews: [], selectedReview: null, selectedAnimal: '' },
 	application: { applications: [], selectedApplication: null },
-	qna: { qnas: [], selectedQna: null }
+	qna: { qnas: [], selectedQna: null },
+	mypost: { posts: [], likes: [], applys: [] }
 }
 
 describe('<PostHeader />', () => {
