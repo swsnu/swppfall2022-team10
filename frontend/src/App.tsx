@@ -9,6 +9,9 @@ import PostApply from './components/PostComponents/PostApply/PostApply'
 import MyPost from './components/PostComponents/MyPost/MyPost'
 import ReviewList from './components/ReviewComponents/ReviewList/ReviewList'
 import ReviewCreate from './components/ReviewComponents/ReviewCreate/ReviewCreate'
+import QnaList from './components/QnaComponents/QnaList/QnaList'
+import QnaDetail from './components/QnaComponents/QnaDetail/QnaDetail'
+import QnaCreate from './components/QnaComponents/QnaCreate/QnaCreate'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 
 function App() {
@@ -36,6 +39,9 @@ function App() {
 						element={<ReviewDetail is_author={false} />}
 					/> */}
 					<Route path='/reviews/create' element={<ReviewCreate />} />
+					<Route path='/qna' element={<QnaList />} />
+					<Route path='/qna/create' element={<QnaCreate />} />
+					<Route path='/qna/:id' element={<QnaDetail />} />
 					<Route path='*' element={<h1>Not Found</h1>} />
 				</Routes>
 			</BrowserRouter>
