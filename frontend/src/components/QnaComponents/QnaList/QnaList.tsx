@@ -1,54 +1,29 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import Layout from '../../Layout/Layout'
-import './QnaList.scss'
-import { MdOutlineAddBox } from 'react-icons/md'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import { useEffect } from 'react'
+import Qna from '../Qna/Qna'
+import { getQnas, QnaType, selectQna } from '../../../store/slices/qna'
+import { AppDispatch } from '../../../store'
+import { MdOutlineAddBox } from 'react-icons/md'
 
 import Accordion from 'react-bootstrap/Accordion'
 import Table from 'react-bootstrap/Table'
 
-import { useDispatch, useSelector } from 'react-redux'
-import Qna from '../Qna/Qna'
-import { selectQna, qnaActions } from '../../../store/slices/qna'
-
-// import ListGroup from 'react-bootstrap/ListGroup'
-
-/*
-import { AppDispatch } from '../../../store'
-import { useEffect } from 'react'
-import { getPosts, postType, selectPost } from '../../../store/slices/post'
-import { AppDispatch } from '../../../store'
-import { MdOutlineAddBox, MdSearch } from 'react-icons/md' 
-
-<tr className='clickable-row' onClick={() => navigate('/')}>
-                                    <td>1</td>
-                                    <td>동물이 말을 안 들어요-1</td>
-                                    <td>2022-11-20</td>
-                                    <td>1</td>
-                                </tr>
-                                <tr className='clickable-row' onClick={() => navigate('/')}>
-                                    <td>2</td>
-                                    <td>동물이 말을 안 들어요-2</td>
-                                    <td>2022-11-20</td>
-                                    <td>2</td>
-                                </tr>
-                                <tr className='clickable-row' onClick={() => navigate('/')}>
-                                    <td>3</td>
-                                    <td>??</td>
-                                    <td>2022-11-20</td>
-                                    <td>3</td>
-                                </tr>
-                                
-*/
-
-// import Button from 'react-bootstrap/Button'
+import './QnaList.scss'
 
 export default function QnaList() {
 	const navigate = useNavigate()
 
 	const qnaState = useSelector(selectQna)
-	const dispatch = useDispatch()
+	const dispatch = useDispatch<AppDispatch>()
+
+	useEffect(() => {
+		dispatch(getQnas())
+	}, [])
 
 	return (
 		<Layout>
@@ -57,40 +32,25 @@ export default function QnaList() {
 					<div className='title'>FAQs</div>
 					<div className='Faqs'>
 						<Accordion>
-							<Accordion.Item eventKey='0'>
-								<Accordion.Header>
-									동물이 밥을 먹지 않아요.
-								</Accordion.Header>
-								<Accordion.Body>
-									병원에 데려가세요.
-								</Accordion.Body>
+							<Accordion.Item eventKey="0">
+								<Accordion.Header>동물이 밥을 먹지 않아요.</Accordion.Header>
+								<Accordion.Body>병원에 데려가세요.</Accordion.Body>
 							</Accordion.Item>
-							<Accordion.Item eventKey='1'>
-								<Accordion.Header>
-									동물이 우울해 해요.
-								</Accordion.Header>
-								<Accordion.Body>
-									저런. 병원에 데려가세요.
-								</Accordion.Body>
+							<Accordion.Item eventKey="1">
+								<Accordion.Header>동물이 우울해 해요.</Accordion.Header>
+								<Accordion.Body>저런. 병원에 데려가세요.</Accordion.Body>
 							</Accordion.Item>
-							<Accordion.Item eventKey='2'>
-								<Accordion.Header>
-									동물이 아파요.
-								</Accordion.Header>
-								<Accordion.Body>
-									병원에 데려가세요.
-								</Accordion.Body>
+							<Accordion.Item eventKey="2">
+								<Accordion.Header>동물이 아파요.</Accordion.Header>
+								<Accordion.Body>병원에 데려가세요.</Accordion.Body>
 							</Accordion.Item>
-							<Accordion.Item eventKey='3'>
-								<Accordion.Header>
-									동물이 자지 않아요.
-								</Accordion.Header>
-								<Accordion.Body>
-									병원에 데려가세요.
-								</Accordion.Body>
+							<Accordion.Item eventKey="3">
+								<Accordion.Header>동물이 자지 않아요.</Accordion.Header>
+								<Accordion.Body>병원에 데려가세요.</Accordion.Body>
 							</Accordion.Item>
 						</Accordion>
 					</div>
+
 				</div>
 				<div className='QnaContainer'>
 					<div className='title'>Q&As</div>
@@ -106,14 +66,9 @@ export default function QnaList() {
 								</tr>
 							</thead>
 							<tbody>
-								{qnaState.qnas.map((td) => {
+								{qnaState.qnas.map((td: QnaType) => {
 									return (
-										<tr
-											key={`${td.id}_qna`}
-											onClick={() =>
-												navigate(`/qna/${td.id}`)
-											}
-										>
+										<tr key={`${td.id}_qna`} onClick={() => navigate(`/qna/${td.id}`)}>
 											<td>{td.id}</td>
 											<td>{td.title}</td>
 											<td>{td.id}</td>
@@ -123,6 +78,8 @@ export default function QnaList() {
 								})}
 							</tbody>
 						</Table>
+
+
 					</div>
 				</div>
 				<div className='create-qna'>
