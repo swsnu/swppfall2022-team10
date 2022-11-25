@@ -6,19 +6,8 @@ from .AbstractTypes import AbstractArticleType, AbstractImageType
 class Review(AbstractArticleType):
     animal_type = models.CharField(max_length=10)
 
-
-def review_serializer(review: Review):
-    photo_list = [p.image.url for p in review.photo_path.all()]
-
-    response = {
-        "author_id": review.author.id,
-        "author_name": review.author.username,
-        "id": review.id,
-        "title": review.title,
-        "photo_path": photo_list,
-        "content": review.content,
-    }
-    return response
+    class Meta:
+        ordering = ["-created_at"]
 
 
 def review_image_upload_to(instance, filename):

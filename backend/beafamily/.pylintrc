@@ -42,7 +42,7 @@ fail-under=5
 #from-stdin=
 
 # Files or directories to be skipped. They should be base names, not paths.
-ignore=manage.py, create_dummy.py
+ignore=manage.py, create_dummy.py, __init__.py
 
 # Add files or directories matching the regular expressions patterns to the
 # ignore-list. The regex matches against paths and can be in Posix or Windows
@@ -415,7 +415,11 @@ disable=raw-checker-failed,
         suppressed-message,
         useless-suppression,
         deprecated-pragma,
-        use-symbolic-message-instead
+        use-symbolic-message-instead,
+        C0144,
+        C0115,
+        C0114,
+        django-not-configured
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option

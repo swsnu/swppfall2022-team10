@@ -1,10 +1,7 @@
-import json
 import logging
-import pytz
 
 from django.db import transaction
 from django.urls import reverse
-from django.utils import timezone
 from rest_framework import status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.decorators import (
@@ -21,20 +18,22 @@ from ..models import Post, PostImage
 from ..serializers import PostSerializer, PostQueryValidator, PostValidator
 from .utils import log_error, pagination, verify
 
-logger = logging.getLogger("post_view")
+logger = logging.getLogger("view_logger")
 
 
 @api_view(["GET", "PUT", "DELETE"])
 @authentication_classes([SessionAuthentication])
 @permission_classes([IsAuthenticatedOrReadOnly])
-@parser_classes([MultiPartParser, JSONParser, FileUploadParser])
+@parser_classes([MultiPartParser])
+# @verify(PostValidator, PostQueryValidator)
 @log_error(logger)
 def post_id(request, pid=0):
+    try:
+        post = Post.objects.get(id=pid)
+    except Post.DoesNotExist as e:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
     if request.method == "GET":
-        try:
-            post = Post.objects.get(id=pid)
-        except Post.DoesNotExist as e:
-            return Response(status=status.HTTP_404_NOT_FOUND)
 
         info_response = PostSerializer(post, context={"user": request.user}).data
 
@@ -42,22 +41,12 @@ def post_id(request, pid=0):
 
     elif request.method == "PUT":
 
-        try:
-            post = Post.objects.get(id=pid)
-        except Post.DoesNotExist as e:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-
         if post.author != request.user:
             return Response(status=status.HTTP_403_FORBIDDEN)
 
         return Response(status=status.HTTP_200_OK)
 
     else:
-
-        try:
-            post = Post.objects.get(id=pid)
-        except Post.DoesNotExist as e:
-            return Response(status=status.HTTP_404_NOT_FOUND)
 
         if post.author != request.user:
             return Response(status=status.HTTP_403_FORBIDDEN)
@@ -74,7 +63,7 @@ def post_id(request, pid=0):
 @log_error(logger)
 def posts(request):
     if request.method == "GET":
-        post_list = Post.objects.prefetch_related("photo_path").order_by("-created_at")
+        post_list = Post.objects.prefetch_related("photo_path", "comments")
         query = request.query
 
         date = query.get("date")
@@ -115,7 +104,7 @@ def posts(request):
         return Response(response)
 
     else:
-        query = request.data.get("parsed")
+        query = request.parsed
         photos = request.data.pop("photos")
 
         with transaction.atomic():

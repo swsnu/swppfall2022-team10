@@ -2,6 +2,7 @@ from ..models import Post, PostImage, PostComment
 from rest_framework import serializers
 from django.utils import timezone
 from .ImageSerializer import ImageSerializer
+from .AbstractTypes import SerializerWithAuth, PaginationValidator
 
 
 def validate_nonnegative_int(x):
@@ -32,23 +33,20 @@ def validate_minmax(start, end):
         return None, None
 
 
-class PostQueryValidator(serializers.Serializer):
+class PostQueryValidator(PaginationValidator):
     date = serializers.DateField(required=False)
     date_min = serializers.DateField(required=False)
     date_max = serializers.DateField(required=False)
 
-    age = serializers.IntegerField(required=False)
-    age_min = serializers.IntegerField(required=False)
-    age_max = serializers.IntegerField(required=False)
+    age = serializers.IntegerField(required=False, min_value=0)
+    age_min = serializers.IntegerField(required=False, min_value=0)
+    age_max = serializers.IntegerField(required=False, min_value=0)
 
     animal_type = serializers.CharField(required=False)
     species = serializers.CharField(required=False)
 
     gender = serializers.BooleanField(required=False)
     is_active = serializers.BooleanField(required=False)
-
-    page = serializers.IntegerField(required=False)
-    page_size = serializers.IntegerField(required=False)
 
     def to_internal_value(self, data):
 
@@ -80,8 +78,8 @@ class PostQueryValidator(serializers.Serializer):
                 validated_query["date_min"] = date_min
                 validated_query["date_max"] = date_max
 
-            page = validate_nonnegative_int(data.get("page"))
-            page_size = validate_nonnegative_int(data.get("page_size"))
+            page = data.get("page")
+            page_size = data.get("page_size")
 
             if page:
                 validated_query["page"] = page
@@ -106,7 +104,7 @@ class PostQueryValidator(serializers.Serializer):
         except Exception as e:
             raise serializers.ValidationError()
 
-        return validated_query
+        return super(PostQueryValidator, self).to_internal_value(validated_query)
 
     class Meta:
         fields = [
@@ -146,7 +144,7 @@ class PostValidator(serializers.ModelSerializer):
         ]
 
 
-class PostCommentSerializer(serializers.ModelSerializer):
+class PostCommentSerializer(SerializerWithAuth):
     author_name = serializers.StringRelatedField(source="author", read_only=True)
     created_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
 
@@ -163,7 +161,7 @@ class PostCommentSerializer(serializers.ModelSerializer):
         return ret
 
 
-class PostSerializer(serializers.ModelSerializer):
+class PostSerializer(SerializerWithAuth):
     created_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
     author_name = serializers.StringRelatedField(source="author", read_only=True)
     comments = PostCommentSerializer(many=True)
@@ -189,11 +187,3 @@ class PostSerializer(serializers.ModelSerializer):
             "photo_path",
             "comments",
         ]
-
-    def to_representation(self, instance):
-        ret = super().to_representation(instance)
-        if self.context:
-            user = self.context["user"]
-            ret["editable"] = user == instance.author
-
-        return ret

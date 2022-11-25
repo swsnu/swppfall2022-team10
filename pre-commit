@@ -30,7 +30,7 @@ then
             else
                 echo "python formatting finished!"
             fi
-            pylint --load-plugins pylint_django --rcfile backend/beafamily/.pylintrc "$change_list"
+            pylint --load-plugins pylint_django --rcfile backend/beafamily/.pylintrc "$file"
             ret=$?
             if [ $ret -ne 0 ]
             then

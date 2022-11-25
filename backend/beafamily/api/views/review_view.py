@@ -16,11 +16,11 @@ from rest_framework.parsers import FileUploadParser, JSONParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
-from ..models import Review, ReviewImage, review_serializer
+from ..models import Review, ReviewImage
 from ..serializers import ReviewSerializer, ReviewQueryValidator, ReviewValidator
 from .utils import log_error, pagination, verify
 
-logger = logging.getLogger("review_view")
+logger = logging.getLogger("view_logger")
 
 
 @api_view(["GET", "POST"])
@@ -31,7 +31,7 @@ logger = logging.getLogger("review_view")
 @log_error(logger)
 def reviews(request):
     if request.method == "GET":
-        review_list = Review.objects.all().order_by("-created_at")
+        review_list = Review.objects.prefetch_related("photo_path")
         query = request.query
 
         animal_type = query.get("animal_type")
@@ -46,7 +46,7 @@ def reviews(request):
         return Response(response)
 
     else:
-        content = request.data.get("parsed")
+        content = request.parsed
         photos = request.data.pop("photos")
 
         with transaction.atomic():

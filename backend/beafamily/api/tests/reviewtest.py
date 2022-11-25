@@ -7,6 +7,7 @@ from rest_framework import status
 
 from ..models import *
 from .utils import *
+from ..serializers import ReviewSerializer
 
 User: AbstractBaseUser = get_user_model()
 
@@ -30,7 +31,9 @@ class ReviewTestCase(TestCase):
             author=u1,
         )
 
-        r2 = Review.objects.create(author=u2, title="title", content="content")
+        r2 = Review.objects.create(
+            author=u2, title="title", content="content", animal_type="개"
+        )
         photo3 = ReviewImage.objects.create(
             image="dummy/dog_dummy/dog.jpeg",
             review=r2,
@@ -51,8 +54,8 @@ class ReviewTestCase(TestCase):
     def test_getreview(self):
         response = self.client.get("/api/reviews/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        r1 = review_serializer(self.r1)
-        r2 = review_serializer(self.r2)
+        r1 = ReviewSerializer(self.r1).data
+        r2 = ReviewSerializer(self.r2).data
         self.assertEqual(response.json()["results"], [r2, r1])
 
         response = self.client.get("/api/reviews/1/")
@@ -63,6 +66,9 @@ class ReviewTestCase(TestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
         response = self.client.get("/api/reviews/?page=1&page_size=-1")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        response = self.client.get("/api/reviews/?page=-1")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_createreview(self):

@@ -18,21 +18,19 @@ from ..serializers import ImageValidator
 writable_methods = ["POST", "PUT"]
 
 
-def verify(validator, query_validator):
+def verify(validator, query_validator, has_image=True):
     def decorator(func):
         @wraps(func)
         def verified_view(request, *args, **kwargs):
-            data_set = dict()
             if request.method in writable_methods:
 
                 # check existence
-                if "photos" not in request.data:
+                if has_image and ("photos" not in request.data):
                     return Response(status=status.HTTP_400_BAD_REQUEST)
 
                 if "content" not in request.data:
                     return Response(status=status.HTTP_400_BAD_REQUEST)
 
-                photos = request.data.getlist("photos")
                 content_json = request.data.getlist("content")
 
                 # check existence of extras
@@ -41,17 +39,19 @@ def verify(validator, query_validator):
 
                 content_json = json.loads(content_json[0])
 
-                photos = [{"image": p} for p in photos]
+                if has_image:
+                    photos = request.data.getlist("photos")
+                    photos = [{"image": p} for p in photos]
 
-                photos_validator = ImageValidator(data=photos, many=True)
-                if not photos_validator.is_valid():
-                    return Response(status=status.HTTP_400_BAD_REQUEST)
+                    photos_validator = ImageValidator(data=photos, many=True)
+                    if not photos_validator.is_valid():
+                        return Response(status=status.HTTP_400_BAD_REQUEST)
 
                 post_validator = validator(data=content_json)
                 if not post_validator.is_valid():
                     return Response(status=status.HTTP_400_BAD_REQUEST)
 
-                request.data.setlist("parsed", [post_validator.data])
+                request.parsed = post_validator.data
 
             elif request.method == "GET":
                 query = request.GET

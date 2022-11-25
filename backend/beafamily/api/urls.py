@@ -11,4 +11,6 @@ urlpatterns = [
     path("signout/", views.signout),
     path("token/", views.token),
     path("check/", views.check_login),
+    path("questions/", views.questions),
+    path("questions/<int:qid>/", views.question_id),
 ]

@@ -4,7 +4,8 @@ from .AbstractTypes import AbstractArticleType, AbstractCommentType
 
 
 class Question(AbstractArticleType):
-    pass
+    class Meta:
+        ordering = ["-created_at"]
 
 
 class QuestionComment(AbstractCommentType):

@@ -1,8 +1,9 @@
 from ..models import Review, ReviewImage
 from rest_framework import serializers
+from .AbstractTypes import SerializerWithAuth, PaginationValidator
 
 
-class ReviewSerializer(serializers.ModelSerializer):
+class ReviewSerializer(SerializerWithAuth):
     author_name = serializers.StringRelatedField(source="author", read_only=True)
     photo_path = serializers.StringRelatedField(many=True, read_only=True)
 
@@ -25,9 +26,7 @@ class ReviewValidator(serializers.ModelSerializer):
         fields = ["title", "content", "animal_type"]
 
 
-class ReviewQueryValidator(serializers.Serializer):
-    page = serializers.IntegerField(required=False)
-    page_size = serializers.IntegerField(required=False)
+class ReviewQueryValidator(PaginationValidator):
     animal_type = serializers.CharField(required=False)
 
     class Meta:

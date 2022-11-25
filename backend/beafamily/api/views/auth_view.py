@@ -9,7 +9,7 @@ from rest_framework.response import Response
 
 from .utils import log_error
 
-logger = logging.getLogger("auth_view")
+logger = logging.getLogger("view_logger")
 
 User = get_user_model()
 

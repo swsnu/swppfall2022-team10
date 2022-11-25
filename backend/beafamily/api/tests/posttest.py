@@ -1,7 +1,6 @@
 import json
 import random
 
-import requests
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractBaseUser
 from django.utils import timezone
@@ -97,7 +96,7 @@ def datebetween(start, end, date):
     return end >= date >= start
 
 
-class PostTestCase(TestCase):
+class PostTestCase(APITestCase):
     def setUp(self):
         u1 = User.objects.create_user(username="abc", password="1234")
         u2 = User.objects.create_user(username="pqr", password="3456")
@@ -156,7 +155,7 @@ class PostTestCase(TestCase):
         )
         self.p1 = p1
         self.p2 = p2
-        self.client = Client(enforce_csrf_checks=True)
+        self.client = APIClient(enforce_csrf_checks=True)
         self.post_list = [p1, p2]
         for i in range(100):
             age = random.randint(0, 5)
@@ -211,6 +210,9 @@ class PostTestCase(TestCase):
         response = self.client.get("/api/posts/?page=2&page_size=x")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         response = self.client.get("/api/posts/?page=2&page_size=-1")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        response = self.client.get("/api/posts/?page=-1")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_getpost(self):
@@ -321,23 +323,24 @@ class PostTestCase(TestCase):
 
             self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+        # with open("dummy/post/cat_dummy/cat2.jpg", "rb") as f:
+        #     response = self.client.post(
+        #         "/api/posts/",
+        #         data={"photos": [f], "content": json.dumps(newpost), "extra": json.dumps({"dummy": "dummy"})},
+        #         HTTP_X_CSRFTOKEN=token,
+        #     )
+        #
+        #     self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
         with open("dummy/post/cat_dummy/cat2.jpg", "rb") as f:
             response = self.client.post(
                 "/api/posts/",
-                data={"photos": [f], "content": newpost, "extra": {"dummy": "dummy"}},
+                data={"photos": [f], "extra": json.dumps({"dummy": "dummy"})},
                 HTTP_X_CSRFTOKEN=token,
             )
 
             self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-        with open("dummy/post/cat_dummy/cat2.jpg", "rb") as f:
-            response = self.client.post(
-                "/api/posts/",
-                data={"photos": [f], "extra": {"dummy": "dummy"}},
-                HTTP_X_CSRFTOKEN=token,
-            )
-
-            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         with open("dummy/post/cat_dummy/cat2.jpg", "rb") as f:
             response = self.client.post(
                 "/api/posts/",
@@ -395,6 +398,12 @@ class PostTestCase(TestCase):
 
         # only min
         invalid = {"age_min": 1}
+
+        response = self.client.get("/api/posts/?page=1&page_size=40", invalid)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        # type error
+        invalid = {"gender": "x"}
 
         response = self.client.get("/api/posts/?page=1&page_size=40", invalid)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -459,3 +468,21 @@ class PostTestCase(TestCase):
             filter(lambda x: check_date_range(x, valid), reversed_list[0:100])
         )
         self.assertEqual(response.json()["results"], expected)
+
+    def test_editable(self):
+        response = self.client.get("/api/token/")
+        token = response.cookies["csrftoken"].value
+
+        response = self.client.post(
+            "/api/signin/",
+            HTTP_X_CSRFTOKEN=token,
+            HTTP_AUTHORIZATION=basic_auth_encoder("abc", "1234"),
+        )
+
+        token = response.cookies["csrftoken"].value
+
+        response = self.client.get("/api/posts/1/")
+        self.assertTrue(response.json()["editable"])
+
+        response = self.client.get("/api/posts/2/")
+        self.assertFalse(response.json()["editable"])
