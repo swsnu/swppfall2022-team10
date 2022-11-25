@@ -15,7 +15,9 @@ class ReviewTestCase(TestCase):
     def setUp(self):
         u1 = User.objects.create_user(username="abc", password="1234")
         u2 = User.objects.create_user(username="pqr", password="3456")
-        r1 = Review.objects.create(author=u1, title="title", content="content")
+        r1 = Review.objects.create(
+            author=u1, title="title", content="content", animal_type="고양이"
+        )
         photo1 = ReviewImage.objects.create(
             image="dummy/cat_dummy/cat2.jpg",
             review=r1,
@@ -75,7 +77,7 @@ class ReviewTestCase(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         token = response.cookies["csrftoken"].value
 
-        newreview = {"title": "abc", "content": "xyz"}
+        newreview = {"title": "abc", "content": "xyz", "animal_type": "pqr"}
 
         with open("dummy/review/cat_dummy/cat2.jpg", "rb") as f:
             response = self.client.post(

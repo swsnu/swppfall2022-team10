@@ -8,13 +8,21 @@ class ReviewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Review
-        fields = ["author_id", "author_name", "id", "title", "photo_path", "content"]
+        fields = [
+            "author_id",
+            "author_name",
+            "id",
+            "title",
+            "photo_path",
+            "content",
+            "animal_type",
+        ]
 
 
 class ReviewValidator(serializers.ModelSerializer):
     class Meta:
         model = Review
-        fields = ["title", "content"]
+        fields = ["title", "content", "animal_type"]
 
 
 class ReviewQueryValidator(serializers.Serializer):

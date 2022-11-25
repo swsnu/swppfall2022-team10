@@ -87,7 +87,7 @@ def log_error(logger):
 
 
 def pagination(request, data_list, api_url, serializer):
-    page_size = request.GET.get("page_size")
+    page_size = request.query.get("page_size")
 
     if page_size:
         try:
@@ -102,13 +102,9 @@ def pagination(request, data_list, api_url, serializer):
 
     paginator = Paginator(data_list, page_size)
 
-    page_num = request.GET.get("page")
+    page_num = request.query.get("page")
     page = paginator.get_page(page_num)
 
-    # response_list = []
-    # for post in page.object_list:
-    #     response = serializer(post)
-    #     response_list.append(response)
     results = serializer(page.object_list, many=True).data
 
     response = {

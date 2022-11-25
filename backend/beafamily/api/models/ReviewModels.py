@@ -4,7 +4,7 @@ from .AbstractTypes import AbstractArticleType, AbstractImageType
 
 
 class Review(AbstractArticleType):
-    pass
+    animal_type = models.CharField(max_length=10)
 
 
 def review_serializer(review: Review):

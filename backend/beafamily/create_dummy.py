@@ -26,7 +26,7 @@ User: models.User = get_user_model()
 
 
 def get_random_review():
-    animal_type = random.choice(["고양이", "강아지"])
+    animal_type = random.choice(["고양이", "개"])
     title = f"{animal_type}가 아주 귀여워요!"
     content = title
     delta = timezone.timedelta(random.randint(0, 10))
@@ -44,7 +44,7 @@ def get_random_post():
     len_contents = random.randint(30, 200)
     contents = "".join(random.choices(ascii_letters, k=len_contents))
     name = random.choice(names)
-    animal_type = random.choice(["고양이", "강아지"])
+    animal_type = random.choice(["고양이", "개"])
 
     dog_species = [
         "포메라니안",
@@ -138,7 +138,7 @@ def create(a, b, model_id):
             post.created_at = data["created_at"]
             post.save()
 
-            animal_type = post.animal_type == "강아지"
+            animal_type = post.animal_type == "개"
 
             photos = dog_list if animal_type else cat_list
             photos = [
@@ -158,11 +158,11 @@ def create(a, b, model_id):
 
             data, animal_type = get_random_review()
 
-            review = Review.objects.create(author=user, **data)
+            review = Review.objects.create(author=user, animal_type=animal_type, **data)
             review.created_at = data["created_at"]
             review.save()
 
-            photos = dog_list if animal_type == "강아지" else cat_list
+            photos = dog_list if animal_type == "개" else cat_list
             photos = [
                 ReviewImage.objects.create(author=user, review=review, image=p)
                 for p in photos

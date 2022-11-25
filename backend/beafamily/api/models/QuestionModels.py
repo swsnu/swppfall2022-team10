@@ -8,4 +8,6 @@ class Question(AbstractArticleType):
 
 
 class QuestionComment(AbstractCommentType):
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    question = models.ForeignKey(
+        Question, on_delete=models.CASCADE, related_name="comments"
+    )

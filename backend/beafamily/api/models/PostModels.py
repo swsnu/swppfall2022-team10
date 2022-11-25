@@ -12,7 +12,7 @@ class Post(AbstractArticleType):
     animal_type = models.CharField(max_length=10)
     neutering = models.BooleanField()
     vaccination = models.BooleanField()
-    age = models.IntegerField()
+    age = models.PositiveIntegerField()
     name = models.CharField(max_length=50)
     gender = models.BooleanField()
     species = models.CharField(max_length=30)

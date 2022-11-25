@@ -32,6 +32,11 @@ logger = logging.getLogger("review_view")
 def reviews(request):
     if request.method == "GET":
         review_list = Review.objects.all().order_by("-created_at")
+        query = request.query
+
+        animal_type = query.get("animal_type")
+        if animal_type:
+            review_list = review_list.filter(animal_type=animal_type)
 
         api_url = reverse(reviews)
         response = pagination(request, review_list, api_url, ReviewSerializer)
