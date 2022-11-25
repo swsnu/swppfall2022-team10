@@ -5,7 +5,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import React, { Dispatch, SetStateAction, useState } from 'react'
+import React, { Dispatch, SetStateAction } from 'react'
 import './Pagination.scss'
 
 interface IProps {
@@ -18,7 +18,7 @@ interface IProps {
 const Pagination = (props: IProps) => {
 	const pageNumbers = []
 	const totalPages = Math.ceil(props.totalItems / props.itemsPerPage)
-	if (totalPages <= 10)
+	if (totalPages <= 9)
 		for (let i = 1; i <= totalPages; i++) pageNumbers.push(i)
 	else if (props.currentPage <= 5)
 		for (let i = 1; i <= 9; i++) pageNumbers.push(i)

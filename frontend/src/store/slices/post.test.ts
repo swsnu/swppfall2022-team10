@@ -64,11 +64,14 @@ describe('post reducer', () => {
 	it('should handle initial state', () => {
 		expect(reducer(undefined, { type: 'unknown' })).toEqual({
 			posts: [],
-			selectedPost: null
+			selectedPost: null,
+			selectedAnimal: ''
 		})
 	})
 	it('should handle getPosts', async () => {
-		axios.get = jest.fn().mockResolvedValue({ data: [fakePost] })
+		axios.get = jest
+			.fn()
+			.mockResolvedValue({ data: { count: 1, results: [fakePost] } })
 		await store.dispatch(getPosts(fakePostFilter))
 		expect(store.getState().post.posts).toEqual([fakePost])
 	})

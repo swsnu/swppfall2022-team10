@@ -33,7 +33,9 @@ const tempState = {
 		selectedAnimal: ''
 	},
 	user: { users: [], currentUser: null, logged_in: true },
-	review: { reviews: [], selectedReview: null, selectedAnimal: '' }
+	review: { reviews: [], selectedReview: null, selectedAnimal: '' },
+	application: { applications: [], selectedApplication: null },
+	qna: { qnas: [], selectedQna: null }
 }
 
 describe('<PostHeader />', () => {
@@ -72,5 +74,17 @@ describe('<PostHeader />', () => {
 			name: /bookmark-button/i
 		})
 		fireEvent.click(bookmarkButton)
+	})
+	it('should navigate to submit page when adopt button clicked', async () => {
+		render(
+			<Provider store={getMockStore(tempState)}>
+				<PostHeader is_author={false} />
+			</Provider>
+		)
+		const adoptButton = await screen.findByText('입양하기')
+		fireEvent.click(adoptButton)
+		await waitFor(() => {
+			expect(mockNavigate).toHaveBeenCalledWith('./submit')
+		})
 	})
 })

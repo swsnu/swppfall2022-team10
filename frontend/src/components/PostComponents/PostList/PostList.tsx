@@ -50,26 +50,6 @@ export default function PostList() {
 	const filterPostHandler = () => {
 		setLoading(true)
 
-		// const searchDate = searchMinDate
-		// 	? searchMaxDate
-		// 		? searchMinDate === searchMaxDate
-		// 			? [searchMinDate]
-		// 			: [searchMinDate, searchMaxDate]
-		// 		: [null, searchMaxDate]
-		// 	: searchMaxDate
-		// 	? [searchMinDate, null]
-		// 	: null
-		//
-		// const searchAge = searchMinAge
-		// 	? searchMaxAge
-		// 		? searchMinAge === searchMaxAge
-		// 			? [searchMinAge]
-		// 			: [searchMinAge, searchMaxAge]
-		// 		: [null, searchMaxAge]
-		// 	: searchMaxAge
-		// 	? [searchMinAge, null]
-		// 	: null
-
 		const animalType =
 			searchAnimalType !== ''
 				? searchAnimalType
@@ -136,9 +116,15 @@ export default function PostList() {
 						{postState.selectedAnimal === '개' ||
 						postState.selectedAnimal === '고양이' ? (
 							<div className='category animal-container'>
-								<div className='title'>종</div>
+								<label
+									htmlFor='user-input-species'
+									className='title'
+								>
+									종
+								</label>
 								<input
 									className='type-space'
+									id='user-input-species'
 									placeholder='종'
 									onChange={(event) =>
 										setSearchSpecies(event.target.value)
@@ -148,9 +134,15 @@ export default function PostList() {
 							</div>
 						) : (
 							<div className='category animal-container'>
-								<div className='title'>동물</div>
+								<label
+									htmlFor='user-input-animal-type'
+									className='title'
+								>
+									동물
+								</label>
 								<input
 									className='type-space'
+									id='user-input-animal-type'
 									placeholder='동물'
 									onChange={(event) =>
 										setSearchAnimalType(event.target.value)
@@ -169,6 +161,7 @@ export default function PostList() {
 									onChange={(value) =>
 										setSearchMinDate(value)
 									}
+									name='min-date'
 									min={0}
 									max={
 										searchMaxDate
@@ -182,6 +175,7 @@ export default function PostList() {
 									onChange={(value) =>
 										setSearchMaxDate(value)
 									}
+									name='max-date'
 									min={searchMinDate ? searchMinDate : 0}
 								/>
 							</div>
@@ -193,6 +187,7 @@ export default function PostList() {
 									className='type-space'
 									placeholder='최소'
 									onChange={(value) => setSearchMinAge(value)}
+									name='min-age'
 									min={0}
 									max={searchMaxAge ? searchMaxAge : 30}
 								/>
@@ -200,16 +195,23 @@ export default function PostList() {
 									className='type-space'
 									placeholder='최대'
 									onChange={(value) => setSearchMaxAge(value)}
+									name='max-age'
 									min={searchMinAge ? searchMinAge : 0}
 									max={30}
 								/>
 							</div>
 						</div>
 						<div className='category sex-container'>
-							<div className='title'>성별</div>
+							<label
+								htmlFor='user-input-gender'
+								className='title'
+							>
+								성별
+							</label>
 							<input
 								className='type-space'
 								placeholder='성별'
+								id='user-input-gender'
 								onChange={(event) =>
 									setSearchGender(event.target.value)
 								}
@@ -219,6 +221,7 @@ export default function PostList() {
 						<div className='search-button'>
 							<Button
 								id='search-button'
+								aria-label='search-button'
 								variant='outline-success'
 								onClick={searchPostHandler}
 							>
@@ -226,23 +229,23 @@ export default function PostList() {
 							</Button>
 						</div>
 					</div>
-					{searchActive ? (
-						<div className='user-input-checkbox'>
-							<MdCheckBox
-								size='20'
-								onClick={() => setSearchActive(false)}
-							/>
-							<span>&lsquo;입양신청 진행 중&lsquo;만 표시</span>
-						</div>
-					) : (
-						<div className='user-input-checkbox'>
-							<MdCheckBoxOutlineBlank
-								size='20'
-								onClick={() => setSearchActive(true)}
-							/>
-							<span>&lsquo;입양신청 진행 중&lsquo;만 표시</span>
-						</div>
-					)}
+					<div className='user-input-checkbox'>
+						<button
+							id='active-check-button'
+							aria-label='active-check-button'
+							onClick={(event) => {
+								event.preventDefault()
+								setSearchActive((current) => !current)
+							}}
+						>
+							{searchActive ? (
+								<MdCheckBox size='20' />
+							) : (
+								<MdCheckBoxOutlineBlank size='20' />
+							)}
+						</button>
+						<span>&lsquo;입양신청 진행 중&lsquo;만 표시</span>
+					</div>
 					<div className='posts'>
 						{loading && <div> loading... </div>}
 						{postState.posts.map((post: postType) => {

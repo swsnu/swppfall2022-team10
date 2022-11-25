@@ -15,7 +15,9 @@ const tempState = {
 		selectedAnimal: ''
 	},
 	user: { users: [], currentUser: null, logged_in: true },
-	review: { reviews: [], selectedReview: null, selectedAnimal: '' }
+	review: { reviews: [], selectedReview: null, selectedAnimal: '' },
+	application: { applications: [], selectedApplication: null },
+	qna: { qnas: [], selectedQna: null }
 }
 
 const tempLoggedOutState = {
@@ -25,7 +27,9 @@ const tempLoggedOutState = {
 		selectedAnimal: ''
 	},
 	user: { users: [], currentUser: null, logged_in: false },
-	review: { reviews: [], selectedReview: null, selectedAnimal: '' }
+	review: { reviews: [], selectedReview: null, selectedAnimal: '' },
+	application: { applications: [], selectedApplication: null },
+	qna: { qnas: [], selectedQna: null }
 }
 
 const testPostFormat = {
@@ -172,6 +176,18 @@ describe('<PostCreate />', () => {
 		if (fileInput !== null)
 			fireEvent.change(fileInput, { target: { files: [file] } })
 
+		const applyForm: Partial<File> = {
+			name: 'myimage.doc',
+			lastModified: 1580400631732,
+			size: 703786,
+			type: 'text/doc'
+		}
+		const applyFormInput = container.querySelector(
+			'input[name="application"]'
+		)
+		if (applyFormInput !== null)
+			fireEvent.change(applyFormInput, { target: { files: [applyForm] } })
+
 		const postButton = await screen.findByText('게시하기')
 		fireEvent.click(postButton)
 		await waitFor(() =>
@@ -235,66 +251,225 @@ describe('<PostCreate />', () => {
 		if (fileInput !== null)
 			fireEvent.change(fileInput, { target: { files: [file] } })
 
+		const applyForm: Partial<File> = {
+			name: 'myimage.doc',
+			lastModified: 1580400631732,
+			size: 703786,
+			type: 'text/doc'
+		}
+		const applyFormInput = container.querySelector(
+			'input[name="application"]'
+		)
+		if (applyFormInput !== null)
+			fireEvent.change(applyFormInput, { target: { files: [applyForm] } })
+
 		const postButton = await screen.findByText('게시하기')
 		fireEvent.click(postButton)
 		await waitFor(() => expect(window.alert).toHaveBeenCalledWith('ERROR'))
 	})
-	// it("should not handle create post if not logged in", async () => {
-	//     jest.spyOn(axios, "post").mockResolvedValueOnce({
-	//         data: testPostFormat,
-	//     });
-	//     window.alert = jest.fn();
+	it('should not handle create post if not logged in', async () => {
+		window.alert = jest.fn()
 
-	//     const {container} = render(postCreateLoggedOut);
-	//     const titleInput = await screen.findByLabelText("제목:");
-	// 	fireEvent.change(titleInput, { target: { value: "POST_TEST_TITLE" } });
+		const { container } = render(postCreateLoggedOut)
+		const postButton = await screen.findByText('게시하기')
+		fireEvent.click(postButton)
+		await waitFor(() =>
+			expect(window.alert).toHaveBeenCalledWith('You should log in')
+		)
+		// await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith('/login'))
+	})
+	it('should not handle create post if empty field exists', async () => {
+		window.alert = jest.fn()
 
-	//     const nameInput = await screen.findByLabelText("이름:");
-	// 	fireEvent.change(nameInput, { target: { value: "POST_TEST_NAME" } });
+		const { container } = render(postCreate)
 
-	//     const animalTypeInput = await screen.findByLabelText("동물:");
-	// 	fireEvent.change(animalTypeInput, { target: { value: "POST_TEST_ANIMAL_TYPE" } });
+		const postButton = await screen.findByText('게시하기')
+		fireEvent.click(postButton)
+		await waitFor(() => expect(axios.post).not.toHaveBeenCalled())
+	})
+	it('should not handle create post if no photo file', async () => {
+		window.alert = jest.fn()
 
-	//     const speciesInput = await screen.findByLabelText("종:");
-	// 	fireEvent.change(speciesInput, { target: { value: "POST_TEST_SPECIES" } });
+		const { container } = render(postCreate)
+		const titleInput = await screen.findByLabelText('제목:')
+		fireEvent.change(titleInput, { target: { value: 'POST_TEST_TITLE' } })
 
-	//     const ageInput = await screen.findByLabelText("나이:");
-	// 	fireEvent.change(ageInput, { target: { value: "5" } });
+		const nameInput = await screen.findByLabelText('이름:')
+		fireEvent.change(nameInput, { target: { value: 'POST_TEST_NAME' } })
 
-	//     const genderInput = container.querySelector('input[name="gender"]');
-	//     if (genderInput !== null)
-	//         fireEvent.change(genderInput, {target:{value:"암컷"}});
+		const animalTypeInput = await screen.findByLabelText('동물:')
+		fireEvent.change(animalTypeInput, {
+			target: { value: 'POST_TEST_ANIMAL_TYPE' }
+		})
 
-	//     const vaccinationInput = container.querySelector('input[name="vaccination"]');
-	//     if (vaccinationInput !== null)
-	//         fireEvent.change(vaccinationInput, {target:{value:"O"}});
+		const speciesInput = await screen.findByLabelText('종:')
+		fireEvent.change(speciesInput, {
+			target: { value: 'POST_TEST_SPECIES' }
+		})
 
-	//     const neuteringInput = container.querySelector('input[name="neutering"]');
-	//     if (neuteringInput !== null)
-	//         fireEvent.change(neuteringInput, {target:{value:"O"}});
+		const ageInput = await screen.findByLabelText('나이:')
+		fireEvent.change(ageInput, { target: { value: '5' } })
 
-	//     const contentInput = await screen.findByLabelText("동물에 대해 추가로 알려주세요! 자세한 설명은 입양에 도움이 됩니다:)");
-	// 	fireEvent.change(contentInput, { target: { value: "POST_TEST_CONTENT" } });
+		const genderInput = container.querySelector('input[name="gender"]')
+		if (genderInput !== null)
+			fireEvent.change(genderInput, { target: { value: '암컷' } })
 
-	//     const file : Partial<File> = {
-	//         name: 'myimage.png',
-	//         lastModified: 1580400631732,
-	//         size: 703786,
-	//         type: 'image/png'
-	//     };
-	//     const fileInput = container.querySelector('input[name="photo"]');
-	//     if (fileInput !== null)
-	// 	    fireEvent.change(fileInput, { target: {files: [file]} });
+		const vaccinationInput = container.querySelector(
+			'input[name="vaccination"]'
+		)
+		if (vaccinationInput !== null)
+			fireEvent.change(vaccinationInput, { target: { value: 'O' } })
 
-	//     const postButton = await screen.findByText("게시하기");
-	//     fireEvent.click(postButton);
-	//     await waitFor(() =>
-	//         expect(window.alert).toHaveBeenCalledWith("You should log in")
-	//     );
-	//     await waitFor(() =>
-	//         expect(mockNavigate).toHaveBeenCalledWith("/login")
-	//     );
-	// });
+		const neuteringInput = container.querySelector(
+			'input[name="neutering"]'
+		)
+		if (neuteringInput !== null)
+			fireEvent.change(neuteringInput, { target: { value: 'O' } })
+
+		const contentInput = await screen.findByLabelText(
+			'동물에 대해 추가로 알려주세요! 자세한 설명은 입양에 도움이 됩니다:)'
+		)
+		fireEvent.change(contentInput, {
+			target: { value: 'POST_TEST_CONTENT' }
+		})
+
+		const postButton = await screen.findByText('게시하기')
+		fireEvent.click(postButton)
+		await waitFor(() => expect(axios.post).not.toHaveBeenCalled())
+	})
+	it('should not handle create post if no apply form file', async () => {
+		window.alert = jest.fn()
+
+		const { container } = render(postCreate)
+		const titleInput = await screen.findByLabelText('제목:')
+		fireEvent.change(titleInput, { target: { value: 'POST_TEST_TITLE' } })
+
+		const nameInput = await screen.findByLabelText('이름:')
+		fireEvent.change(nameInput, { target: { value: 'POST_TEST_NAME' } })
+
+		const animalTypeInput = await screen.findByLabelText('동물:')
+		fireEvent.change(animalTypeInput, {
+			target: { value: 'POST_TEST_ANIMAL_TYPE' }
+		})
+
+		const speciesInput = await screen.findByLabelText('종:')
+		fireEvent.change(speciesInput, {
+			target: { value: 'POST_TEST_SPECIES' }
+		})
+
+		const ageInput = await screen.findByLabelText('나이:')
+		fireEvent.change(ageInput, { target: { value: '5' } })
+
+		const genderInput = container.querySelector('input[name="gender"]')
+		if (genderInput !== null)
+			fireEvent.change(genderInput, { target: { value: '암컷' } })
+
+		const vaccinationInput = container.querySelector(
+			'input[name="vaccination"]'
+		)
+		if (vaccinationInput !== null)
+			fireEvent.change(vaccinationInput, { target: { value: 'O' } })
+
+		const neuteringInput = container.querySelector(
+			'input[name="neutering"]'
+		)
+		if (neuteringInput !== null)
+			fireEvent.change(neuteringInput, { target: { value: 'O' } })
+
+		const contentInput = await screen.findByLabelText(
+			'동물에 대해 추가로 알려주세요! 자세한 설명은 입양에 도움이 됩니다:)'
+		)
+
+		const file: Partial<File> = {
+			name: 'myimage.png',
+			lastModified: 1580400631732,
+			size: 703786,
+			type: 'image/png'
+		}
+		const fileInput = container.querySelector('input[name="photo"]')
+		if (fileInput !== null)
+			fireEvent.change(fileInput, { target: { files: [file] } })
+
+		fireEvent.change(contentInput, {
+			target: { value: 'POST_TEST_CONTENT' }
+		})
+
+		const postButton = await screen.findByText('게시하기')
+		fireEvent.click(postButton)
+		await waitFor(() => expect(axios.post).not.toHaveBeenCalled())
+	})
+	it('should not handle create post if age not satisfied', async () => {
+		window.alert = jest.fn()
+
+		const { container } = render(postCreate)
+		const titleInput = await screen.findByLabelText('제목:')
+		fireEvent.change(titleInput, { target: { value: 'POST_TEST_TITLE' } })
+
+		const nameInput = await screen.findByLabelText('이름:')
+		fireEvent.change(nameInput, { target: { value: 'POST_TEST_NAME' } })
+
+		const animalTypeInput = await screen.findByLabelText('동물:')
+		fireEvent.change(animalTypeInput, {
+			target: { value: 'POST_TEST_ANIMAL_TYPE' }
+		})
+
+		const speciesInput = await screen.findByLabelText('종:')
+		fireEvent.change(speciesInput, {
+			target: { value: 'POST_TEST_SPECIES' }
+		})
+
+		const ageInput = await screen.findByLabelText('나이:')
+		fireEvent.change(ageInput, { target: { value: '33' } })
+
+		const genderInput = container.querySelector('input[name="gender"]')
+		if (genderInput !== null)
+			fireEvent.change(genderInput, { target: { value: '암컷' } })
+
+		const vaccinationInput = container.querySelector(
+			'input[name="vaccination"]'
+		)
+		if (vaccinationInput !== null)
+			fireEvent.change(vaccinationInput, { target: { value: 'O' } })
+
+		const neuteringInput = container.querySelector(
+			'input[name="neutering"]'
+		)
+		if (neuteringInput !== null)
+			fireEvent.change(neuteringInput, { target: { value: 'O' } })
+
+		const contentInput = await screen.findByLabelText(
+			'동물에 대해 추가로 알려주세요! 자세한 설명은 입양에 도움이 됩니다:)'
+		)
+		fireEvent.change(contentInput, {
+			target: { value: 'POST_TEST_CONTENT' }
+		})
+
+		const file: Partial<File> = {
+			name: 'myimage.png',
+			lastModified: 1580400631732,
+			size: 703786,
+			type: 'image/png'
+		}
+		const fileInput = container.querySelector('input[name="photo"]')
+		if (fileInput !== null)
+			fireEvent.change(fileInput, { target: { files: [file] } })
+
+		const applyForm: Partial<File> = {
+			name: 'myimage.doc',
+			lastModified: 1580400631732,
+			size: 703786,
+			type: 'text/doc'
+		}
+		const applyFormInput = container.querySelector(
+			'input[name="application"]'
+		)
+		if (applyFormInput !== null)
+			fireEvent.change(applyFormInput, { target: { files: [applyForm] } })
+
+		const postButton = await screen.findByText('게시하기')
+		fireEvent.click(postButton)
+		await waitFor(() => expect(axios.post).not.toHaveBeenCalled())
+	})
 	it('should render navigate to / when back Button clicked', async () => {
 		render(postCreate)
 		const backButton = await screen.findByRole('button', {

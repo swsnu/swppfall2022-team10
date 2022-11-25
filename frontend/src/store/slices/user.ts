@@ -33,18 +33,18 @@ export const checkLogin = createAsyncThunk(
 	}
 )
 
-export const getUsers = createAsyncThunk('user/getUsers', async () => {
-	const response = await axios.get<UserType[]>(`/api/user/`)
-	return response.data
-})
+// export const getUsers = createAsyncThunk('user/getUsers', async () => {
+// 	const response = await axios.get<UserType[]>(`/api/user/`)
+// 	return response.data
+// })
 
-export const getUser = createAsyncThunk(
-	'user/getUsers',
-	async (id: UserType['id']) => {
-		const response = await axios.get(`/api/user/${id}/`)
-		return response.data
-	}
-)
+// export const getUser = createAsyncThunk(
+// 	'user/getUsers',
+// 	async (id: UserType['id']) => {
+// 		const response = await axios.get(`/api/user/${id}/`)
+// 		return response.data
+// 	}
+// )
 
 // example for login request
 // const sendLoginRequest = async (username: string, password: string) => {
@@ -105,27 +105,27 @@ export const userSlice = createSlice({
 	initialState,
 	reducers: {
 		loginUser: (state, action: PayloadAction<{ targetId: number }>) => {
-			const user = state.users.find(
-				(value: UserType) => value.id === action.payload.targetId
-			)
-			if (user != null) {
-				user.logged_in = !user.logged_in
-				state.currentUser = user
-				state.logged_in = true
-			}
+			// const user = state.users.find(
+			// 	(value: UserType) => value.id === action.payload.targetId
+			// )
+			// if (user != null) {
+			// 	user.logged_in = !user.logged_in
+			// 	state.currentUser = user
+			state.logged_in = true
+			// }
 		},
 		logoutUser: (state, action: PayloadAction<{ targetId: number }>) => {
-			if (
-				state.currentUser != null &&
-				state.currentUser.id === action.payload.targetId
-			) {
-				const user = state.users.find(
-					(value: UserType) => value.id === action.payload.targetId
-				)
-				if (user != null) user.logged_in = !user.logged_in
-				state.currentUser = null
-				state.logged_in = false
-			}
+			// if (
+			// 	state.currentUser != null &&
+			// 	state.currentUser.id === action.payload.targetId
+			// ) {
+			// const user = state.users.find(
+			// 	(value: UserType) => value.id === action.payload.targetId
+			// )
+			// if (user != null) user.logged_in = !user.logged_in
+			// state.currentUser = null
+			state.logged_in = false
+			// }
 		},
 		checkLogin: (state, action: PayloadAction<{ logged_in: boolean }>) => {
 			state.logged_in = action.payload.logged_in
@@ -133,10 +133,10 @@ export const userSlice = createSlice({
 	},
 	extraReducers: (builder) => {
 		// Add reducers for additional action types here, and handle loading state as needed
-		builder.addCase(getUsers.fulfilled, (state, action) => {
-			// Add user to the state array
-			state.users = action.payload
-		})
+		// builder.addCase(getUsers.fulfilled, (state, action) => {
+		// 	// Add user to the state array
+		// 	state.users = action.payload
+		// })
 		builder.addCase(checkLogin.fulfilled, (state, action) => {
 			state.logged_in = action.payload.logged_in
 		})

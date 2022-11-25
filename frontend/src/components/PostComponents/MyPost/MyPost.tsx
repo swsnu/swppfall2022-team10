@@ -31,10 +31,10 @@ export default function MyPost() {
 	const mylike = postState.posts.slice(4, 10)
 	const myapply = postState.posts.slice(4, 9)
 
-	useEffect(() => {
-		// eslint-disable-next-line @typescript-eslint/no-floating-promises
-		dispatch(getPosts())
-	}, [])
+	// useEffect(() => {
+	// 	// eslint-disable-next-line @typescript-eslint/no-floating-promises
+	// 	dispatch(getPosts())
+	// }, [])
 
 	const post = useMemo(() => {
 		const shortMypost: postType[] = mypost.slice(0, 4)

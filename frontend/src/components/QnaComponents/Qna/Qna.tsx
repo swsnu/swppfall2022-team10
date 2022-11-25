@@ -8,14 +8,14 @@ export interface IProps {
 
 const Qna = (props: IProps) => {
 	return (
-		<div className='Qna'>
-			<tr className='qna-row'>
-				<td>{props.id}</td>
-				<td>{props.title}</td>
-				<td>{props.created_at}</td>
-				<td>{props.hits}</td>
-			</tr>
-		</div>
+		<div className='Qna' data-testid='spyQna'>
+			<div className='qna-row'>
+				<div>{props.id}</div>
+				<div>{props.title}</div>
+				<div>{props.created_at}</div>
+				<div>{props.hits}</div>
+			</div>
+		</div >
 	)
 }
 export default Qna

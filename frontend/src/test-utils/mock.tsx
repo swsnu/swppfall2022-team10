@@ -7,6 +7,7 @@ import postReducer from '../store/slices/post'
 import reviewReducer from '../store/slices/review'
 import userReducer from '../store/slices/user'
 import applicationReducer from '../store/slices/application'
+import qnaReducer from '../store/slices/qna'
 
 interface ExtendedRenderOptions extends Omit<RenderOptions, 'queries'> {
 	preloadedState?: PreloadedState<RootState>
@@ -19,7 +20,8 @@ export const getMockStore = (preloadedState?: PreloadedState<RootState>) => {
 			post: postReducer,
 			review: reviewReducer,
 			user: userReducer,
-			application: applicationReducer
+			application: applicationReducer,
+			qna: qnaReducer
 		},
 		preloadedState
 	})
