@@ -14,7 +14,8 @@ jest.mock('react-router', () => ({
 const mockStore = getMockStore({
 	post: { posts: [], selectedPost: null, selectedAnimal: '' },
 	user: { users: [], currentUser: null, logged_in: true },
-	review: { reviews: [], selectedReview: null, selectedAnimal: '' }
+	review: { reviews: [], selectedReview: null, selectedAnimal: '' },
+	application: { applications: [], selectedApplication: null }
 })
 
 describe('<Header />', () => {
