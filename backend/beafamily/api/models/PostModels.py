@@ -19,7 +19,7 @@ class Post(AbstractArticleType):
     is_active = models.BooleanField()
 
 
-def post_serializer(post: Post):
+def PostSerializer(post: Post):
     photo_list = [p.image.url for p in post.photo_path.all()]
     # comment_list = [comment_serializer(c) for c in post.postcomment_set.all()]
     response = {

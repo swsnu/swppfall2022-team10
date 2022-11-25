@@ -1,5 +1,149 @@
 from ..models import Post, PostImage, PostComment
 from rest_framework import serializers
+from django.utils import timezone
+from .ImageSerializer import ImageSerializer
+
+
+def validate_nonnegative_int(x):
+    if x is None:
+        return None
+    x = int(x)
+    if x < 0:
+        raise ValueError()
+    return x
+
+
+def validate_minmax(start, end):
+    # only one exists
+    if (start is None) ^ (end is None):
+        raise ValueError()
+
+    # both exists
+    elif (start is not None) and (end is not None):
+
+        start, end = int(end), int(start)
+        if start < 0 or end < 0:
+            raise ValueError()
+
+        return start, end
+
+    # not exists
+    else:
+        return None, None
+
+
+class PostQueryValidator(serializers.Serializer):
+    date = serializers.DateField(required=False)
+    date_min = serializers.DateField(required=False)
+    date_max = serializers.DateField(required=False)
+
+    age = serializers.IntegerField(required=False)
+    age_min = serializers.IntegerField(required=False)
+    age_max = serializers.IntegerField(required=False)
+
+    animal_type = serializers.CharField(required=False)
+    species = serializers.CharField(required=False)
+
+    gender = serializers.BooleanField(required=False)
+    is_active = serializers.BooleanField(required=False)
+
+    page = serializers.IntegerField(required=False)
+    page_size = serializers.IntegerField(required=False)
+
+    def to_internal_value(self, data):
+
+        validated_query = {}
+        try:
+            age = validate_nonnegative_int(data.get("age"))
+            age_min, age_max = validate_minmax(data.get("age_min"), data.get("age_max"))
+
+            if age:
+                validated_query["age"] = age
+
+            if age_min:
+                validated_query["age_min"] = age_min
+                validated_query["age_max"] = age_max
+
+            date = validate_nonnegative_int(data.get("date"))
+            date_min, date_max = validate_minmax(
+                data.get("date_min"), data.get("date_max")
+            )
+            now = timezone.now()
+
+            if date:
+                date = (now - timezone.timedelta(days=date)).date()
+                validated_query["date"] = date
+
+            if date_min:
+                date_min = (now - timezone.timedelta(days=date_min)).date()
+                date_max = (now - timezone.timedelta(days=date_max)).date()
+                validated_query["date_min"] = date_min
+                validated_query["date_max"] = date_max
+
+            page = validate_nonnegative_int(data.get("page"))
+            page_size = validate_nonnegative_int(data.get("page_size"))
+
+            if page:
+                validated_query["page"] = page
+
+            if page_size:
+                validated_query["page_size"] = page_size
+
+            animal_type = data.get("animal_type")
+            if animal_type:
+                validated_query["animal_type"] = animal_type
+            species = data.get("species")
+            if species:
+                validated_query["species"] = species
+
+            gender = data.get("gender")
+            if gender:
+                validated_query["gender"] = gender
+            is_active = data.get("is_active")
+            if is_active is not None:
+                validated_query["is_active"] = is_active
+
+        except Exception as e:
+            raise serializers.ValidationError()
+
+        return validated_query
+
+    class Meta:
+        fields = [
+            "animal_type",
+            "date",
+            "date_min",
+            "date_max",
+            "species",
+            "age",
+            "age_min",
+            "age_max",
+            "gender",
+            "is_active",
+            "page",
+            "page_size",
+        ]
+
+
+class PostValidator(serializers.ModelSerializer):
+    age = serializers.IntegerField()
+    gender = serializers.BooleanField()
+    neutering = serializers.BooleanField()
+    vaccination = serializers.BooleanField()
+
+    class Meta:
+        model = Post
+        fields = [
+            "animal_type",
+            "age",
+            "name",
+            "gender",
+            "title",
+            "species",
+            "neutering",
+            "vaccination",
+            "content",
+        ]
 
 
 class PostCommentSerializer(serializers.ModelSerializer):
@@ -21,9 +165,9 @@ class PostCommentSerializer(serializers.ModelSerializer):
 
 class PostSerializer(serializers.ModelSerializer):
     created_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
-    photo_path = serializers.StringRelatedField(many=True, read_only=True)
     author_name = serializers.StringRelatedField(source="author", read_only=True)
     comments = PostCommentSerializer(many=True)
+    photo_path = ImageSerializer(many=True)
 
     class Meta:
         model = Post

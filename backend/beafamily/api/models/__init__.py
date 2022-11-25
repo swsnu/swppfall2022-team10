@@ -1,8 +1,9 @@
 from .UserModels import User, UserManager
 from .ApplicationModels import Application
-from .PostModels import Post, PostComment, PostImage, post_serializer
+from .PostModels import Post, PostComment, PostImage, PostSerializer
 from .QuestionModels import Question, QuestionComment
 from .ReviewModels import Review, ReviewImage, review_serializer
+from .AbstractTypes import AbstractImageType
 
 __all__ = [
     "User",
@@ -10,11 +11,12 @@ __all__ = [
     "Post",
     "PostImage",
     "PostComment",
-    "post_serializer",
+    "PostSerializer",
     "Review",
     "ReviewImage",
     "review_serializer",
     "Application",
     "Question",
     "QuestionComment",
+    "AbstractImageType",
 ]

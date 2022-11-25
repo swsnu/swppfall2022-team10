@@ -17,7 +17,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
 from ..models import Review, ReviewImage, review_serializer
-from ..serializers import ReviewSerializer
+from ..serializers import ReviewSerializer, ReviewQueryValidator, ReviewValidator
 from .utils import log_error, pagination, verify
 
 logger = logging.getLogger("review_view")
@@ -27,7 +27,7 @@ logger = logging.getLogger("review_view")
 @authentication_classes([SessionAuthentication])
 @permission_classes([IsAuthenticatedOrReadOnly])
 @parser_classes([MultiPartParser])
-@verify("review")
+@verify(ReviewValidator, ReviewQueryValidator)
 @log_error(logger)
 def reviews(request):
     if request.method == "GET":

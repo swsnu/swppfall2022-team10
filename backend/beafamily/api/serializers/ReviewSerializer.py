@@ -9,3 +9,18 @@ class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
         fields = ["author_id", "author_name", "id", "title", "photo_path", "content"]
+
+
+class ReviewValidator(serializers.ModelSerializer):
+    class Meta:
+        model = Review
+        fields = ["title", "content"]
+
+
+class ReviewQueryValidator(serializers.Serializer):
+    page = serializers.IntegerField(required=False)
+    page_size = serializers.IntegerField(required=False)
+    animal_type = serializers.CharField(required=False)
+
+    class Meta:
+        fields = ["animal_type", "page", "page_size"]

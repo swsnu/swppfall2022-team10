@@ -30,17 +30,17 @@ then
             else
                 echo "python formatting finished!"
             fi
+            pylint --load-plugins pylint_django --rcfile backend/beafamily/.pylintrc "$change_list"
+            ret=$?
+            if [ $ret -ne 0 ]
+            then
+                echo "ERROR on pylint"
+                exit 1
+            else
+                echo "pylint passed!"
+            fi
         fi
     done
-    pylint --load-plugins pylint_django --rcfile backend/beafamily/.pylintrc "$change_list"
-    ret=$?
-    if [ $ret -ne 0 ]
-    then
-        echo "ERROR on pylint"
-        exit 1
-    else
-        echo "pylint passed!"
-    fi
 else
     echo "we don't need to format any python files!"
 fi

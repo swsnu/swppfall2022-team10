@@ -13,107 +13,53 @@ from rest_framework.parsers import (
 )
 from rest_framework.response import Response
 
-from ..models import post_serializer
+from ..serializers import ImageValidator
 
 writable_methods = ["POST", "PUT"]
 
 
-def get_required_keys_and_types(view, method):
-    key_type_set = dict()
-
-    if view == "post":
-        if method in writable_methods:
-            key_type_set["animal_type"] = str
-            key_type_set["age"] = int
-            key_type_set["name"] = str
-            key_type_set["gender"] = bool
-            key_type_set["title"] = str
-            key_type_set["species"] = str
-            key_type_set["neutering"] = bool
-            key_type_set["vaccination"] = bool
-            key_type_set["content"] = str
-        elif method == "GET":
-            key_type_set["animal_type"] = str
-            key_type_set["date"] = int
-            key_type_set["date_min"] = int
-            key_type_set["date_max"] = int
-            key_type_set["species"] = str
-            key_type_set["age"] = int
-            key_type_set["age_min"] = int
-            key_type_set["age_max"] = int
-            key_type_set["gender"] = bool
-            key_type_set["is_active"] = bool
-    elif view == "review":
-        if method in writable_methods:
-            key_type_set["title"] = str
-            key_type_set["content"] = str
-
-    return key_type_set
-
-
-def verify(view):
+def verify(validator, query_validator):
     def decorator(func):
         @wraps(func)
         def verified_view(request, *args, **kwargs):
-            key_type_set = get_required_keys_and_types(view, request.method)
             data_set = dict()
             if request.method in writable_methods:
 
+                # check existence
                 if "photos" not in request.data:
-                    return Response(status=status.HTTP_400_BAD_REQUEST)
-
-                photos = request.data.getlist("photos")
-
-                try:
-                    for photo in photos:
-                        img = Image.open(photo)
-                        img.verify()
-                except:
                     return Response(status=status.HTTP_400_BAD_REQUEST)
 
                 if "content" not in request.data:
                     return Response(status=status.HTTP_400_BAD_REQUEST)
 
+                photos = request.data.getlist("photos")
                 content_json = request.data.getlist("content")
 
+                # check existence of extras
                 if len(content_json) != 1:
                     return Response(status=status.HTTP_400_BAD_REQUEST)
 
                 content_json = json.loads(content_json[0])
 
-                for key, required_type in key_type_set.items():
-                    if (
-                        key not in content_json
-                        or type(content_json[key]) != required_type
-                    ):
-                        return Response(status=status.HTTP_400_BAD_REQUEST)
-                    data_set[key] = content_json[key]
+                photos = [{"image": p} for p in photos]
 
-                request.data.setlist("parsed", [data_set])
+                photos_validator = ImageValidator(data=photos, many=True)
+                if not photos_validator.is_valid():
+                    return Response(status=status.HTTP_400_BAD_REQUEST)
+
+                post_validator = validator(data=content_json)
+                if not post_validator.is_valid():
+                    return Response(status=status.HTTP_400_BAD_REQUEST)
+
+                request.data.setlist("parsed", [post_validator.data])
 
             elif request.method == "GET":
-                content_json = request.GET
+                query = request.GET
+                qv = query_validator(data=query)
 
-                for key, required_type in key_type_set.items():
-                    if key in content_json and content_json.get(key):
-                        val = content_json.get(key)
-                        if required_type == int:
-                            try:
-                                n = int(val)
-                                if n < 0:
-                                    raise ValueError()
-                            except:
-                                return Response(status=status.HTTP_400_BAD_REQUEST)
-                        elif required_type == bool:
-                            if val.lower() not in ["true", "false"]:
-                                return Response(status=status.HTTP_400_BAD_REQUEST)
-
-                for int_var in ["age", "date"]:
-                    min_in = f"{int_var}_min" in content_json
-                    max_in = f"{int_var}_max" in content_json
-
-                    if min_in ^ max_in:
-                        return Response(status=status.HTTP_400_BAD_REQUEST)
+                if not qv.is_valid():
+                    return Response(status=status.HTTP_400_BAD_REQUEST)
+                request.query = qv.data
 
             return func(request, *args, **kwargs)
 

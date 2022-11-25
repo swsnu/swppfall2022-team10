@@ -10,6 +10,7 @@ from rest_framework import status
 from rest_framework.test import APIClient, APITestCase
 
 from ..models import *
+from ..serializers import PostSerializer
 from .utils import *
 
 User: AbstractBaseUser = get_user_model()
@@ -193,7 +194,7 @@ class PostTestCase(TestCase):
 
     def test_getposts(self):
 
-        reversed_list = [post_serializer(i) for i in reversed(self.post_list)]
+        reversed_list = [PostSerializer(i).data for i in reversed(self.post_list)]
 
         response = self.client.get("/api/posts/")
         self.assertEqual(response.json()["results"], reversed_list[0:20])
@@ -213,8 +214,9 @@ class PostTestCase(TestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_getpost(self):
-        p1 = post_serializer(self.p1)
-        p2 = post_serializer(self.p2)
+        p1 = PostSerializer(self.p1).data
+        p1["editable"] = False
+        p2 = PostSerializer(self.p2).data
 
         response = self.client.get("/api/posts/1/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -349,6 +351,20 @@ class PostTestCase(TestCase):
             )
 
             self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        with open("dummy/post/cat_dummy/info.json", "rb") as f1, open(
+            "dummy/post/cat_dummy/cat2.jpg", "rb"
+        ) as f2:
+            response = self.client.post(
+                "/api/posts/",
+                data={
+                    "photos": [f1, f2],
+                    "content": json.dumps(newpost),
+                },
+                HTTP_X_CSRFTOKEN=token,
+            )
+
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
         with open("dummy/post/cat_dummy/cat2.jpg", "rb") as f:
             response = self.client.post(
                 "/api/posts/",
@@ -384,7 +400,7 @@ class PostTestCase(TestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_valid_query(self):
-        reversed_list = [post_serializer(i) for i in reversed(self.post_list)]
+        reversed_list = [PostSerializer(i).data for i in reversed(self.post_list)]
 
         valid = {
             "age": 3,
