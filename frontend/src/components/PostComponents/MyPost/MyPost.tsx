@@ -81,7 +81,7 @@ export default function MyPost() {
 								(mypostMore ? '닫기' : '전체보기')}
 						</button>
 					</div>
-					<div className='posts'>
+					<div className='posts-post'>
 						{post.map((post: postType) => {
 							return (
 								<Post
@@ -109,7 +109,7 @@ export default function MyPost() {
 								(mylikeMore ? '닫기' : '전체보기')}
 						</button>
 					</div>
-					<div className='posts'>
+					<div className='posts-like'>
 						{like.map((post: postType) => {
 							return (
 								<Post
@@ -137,7 +137,7 @@ export default function MyPost() {
 								(myapplyMore ? '닫기' : '전체보기')}
 						</button>
 					</div>
-					<div className='posts'>
+					<div className='posts-apply'>
 						{apply.map((post: postType) => {
 							return (
 								<Post
