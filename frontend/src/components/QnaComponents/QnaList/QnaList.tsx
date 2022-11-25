@@ -71,8 +71,8 @@ export default function QnaList() {
 										<tr key={`${td.id}_qna`} onClick={() => navigate(`/qna/${td.id}`)}>
 											<td>{td.id}</td>
 											<td>{td.title}</td>
-											<td>{td.id}</td>
-											<td>{td.id}</td>
+											<td>{td.created_at}</td>
+											<td>{td.hits}</td>
 										</tr>
 									)
 								})}
