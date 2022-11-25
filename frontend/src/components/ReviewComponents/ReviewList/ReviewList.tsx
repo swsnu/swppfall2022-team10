@@ -51,7 +51,7 @@ export default function ReviewList() {
 		})
 		setLoading(false)
 	}, [currentPage, headerAnimalType])
-	console.log(reviewState.reviews)
+	// console.log(reviewState.reviews)
 
 	useEffect(() => {
 		setHeaderAnimalType(reviewState.selectedAnimal)

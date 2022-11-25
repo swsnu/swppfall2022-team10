@@ -18,6 +18,7 @@ import './ReviewCreate.scss'
 
 export default function ReviewCreate() {
 	const [title, setTitle] = useState<string>('')
+	const [animalType, setAnimalType] = useState<string>('')
 	const [content, setContent] = useState<string>('')
 	const [file, setFile] = useState<File[]>([])
 
@@ -39,14 +40,15 @@ export default function ReviewCreate() {
 			alert('You should login')
 			return
 		}
-		console.log(title)
-		console.log(content)
-		console.log(file)
+		// console.log(title)
+		// console.log(content)
+		// console.log(file)
 
 		if (title.length === 0) return
+		if (animalType.length === 0) return
 		if (file.length === 0) return
 
-		const data = { title: title, content: content }
+		const data = { title: title, animal_type: animalType, content: content }
 		const formData = new FormData()
 		formData.append('content', JSON.stringify(data))
 		file.forEach((f, i) => formData.append('photos', f))
@@ -97,6 +99,20 @@ export default function ReviewCreate() {
 									value={title}
 									onChange={(event) =>
 										setTitle(event.target.value)
+									}
+								/>
+							</div>
+							<div className='input-container'>
+								<label htmlFor='review-animal-type-input'>
+									동물:
+								</label>
+								<input
+									id='review-animal-type-input'
+									type='text'
+									name='animalType'
+									value={animalType}
+									onChange={(event) =>
+										setAnimalType(event.target.value)
 									}
 								/>
 							</div>

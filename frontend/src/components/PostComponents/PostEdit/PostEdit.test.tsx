@@ -51,10 +51,6 @@ describe('<PostEdit />', () => {
 	let postEdit: JSX.Element
 	beforeEach(() => {
 		jest.clearAllMocks()
-		jest.spyOn(axios, 'get').mockResolvedValueOnce({
-			data: { logged_in: true }
-		})
-		jest.spyOn(axios, 'get').mockResolvedValueOnce({ data: testPostFormat })
 		postEdit = (
 			<Provider store={getMockStore(tempState)}>
 				<MemoryRouter>
@@ -70,12 +66,31 @@ describe('<PostEdit />', () => {
 		)
 	})
 	it('should render without errors', async () => {
+		jest.spyOn(axios, 'get').mockResolvedValueOnce({
+			data: { logged_in: true }
+		})
+		jest.spyOn(axios, 'get').mockResolvedValueOnce({ data: testPostFormat })
 		await act(() => {
 			render(postEdit)
 		})
 		await screen.findByText('입양게시글 수정하기')
 	})
+	it('should navigate to login page when not logged in', async () => {
+		jest.spyOn(axios, 'get').mockResolvedValueOnce({
+			data: { logged_in: false }
+		})
+		await act(() => {
+			render(postEdit)
+		})
+		await waitFor(() => {
+			expect(mockNavigate).toHaveBeenCalledWith('/login')
+		})
+	})
 	it('should render button and inputs', async () => {
+		jest.spyOn(axios, 'get').mockResolvedValueOnce({
+			data: { logged_in: true }
+		})
+		jest.spyOn(axios, 'get').mockResolvedValueOnce({ data: testPostFormat })
 		await act(() => {
 			render(postEdit)
 		})
@@ -88,6 +103,10 @@ describe('<PostEdit />', () => {
 		})
 	})
 	it('should render navigate to /post/:id when submitted', async () => {
+		jest.spyOn(axios, 'get').mockResolvedValueOnce({
+			data: { logged_in: true }
+		})
+		jest.spyOn(axios, 'get').mockResolvedValueOnce({ data: testPostFormat })
 		jest.spyOn(axios, 'post').mockResolvedValueOnce({
 			data: testPostFormat
 		})
@@ -178,6 +197,10 @@ describe('<PostEdit />', () => {
 		})
 	})
 	it('should render navigate to / when back Button clicked', async () => {
+		jest.spyOn(axios, 'get').mockResolvedValueOnce({
+			data: { logged_in: true }
+		})
+		jest.spyOn(axios, 'get').mockResolvedValueOnce({ data: testPostFormat })
 		await act(() => {
 			render(postEdit)
 		})

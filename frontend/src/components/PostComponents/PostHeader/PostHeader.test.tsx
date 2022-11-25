@@ -75,4 +75,16 @@ describe('<PostHeader />', () => {
 		})
 		fireEvent.click(bookmarkButton)
 	})
+	it('should navigate to submit page when adopt button clicked', async () => {
+		render(
+			<Provider store={getMockStore(tempState)}>
+				<PostHeader is_author={false} />
+			</Provider>
+		)
+		const adoptButton = await screen.findByText('입양하기')
+		fireEvent.click(adoptButton)
+		await waitFor(() => {
+			expect(mockNavigate).toHaveBeenCalledWith('./submit')
+		})
+	})
 })
