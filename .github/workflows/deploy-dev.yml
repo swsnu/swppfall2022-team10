@@ -1,0 +1,41 @@
+name: Deploy on Development Server
+
+# runs when CI build for new commits to dev branch passed
+on:
+  workflow_run:
+      workflows: [CI]
+      types:
+        - completed
+      branches: 
+        - dev
+
+jobs:
+    dev-deploy:
+        runs-on: ubuntu-latest
+        name: Deploy to Development Server 
+        
+        permissions:
+            contents: "read"
+            id-token: "write"
+            
+        steps:
+          - uses: "actions/checkout@v3"
+          
+          # authenticate to google cloud with iam service account
+          - id: "auth"
+            uses: "google-github-actions/auth@v1"
+            with:
+                workload_identity_provider: ${{ secrets.DEV_DEPLOY_PROVIDER }}
+                service_account: ${{ secrets.DEV_DEPLOY_ACCOUNT }}
+                
+          - name: "Set up Cloud SDK"
+            uses: "google-github-actions/setup-gcloud@v1"
+            
+          - name: "Deploy"
+            uses: "google-github-actions/ssh-compute@v0"
+            with:
+                instance_name: "dev-deploy@dev-deploy"
+                zone: "asia-northeast3-a"
+                ssh_private_key: "${{ secrets.DEV_DEPLOY_KEY }}"
+                command: "source $HOME/deploy.sh"
+            
