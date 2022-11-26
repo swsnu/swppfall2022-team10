@@ -6,7 +6,7 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
-class UserSerializer(serializers.ModelSerializer):
+class UserPostSerializer(serializers.ModelSerializer):
 
     posts = PostSerializer(many=True)
     likes = PostSerializer(many=True)
@@ -15,3 +15,9 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ["username", "posts", "likes", "applies"]
+
+
+class UserInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["username"]

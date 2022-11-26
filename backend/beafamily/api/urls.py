@@ -13,4 +13,12 @@ urlpatterns = [
     path("check/", views.check_login),
     path("questions/", views.questions),
     path("questions/<int:qid>/", views.question_id),
+    # TODO:
+    # path("users/", views),
+    path("users/info/", views.user_info),
+    # path("users/post/"), GET myposts
+    # path("posts/<int:pid>/comments/"), GET / POST / PUT / DELETE comments
+    # path("questions/<int:qid>/comments/"), GET / POST / PUT / DELETE comments
+    # path("apply/") GET / POST application
+    # path("apply/<int:aid>/) GET / PUT / DELETE application
 ]
