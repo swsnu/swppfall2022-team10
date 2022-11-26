@@ -87,8 +87,10 @@ describe('qna reducer', () => {
 		})
 	})
 	it('should handle getQnas', async () => {
-		axios.get = jest.fn().mockResolvedValue({ data: [fakeQna] })
-		await store.dispatch(getQnas())
+		axios.get = jest
+			.fn()
+			.mockResolvedValue({ data: { count: 1, results: [fakeQna] } })
+		await store.dispatch(getQnas({ page: 1 }))
 		expect(store.getState().qna.qnas).toEqual([fakeQna])
 	})
 	it('should handle getQna', async () => {

@@ -11,6 +11,9 @@ export interface QnaType {
 	created_at: string
 	hits: number
 }
+export interface QnaFilterType {
+	page: number
+}
 
 export interface qnaState {
 	qnas: QnaType[]
@@ -79,10 +82,13 @@ const initialState: qnaState = {
 	selectedQna: null
 }
 
-export const getQnas = createAsyncThunk('qna/getQnas', async () => {
-	const response = await axios.get<QnaType[]>('/api/qnas/')
-	return response.data
-})
+export const getQnas = createAsyncThunk(
+	'qna/getQnas',
+	async (data: QnaFilterType, { dispatch }) => {
+		const response = await axios.get('/api/qnas/', { params: data })
+		return response.data
+	}
+)
 
 export const getQna = createAsyncThunk(
 	'qna/getQna',
@@ -150,7 +156,7 @@ export const qnaSlice = createSlice({
 	},
 	extraReducers: (builder) => {
 		builder.addCase(getQnas.fulfilled, (state, action) => {
-			state.qnas = action.payload
+			state.qnas = action.payload.results
 		})
 		builder.addCase(getQna.fulfilled, (state, action) => {
 			state.selectedQna = action.payload

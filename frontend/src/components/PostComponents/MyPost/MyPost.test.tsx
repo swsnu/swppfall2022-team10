@@ -72,9 +72,27 @@ describe('<MyPost />', () => {
 	beforeEach(() => {
 		jest.spyOn(axios, 'get').mockResolvedValue({
 			data: [
-				[fakepost, fakepost, fakepost, fakepost, fakepost],
-				[fakepost, fakepost, fakepost, fakepost, fakepost],
-				[fakepost, fakepost, fakepost, fakepost, fakepost]
+				[
+					fakepost,
+					{ ...fakepost, id: 2 },
+					{ ...fakepost, id: 3 },
+					{ ...fakepost, id: 4 },
+					{ ...fakepost, id: 5 }
+				],
+				[
+					{ ...fakepost, id: 6 },
+					{ ...fakepost, id: 7 },
+					{ ...fakepost, id: 8 },
+					{ ...fakepost, id: 9 },
+					{ ...fakepost, id: 10 }
+				],
+				[
+					{ ...fakepost, id: 11 },
+					{ ...fakepost, id: 12 },
+					{ ...fakepost, id: 13 },
+					{ ...fakepost, id: 14 },
+					{ ...fakepost, id: 15 }
+				]
 			]
 		})
 		Object.defineProperty(global.window, 'scrollTo', { value: scrollToSpy })

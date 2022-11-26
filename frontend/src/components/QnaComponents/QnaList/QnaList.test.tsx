@@ -1,12 +1,13 @@
 /* eslint-disable react/display-name */
-import { fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { Provider } from 'react-redux'
 import { MemoryRouter, Route, Routes } from 'react-router'
 import { qnaState } from '../../../store/slices/qna'
 import { getMockStore } from '../../../test-utils/mock'
 import QnaList from './QnaList'
 import { IProps as QnaProps } from '../Qna/Qna'
-import assert from 'assert'
+import axios from 'axios'
+import { act } from 'react-dom/test-utils'
 
 jest.mock('../Qna/Qna', () => (props: QnaProps) => (
 	<div data-testid='spyQna'>
@@ -49,11 +50,11 @@ jest.mock('react-router', () => ({
 	useNavigate: () => mockNavigate
 }))
 
-const mockDispatch = jest.fn()
-jest.mock('react-redux', () => ({
-	...jest.requireActual('react-redux'),
-	useDispatch: () => mockDispatch
-}))
+// const mockDispatch = jest.fn()
+// jest.mock('react-redux', () => ({
+// 	...jest.requireActual('react-redux'),
+// 	useDispatch: () => mockDispatch
+// }))
 
 const scrollToSpy = jest.fn()
 global.scrollTo = scrollToSpy
@@ -64,6 +65,22 @@ describe('<QnaList />', () => {
 	let qnaList: JSX.Element
 	beforeEach(() => {
 		jest.clearAllMocks()
+		jest.spyOn(axios, 'get').mockResolvedValue({
+			data: {
+				count: 1,
+				results: [
+					{
+						id: 1,
+						author_id: 2,
+						author_name: 'QNA_AUTHOR_NAME',
+						title: 'QNA_TITLE',
+						content: 'QNA_CONTENT',
+						created_at: 'QNA_CREATED_AT',
+						hits: 3
+					}
+				]
+			}
+		})
 		qnaList = (
 			<Provider store={mockStore}>
 				<MemoryRouter>
@@ -75,8 +92,10 @@ describe('<QnaList />', () => {
 		)
 	})
 	it('should render QnaList', async () => {
-		const { container } = render(qnaList)
-		expect(container).toBeTruthy()
+		await act(() => {
+			const { container } = render(qnaList)
+			expect(container).toBeTruthy()
+		})
 		await screen.findByText('동물이 밥을 먹지 않아요.')
 		await screen.findByText('동물이 우울해 해요.')
 		await screen.findByText('동물이 아파요.')
@@ -96,11 +115,16 @@ describe('<QnaList />', () => {
 	//     fireEvent.click(button)
 	//     expect(mockNavigate).toHaveBeenCalledTimes(1)
 	// })
-	it('should handle createQnaButton', () => {
-		render(qnaList)
-		const createQnaButton = document.querySelector('#create-qna-button')
-		assert(createQnaButton !== null)
+	it('should handle createQnaButton', async () => {
+		await act(() => {
+			render(qnaList)
+		})
+		const createQnaButton = await screen.findByRole('button', {
+			name: /create-qna-button/i
+		})
 		fireEvent.click(createQnaButton)
-		expect(mockNavigate).toHaveBeenCalledTimes(1)
+		await waitFor(() => {
+			expect(mockNavigate).toHaveBeenCalledTimes(1)
+		})
 	})
 })

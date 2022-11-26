@@ -108,11 +108,15 @@ describe('<ReviewCreate />', () => {
 		})
 		const { container } = render(reviewCreate)
 		const titleInput = await screen.findByLabelText('제목:')
+		const animalTypeInput = await screen.findByLabelText('동물:')
 		const contentInput = await screen.findByLabelText(
 			'입양 후기를 알려주세요! 자세한 후기는 입양에 도움이 됩니다:)'
 		)
 		const reviewButton = screen.getByText('게시하기')
 		fireEvent.change(titleInput, { target: { value: 'NEW_TITLE' } })
+		fireEvent.change(animalTypeInput, {
+			target: { value: 'NEW_ANIMAL_TYPE' }
+		})
 		fireEvent.change(contentInput, { target: { value: 'NEW_CONTENT' } })
 		const file: Partial<File> = {
 			name: 'myimage.png',
@@ -124,6 +128,7 @@ describe('<ReviewCreate />', () => {
 		if (fileInput !== null)
 			fireEvent.change(fileInput, { target: { files: [file] } })
 		await screen.findByDisplayValue('NEW_TITLE')
+		await screen.findByDisplayValue('NEW_ANIMAL_TYPE')
 		await screen.findByDisplayValue('NEW_CONTENT')
 		fireEvent.click(reviewButton)
 		await waitFor(() =>

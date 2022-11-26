@@ -1,10 +1,13 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
-/* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-unneeded-ternary */
+/* eslint-disable object-shorthand */
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
+/* eslint-disable @typescript-eslint/no-misused-promises */
 import Layout from '../../Layout/Layout'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import Qna from '../Qna/Qna'
 import { getQnas, QnaType, selectQna } from '../../../store/slices/qna'
 import { AppDispatch } from '../../../store'
@@ -12,18 +15,36 @@ import { MdOutlineAddBox } from 'react-icons/md'
 
 import Accordion from 'react-bootstrap/Accordion'
 import Table from 'react-bootstrap/Table'
+import Pagination from '../../Pagination/Pagination'
 
 import './QnaList.scss'
 
 export default function QnaList() {
+	const [loading, setLoading] = useState<boolean>(false)
+	const [currentPage, setCurrentPage] = useState<number>(1)
+	const [qnasPerPage, setQnasPerPage] = useState<number>(10)
+	const [qnaCount, setQnaCount] = useState<number>(0)
+
 	const navigate = useNavigate()
 
 	const qnaState = useSelector(selectQna)
 	const dispatch = useDispatch<AppDispatch>()
 
 	useEffect(() => {
-		dispatch(getQnas())
-	}, [])
+		setLoading(true)
+
+		const data = {
+			page: currentPage
+		}
+
+		dispatch(getQnas(data)).then((result) => {
+			const pageResult = result.payload
+			if (pageResult) {
+				setQnaCount(pageResult.count)
+			}
+		})
+		setLoading(false)
+	}, [currentPage])
 
 	return (
 		<Layout>
@@ -99,10 +120,17 @@ export default function QnaList() {
 							</tbody>
 						</Table>
 					</div>
+					<Pagination
+						itemsPerPage={qnasPerPage}
+						totalItems={qnaCount}
+						currentPage={currentPage}
+						paginate={setCurrentPage}
+					></Pagination>
 				</div>
 				<div className='create-qna'>
 					<button
 						id='create-qna-button'
+						aria-label='create-qna-button'
 						onClick={() => navigate('/qna/create')}
 					>
 						<MdOutlineAddBox size='50' />
