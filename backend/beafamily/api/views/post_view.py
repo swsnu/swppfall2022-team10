@@ -81,7 +81,7 @@ def posts(request):
             post_list = post_list.filter(age__range=[age_min, age_max])
 
         is_active = query.get("is_active")
-        if is_active is not None:
+        if is_active:
             post_list = post_list.filter(is_active=is_active)
 
         gender = query.get("gender")

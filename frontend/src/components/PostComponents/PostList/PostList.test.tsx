@@ -210,7 +210,7 @@ describe('<PostList />', () => {
 					age_max: 5,
 					species: null,
 					gender: false,
-					is_active: false
+					is_active: null
 				})
 			})
 		})

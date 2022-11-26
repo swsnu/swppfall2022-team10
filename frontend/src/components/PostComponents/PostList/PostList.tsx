@@ -68,7 +68,7 @@ export default function PostList() {
 			age_max: searchMaxAge,
 			species: searchSpecies !== '' ? searchSpecies : null,
 			gender: searchGender ? searchGender === '수컷' : null,
-			is_active: searchActive
+			is_active: searchActive ? searchActive : null
 		}
 
 		dispatch(getPosts(data)).then((result) => {

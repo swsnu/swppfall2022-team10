@@ -31,7 +31,7 @@ export interface postFilterType {
 	age_min: number | null
 	age_max: number | null
 	species: string | null
-	is_active: boolean
+	is_active: boolean | null
 }
 
 export interface postCreateType {
