@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, Navigate } from 'react-router-dom'
 import { AppDispatch } from '../../../store'
 import { createQna } from '../../../store/slices/qna'
-import { selectUser } from '../../../store/slices/user'
+import { checkLogin } from '../../../store/slices/user'
 import { MdArrowBack } from 'react-icons/md'
 
 import './QnaCreate.scss'
@@ -22,15 +22,20 @@ export default function QnaCreate() {
 
 	const navigate = useNavigate()
 	const dispatch = useDispatch<AppDispatch>()
-	const userState = useSelector(selectUser)
+
+	useEffect(() => {
+		dispatch(checkLogin()).then((result) => {
+			const loggedIn: boolean = (result.payload as { logged_in: boolean })
+				.logged_in
+			if (!loggedIn) {
+				alert('You should log in')
+				navigate('/login')
+			}
+		})
+	}, [])
 
 	const createQnaHandler = (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault()
-		if (!userState.logged_in) {
-			alert('You should login')
-			return
-		}
-
 		if (title.length === 0) return
 
 		const data = { title: title, content: content }

@@ -10,21 +10,21 @@ import { MdArrowBack } from 'react-icons/md'
 
 const tempState = {
 	post: { posts: [], selectedPost: null, selectedAnimal: '' },
-	user: { users: [], currentUser: null, logged_in: true },
+	// user: { users: [], currentUser: null, logged_in: true },
 	review: { reviews: [], selectedReview: null, selectedAnimal: '' },
 	application: { applications: [], selectedApplication: null },
 	qna: { qnas: [], selectedQna: null },
 	mypost: { posts: [], likes: [], applys: [] }
 }
 
-const tempLoggedOutState = {
-	post: { posts: [], selectedPost: null, selectedAnimal: '' },
-	user: { users: [], currentUser: null, logged_in: false },
-	review: { reviews: [], selectedReview: null, selectedAnimal: '' },
-	application: { applications: [], selectedApplication: null },
-	qna: { qnas: [], selectedQna: null },
-	mypost: { posts: [], likes: [], applys: [] }
-}
+// const tempLoggedOutState = {
+// 	post: { posts: [], selectedPost: null, selectedAnimal: '' },
+// 	user: { users: [], currentUser: null, logged_in: false },
+// 	review: { reviews: [], selectedReview: null, selectedAnimal: '' },
+// 	application: { applications: [], selectedApplication: null },
+// 	qna: { qnas: [], selectedQna: null },
+// 	mypost: { posts: [], likes: [], applys: [] }
+// }
 
 const mockNavigate = jest.fn()
 jest.mock('react-router', () => ({
@@ -61,25 +61,31 @@ describe('<QnaCreate />', () => {
 				</MemoryRouter>
 			</Provider>
 		)
-		qnaCreateLoggedOut = (
-			<Provider store={getMockStore(tempLoggedOutState)}>
-				<MemoryRouter>
-					<Routes>
-						<Route path='/qna/create' element={<QnaCreate />} />
-						<Route
-							path='/'
-							element={<Navigate to={'/qna/create'} />}
-						/>
-					</Routes>
-				</MemoryRouter>
-			</Provider>
-		)
+		// qnaCreateLoggedOut = (
+		// 	<Provider store={getMockStore(tempLoggedOutState)}>
+		// 		<MemoryRouter>
+		// 			<Routes>
+		// 				<Route path='/qna/create' element={<QnaCreate />} />
+		// 				<Route
+		// 					path='/'
+		// 					element={<Navigate to={'/qna/create'} />}
+		// 				/>
+		// 			</Routes>
+		// 		</MemoryRouter>
+		// 	</Provider>
+		// )
 	})
 	it('should render without errors', async () => {
+		jest.spyOn(axios, 'get').mockResolvedValueOnce({
+			data: { logged_in: true }
+		})
 		render(qnaCreate)
 		await screen.findByText('Qna 올리기')
 	})
 	it('should render button and inputs', async () => {
+		jest.spyOn(axios, 'get').mockResolvedValueOnce({
+			data: { logged_in: true }
+		})
 		render(qnaCreate)
 		const titleInput = await screen.findByLabelText('제목:')
 		fireEvent.change(titleInput, {
@@ -98,6 +104,9 @@ describe('<QnaCreate />', () => {
 		)
 	})
 	it('should render navigate to /qna when submitted', async () => {
+		jest.spyOn(axios, 'get').mockResolvedValueOnce({
+			data: { logged_in: true }
+		})
 		jest.spyOn(axios, 'post').mockResolvedValueOnce({
 			data: testQnaFormat
 		})
@@ -118,6 +127,9 @@ describe('<QnaCreate />', () => {
 		await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith('/qna'))
 	})
 	it('should render navigate to / when back Button clicked', async () => {
+		jest.spyOn(axios, 'get').mockResolvedValueOnce({
+			data: { logged_in: true }
+		})
 		render(qnaCreate)
 		const backButton = await screen.findByRole('button', {
 			name: /back-button/i

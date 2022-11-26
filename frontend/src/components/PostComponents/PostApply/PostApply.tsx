@@ -6,17 +6,16 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import Layout from '../../Layout/Layout'
 
-import { useState, useEffect, useRef } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import { useParams } from 'react-router'
 import { AppDispatch } from '../../../store'
 // import { createApplication } from '../../../store/slices/application'
-import { selectPost, getPost } from '../../../store/slices/post'
-import { selectUser } from '../../../store/slices/user'
+import { getPost } from '../../../store/slices/post'
+import { checkLogin } from '../../../store/slices/user'
 import './PostApply.scss'
 import PostHeader from '../PostHeader/PostHeader'
-import DropdownList from 'react-widgets/DropdownList'
 
 export default function PostApply() {
 	const { id } = useParams()
@@ -24,7 +23,18 @@ export default function PostApply() {
 
 	const navigate = useNavigate()
 	const dispatch = useDispatch<AppDispatch>()
-	const userState = useSelector(selectUser)
+
+	useEffect(() => {
+		dispatch(checkLogin()).then((result) => {
+			const loggedIn: boolean = (result.payload as { logged_in: boolean })
+				.logged_in
+			if (!loggedIn) {
+				alert('You should log in')
+				navigate('/login')
+			}
+		})
+	}, [])
+
 	useEffect(() => {
 		dispatch(getPost(Number(id))).then((result) => {
 			// setEditable(result.payload.editable)
@@ -39,11 +49,7 @@ export default function PostApply() {
 
 	const ApplyHandler = (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault()
-		if (!userState.logged_in) {
-			alert('You should log in')
-			navigate('/login')
-			return
-		}
+
 		if (file.length === 0) return
 		const formData = new FormData()
 		file.forEach((f, i) => formData.append('files', f))

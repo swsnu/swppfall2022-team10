@@ -25,7 +25,7 @@ const stubInitialState: applicationState = {
 	selectedApplication: null
 }
 const mockStore = getMockStore({
-	user: { users: [], currentUser: null, logged_in: false },
+	// user: { users: [], currentUser: null, logged_in: false },
 	post: { posts: [], selectedPost: null, selectedAnimal: '' },
 	review: { reviews: [], selectedReview: null, selectedAnimal: '' },
 	application: stubInitialState,

@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit'
-import userReducer from './slices/user'
+// import userReducer from './slices/user'
 import postReducer from './slices/post'
 import reviewReducer from './slices/review'
 import applicationReducer from './slices/application'
@@ -13,7 +13,7 @@ axios.defaults.withCredentials = true
 
 export const store = configureStore({
 	reducer: {
-		user: userReducer,
+		// user: userReducer,
 		post: postReducer,
 		review: reviewReducer,
 		application: applicationReducer,

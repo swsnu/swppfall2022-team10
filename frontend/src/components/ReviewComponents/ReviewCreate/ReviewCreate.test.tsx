@@ -10,7 +10,7 @@ import { MdArrowBack } from 'react-icons/md'
 
 const tempState = {
 	post: { posts: [], selectedPost: null, selectedAnimal: '' },
-	user: { users: [], currentUser: null, logged_in: true },
+	// user: { users: [], currentUser: null, logged_in: true },
 	review: {
 		reviews: [
 			{
@@ -72,10 +72,16 @@ describe('<ReviewCreate />', () => {
 		)
 	})
 	it('should render without errors', async () => {
+		jest.spyOn(axios, 'get').mockResolvedValueOnce({
+			data: { logged_in: true }
+		})
 		render(reviewCreate)
 		await screen.findByText('입양후기 올리기')
 	})
 	it('should render button and inputs with original values', async () => {
+		jest.spyOn(axios, 'get').mockResolvedValueOnce({
+			data: { logged_in: true }
+		})
 		render(reviewCreate)
 		const titleInput = await screen.findByLabelText('제목:')
 		fireEvent.change(titleInput, {
@@ -98,6 +104,9 @@ describe('<ReviewCreate />', () => {
 		)
 	})
 	it('should render navigate to /review when submitted', async () => {
+		jest.spyOn(axios, 'get').mockResolvedValueOnce({
+			data: { logged_in: true }
+		})
 		jest.spyOn(axios, 'post').mockResolvedValueOnce({
 			data: {
 				id: 1,
@@ -136,6 +145,9 @@ describe('<ReviewCreate />', () => {
 		)
 	})
 	it('should render navigate to / when back Button clicked', async () => {
+		jest.spyOn(axios, 'get').mockResolvedValueOnce({
+			data: { logged_in: true }
+		})
 		render(reviewCreate)
 		const backButton = await screen.findByRole('button', {
 			name: /back-button/i

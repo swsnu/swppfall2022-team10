@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
+
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { useState, useEffect } from 'react'
@@ -21,10 +23,8 @@ export default function Header(props: IProps) {
 	const [animalType, setAnimalType] = useState('')
 
 	useEffect(() => {
-		// eslint-disable-next-line @typescript-eslint/no-floating-promises
 		if (props.pageName === 'post') dispatch(postSelectAnimal(animalType))
 		else if (props.pageName === 'review')
-			// eslint-disable-next-line @typescript-eslint/no-floating-promises
 			dispatch(reviewSelectAnimal(animalType))
 	}, [animalType])
 

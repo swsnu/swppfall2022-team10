@@ -9,7 +9,6 @@ import Layout from '../../Layout/Layout'
 
 import { useEffect, useState, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectUser } from '../../../store/slices/user'
 import { useNavigate } from 'react-router-dom'
 import Post from '../Post/Post'
 import { postType } from '../../../store/slices/post'
@@ -22,7 +21,6 @@ export default function MyPost() {
 	const navigate = useNavigate()
 	const postState = useSelector(selectMyPost)
 	const dispatch = useDispatch<AppDispatch>()
-	const userState = useSelector(selectUser)
 
 	const [mypostMore, setMypostMore] = useState<boolean>(false)
 	const [mylikeMore, setMylikeMore] = useState<boolean>(false)

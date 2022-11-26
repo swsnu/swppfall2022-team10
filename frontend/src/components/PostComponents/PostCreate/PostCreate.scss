@@ -27,7 +27,9 @@
 		box-shadow: 0 5px 10px rgb(0 0 0 / 20%);
 		transition: 0.25s;
 		font-size: 20px;
-
+		&:disabled {
+			background-color: gray;
+		}
 		&:hover {
 			letter-spacing: 1px;
 			transform: scale(1.1);

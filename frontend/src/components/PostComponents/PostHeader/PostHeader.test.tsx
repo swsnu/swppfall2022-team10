@@ -32,7 +32,7 @@ const tempState = {
 		},
 		selectedAnimal: ''
 	},
-	user: { users: [], currentUser: null, logged_in: true },
+	// user: { users: [], currentUser: null, logged_in: true },
 	review: { reviews: [], selectedReview: null, selectedAnimal: '' },
 	application: { applications: [], selectedApplication: null },
 	qna: { qnas: [], selectedQna: null },

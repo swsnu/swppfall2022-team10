@@ -84,7 +84,7 @@ export default function PostList() {
 		setLoading(false)
 	}
 
-	useEffect(() => {
+	useEffect(() => {	
 		filterPostHandler()
 	}, [currentPage, headerAnimalType, searchActive])
 

@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, Navigate } from 'react-router-dom'
 import { AppDispatch } from '../../../store'
 import { createReview } from '../../../store/slices/review'
-import { selectUser } from '../../../store/slices/user'
+import { checkLogin } from '../../../store/slices/user'
 import { MdArrowBack } from 'react-icons/md'
 
 import './ReviewCreate.scss'
@@ -24,10 +24,17 @@ export default function ReviewCreate() {
 
 	const navigate = useNavigate()
 	const dispatch = useDispatch<AppDispatch>()
-	const userState = useSelector(selectUser)
-	// useEffect(() => {
-	// 	if (!userState.currentUser) navigate("/login");
-	// }, [userState.currentUser, navigate]);
+
+	useEffect(() => {
+		dispatch(checkLogin()).then((result) => {
+			const loggedIn: boolean = (result.payload as { logged_in: boolean })
+				.logged_in
+			if (!loggedIn) {
+				alert('You should log in')
+				navigate('/login')
+			}
+		})
+	}, [])
 
 	const fileChangedHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const files = event.target.files
@@ -36,10 +43,7 @@ export default function ReviewCreate() {
 
 	const createReviewHandler = (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault()
-		if (!userState.logged_in) {
-			alert('You should login')
-			return
-		}
+
 		// console.log(title)
 		// console.log(content)
 		// console.log(file)
