@@ -150,6 +150,14 @@ def create(a, b, model_id):
             data = Question.objects.create(
                 author=user, content=f"content_{i}", title=f"title_{i}"
             )
+            num_comments = random.randint(0, 5)
+            user_comment = random.choices(users, k=num_comments)
+            comments = [
+                QuestionComment.objects.create(
+                    author=u, content="comment", question=data
+                )
+                for u in user_comment
+            ]
         elif model_id == "r":
 
             data, animal_type = get_random_review()
