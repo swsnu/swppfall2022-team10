@@ -22,13 +22,22 @@ then
             "$formatter" "$file"
             git add $file
             ret=$?
-        
+            
             if [ $ret -ne 0 ]
             then
                 echo "ERROR on python formatting"
                 exit 1
             else
                 echo "python formatting finished!"
+            fi
+            pylint --load-plugins pylint_django --rcfile backend/beafamily/.pylintrc "$file"
+            ret=$?
+            if [ $ret -ne 0 ]
+            then
+                echo "ERROR on pylint"
+                exit 1
+            else
+                echo "pylint passed!"
             fi
         fi
     done
@@ -54,6 +63,7 @@ exts="\.\(ts\|tsx\)$"
 
 # The formatter to use
 formatter="frontend/node_modules/.bin/prettier"
+eslint="frontend/node_modules/.bin/eslint"
 
 change_list=`git diff --cached --name-only --diff-filter=ACMR | grep $exts | xargs`
 echo "$change_list"
@@ -69,7 +79,7 @@ then
             "$formatter" --write "$file"
             git add $file
             ret=$?
-        
+            
             if [ $ret -ne 0 ]
             then
                 echo "ERROR on typescript/react formatting"
@@ -79,8 +89,8 @@ then
             fi
         fi
     done
-
-    frontend/node_modules/.bin/eslint "$change_list"
+    
+    "$eslint" $change_list
     ret=$?
     if [ $ret -ne 0 ]
     then
@@ -92,3 +102,4 @@ then
 else
     echo "we don't need to format any typescript/react files!"
 fi
+
