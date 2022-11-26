@@ -16,7 +16,7 @@ urlpatterns = [
     # TODO:
     # path("users/", views),
     path("users/info/", views.user_info),
-    # path("users/post/"), GET myposts
+    path("users/post/", views.user_post)
     # path("posts/<int:pid>/comments/"), GET / POST / PUT / DELETE comments
     # path("questions/<int:qid>/comments/"), GET / POST / PUT / DELETE comments
     # path("apply/") GET / POST application
