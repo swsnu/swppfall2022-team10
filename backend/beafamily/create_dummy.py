@@ -1,11 +1,6 @@
 #!/usr/bin/env python
-# import datetime
-import pytz
-import json
 import os
 import random
-import shutil
-import string
 
 import tqdm
 
@@ -21,6 +16,7 @@ from django.contrib.auth import get_user_model, models
 from api.models import *
 from config.dev_settings import BASE_DIR, DATA_DIR
 from django.utils import timezone
+
 
 # User: User = get_user_model()
 
@@ -143,7 +139,7 @@ def create(a, b, model_id):
                 PostImage.objects.create(author=user, post=post, image=p)
                 for p in photos
             ]
-            num_comments = random.randint(0, 10)
+            num_comments = random.randint(0, 5)
             user_comment = random.choices(users, k=num_comments)
             comments = [
                 PostComment.objects.create(author=u, content="comment", post=post)
@@ -215,34 +211,34 @@ if __name__ == "__main__":
         "Please type which model to create dummy\n"
         "p: Post, r: Review, a: Application, q: Question, d: Default, otherwise: Quit\n"
         "Default: create every model which has zero element\n"
-        "Number to create: (80, 50, 30, 40)"
+        "Number to create: (50, 50, 30, 40)"
     )
+    a_p, a_q, a_r, a_a = (50, 50, 30, 40)
 
     if model in ["p", "q", "r", "a"]:
         n = 0
-        a = 0
         if model == "p":
             n = n_post
-            a = 80
+            a = a_p
         elif model == "q":
             n = n_question
-            a = 50
+            a = a_q
         elif model == "r":
             n = n_review
-            a = 30
+            a = a_r
         elif model == "a":
             n = n_application
-            a = 20
+            a = a_a
         create(n + 1, n + a, model)
     elif model == "d":
         if n_post == 0:
-            create(n_post + 1, n_post + 80, "p")
+            create(n_post + 1, n_post + a_p, "p")
         if n_application == 0:
-            create(n_application + 1, n_application + 50, "a")
+            create(n_application + 1, n_application + a_a, "a")
         if n_question == 0:
-            create(n_question + 1, n_question + 30, "q")
+            create(n_question + 1, n_question + a_q, "q")
         if n_review == 0:
-            create(n_review + 1, n_review + 40, "r")
+            create(n_review + 1, n_review + a_r, "r")
 
         users: list[User] = list(User.objects.all().iterator())
         posts = list(Post.objects.all().iterator())
