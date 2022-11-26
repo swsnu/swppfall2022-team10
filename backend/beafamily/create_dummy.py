@@ -148,7 +148,7 @@ def create(a, b, model_id):
 
         elif model_id == "q":
             data = Question.objects.create(
-                author=user, content=f"content_{i}", title="title_{i}"
+                author=user, content=f"content_{i}", title=f"title_{i}"
             )
         elif model_id == "r":
 
@@ -168,7 +168,7 @@ def create(a, b, model_id):
 
             post = random.choice(posts)
             data = Application.objects.create(
-                author=user, content=f"content_{i}", title="title_{i}", post=post
+                author=user, content=f"content_{i}", title=f"title_{i}", post=post
             )
 
 

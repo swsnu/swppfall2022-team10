@@ -45,7 +45,7 @@ export default function QnaCreate() {
 				console.log(err)
 				alert('ERROR')
 			})
-		console.log(data)
+		// console.log(data)
 	}
 
 	return (

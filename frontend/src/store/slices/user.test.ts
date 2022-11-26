@@ -52,11 +52,15 @@ describe('user reducer', () => {
 	// })
 	it('should handle loginUser', async () => {
 		axios.get = jest.fn().mockResolvedValue({ data: fakeUserLogin })
+		axios.post = jest
+			.fn()
+			.mockResolvedValue({ status: 200, data: fakeUser })
 		await store.dispatch(loginUser(fakeUserLogin))
 		// expect(store.getState().user.logged_in).toEqual(true);
 	})
 	it('should handle logoutUser', async () => {
 		axios.get = jest.fn().mockResolvedValue({ data: fakeUser })
+
 		await store.dispatch(logoutUser())
 		// expect(store.getState().user.currentUser).toEqual(null);
 	})

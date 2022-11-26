@@ -85,7 +85,7 @@ const initialState: qnaState = {
 export const getQnas = createAsyncThunk(
 	'qna/getQnas',
 	async (data: QnaFilterType, { dispatch }) => {
-		const response = await axios.get('/api/qnas/', { params: data })
+		const response = await axios.get('/api/questions/', { params: data })
 		return response.data
 	}
 )
@@ -93,7 +93,7 @@ export const getQnas = createAsyncThunk(
 export const getQna = createAsyncThunk(
 	'qna/getQna',
 	async (id: QnaType['id'], { dispatch }) => {
-		const response = await axios.get(`/api/qnas/${id}/`)
+		const response = await axios.get(`/api/questions/${id}/`)
 		return response.data ?? null
 	}
 )
@@ -101,7 +101,7 @@ export const getQna = createAsyncThunk(
 export const createQna = createAsyncThunk(
 	'review/createQna',
 	async (qna: FormData, { dispatch }) => {
-		const response = await axios.post('/api/qnas/', qna)
+		const response = await axios.post('/api/questions/', qna)
 		dispatch(qnaActions.addQna(response.data))
 		return response.data
 	}
@@ -110,7 +110,7 @@ export const createQna = createAsyncThunk(
 export const deleteQna = createAsyncThunk(
 	'qna/deleteQna',
 	async (id: QnaType['id'], { dispatch }) => {
-		await axios.delete(`/api/qnas/${id}/`)
+		await axios.delete(`/api/questions/${id}/`)
 		dispatch(qnaActions.deleteQna({ targetId: id }))
 	}
 )
