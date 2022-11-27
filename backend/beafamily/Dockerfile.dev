@@ -16,4 +16,4 @@ RUN mkdir -p data
 RUN mv dummy data
 RUN python manage.py makemigrations 
 RUN python manage.py migrate
-RUN (echo "Y" && echo "d" && echo "100") | python create_dummy.py
+RUN (echo "Y" && echo "d") | python create_dummy.py

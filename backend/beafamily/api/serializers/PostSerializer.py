@@ -23,7 +23,7 @@ def validate_minmax(start, end):
     # both exists
     elif (start is not None) and (end is not None):
 
-        start, end = int(end), int(start)
+        start, end = int(start), int(end)
         if start < 0 or end < 0:
             raise ValueError()
 
@@ -64,7 +64,7 @@ class PostQueryValidator(PaginationValidator):
                 validated_query["age_max"] = age_max
 
             date = validate_nonnegative_int(data.get("date"))
-            date_min, date_max = validate_minmax(
+            delta_min, delta_max = validate_minmax(
                 data.get("date_min"), data.get("date_max")
             )
             now = timezone.now()
@@ -73,9 +73,9 @@ class PostQueryValidator(PaginationValidator):
                 date = (now - timezone.timedelta(days=date)).date()
                 validated_query["date"] = date
 
-            if date_min:
-                date_min = (now - timezone.timedelta(days=date_min)).date()
-                date_max = (now - timezone.timedelta(days=date_max)).date()
+            if delta_min:
+                date_min = (now - timezone.timedelta(days=delta_max)).date()
+                date_max = (now - timezone.timedelta(days=delta_min)).date()
                 validated_query["date_min"] = date_min
                 validated_query["date_max"] = date_max
 

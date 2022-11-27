@@ -1,0 +1,58 @@
+version: "3.8"
+services:
+
+  backend:
+    build:
+      context: ./backend/beafamily
+      dockerfile: Dockerfile.dev.deploy
+      args:
+        - SECRET_KEY=${SECRET_KEY}
+        - IP_ADDRESS=${IP_ADDRESS}
+
+    command: uwsgi --ini uwsgi/uwsgi.ini
+    ports:
+      - "8000:8000"
+
+    volumes:
+      - type: bind 
+        source: ${PWD}/backend/beafamily/logs
+        target: /backend/beafamily/logs
+      - type: bind
+        source: /home/dev-deploy/media/
+        target: /backend/data/
+      - type: bind
+        source: /home/dev-deploy/logs/
+        target: /backend/logs/
+
+  frontend:
+    depends_on:
+      - backend
+
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile.dev.deploy
+      args:
+        - SSL_CHAIN_PATH_HOST=${SSL_CHAIN_PATH_HOST}
+        - SSL_CHAIN_PATH_DOCKER=${SSL_CHAIN_PATH_DOCKER}
+        - SSL_KEY_PATH_HOST=${SSL_KEY_PATH_HOST}
+        - SSL_KEY_PATH_DOCKER=${SSL_KEY_PATH_DOCKER}
+
+    volumes:
+      - type: bind 
+        source: $SSL_KEY_PATH_HOST
+        target: $SSL_KEY_PATH_DOCKER
+      - type: bind 
+        source: $SSL_CHAIN_PATH_HOST
+        target: $SSL_CHAIN_PATH_DOCKER
+      - type: bind
+        source: /home/dev-deploy/media/
+        target: /usr/app/html/media/
+
+    command: nginx -g 'daemon off;'
+
+    ports:
+      - "443:443"
+
+
+
+  
