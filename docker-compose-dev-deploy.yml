@@ -14,9 +14,6 @@ services:
       - "8000:8000"
 
     volumes:
-      - type: bind 
-        source: ${PWD}/backend/beafamily/logs
-        target: /backend/beafamily/logs
       - type: bind
         source: /home/dev-deploy/media/
         target: /backend/data/
