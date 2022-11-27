@@ -1,9 +1,6 @@
-# This is a basic workflow that is manually triggered
-
 name: Deploy on Development Server
 
-# Controls when the action will run. Workflow runs when manually triggered using the UI
-# or API.
+# runs when CI build for new commits to dev branch passed
 on:
   workflow_run:
       workflows: [CI]
@@ -11,19 +8,7 @@ on:
         - completed
       branches: 
         - dev
-  
-  workflow_dispatch:
-    # Inputs the workflow accepts.
-    inputs:
-      name:
-        # Friendly description to be shown in the UI instead of 'name'
-        description: 'Person to greet'
-        # Default value if no value is explicitly provided
-        default: 'World'
-        # Input has to be provided for the workflow to run
-        required: true
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
     dev-deploy:
         runs-on: ubuntu-latest
@@ -35,15 +20,35 @@ jobs:
             
         steps:
           - uses: "actions/checkout@v3"
+
+          - uses: "actions/setup-node@v3"
+            with:
+                node-version: 18 
+
+          - name: "Build Frontend"
+            run: |
+                cd frontend
+                yarn install
+                npm run build
+                tar czf build.tar.gz --directory=build .
+                cd ..
           
+          # authenticate to google cloud with iam service account
           - id: "auth"
             uses: "google-github-actions/auth@v1"
             with:
                 workload_identity_provider: ${{ secrets.DEV_DEPLOY_PROVIDER }}
                 service_account: ${{ secrets.DEV_DEPLOY_ACCOUNT }}
+
                 
           - name: "Set up Cloud SDK"
             uses: "google-github-actions/setup-gcloud@v1"
+
+          - id: "Upload file"
+            uses: "google-github-actions/upload-cloud-storage@v1"
+            with:
+                path: frontend/build.tar.gz
+                destination: "swpp22-team10-frontend-build/build.tar.gz"
             
           - name: "Deploy"
             uses: "google-github-actions/ssh-compute@v0"
@@ -51,6 +56,5 @@ jobs:
                 instance_name: "dev-deploy@dev-deploy"
                 zone: "asia-northeast3-a"
                 ssh_private_key: "${{ secrets.DEV_DEPLOY_KEY }}"
-                command: "$HOME/deploy.sh"
-
+                command: "source $HOME/deploy.sh"
             
