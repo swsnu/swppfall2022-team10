@@ -55,7 +55,7 @@ jobs:
             uses: "google-github-actions/upload-cloud-storage@v1"
             with:
                 path: frontend/build.tar.gz
-                destination: "swpp22-team10-frontend-build/build.tar.gz"
+                destination: "swpp22-team10-frontend-build"
             
           - name: "Deploy"
             uses: "google-github-actions/ssh-compute@v0"
