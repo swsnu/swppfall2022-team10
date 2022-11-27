@@ -32,6 +32,8 @@ def user_info(request):
 def user_post(request):
     u = UserPostSerializer(request.user).data
 
-    response = [u["posts"], u["likes"], u["applies"]]
+    response = [u["posts"], u["likes"], [
+        i["post"] for i in u["applies"]
+    ]]
 
     return Response(response)
