@@ -105,7 +105,7 @@ export default function QnaCreate() {
 								id='confirm-create-qna-button'
 								type='submit'
 								disabled={!(title && content)}
-								// onClick={createReviewHandler}
+							// onClick={createReviewHandler}
 							>
 								게시하기
 							</button>

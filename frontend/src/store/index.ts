@@ -5,6 +5,7 @@ import reviewReducer from './slices/review'
 import applicationReducer from './slices/application'
 import qnaReducer from './slices/qna'
 import mypostReducer from './slices/mypost'
+import commentReducer from './slices/comment'
 import axios from 'axios'
 
 axios.defaults.xsrfCookieName = 'csrftoken'
@@ -18,7 +19,8 @@ export const store = configureStore({
 		review: reviewReducer,
 		application: applicationReducer,
 		qna: qnaReducer,
-		mypost: mypostReducer
+		mypost: mypostReducer,
+		comment: commentReducer,
 	}
 })
 
