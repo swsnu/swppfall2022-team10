@@ -74,8 +74,11 @@ export const checkLogin = createAsyncThunk(
 
 export const checkUsername = createAsyncThunk(
 	'user/checkUsername',
-	async (x, { dispatch }) => {
-		const response = await axios.get<{ confirm: boolean }>('/api/username/')
+	async (username: string, { dispatch }) => {
+		const response = await axios.get<{ confirm: boolean }>(
+			'/api/username/',
+			{ params: username }
+		)
 		return response.data
 	}
 )

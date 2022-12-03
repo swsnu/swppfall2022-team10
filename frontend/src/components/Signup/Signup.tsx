@@ -175,7 +175,7 @@ export default function Signup() {
 												onClick={(event) => {
 													event.preventDefault()
 													dispatch(
-														checkUsername()
+														checkUsername(username)
 													).then((result) => {
 														const confirm: boolean =
 															(
