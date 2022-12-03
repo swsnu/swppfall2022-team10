@@ -14,6 +14,8 @@ export interface UserSignupType {
 	email: string
 	password: string
 	name: string
+	phoneNumber: string
+	address: string
 }
 export interface UserLoginType {
 	username: string
@@ -69,6 +71,23 @@ export const checkLogin = createAsyncThunk(
 // 	if (response.status === 200) return true
 // 	else return false
 // }
+
+export const checkUsername = createAsyncThunk(
+	'user/checkUsername',
+	async (x, { dispatch }) => {
+		const response = await axios.get<{ confirm: boolean }>('/api/username/')
+		return response.data
+	}
+)
+
+export const signupUser = createAsyncThunk(
+	'user/signupUser',
+	async (user: FormData, { dispatch }) => {
+		await axios.get(`/api/token/`) // get csrf token
+		const response = await axios.post(`/api/signup/`, user)
+		return response.status
+	}
+)
 
 export const loginUser = createAsyncThunk(
 	'user/loginUser',

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import './App.css'
 import Login from './components/Login/Login'
+import Signup from './components/Signup/Signup'
 import PostList from './components/PostComponents/PostList/PostList'
 import PostDetail from './components/PostComponents/PostDetail/PostDetail'
 import PostCreate from './components/PostComponents/PostCreate/PostCreate'
@@ -21,6 +22,7 @@ function App() {
 				<Routes>
 					<Route path='/' element={<PostList />} />
 					<Route path='/login' element={<Login />} />
+					<Route path='/signup' element={<Signup />} />
 					<Route
 						path='/post/:id'
 						element={<PostDetail is_author={false} />}
