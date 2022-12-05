@@ -1,4 +1,5 @@
 import json
+import logging
 from functools import wraps
 
 from django.core.paginator import Paginator
@@ -16,6 +17,21 @@ from rest_framework.response import Response
 from ..serializers import ImageValidator
 
 writable_methods = ["POST", "PUT"]
+
+logger = logging.getLogger("view_logger")
+
+
+def verify_signup(validator):
+
+    def decorator(func):
+        @wraps(func)
+        def verified_view(request, *args, **kwargs):
+
+            return func(request, *args, **kwargs)
+
+        return verified_view
+
+    return decorator
 
 
 def verify(validator, query_validator, has_image=True):
@@ -39,7 +55,7 @@ def verify(validator, query_validator, has_image=True):
 
                 content_json = json.loads(content_json[0])
 
-                if has_image:
+                if "photos" in request.data:
                     photos = request.data.getlist("photos")
                     photos = [{"image": p} for p in photos]
 
@@ -49,6 +65,9 @@ def verify(validator, query_validator, has_image=True):
 
                 post_validator = validator(data=content_json)
                 if not post_validator.is_valid():
+                    print("HERE")
+                    print(post_validator.data)
+                    print(post_validator.errors)
                     return Response(status=status.HTTP_400_BAD_REQUEST)
 
                 request.parsed = post_validator.data
