@@ -205,11 +205,10 @@ if __name__ == "__main__":
         if yn.lower() == "y" or yn == "":
             usernames = ["yeomjy", "seorin55", "lenyakim", "jhpyun"]
             passwords = ["1q2w3e4r", "password", "12345678", "qwerty"]
+            nicknames = ['염준영', '최서린', '김수빈', '편진희']
 
-            for un, pw in zip(usernames, passwords):
-                u = User.objects.create(username=un)
-                u.set_password(pw)
-                u.save()
+            for un, pw, nn in zip(usernames, passwords, nicknames):
+                u = User.objects.create_user(username=un, password=pw, nickname=nn)
 
         else:
             print("You should first create user...")

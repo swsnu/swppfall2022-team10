@@ -7,4 +7,4 @@ from .QuestionSerializer import (
     QuestionValidator,
 )
 from .AbstractTypes import PaginationValidator
-from .UserSerializer import UserPostSerializer, UserInfoSerializer
+from .UserSerializer import UserPostSerializer, UserInfoSerializer, SignUpValidator
