@@ -59,7 +59,7 @@ def post_id(request, pid=0):
 @authentication_classes([SessionAuthentication])
 @permission_classes([IsAuthenticatedOrReadOnly])
 @parser_classes([MultiPartParser])
-@verify(PostValidator, PostQueryValidator)
+@verify(PostValidator, PostQueryValidator, has_form=True)
 @log_error(logger)
 def posts(request):
     if request.method == "GET":
