@@ -4,12 +4,15 @@ from django.apps import apps
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, username: str, password=None, email=None, nickname=None, address=None):
+    def create_user(
+        self, username: str, password=None, email=None, nickname=None, address=None
+    ):
         if username is None:
             raise ValueError("Username is required")
 
         if nickname is None:
-            raise ValueError("Nickname is required")
+            nickname = username
+            # raise ValueError("Nickname is required")
 
         if type(username) != str:
             raise TypeError("Username must be string")
@@ -25,7 +28,9 @@ class UserManager(BaseUserManager):
         )
         username = GlobalUserModel.normalize_username(username)
 
-        user = self.model(username=username, email=email, nickname=nickname, address=address)
+        user = self.model(
+            username=username, email=email, nickname=nickname, address=address
+        )
         user.set_password(password)
         user.save(using=self._db)
 

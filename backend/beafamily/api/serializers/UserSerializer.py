@@ -23,10 +23,9 @@ class UserInfoSerializer(serializers.ModelSerializer):
 
 
 class SignUpValidator(serializers.ModelSerializer):
-
     def to_internal_value(self, data):
         for key, val in data.items():
-            if val == '':
+            if val == "":
                 data[key] = None
 
         data["nickname"] = data["name"]

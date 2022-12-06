@@ -60,10 +60,6 @@ def check_username(request):
     username = request.GET.get("username")
     try:
         User.objects.get(username=username)
-        return Response(data={
-            'confirm': False
-        })
+        return Response(data={"confirm": False})
     except:
-        return Response(data={
-            'confirm': True
-        })
+        return Response(data={"confirm": True})
