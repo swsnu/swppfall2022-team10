@@ -152,17 +152,34 @@ def post_id_application(request, pid):
 @authentication_classes([SessionAuthentication])
 @permission_classes([IsAuthenticated])
 @parser_classes([MultiPartParser])
-@verify(ApplicationValidator, None, has_form=True)
+@verify(ApplicationValidator, None, has_form=True, has_content=False, has_image=False)
 @log_error(logger)
 def post_id_application_id(request, pid, aid):
     try:
         post = Post.objects.get(id=pid)
+        app = Application.objects.get(id=aid)
     except:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
+    if post.author != request.user:
+        return Response(status=status.HTTP_403_FORBIDDEN)
+
+    if post != app.post:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
     if request.method == "GET":
-        app = ApplicationSerializer(post.applications, many=True)
+        app = ApplicationSerializer(app)
+
+        return Response(status=status.HTTP_200_OK, data=app.data)
+    elif request.method == "PUT":
+
+        file = request.data.getlist("application")[0]
+        app.file = file
+        app.save()
+        app = ApplicationSerializer(app)
 
         return Response(status=status.HTTP_200_OK, data=app.data)
     else:
+        app.delete()
+
         return Response(status=status.HTTP_200_OK)

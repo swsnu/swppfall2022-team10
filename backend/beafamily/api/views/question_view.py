@@ -64,7 +64,7 @@ def question_id(request, qid=0):
 @authentication_classes([SessionAuthentication])
 @permission_classes([IsAuthenticatedOrReadOnly])
 @parser_classes([MultiPartParser])
-@verify(QuestionValidator, PaginationValidator, has_image=False)
+@verify(QuestionValidator, PaginationValidator, has_image=False, has_form=False)
 @log_error(logger)
 def questions(request):
     if request.method == "GET":
