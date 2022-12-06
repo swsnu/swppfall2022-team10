@@ -6,7 +6,7 @@ export interface applicationType {
 	id: number
 	author_id: number
 	author_name: string
-	files: string[]
+	file: File | null
 	created_at: string
 	post_id: number
 }
@@ -25,7 +25,17 @@ export const getApplications = createAsyncThunk(
 	'application/getApplications',
 	async (postId: applicationType['post_id'], { dispatch }) => {
 		const response = await axios.get<applicationType[]>(
-			`/api/apply/${postId}/`
+			`/api/posts/${postId}/applications/`
+		)
+		return response.data ?? null
+	}
+)
+
+export const getApplication = createAsyncThunk(
+	'application/getApplication',
+	async (app: applicationType, { dispatch }) => {
+		const response = await axios.get<applicationType>(
+			`/api/posts/${app.post_id}/applications/${app.id}/`
 		)
 		return response.data ?? null
 	}
@@ -33,8 +43,8 @@ export const getApplications = createAsyncThunk(
 
 export const createApplication = createAsyncThunk(
 	'application/createApplication',
-	async (application: FormData, { dispatch }) => {
-		const response = await axios.post('/api/apply/', application)
+	async (arg: { application: File, postId: string }, { dispatch }) => {
+		const response = await axios.post(`/api/posts/${arg.postId}/applications/`, arg.application)
 		return response.data
 	}
 )
@@ -49,6 +59,9 @@ export const applicationSlice = createSlice({
 			// Add post to the state array
 			state.applications = action.payload
 		})
+		builder.addCase(getApplication.fulfilled, (state, action) => {
+			state.selectedApplication = action.payload
+		})
 		builder.addCase(createApplication.rejected, (_state, action) => {
 			alert('ERROR')
 		})
@@ -57,5 +70,4 @@ export const applicationSlice = createSlice({
 
 export const applicationActions = applicationSlice.actions
 export const selectApplication = (state: RootState) => state.application
-
 export default applicationSlice.reducer

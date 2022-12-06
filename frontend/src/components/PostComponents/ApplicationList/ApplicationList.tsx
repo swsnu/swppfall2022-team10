@@ -26,7 +26,7 @@ const dummyList = [
 		id: 1,
 		author_id: 1,
 		author_name: 'jhpyun1',
-		files: [],
+		file: null,
 		created_at: '2022-06-22',
 		post_id: 1
 	},
@@ -34,7 +34,7 @@ const dummyList = [
 		id: 2,
 		author_id: 1,
 		author_name: 'jhpyun2',
-		files: [],
+		file: null,
 		created_at: '2022-06-23',
 		post_id: 1
 	},
@@ -42,7 +42,7 @@ const dummyList = [
 		id: 3,
 		author_id: 1,
 		author_name: 'jhpyun3',
-		files: [],
+		file: null,
 		created_at: '2022-06-24',
 		post_id: 1
 	}
@@ -58,7 +58,7 @@ export default function ApplicationList(props: IProps) {
 			id: 1,
 			author_id: 1,
 			author_name: 'jhpyun1',
-			files: [],
+			file: null,
 			created_at: '2022-06-22',
 			post_id: 1
 		})
