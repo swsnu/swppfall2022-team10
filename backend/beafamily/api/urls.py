@@ -23,5 +23,4 @@ urlpatterns = [
     # path("apply/<int:aid>/) GET / PUT / DELETE application
     path("signup/", views.signup),
     path("username/", views.check_username),
-
 ]

@@ -205,7 +205,7 @@ if __name__ == "__main__":
         if yn.lower() == "y" or yn == "":
             usernames = ["yeomjy", "seorin55", "lenyakim", "jhpyun"]
             passwords = ["1q2w3e4r", "password", "12345678", "qwerty"]
-            nicknames = ['염준영', '최서린', '김수빈', '편진희']
+            nicknames = ["염준영", "최서린", "김수빈", "편진희"]
 
             for un, pw, nn in zip(usernames, passwords, nicknames):
                 u = User.objects.create_user(username=un, password=pw, nickname=nn)
