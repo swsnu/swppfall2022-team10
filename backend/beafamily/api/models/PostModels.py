@@ -20,6 +20,14 @@ class Post(AbstractArticleType):
     gender = models.BooleanField()
     species = models.CharField(max_length=30)
     is_active = models.BooleanField()
+    form = models.FileField()
+    accepted_application = models.OneToOneField(
+        "Application",
+        on_delete=models.CASCADE,
+        null=True,
+        default=None,
+        related_name="accepted_application",
+    )
 
     class Meta:
         ordering = ["-created_at"]

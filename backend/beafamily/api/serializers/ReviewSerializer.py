@@ -1,11 +1,13 @@
 from ..models import Review, ReviewImage
 from rest_framework import serializers
 from .AbstractTypes import SerializerWithAuth, PaginationValidator
+from .utils import UserNameField
+from .ImageSerializer import ImageURLField
 
 
 class ReviewSerializer(SerializerWithAuth):
-    author_name = serializers.StringRelatedField(source="author", read_only=True)
-    photo_path = serializers.StringRelatedField(many=True, read_only=True)
+    author_name = UserNameField(source="author", read_only=True)
+    photo_path = ImageURLField(read_only=True, many=True)
 
     class Meta:
         model = Review

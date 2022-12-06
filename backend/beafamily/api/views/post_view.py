@@ -2,6 +2,7 @@ import logging
 
 from django.db import transaction
 from django.urls import reverse
+from django.http.response import FileResponse
 from rest_framework import status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.decorators import (
@@ -11,11 +12,17 @@ from rest_framework.decorators import (
     permission_classes,
 )
 from rest_framework.parsers import FileUploadParser, JSONParser, MultiPartParser
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework.response import Response
 
-from ..models import Post, PostImage
-from ..serializers import PostSerializer, PostQueryValidator, PostValidator
+from ..models import Post, PostImage, Application
+from ..serializers import (
+    PostSerializer,
+    PostQueryValidator,
+    PostValidator,
+    ApplicationValidator,
+    ApplicationSerializer,
+)
 from .utils import log_error, pagination, verify
 
 logger = logging.getLogger("view_logger")
@@ -59,7 +66,7 @@ def post_id(request, pid=0):
 @authentication_classes([SessionAuthentication])
 @permission_classes([IsAuthenticatedOrReadOnly])
 @parser_classes([MultiPartParser])
-@verify(PostValidator, PostQueryValidator)
+@verify(PostValidator, PostQueryValidator, has_form=True)
 @log_error(logger)
 def posts(request):
     if request.method == "GET":
@@ -115,3 +122,73 @@ def posts(request):
                 )
 
         return Response(status=status.HTTP_201_CREATED, data=PostSerializer(post).data)
+
+
+@api_view(["GET", "POST"])
+@authentication_classes([SessionAuthentication])
+# @permission_classes([IsAuthenticated])
+@parser_classes([MultiPartParser])
+@verify(ApplicationValidator, None, has_form=True, has_content=False, has_image=False)
+@log_error(logger)
+def post_id_application(request, pid):
+    try:
+        post = Post.objects.get(id=pid)
+    except:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == "GET":
+        # if request.user == post.author:
+        #     app = ApplicationSerializer(post.applications, many=True)
+        # else:
+        #     app = ApplicationSerializer(post.applications.filter(author=request.user), many=True)
+        app = ApplicationSerializer(post.applications, many=True)
+        return Response(status=status.HTTP_200_OK, data=app.data)
+    else:
+        if request.user == post.author:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        file = request.data.getlist("application")[0]
+        app = Application.objects.create(post=post, author=request.user)
+        app.file = file
+        app.save()
+        data = ApplicationSerializer(app).data
+
+        return Response(status=status.HTTP_201_CREATED, data=data)
+
+
+@api_view(["GET", "PUT", "DELETE"])
+@authentication_classes([SessionAuthentication])
+# @permission_classes([IsAuthenticated])
+@parser_classes([MultiPartParser])
+@verify(ApplicationValidator, None, has_form=True, has_content=False, has_image=False)
+@log_error(logger)
+def post_id_application_id(request, pid, aid):
+    try:
+        post = Post.objects.get(id=pid)
+        app = Application.objects.get(id=aid)
+    except:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if post != app.post:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    if request.method == "GET":
+        # if post.author != request.user or app.author != request.user:
+        #     return Response(status=status.HTTP_204_NO_CONTENT)
+
+        return FileResponse(app.file.file, as_attachment=True)
+    elif request.method == "PUT":
+        if app.author != request.user:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+
+        file = request.data.getlist("application")[0]
+        app.file = file
+        app.save()
+        app = ApplicationSerializer(app)
+
+        return Response(status=status.HTTP_200_OK, data=app.data)
+    else:
+        if app.author != request.user:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+        app.delete()
+        return Response(status=status.HTTP_200_OK)
