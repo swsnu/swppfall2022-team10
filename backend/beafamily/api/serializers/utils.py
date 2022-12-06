@@ -12,9 +12,9 @@ class UserNameField(serializers.RelatedField):
 
 
 class ApplicationFieldSerializer(serializers.RelatedField):
-
     def to_representation(self, value):
         return value.file.url
+
 
 def form_validator(file):
     try:

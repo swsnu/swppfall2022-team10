@@ -78,7 +78,9 @@ def log_error(logger):
     return decorator
 
 
-def verify(validator, query_validator, has_image=True, has_form=False, has_content=True):
+def verify(
+    validator, query_validator, has_image=True, has_form=False, has_content=True
+):
     def decorator(func):
         @wraps(func)
         def verified_view(request, *args, **kwargs):
@@ -119,13 +121,12 @@ def verify(validator, query_validator, has_image=True, has_form=False, has_conte
                 if "application" in request.data:
                     application = request.data.getlist("application")[0]
 
-                    application_validator = ApplicationValidator(data={
-                        "file": application
-                    })
+                    application_validator = ApplicationValidator(
+                        data={"file": application}
+                    )
 
                     if not application_validator.is_valid():
                         return Response(status=status.HTTP_400_BAD_REQUEST)
-
 
             elif request.method == "GET":
                 if query_validator is not None:

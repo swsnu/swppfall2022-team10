@@ -15,7 +15,13 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticate
 from rest_framework.response import Response
 
 from ..models import Post, PostImage, Application
-from ..serializers import PostSerializer, PostQueryValidator, PostValidator, ApplicationValidator, ApplicationSerializer
+from ..serializers import (
+    PostSerializer,
+    PostQueryValidator,
+    PostValidator,
+    ApplicationValidator,
+    ApplicationSerializer,
+)
 from .utils import log_error, pagination, verify
 
 logger = logging.getLogger("view_logger")
@@ -131,8 +137,7 @@ def post_id_application(request, pid):
 
     if request.method == "GET":
         app = ApplicationSerializer(post.applications, many=True)
-        return Response(status=status.HTTP_200_OK,
-                        data=app.data)
+        return Response(status=status.HTTP_200_OK, data=app.data)
     else:
         if request.user == post.author:
             return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -143,9 +148,7 @@ def post_id_application(request, pid):
         app.save()
         data = ApplicationSerializer(app).data
 
-        return Response(status=status.HTTP_201_CREATED,
-                        data=data
-                        )
+        return Response(status=status.HTTP_201_CREATED, data=data)
 
 
 @api_view(["GET", "PUT", "DELETE"])

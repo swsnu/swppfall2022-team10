@@ -180,5 +180,5 @@ class PostSerializer(SerializerWithAuth):
             "is_active",
             "photo_path",
             "comments",
-            "form"
+            "form",
         ]

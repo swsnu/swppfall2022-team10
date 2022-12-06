@@ -88,7 +88,7 @@ def get_random_post():
         is_active=is_active,
         content=contents,
         created_at=timezone.now() - delta,
-        form=form
+        form=form,
     )
 
 
@@ -179,8 +179,7 @@ def create(a, b, model_id):
 
             post = random.choice(posts)
             data = Application.objects.create(
-                author=user, post=post,
-                file="dummy/post/dog_dummy/dog_form.docx"
+                author=user, post=post, file="dummy/post/dog_dummy/dog_form.docx"
             )
 
 

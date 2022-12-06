@@ -13,7 +13,9 @@ class Application(AbstractMetaDataType):
     author = models.ForeignKey(
         get_user_model(), on_delete=models.CASCADE, related_name="applies"
     )
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="applications")
+    post = models.ForeignKey(
+        Post, on_delete=models.CASCADE, related_name="applications"
+    )
     file = models.FileField(upload_to=form_upload_to)
 
     class Meta:

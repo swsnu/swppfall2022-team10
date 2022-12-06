@@ -18,14 +18,7 @@ class ApplicationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Application
-        fields = [
-            "id",
-            "file",
-            "created_at",
-            "post_id",
-            "author_id",
-            "author_name"
-        ]
+        fields = ["id", "file", "created_at", "post_id", "author_id", "author_name"]
 
 
 class ApplicationValidator(serializers.ModelSerializer):
@@ -33,6 +26,4 @@ class ApplicationValidator(serializers.ModelSerializer):
 
     class Meta:
         model = Application
-        fields = [
-            "file"
-        ]
+        fields = ["file"]

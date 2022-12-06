@@ -114,7 +114,7 @@ class PostTestCase(APITestCase):
             title="AAA",
             is_active=True,
             content="bbb",
-            form="dummy/post/dog_dummy/dog_form.docx"
+            form="dummy/post/dog_dummy/dog_form.docx",
         )
 
         photo1 = PostImage.objects.create(
@@ -142,7 +142,7 @@ class PostTestCase(APITestCase):
             title="AAA",
             is_active=True,
             content="bbb",
-            form="dummy/post/dog_dummy/dog_form.docx"
+            form="dummy/post/dog_dummy/dog_form.docx",
         )
         photo3 = PostImage.objects.create(
             image="dummy/dog_dummy/dog.jpeg",
@@ -218,9 +218,7 @@ class PostTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_getpost(self):
-        p1 = PostSerializer(self.p1, context={
-            "user": None
-        }).data
+        p1 = PostSerializer(self.p1, context={"user": None}).data
         p2 = PostSerializer(self.p2).data
 
         response = self.client.get("/api/posts/1/")
@@ -362,7 +360,9 @@ class PostTestCase(APITestCase):
 
             self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-        with open("dummy/post/cat_dummy/cat2.jpg", "rb") as f, open("dummy/post/dog_dummy/info.json", "rb") as f2:
+        with open("dummy/post/cat_dummy/cat2.jpg", "rb") as f, open(
+            "dummy/post/dog_dummy/info.json", "rb"
+        ) as f2:
             response = self.client.post(
                 "/api/posts/",
                 data={
@@ -370,16 +370,16 @@ class PostTestCase(APITestCase):
                         f,
                     ],
                     "content": json.dumps(newpost),
-                    "application": [
-                        f2
-                    ]
+                    "application": [f2],
                 },
                 HTTP_X_CSRFTOKEN=token,
             )
 
             self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-        with open("dummy/post/cat_dummy/cat2.jpg", "rb") as f, open("dummy/post/dog_dummy/dog_form.docx", "rb") as f2:
+        with open("dummy/post/cat_dummy/cat2.jpg", "rb") as f, open(
+            "dummy/post/dog_dummy/dog_form.docx", "rb"
+        ) as f2:
             response = self.client.post(
                 "/api/posts/",
                 data={
@@ -387,9 +387,7 @@ class PostTestCase(APITestCase):
                         f,
                     ],
                     "content": json.dumps(newpost),
-                    "application": [
-                        f2
-                    ]
+                    "application": [f2],
                 },
                 HTTP_X_CSRFTOKEN=token,
             )
