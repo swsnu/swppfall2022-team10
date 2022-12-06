@@ -69,8 +69,10 @@ def get_random_post():
 
     if animal_type == "개":
         species = random.choice(dog_species)
+        form = "dummy/post/dog_dummy/dog_form.docx"
     else:
         species = random.choice(cat_species)
+        form = "dummy/post/cat_dummy/cat_form.docx"
 
     gender, vaccination, neutering, is_active = random.choices([True, False], k=4)
 
@@ -86,6 +88,7 @@ def get_random_post():
         is_active=is_active,
         content=contents,
         created_at=timezone.now() - delta,
+        form=form
     )
 
 
@@ -176,7 +179,8 @@ def create(a, b, model_id):
 
             post = random.choice(posts)
             data = Application.objects.create(
-                author=user, content=f"content_{i}", title=f"title_{i}", post=post
+                author=user, post=post,
+                form="dummy/post/dog_dummy/dog_form.docx"
             )
 
 
@@ -220,7 +224,7 @@ if __name__ == "__main__":
         "Default: create every model which has zero element\n"
         "Number to create: (50, 50, 30, 40)"
     )
-    a_p, a_q, a_r, a_a = (50, 50, 30, 40)
+    a_p, a_r, a_a, a_q = (50, 50, 30, 40)
 
     if model in ["p", "q", "r", "a"]:
         n = 0

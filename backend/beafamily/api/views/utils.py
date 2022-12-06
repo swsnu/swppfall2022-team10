@@ -14,7 +14,7 @@ from rest_framework.parsers import (
 )
 from rest_framework.response import Response
 
-from ..serializers import ImageValidator
+from ..serializers import ImageValidator, ApplicationValidator
 
 writable_methods = ["POST", "PUT"]
 
@@ -25,7 +25,6 @@ def verify_signup(validator):
     def decorator(func):
         @wraps(func)
         def verified_view(request, *args, **kwargs):
-
             return func(request, *args, **kwargs)
 
         return verified_view
@@ -79,7 +78,7 @@ def log_error(logger):
     return decorator
 
 
-def verify(validator, query_validator, has_image=True):
+def verify(validator, query_validator, has_image=True, has_form=False):
     def decorator(func):
         @wraps(func)
         def verified_view(request, *args, **kwargs):
@@ -108,6 +107,19 @@ def verify(validator, query_validator, has_image=True):
                     if not photos_validator.is_valid():
                         return Response(status=status.HTTP_400_BAD_REQUEST)
 
+                if has_form and ("application" not in request.data):
+                    return Response(status=status.HTTP_400_BAD_REQUEST)
+
+                if "application" in request.data:
+                    application = request.data.getlist("application")[0]
+
+                    application_validator = ApplicationValidator(data={
+                        "form": application
+                    })
+
+                    if not application_validator.is_valid():
+                        return Response(status=status.HTTP_400_BAD_REQUEST)
+
                 post_validator = validator(data=content_json)
                 if not post_validator.is_valid():
                     return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -125,24 +137,6 @@ def verify(validator, query_validator, has_image=True):
             return func(request, *args, **kwargs)
 
         return verified_view
-
-    return decorator
-
-
-def log_error(logger):
-    def decorator(func):
-        @wraps(func)
-        def error_handler(request, *args, **kwargs):
-            try:
-                ret = func(request, *args, **kwargs)
-
-            except Exception as e:
-                logger.error(f"{e}")
-                return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-            return ret
-
-        return error_handler
 
     return decorator
 

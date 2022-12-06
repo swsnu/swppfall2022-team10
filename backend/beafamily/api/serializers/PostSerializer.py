@@ -3,7 +3,7 @@ from rest_framework import serializers
 from django.utils import timezone
 from .ImageSerializer import ImageURLField
 from .AbstractTypes import SerializerWithAuth, PaginationValidator
-from .utils import UserNameField
+from .utils import UserNameField, ApplicationFieldSerializer, form_validator
 
 
 def validate_nonnegative_int(x):
@@ -153,20 +153,22 @@ class PostCommentSerializer(SerializerWithAuth):
         model = PostComment
         fields = ["id", "author_id", "author_name", "content", "created_at"]
 
-    def to_representation(self, instance):
-        ret = super(PostCommentSerializer, self).to_representation(instance)
-        if self.context:
-            user = self.context["user"]
-            ret["editable"] = user == instance.author
-
-        return ret
-
 
 class PostSerializer(SerializerWithAuth):
     created_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
     comments = PostCommentSerializer(many=True)
     photo_path = ImageURLField(read_only=True, many=True)
     author_name = UserNameField(source="author")
+    applications = ApplicationFieldSerializer(read_only=True, many=True)
+    form = serializers.FileField(validators=[form_validator])
+
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        if self.context:
+            if not ret["editable"]:
+                ret["applications"] = None
+
+        return ret
 
     class Meta:
         model = Post
@@ -187,4 +189,6 @@ class PostSerializer(SerializerWithAuth):
             "is_active",
             "photo_path",
             "comments",
+            "applications",
+            "form"
         ]

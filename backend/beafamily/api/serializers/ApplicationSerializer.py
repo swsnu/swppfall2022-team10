@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from ..models import Application, Post
-from ..serializers import PostSerializer
+from .PostSerializer import PostSerializer
+from .utils import form_validator
 
 
 class ApplicationPostSerializer(serializers.ModelSerializer):
@@ -9,3 +10,13 @@ class ApplicationPostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Application
         fields = ["post"]
+
+
+class ApplicationValidator(serializers.ModelSerializer):
+    form = serializers.FileField(validators=[form_validator])
+
+    class Meta:
+        model = Application
+        fields = [
+            "form"
+        ]
