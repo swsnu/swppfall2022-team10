@@ -11,7 +11,7 @@ import { useParams } from 'react-router'
 import { AppDispatch } from '../../../store'
 import { selectQna, qnaActions } from '../../../store/slices/qna'
 import { useNavigate, Navigate } from 'react-router-dom'
-import { selectComment, commentActions } from '../../../store/slices/comment'
+import { selectComment, createComment } from '../../../store/slices/comment'
 import Comment from '../Comment/Comment'
 import CommentList from '../CommentList/CommentList'
 import './QnaDetail.scss'
@@ -35,12 +35,11 @@ const QnaDetail = () => {
 		const formData = new FormData()
 
 		formData.append('content', JSON.stringify(data))
-		dispatch(commentActions.addComment({
-			qna_id: qnaState.selectedQna ? qnaState.selectedQna.id : 1000,
-			author_id: 1,
-			author_name: 'beafamily',
-			content: content,
-		}))
+		dispatch(createComment(formData))
+			.catch((err) => {
+				console.log(err)
+				alert('ERROR')
+			})
 	}
 
 	useEffect(() => {

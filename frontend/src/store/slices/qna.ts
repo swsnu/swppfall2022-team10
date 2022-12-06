@@ -10,6 +10,7 @@ export interface QnaType {
 	content: string
 	created_at: string
 	hits: number
+	// comments: commentType[]
 }
 export interface QnaFilterType {
 	page: number
@@ -21,66 +22,11 @@ export interface qnaState {
 }
 
 const initialState: qnaState = {
-	// qnas: [],
-	// selectedQna: null
-	qnas: [
-		{
-			id: 1,
-			author_id: 1,
-			author_name: 'paw',
-			title: 'Be-a-family',
-			content: '개가 말을 듣지 않아요. 어떻게 하죠?',
-			created_at: '2022-11-20',
-			hits: 1
-		},
-		{
-			id: 2,
-			author_id: 1,
-			author_name: 'paw',
-			title: 'Be-a-family',
-			content: '고양이가 말을 듣지 않아요. 어떻게 하죠?',
-			created_at: '2022-11-20',
-			hits: 1
-		},
-		{
-			id: 3,
-			author_id: 1,
-			author_name: 'paw',
-			title: 'Be-a-family',
-			content: '앵무새가 말을 듣지 않아요. 어떻게 하죠?',
-			created_at: '2022-11-20',
-			hits: 1
-		},
-		{
-			id: 4,
-			author_id: 1,
-			author_name: 'paw',
-			title: 'working',
-			content: '햄스터가 말을 듣지 않아요. 어떻게 하죠?',
-			created_at: '2022-11-11',
-			hits: 3
-		},
-		{
-			id: 5,
-			author_id: 1,
-			author_name: 'paw',
-			title: 'eslint sucks',
-			content: '친칠라가 말을 듣지 않아요. 어떻게 하죠?',
-			created_at: '2022-11-11',
-			hits: 3
-		},
-		{
-			id: 6,
-			author_id: 1,
-			author_name: 'paw',
-			title: '6th',
-			content: '고슴도치가 말을 듣지 않아요. 어떻게 하죠?',
-			created_at: '2022-11-11',
-			hits: 4
-		}
-	],
-	selectedQna: null
+	qnas: [],
+	selectedQna: null,
 }
+
+
 
 export const getQnas = createAsyncThunk(
 	'qna/getQnas',
@@ -119,7 +65,7 @@ export const qnaSlice = createSlice({
 	name: 'qna',
 	initialState,
 	reducers: {
-		getAll: (state, action: PayloadAction<{ qnas: QnaType[] }>) => {},
+		getAll: (state, action: PayloadAction<{ qnas: QnaType[] }>) => { },
 		getQna: (state, action: PayloadAction<{ targetId: number }>) => {
 			const target = state.qnas.find(
 				(td) => td.id === action.payload.targetId
@@ -149,7 +95,8 @@ export const qnaSlice = createSlice({
 				title: action.payload.title,
 				content: action.payload.content,
 				created_at: '',
-				hits: 0
+				hits: 0,
+				comments: [],
 			}
 			state.qnas.push(newQna)
 		}

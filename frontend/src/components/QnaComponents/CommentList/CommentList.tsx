@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import Comment from "../Comment/Comment"
-import { selectComment, commentActions } from '../../../store/slices/comment'
+import { selectComment, getComment } from '../../../store/slices/comment'
 import { useSelector, useDispatch } from 'react-redux'
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
@@ -9,12 +10,10 @@ import { AppDispatch } from '../../../store'
 export default function CommentList() {
     const commentState = useSelector(selectComment)
     const dispatch = useDispatch<AppDispatch>()
-    // eslint-disable-next-line prefer-const
-    let { id } = useParams()
-
+    const { id } = useParams()
 
     useEffect(() => {
-        dispatch(commentActions.getCommentList({ targetId: Number(id) }))
+        dispatch(getComment(Number(id)))
     }, [dispatch, id]
     )
     console.log(id)
