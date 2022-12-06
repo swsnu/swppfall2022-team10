@@ -1,11 +1,12 @@
 from ..models import Question, QuestionComment
 from rest_framework import serializers
 from .AbstractTypes import SerializerWithAuth
+from .utils import UserNameField
 
 
 class QuestionCommentSerializer(SerializerWithAuth):
     created_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
-    author_name = serializers.StringRelatedField(source="author", read_only=True)
+    author_name = UserNameField(source="author", read_only=True)
 
     class Meta:
         model = QuestionComment
@@ -20,7 +21,7 @@ class QuestionCommentValidator(serializers.ModelSerializer):
 
 class QuestionSerializer(SerializerWithAuth):
     created_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
-    author_name = serializers.StringRelatedField(source="author", read_only=True)
+    author_name = UserNameField(source="author", read_only=True)
     comments = QuestionCommentSerializer(many=True)
 
     class Meta:

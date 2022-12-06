@@ -14,7 +14,7 @@ class Application(AbstractMetaDataType):
         get_user_model(), on_delete=models.CASCADE, related_name="applies"
     )
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="applications")
-    form = models.FileField(upload_to=form_upload_to)
+    file = models.FileField(upload_to=form_upload_to)
 
     class Meta:
         ordering = ["-created_at"]

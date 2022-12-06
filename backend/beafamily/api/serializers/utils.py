@@ -6,7 +6,7 @@ from docx import Document
 User = get_user_model()
 
 
-class UserNameField(serializers.Field):
+class UserNameField(serializers.RelatedField):
     def to_representation(self, instance):
         return instance.username
 
@@ -14,7 +14,7 @@ class UserNameField(serializers.Field):
 class ApplicationFieldSerializer(serializers.RelatedField):
 
     def to_representation(self, value):
-        return value.form.url
+        return value.file.url
 
 def form_validator(file):
     try:

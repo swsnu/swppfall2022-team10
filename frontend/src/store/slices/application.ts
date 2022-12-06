@@ -43,7 +43,7 @@ export const getApplication = createAsyncThunk(
 
 export const createApplication = createAsyncThunk(
 	'application/createApplication',
-	async (arg: { application: File, postId: string }, { dispatch }) => {
+	async (arg: { application: FormData, postId: string }, { dispatch }) => {
 		const response = await axios.post(`/api/posts/${arg.postId}/applications/`, arg.application)
 		return response.data
 	}

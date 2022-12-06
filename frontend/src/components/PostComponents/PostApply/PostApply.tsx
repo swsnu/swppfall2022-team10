@@ -52,12 +52,12 @@ export default function PostApply() {
 
 		if (!file) return
 		if (!id) return
-		// const formData = new FormData()
+		const formData = new FormData()
 		// formData.append('id', id)
-		// formData.append('file', file)
+		formData.append('form', file)
 		// console.log(formData.get("id"))
 
-		dispatch(createApplication({application: file, postId: id}))
+		dispatch(createApplication({application: formData, postId: id}))
 			.then((result) => {
 			    navigate(`/post/${id}`)
 			})

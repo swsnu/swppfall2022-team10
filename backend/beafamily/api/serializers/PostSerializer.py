@@ -158,17 +158,8 @@ class PostSerializer(SerializerWithAuth):
     created_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
     comments = PostCommentSerializer(many=True)
     photo_path = ImageURLField(read_only=True, many=True)
-    author_name = UserNameField(source="author")
-    applications = ApplicationFieldSerializer(read_only=True, many=True)
+    author_name = UserNameField(source="author", read_only=True)
     form = serializers.FileField(validators=[form_validator])
-
-    def to_representation(self, instance):
-        ret = super().to_representation(instance)
-        if self.context:
-            if not ret["editable"]:
-                ret["applications"] = None
-
-        return ret
 
     class Meta:
         model = Post
@@ -189,6 +180,5 @@ class PostSerializer(SerializerWithAuth):
             "is_active",
             "photo_path",
             "comments",
-            "applications",
             "form"
         ]

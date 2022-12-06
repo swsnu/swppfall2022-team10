@@ -20,8 +20,8 @@ urlpatterns = [
     # path("posts/<int:pid>/comments/"), GET / POST / PUT / DELETE comments
     path("questions/<int:qid>/comments/", views.questions_comment),
     path("questions/<int:qid>/comments/<int:cid>/", views.question_comment_id),
-    # path("apply/") GET / POST application
-    # path("apply/<int:aid>/) GET / PUT / DELETE application
+    path("posts/<int:pid>/applications/", views.post_id_application),  # POST: add new application
+    path("posts/<int:pid>/applications/<int:aid>", views.post_id_application_id),  # GET, PUT: Update application, DELETE: Delete application
     path("signup/", views.signup),
     path("username/", views.check_username),
 ]

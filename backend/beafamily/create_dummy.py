@@ -180,7 +180,7 @@ def create(a, b, model_id):
             post = random.choice(posts)
             data = Application.objects.create(
                 author=user, post=post,
-                form="dummy/post/dog_dummy/dog_form.docx"
+                file="dummy/post/dog_dummy/dog_form.docx"
             )
 
 
