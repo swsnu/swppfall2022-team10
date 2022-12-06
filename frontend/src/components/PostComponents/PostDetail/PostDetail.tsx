@@ -29,8 +29,8 @@ const PostDetail = (props: IProps) => {
 
 	useEffect(() => {
 		dispatch(getPost(Number(id))).then((result) => {
-			// setEditable(result.payload.editable)
-			setEditable(true)
+			setEditable(result.payload.editable)
+			// setEditable(true)
 		})
 	}, [id])
 
@@ -38,7 +38,7 @@ const PostDetail = (props: IProps) => {
 		<Layout>
 			<div className='DetailContainer'>
 				<div className='PostDetail'>
-					<PostHeader is_author={props.is_author} />
+					<PostHeader is_author={editable} />
 					<div className='post-content-container'>
 						<div className='first-line'>
 							새로운 집을 찾고 있는,{' '}
@@ -80,7 +80,7 @@ const PostDetail = (props: IProps) => {
 								})}
 						</div>
 					</div>
-					{props.is_author&& id && <ApplicationList id={id} />}
+					{editable && id && <ApplicationList id={id} />}
 					{editable && (
 						<div className='post-buttons'>
 							<button
