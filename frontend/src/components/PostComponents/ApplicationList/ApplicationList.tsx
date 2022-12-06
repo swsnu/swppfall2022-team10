@@ -5,7 +5,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useDispatch, useSelector } from 'react-redux'
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import {
 	getApplications,
 	selectApplication,
@@ -18,35 +18,8 @@ import Modal from 'react-bootstrap/Modal'
 import './ApplicationList.scss'
 
 interface IProps {
-	id: string | undefined
+	id: string
 }
-
-const dummyList = [
-	{
-		id: 1,
-		author_id: 1,
-		author_name: 'jhpyun1',
-		file: null,
-		created_at: '2022-06-22',
-		post_id: 1
-	},
-	{
-		id: 2,
-		author_id: 1,
-		author_name: 'jhpyun2',
-		file: null,
-		created_at: '2022-06-23',
-		post_id: 1
-	},
-	{
-		id: 3,
-		author_id: 1,
-		author_name: 'jhpyun3',
-		file: null,
-		created_at: '2022-06-24',
-		post_id: 1
-	}
-]
 
 export default function ApplicationList(props: IProps) {
 	const applicationState = useSelector(selectApplication)
@@ -62,6 +35,12 @@ export default function ApplicationList(props: IProps) {
 			created_at: '2022-06-22',
 			post_id: 1
 		})
+
+	useEffect(() => {
+		// eslint-disable-next-line @typescript-eslint/no-floating-promises
+		dispatch(getApplications(props.id))
+	}, [])
+
 	const handleClose = () => setShow(false)
 	const onClickApp = useCallback(
 		(apply: applicationType) => {
@@ -84,7 +63,7 @@ export default function ApplicationList(props: IProps) {
 						</tr>
 					</thead>
 					<tbody>
-						{dummyList.map((apply: applicationType) => {
+						{applicationState.applications.map((apply: applicationType) => {
 							return (
 								<tr key={`${apply.id}_apply`}>
 									<td>{apply.id}</td>

@@ -80,7 +80,7 @@ const PostDetail = (props: IProps) => {
 								})}
 						</div>
 					</div>
-					{props.is_author && <ApplicationList id={id} />}
+					{props.is_author&& id && <ApplicationList id={id} />}
 					{editable && (
 						<div className='post-buttons'>
 							<button

@@ -23,7 +23,7 @@ const initialState: applicationState = {
 
 export const getApplications = createAsyncThunk(
 	'application/getApplications',
-	async (postId: applicationType['post_id'], { dispatch }) => {
+	async (postId: string, { dispatch }) => {
 		const response = await axios.get<applicationType[]>(
 			`/api/posts/${postId}/applications/`
 		)
