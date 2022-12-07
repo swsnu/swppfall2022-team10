@@ -3,7 +3,6 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { RootState } from '..'
 
-
 export interface commentType {
 	id: number
 	author_id: number
@@ -29,7 +28,6 @@ export interface QnaFilterType {
 	page: number
 }
 
-
 export interface commentState {
 	comments: commentType[]
 	selectedComment: commentType | null
@@ -42,7 +40,7 @@ export interface qnaState {
 
 const initialState: qnaState = {
 	qnas: [],
-	selectedQna: null,
+	selectedQna: null
 }
 
 export const getQnas = createAsyncThunk(
@@ -80,18 +78,20 @@ export const deleteQna = createAsyncThunk(
 
 export const createComment = createAsyncThunk(
 	'qna/createComment',
-	async (arg: { comment: { content: string }, id: number }, { dispatch }) => {
-		const response = await axios.post(`/api/questions/${arg.id}/comments`, arg.comment)
+	async (arg: { comment: { content: string }; id: number }, { dispatch }) => {
+		const response = await axios.post(
+			`/api/questions/${arg.id}/comments/`,
+			arg.comment
+		)
 		return response.data
 	}
 )
-
 
 export const qnaSlice = createSlice({
 	name: 'qna',
 	initialState,
 	reducers: {
-		getAll: (state, action: PayloadAction<{ qnas: QnaType[] }>) => { },
+		getAll: (state, action: PayloadAction<{ qnas: QnaType[] }>) => {},
 		getQna: (state, action: PayloadAction<{ targetId: number }>) => {
 			const target = state.qnas.find(
 				(td) => td.id === action.payload.targetId
@@ -123,10 +123,10 @@ export const qnaSlice = createSlice({
 				created_at: '',
 				hits: 0,
 				comments: [],
-				editable: false,
+				editable: false
 			}
 			state.qnas.push(newQna)
-		},
+		}
 	},
 	extraReducers: (builder) => {
 		builder.addCase(getQnas.fulfilled, (state, action) => {
