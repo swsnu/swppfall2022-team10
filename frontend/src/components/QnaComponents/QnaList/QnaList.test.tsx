@@ -29,7 +29,9 @@ const stubInitialState: qnaState = {
 			title: 'QNA_TITLE',
 			content: 'QNA_CONTENT',
 			created_at: 'QNA_CREATED_AT',
-			hits: 3
+			hits: 3,
+			editable: false,
+			comments: [],
 		}
 	],
 	selectedQna: null

@@ -1,6 +1,17 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { RootState } from '..'
+
+
+export interface commentType {
+	id: number
+	author_id: number
+	author_name: string
+	content: string
+	created_at: string
+	editable: boolean
+}
 
 export interface QnaType {
 	id: number
@@ -10,10 +21,18 @@ export interface QnaType {
 	content: string
 	created_at: string
 	hits: number
-	// comments: commentType[]
+	comments: commentType[]
+	editable: boolean
 }
+
 export interface QnaFilterType {
 	page: number
+}
+
+
+export interface commentState {
+	comments: commentType[]
+	selectedComment: commentType | null
 }
 
 export interface qnaState {
@@ -25,8 +44,6 @@ const initialState: qnaState = {
 	qnas: [],
 	selectedQna: null,
 }
-
-
 
 export const getQnas = createAsyncThunk(
 	'qna/getQnas',
@@ -45,7 +62,7 @@ export const getQna = createAsyncThunk(
 )
 
 export const createQna = createAsyncThunk(
-	'review/createQna',
+	'qna/createQna',
 	async (qna: FormData, { dispatch }) => {
 		const response = await axios.post('/api/questions/', qna)
 		dispatch(qnaActions.addQna(response.data))
@@ -60,6 +77,15 @@ export const deleteQna = createAsyncThunk(
 		dispatch(qnaActions.deleteQna({ targetId: id }))
 	}
 )
+
+export const createComment = createAsyncThunk(
+	'qna/createComment',
+	async (arg: { comment: { content: string }, id: number }, { dispatch }) => {
+		const response = await axios.post(`/api/questions/${arg.id}/comments`, arg.comment)
+		return response.data
+	}
+)
+
 
 export const qnaSlice = createSlice({
 	name: 'qna',
@@ -97,9 +123,10 @@ export const qnaSlice = createSlice({
 				created_at: '',
 				hits: 0,
 				comments: [],
+				editable: false,
 			}
 			state.qnas.push(newQna)
-		}
+		},
 	},
 	extraReducers: (builder) => {
 		builder.addCase(getQnas.fulfilled, (state, action) => {

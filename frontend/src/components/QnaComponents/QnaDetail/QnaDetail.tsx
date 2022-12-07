@@ -9,10 +9,9 @@ import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router'
 import { AppDispatch } from '../../../store'
-import { selectQna, qnaActions } from '../../../store/slices/qna'
+import { selectQna, createComment, qnaActions } from '../../../store/slices/qna'
 import { useNavigate, Navigate } from 'react-router-dom'
-import { selectComment, createComment } from '../../../store/slices/comment'
-import Comment from '../Comment/Comment'
+// import { selectComment, createComment } from '../../../store/slices/comment'
 import CommentList from '../CommentList/CommentList'
 import './QnaDetail.scss'
 
@@ -23,7 +22,6 @@ const QnaDetail = () => {
 	const dispatch = useDispatch<AppDispatch>()
 	const qnaState = useSelector(selectQna)
 	const navigate = useNavigate()
-	const commentState = useSelector(selectComment)
 
 	const createCommentHandler = (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault()
@@ -31,11 +29,15 @@ const QnaDetail = () => {
 		if (content.length === 0) return
 		console.log(content)
 
-		const data = { content: content }
+		/* const data = { content: content }
 		const formData = new FormData()
 
-		formData.append('content', JSON.stringify(data))
-		dispatch(createComment(formData))
+		formData.append('content', JSON.stringify(data)) */
+		const idNum = id !== undefined ? parseInt(id) : -1
+		dispatch(createComment({
+			comment: { content: content },
+			id: idNum
+		}))
 			.catch((err) => {
 				console.log(err)
 				alert('ERROR')
