@@ -7,10 +7,12 @@ from rest_framework.decorators import (
     api_view,
     authentication_classes,
     permission_classes,
+    parser_classes,
 )
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
+from rest_framework.parsers import MultiPartParser
 
 from ..serializers import UserPostSerializer, UserInfoSerializer, SignUpValidator
 
@@ -42,6 +44,7 @@ def user_post(request):
 
 
 @api_view(["POST"])
+@parser_classes([MultiPartParser])
 @verify(SignUpValidator, None, has_image=False)
 def signup(request):
     u = User.objects.create_user(**request.parsed)
