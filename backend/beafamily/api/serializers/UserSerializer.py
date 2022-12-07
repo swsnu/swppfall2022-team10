@@ -7,7 +7,6 @@ User = get_user_model()
 
 
 class UserPostSerializer(serializers.ModelSerializer):
-
     posts = PostSerializer(many=True)
     likes = PostSerializer(many=True)
     applies = ApplicationPostSerializer(many=True)
@@ -20,4 +19,19 @@ class UserPostSerializer(serializers.ModelSerializer):
 class UserInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ["username"]
+        fields = ["username", "nickname", "profile"]
+
+
+class SignUpValidator(serializers.ModelSerializer):
+    def to_internal_value(self, data):
+        for key, val in data.items():
+            if val == "":
+                data[key] = None
+
+        data["nickname"] = data["name"]
+
+        return super().to_internal_value(data)
+
+    class Meta:
+        model = User
+        fields = ["username", "password", "nickname", "email", "address"]

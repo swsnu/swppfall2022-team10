@@ -9,7 +9,13 @@ class QuestionCommentSerializer(SerializerWithAuth):
 
     class Meta:
         model = QuestionComment
-        fields = ["content", "author_name", "author_id", "created_at"]
+        fields = ["id", "content", "author_name", "author_id", "created_at"]
+
+
+class QuestionCommentValidator(serializers.ModelSerializer):
+    class Meta:
+        model = QuestionComment
+        fields = ["content"]
 
 
 class QuestionSerializer(SerializerWithAuth):

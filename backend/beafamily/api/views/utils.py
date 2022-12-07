@@ -1,4 +1,5 @@
 import json
+import logging
 from functools import wraps
 
 from django.core.paginator import Paginator
@@ -16,6 +17,66 @@ from rest_framework.response import Response
 from ..serializers import ImageValidator
 
 writable_methods = ["POST", "PUT"]
+
+logger = logging.getLogger("view_logger")
+
+
+def verify_signup(validator):
+    def decorator(func):
+        @wraps(func)
+        def verified_view(request, *args, **kwargs):
+
+            return func(request, *args, **kwargs)
+
+        return verified_view
+
+    return decorator
+
+
+def verify_json_request(validator, query_validator):
+    def decorator(func):
+        @wraps(func)
+        def verified_view(request, *args, **kwargs):
+            if request.method in writable_methods:
+                content_json = request.data
+
+                post_validator = validator(data=content_json)
+                if not post_validator.is_valid():
+                    return Response(status=status.HTTP_400_BAD_REQUEST)
+
+                request.parsed = post_validator.data
+
+            elif request.method == "GET":
+                query = request.GET
+                qv = query_validator(data=query)
+
+                if not qv.is_valid():
+                    return Response(status=status.HTTP_400_BAD_REQUEST)
+                request.query = qv.data
+
+            return func(request, *args, **kwargs)
+
+        return verified_view
+
+    return decorator
+
+
+def log_error(logger):
+    def decorator(func):
+        @wraps(func)
+        def error_handler(request, *args, **kwargs):
+            try:
+                ret = func(request, *args, **kwargs)
+
+            except Exception as e:
+                logger.error(f"{e}")
+                return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+            return ret
+
+        return error_handler
+
+    return decorator
 
 
 def verify(validator, query_validator, has_image=True):
@@ -39,7 +100,7 @@ def verify(validator, query_validator, has_image=True):
 
                 content_json = json.loads(content_json[0])
 
-                if has_image:
+                if "photos" in request.data:
                     photos = request.data.getlist("photos")
                     photos = [{"image": p} for p in photos]
 
