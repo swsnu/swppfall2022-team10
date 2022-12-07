@@ -2,23 +2,23 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-floating-promises */
 
-import Layout from '../Layout/Layout'
+import Layout from '../../Layout/Layout'
 import basicProfileImage from '../../data/basic_profile_image.png'
 
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { AppDispatch } from '../../store'
+import { AppDispatch } from '../../../store'
 import {
 	checkLogin,
 	signupUser,
 	UserSignupType,
 	checkUsername
-} from '../../store/slices/user'
+} from '../../../store/slices/user'
 import { useNavigate } from 'react-router-dom'
 import { MdDone, MdClear } from 'react-icons/md'
-import './Signup.scss'
+import './MyPage.scss'
 
-export default function Signup() {
+export default function MyPage() {
 	const [name, setName] = useState<string>('')
 	const [username, setUserName] = useState<string>('')
 	const [checked, setChecked] = useState<boolean>(false)
@@ -92,14 +92,11 @@ export default function Signup() {
 	}
 	return (
 		<Layout>
-			<div className='SignupContainer'>
-				<div className='Signup'>
-					<div className='signup-header'>
-						<h1>회원가입</h1>
-					</div>
-					<form className='signup-form'>
-						<div className='signup-input-container'>
-							<div className='signup-photo'>
+			<div className='MyPageContainer'>
+				<div className='MyPage'>
+					<form className='user-info-form'>
+						<div className='user-info-input-container'>
+							<div className='user-info-photo'>
 								<div className='photo-container'>
 									<img
 										id='profile-image'
@@ -125,7 +122,7 @@ export default function Signup() {
 									/>
 								</div>
 							</div>
-							<div className='signup-input'>
+							<div className='user-info-input'>
 								<div className='input-container'>
 									<label
 										htmlFor='name-input'
