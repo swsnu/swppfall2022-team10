@@ -1,11 +1,15 @@
 /* eslint-disable n/handle-callback-err */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import Layout from '../Layout/Layout'
+import Layout from '../../Layout/Layout'
 
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { AppDispatch } from '../../store'
-import { checkLogin, loginUser, UserLoginType } from '../../store/slices/user'
+import { AppDispatch } from '../../../store'
+import {
+	checkLogin,
+	loginUser,
+	UserLoginType
+} from '../../../store/slices/user'
 import { useNavigate } from 'react-router-dom'
 import './Login.scss'
 

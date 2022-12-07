@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import './App.css'
-import Login from './components/Login/Login'
-import Signup from './components/Signup/Signup'
+import Login from './components/UserComponents/Login/Login'
+import Signup from './components/UserComponents/Signup/Signup'
 import PostList from './components/PostComponents/PostList/PostList'
 import PostDetail from './components/PostComponents/PostDetail/PostDetail'
 import PostCreate from './components/PostComponents/PostCreate/PostCreate'

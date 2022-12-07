@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
-import { getMockStore } from '../../test-utils/mock'
+import { getMockStore } from '../../../test-utils/mock'
 import axios from 'axios'
 import LogIn from './Login'
 import { Provider } from 'react-redux'
