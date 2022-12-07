@@ -2,6 +2,7 @@ from rest_framework import serializers
 from ..models import Application, Post
 from .PostSerializer import PostSerializer
 from .utils import form_validator, UserNameField, ApplicationFieldSerializer
+from pathlib import Path
 
 
 class ApplicationPostSerializer(serializers.ModelSerializer):
@@ -12,9 +13,16 @@ class ApplicationPostSerializer(serializers.ModelSerializer):
         fields = ["post"]
 
 
+class FileNameField(serializers.FileField):
+    def to_representation(self, value):
+        p = Path(value.name)
+        return p.name
+
+
 class ApplicationSerializer(serializers.ModelSerializer):
     author_name = UserNameField(source="author", read_only=True)
-    file = serializers.FileField(use_url=True)
+    file = FileNameField()
+    created_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
 
     class Meta:
         model = Application
