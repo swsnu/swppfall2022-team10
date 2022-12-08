@@ -206,11 +206,13 @@ def post_bookmark(request, pid):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     user: User = request.user
-    user.likes.add(post)
+    exists = user.likes.filter(id=post.id).exists()
+    if exists:
+        user.likes.remove(post)
+    else:
+        user.likes.add(post)
 
-    return Response(status=status.HTTP_200_OK, data={
-        "bookmark": True
-    })
+    return Response(status=status.HTTP_200_OK, data={"bookmark": not exists})
 
 
 @api_view(["DELETE"])
