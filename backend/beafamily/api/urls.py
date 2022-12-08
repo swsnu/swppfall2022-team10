@@ -29,4 +29,5 @@ urlpatterns = [
     path("signup/", views.signup),
     path("username/", views.check_username),
     path("posts/<int:pid>/bookmark/", views.post_bookmark),
+    path("users/", views.delete_user),
 ]
