@@ -11,6 +11,24 @@ export interface postType {
 	neutering: boolean
 	title: string
 	animal_type: string
+	photo_path: Array<{ id: number; photo_path: string }>
+	species: string
+	age: number
+	gender: boolean
+	content: string
+	created_at: string
+	is_active: boolean
+}
+
+export interface postListType {
+	id: number
+	author_id: number
+	author_name: string
+	name: string
+	vaccination: boolean
+	neutering: boolean
+	title: string
+	animal_type: string
 	photo_path: string[]
 	species: string
 	age: number
@@ -18,7 +36,6 @@ export interface postType {
 	content: string
 	created_at: string
 	is_active: boolean
-	// editable: boolean
 }
 
 export interface postFilterType {
@@ -49,11 +66,11 @@ export interface postCreateType {
 
 export interface deleteImageType {
 	id: number
-	photo_path: string
+	photo_id: number
 }
 
 export interface postState {
-	posts: postType[]
+	posts: postListType[]
 	selectedPost: postType | null
 	selectedAnimal: string
 }
@@ -140,9 +157,9 @@ export const bookmarkPost = createAsyncThunk(
 export const deletePostImage = createAsyncThunk(
 	'post/deletePostImage',
 	async (data: deleteImageType, { dispatch }) => {
-		const response = await axios.put(`/api/posts/${data.id}/delete/`, {
-			photo_path: data.photo_path
-		})
+		const response = await axios.delete(
+			`/api/posts/${data.id}/photos/${data.photo_id}`
+		)
 		return response.data
 	}
 )

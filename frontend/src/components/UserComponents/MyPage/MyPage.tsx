@@ -32,7 +32,7 @@ export default function MyPage() {
 	const [matchPassword, setMatchPassword] = useState<boolean | null>(null)
 	const [email, setEmail] = useState<string>('')
 	const [file, setFile] = useState<File>()
-	const [imageUrl, setImageUrl] = useState<string>('')
+	const [imageUrl, setImageUrl] = useState<string | null>(null)
 
 	const dispatch = useDispatch<AppDispatch>()
 	const navigate = useNavigate()
@@ -45,6 +45,7 @@ export default function MyPage() {
 			if (!loggedIn) navigate('/')
 		})
 		dispatch(getUser()).then((result) => {
+			console.log(result.payload)
 			setCurrentUser(result.payload)
 			setEmail(result.payload.email)
 			setImageUrl(result.payload.photo_path)
@@ -69,13 +70,12 @@ export default function MyPage() {
 	}
 
 	const changeInfoHandler = async () => {
+		setPasswordConfirmMessage(null)
+		setPasswordMessage(null)
+
 		if (currentUser === null) return
 
-		if (password === '') {
-			setPasswordMessage('비밀번호를 입력해주세요.')
-			return
-		}
-		if (passwordConfirm === '') {
+		if (password !== '' && passwordConfirm === '') {
 			setPasswordConfirmMessage('비밀번호를 다시 한 번 입력해주세요.')
 			return
 		}
@@ -84,9 +84,20 @@ export default function MyPage() {
 			return
 		}
 
+		var pattern1 = /[0-9]/
+		var pattern2 = /[a-zA-Z]/
+		if (
+			password !== '' &&
+			(password.length < 10 ||
+				!(pattern1.test(password) && pattern2.test(password)))
+		) {
+			setPasswordMessage('비밀번호를 다시 입력해주세요.')
+			return
+		}
+
 		const userData: UserSignupType = {
 			username: currentUser.username,
-			password: password,
+			password: password === '' ? null : password,
 			email: email
 		}
 
@@ -121,7 +132,7 @@ export default function MyPage() {
 										<img
 											id='profile-image'
 											src={
-												imageUrl !== ''
+												imageUrl !== null
 													? imageUrl
 													: basicProfileImage
 											}
@@ -171,9 +182,9 @@ export default function MyPage() {
 									<div className='input-container'>
 										<label
 											htmlFor='password-input'
-											className='required'
+											// className='required'
 										>
-											비밀번호
+											새 비밀번호
 										</label>
 										<div className='user-input-input'>
 											<input
@@ -204,7 +215,7 @@ export default function MyPage() {
 									<div className='input-container'>
 										<label
 											htmlFor='password-confirm-input'
-											className='required'
+											// className='required'
 										>
 											비밀번호 확인
 										</label>
@@ -294,11 +305,11 @@ export default function MyPage() {
 					) : (
 						<div className='user-info-container'>
 							<div className='user-info'>
-								<div className='photo-container'>
+								<div className='user-info-photo-container'>
 									<img
 										id='profile-image'
 										src={
-											currentUser?.photo_path !== ''
+											currentUser?.photo_path !== null
 												? currentUser?.photo_path
 												: basicProfileImage
 										}

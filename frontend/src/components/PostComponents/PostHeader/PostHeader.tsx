@@ -5,7 +5,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import Layout from '../../Layout/Layout'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Dispatch, SetStateAction } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { AppDispatch } from '../../../store'
@@ -23,15 +23,18 @@ import './PostHeader.scss'
 interface IProps {
 	is_author: boolean
 	is_bookmark: boolean
+	setBookmark: Dispatch<SetStateAction<boolean>>
 }
 
 const PostHeader = (props: IProps) => {
+	// const [isBookmark, setIsBookmark] = useState<boolean>(false)
+
 	const postState = useSelector(selectPost)
 	const navigate = useNavigate()
 	const dispatch = useDispatch<AppDispatch>()
 
-	const [isBookmark, setIsBookmark] = useState<boolean>(props.is_bookmark)
-
+	console.log(props.is_bookmark)
+	// console.log(isBookmark)
 	const bookmarkPostHandler = () => {
 		if (postState.selectedPost === null) return
 		dispatch(checkLogin())
@@ -51,7 +54,7 @@ const PostHeader = (props: IProps) => {
 
 		dispatch(bookmarkPost(postState.selectedPost.id))
 			.then((result) => {
-				setIsBookmark(result.payload.bookmark)
+				props.setBookmark(result.payload.bookmark)
 			})
 			.catch((err) => {
 				console.log(err)
@@ -90,7 +93,7 @@ const PostHeader = (props: IProps) => {
 						aria-label='bookmark-button'
 						onClick={bookmarkPostHandler}
 					>
-						{isBookmark ? (
+						{props.is_bookmark ? (
 							<IoPaw size={40} />
 						) : (
 							<IoPawOutline size={40} />
@@ -111,16 +114,18 @@ const PostHeader = (props: IProps) => {
 			)}
 
 			<div className='post-images'>
-				{postState.selectedPost?.photo_path.map((img_path, index) => {
-					return (
-						<img
-							className='post-image'
-							src={img_path}
-							key={index}
-							alt={postState.selectedPost?.animal_type}
-						/>
-					)
-				})}
+				{postState.selectedPost?.photo_path.map(
+					(img_path, index: number) => {
+						return (
+							<img
+								className='post-image'
+								src={img_path.photo_path}
+								key={index}
+								alt={postState.selectedPost?.animal_type}
+							/>
+						)
+					}
+				)}
 			</div>
 		</div>
 	)

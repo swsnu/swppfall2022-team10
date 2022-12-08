@@ -55,6 +55,9 @@ export default function Signup() {
 	const checkDuplicateHandler = async (
 		event: React.MouseEvent<HTMLButtonElement, MouseEvent>
 	) => {
+		setUserNameMessage(null)
+		setPasswordConfirmMessage(null)
+		setPasswordMessage(null)
 		event.preventDefault()
 		if (username === '') {
 			setUserNameMessage('아이디를 입력해주세요!')
@@ -82,6 +85,9 @@ export default function Signup() {
 	}
 
 	const signUpHandler = async () => {
+		setUserNameMessage(null)
+		setPasswordConfirmMessage(null)
+		setPasswordMessage(null)
 		if (username === '') {
 			setUserNameMessage('아이디를 입력해주세요.')
 			return
@@ -100,6 +106,15 @@ export default function Signup() {
 		}
 		if (matchPassword === false) {
 			setPasswordConfirmMessage('비밀번호가 일치하지 않습니다.')
+			return
+		}
+		var pattern1 = /[0-9]/
+		var pattern2 = /[a-zA-Z]/
+		if (
+			password.length < 10 ||
+			!(pattern1.test(password) && pattern2.test(password))
+		) {
+			setPasswordMessage('비밀번호를 다시 입력해주세요.')
 			return
 		}
 		const userData: UserSignupType = {

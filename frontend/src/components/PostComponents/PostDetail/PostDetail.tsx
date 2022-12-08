@@ -39,7 +39,11 @@ const PostDetail = (props: IProps) => {
 		<Layout>
 			<div className='DetailContainer'>
 				<div className='PostDetail'>
-					<PostHeader is_author={props.is_author} is_bookmark={bookmark}/>
+					<PostHeader
+						is_author={props.is_author}
+						is_bookmark={bookmark}
+						setBookmark={setBookmark}
+					/>
 					<div className='post-content-container'>
 						<div className='first-line'>
 							새로운 집을 찾고 있는,{' '}

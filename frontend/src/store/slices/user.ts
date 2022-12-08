@@ -12,7 +12,7 @@ import axios from 'axios'
 export interface UserSignupType {
 	username: string
 	email: string
-	password: string
+	password: string | null
 	// phoneNumber: string
 	// address: string
 }
@@ -52,11 +52,11 @@ export const checkLogin = createAsyncThunk(
 // })
 
 export const getUser = createAsyncThunk('user/getUser', async () => {
-	const response = await axios.get(`/api/user/`)
+	const response = await axios.get(`/api/users/info`)
 	return response.data
 })
 export const deleteUser = createAsyncThunk('user/deleteUser', async () => {
-	const response = await axios.delete(`/api/user/`)
+	const response = await axios.delete(`/api/users/`)
 	return response.status
 })
 

@@ -40,7 +40,9 @@ export default function PostEdit() {
 	const [vaccination, setVaccination] = useState<string>('')
 	const [neutering, setNeutering] = useState<string>('')
 	const [content, setContent] = useState<string>('')
-	const [imageUrl, setImageUrl] = useState<string[]>([])
+	const [imageUrl, setImageUrl] = useState<
+		Array<{ id: number; photo_path: string }>
+	>([])
 	const [file, setFile] = useState<File[]>([])
 	const [editable, setEditable] = useState<boolean>(true)
 	const [modalOpen, setModalOpen] = useState<boolean>(false)
@@ -59,9 +61,8 @@ export default function PostEdit() {
 			}
 		})
 		dispatch(getPost(Number(id))).then((result) => {
-			const currentPost = result.payload
+			const currentPost = result.payload.post
 			if (currentPost) {
-				console.log(currentPost)
 				setTitle(currentPost.title)
 				setName(currentPost.name)
 				setAnimalType(currentPost.animal_type)
@@ -72,9 +73,8 @@ export default function PostEdit() {
 				setNeutering(currentPost.neutering ? 'O' : 'X')
 				setContent(currentPost.content)
 				setImageUrl(currentPost.photo_path)
-				// setEditable(currentPost.editable)
-				setEditable(true)
 			}
+			setEditable(result.payload.editable)
 		})
 	}, [id])
 
@@ -125,13 +125,15 @@ export default function PostEdit() {
 		[modalOpen, clickedImage]
 	)
 
-	const deleteImageHandler = (image: string) => {
+	const deleteImageHandler = (imageId: number) => {
 		if (postState.selectedPost !== null) {
 			const input = {
 				id: postState.selectedPost.id,
-				photo_path: image
+				photo_id: imageId
 			}
 			dispatch(deletePostImage(input))
+			const newImageUrl = imageUrl.filter((image) => image.id !== imageId)
+			setImageUrl(newImageUrl)
 		}
 	}
 
@@ -318,9 +320,9 @@ export default function PostEdit() {
 									<div className='current-list'>
 										현재 등록된 사진
 										<ul>
-											{imageUrl.map((image: string) => {
+											{imageUrl.map((image) => {
 												const tempList =
-													image.split('/')
+													image.photo_path.split('/')
 												const imageName =
 													tempList[
 														tempList.length - 1
@@ -333,7 +335,7 @@ export default function PostEdit() {
 															onClick={(e) => {
 																e.preventDefault()
 																viewImageModal(
-																	image
+																	image.photo_path
 																)
 															}}
 														>
@@ -344,7 +346,7 @@ export default function PostEdit() {
 															onClick={(e) => {
 																e.preventDefault()
 																deleteImageHandler(
-																	image
+																	image.id
 																)
 															}}
 														>
