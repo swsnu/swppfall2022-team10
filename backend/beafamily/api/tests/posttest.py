@@ -2,14 +2,14 @@ import json
 import random
 
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import AbstractBaseUser, AnonymousUser
 from django.utils import timezone
 from django.test import Client, TestCase
 from rest_framework import status
 from rest_framework.test import APIClient, APITestCase
 
 from ..models import *
-from ..serializers import PostSerializer
+from ..serializers import PostSerializer, PostDetailSerializer
 from .utils import *
 
 User: AbstractBaseUser = get_user_model()
@@ -218,8 +218,8 @@ class PostTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_getpost(self):
-        p1 = PostSerializer(self.p1, context={"user": None}).data
-        p2 = PostSerializer(self.p2).data
+        p1 = PostDetailSerializer(self.p1, context={"user": AnonymousUser()}).data
+        p2 = PostDetailSerializer(self.p2).data
 
         response = self.client.get("/api/posts/1/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
