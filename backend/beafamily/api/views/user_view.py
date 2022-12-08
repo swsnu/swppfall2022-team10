@@ -68,3 +68,11 @@ def check_username(request):
         return Response(data={"confirm": False})
     except:
         return Response(data={"confirm": True})
+
+
+@api_view(["DELETE"])
+@authentication_classes([SessionAuthentication])
+@permission_classes([IsAuthenticated])
+def delete_user(request):
+    request.user.delete()
+    return Response(status=status.HTTP_200_OK)
