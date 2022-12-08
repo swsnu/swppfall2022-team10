@@ -28,7 +28,8 @@ describe('post reducer', () => {
 		content: 'test_content',
 		created_at: 'test_created_at',
 		is_active: false,
-		editable: true
+		editable: true,
+		form: ""
 	}
 
 	const fakePostCreate = {

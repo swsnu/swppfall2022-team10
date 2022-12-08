@@ -36,10 +36,7 @@ export default function PostApply() {
 	}, [])
 
 	useEffect(() => {
-		dispatch(getPost(Number(id))).then((result) => {
-			// setEditable(result.payload.editable)
-			// setEditable(true)
-		})
+		dispatch(getPost(Number(id)))
 	}, [id])
 
 	const fileChangedHandler = (event: React.ChangeEvent<HTMLInputElement>) => {

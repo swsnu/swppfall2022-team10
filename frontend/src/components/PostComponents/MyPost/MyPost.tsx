@@ -148,7 +148,7 @@ export default function MyPost() {
 									gender={post.gender}
 									author={post.author_name}
 									clickDetail={() =>
-										navigate(`/post/${post.id}`)
+										navigate(`/myapply/${post.id}`)
 									}
 								/>
 							)

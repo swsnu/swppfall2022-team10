@@ -28,7 +28,8 @@ const tempState = {
 			vaccination: true,
 			neutering: true,
 			is_active: true,
-			editable: true
+			editable: true,
+			form: ""
 		},
 		selectedAnimal: ''
 	},

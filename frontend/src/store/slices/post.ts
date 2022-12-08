@@ -19,6 +19,7 @@ export interface postType {
 	created_at: string
 	is_active: boolean
 	editable: boolean
+	form: string
 }
 
 export interface postFilterType {

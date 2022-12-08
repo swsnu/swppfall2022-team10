@@ -12,15 +12,12 @@ import { AppDispatch } from '../../../store'
 import { selectPost, getPost, deletePost } from '../../../store/slices/post'
 import { FaSyringe, FaRegMeh } from 'react-icons/fa'
 import PostHeader from '../PostHeader/PostHeader'
-import ApplicationList from '../ApplicationList/ApplicationList'
+import MyApplicationList from '../ApplicationList/MyApplicationList'
 
-import './PostDetail.scss'
+import '../PostDetail/PostDetail.scss'
 
-interface IProps {
-	is_author: boolean
-}
 
-const PostDetail = (props: IProps) => {
+const MyApplyPost = () => {
 	const { id } = useParams()
 	const dispatch = useDispatch<AppDispatch>()
 	const postState = useSelector(selectPost)
@@ -30,8 +27,6 @@ const PostDetail = (props: IProps) => {
 	useEffect(() => {
 		dispatch(getPost(Number(id))).then((result) => {
 			setEditable(result.payload.editable)
-			// console.log(result.payload.editable)
-			// setEditable(true)
 		})
 	}, [id])
 
@@ -90,7 +85,7 @@ const PostDetail = (props: IProps) => {
 							<a href={`http://localhost:8000${postState.selectedPost?.form}`}>입양신청서 서식</a>
 						</div>
 					</div>
-					{editable && id && <ApplicationList id={id} />}
+					{id && <MyApplicationList id={id} />}
 					{editable && (
 						<div className='post-buttons'>
 							<button
@@ -117,4 +112,4 @@ const PostDetail = (props: IProps) => {
 		</Layout>
 	)
 }
-export default PostDetail
+export default MyApplyPost

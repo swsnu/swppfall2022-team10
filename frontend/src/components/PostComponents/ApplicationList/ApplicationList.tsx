@@ -9,7 +9,8 @@ import { useState, useCallback, useEffect } from 'react'
 import {
 	getApplications,
 	selectApplication,
-	applicationType
+	applicationType,
+	acceptApplication
 } from '../../../store/slices/application'
 import { AppDispatch } from '../../../store'
 
@@ -31,7 +32,7 @@ export default function ApplicationList(props: IProps) {
 			id: 1,
 			author_id: 1,
 			author_name: 'jhpyun1',
-			file: null,
+			file: "",
 			created_at: '2022-06-22',
 			post_id: 1
 		})
@@ -49,6 +50,9 @@ export default function ApplicationList(props: IProps) {
 		},
 		[show, clickedApplication]
 	)
+	const acceptHandler = (aid: number) => {
+		dispatch(acceptApplication({id: aid.toString(), postId: props.id}))
+	}
 
 	return (
 		<div className='application-list'>
@@ -93,8 +97,9 @@ export default function ApplicationList(props: IProps) {
 					<div>신청자: {clickedApplication.author_name}</div>
 					<div>신청일시: {clickedApplication.created_at}</div>
 					<div>신청서:</div>
+					<a href={`http://localhost:8000/api/posts/${clickedApplication?.post_id}/applications/${clickedApplication?.id}`}>{clickedApplication?.file}</a>
 					<div className='buttons'>
-						<button id='accept-button'>수락</button>
+						<button id='accept-button' onClick={() => acceptHandler(clickedApplication.id)}>수락</button>
 						<button id='reject-button'>거절</button>
 					</div>
 				</Modal.Body>

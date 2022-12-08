@@ -17,7 +17,7 @@ const stubInitialState: applicationState = {
 			id: 1,
 			author_id: 1,
 			author_name: 'Application_Author',
-			file: null,
+			file: "",
 			created_at: 'Application_Date',
 			post_id: 1
 		}

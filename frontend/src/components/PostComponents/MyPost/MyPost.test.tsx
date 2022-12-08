@@ -46,7 +46,8 @@ const fakepost: postType = {
 	content: 'POST_CONTENT',
 	created_at: 'POST_CREATED_AT',
 	is_active: true,
-	editable: false
+	editable: false,
+	form: ""
 }
 const mockStore = getMockStore({
 	post: { posts: [], selectedPost: null, selectedAnimal: '' },

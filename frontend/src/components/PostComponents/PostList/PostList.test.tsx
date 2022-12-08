@@ -45,7 +45,8 @@ const stubInitialState: postSlice.postState = {
 			content: 'POST_CONTENT',
 			created_at: 'POST_CREATED_AT',
 			is_active: true,
-			editable: false
+			editable: false,
+			form: ""
 		}
 	],
 	selectedPost: null,
@@ -94,7 +95,8 @@ describe('<PostList />', () => {
 						content: 'POST_CONTENT',
 						created_at: 'POST_CREATED_AT',
 						is_active: true,
-						editable: false
+						editable: false,
+						form: ""
 					}
 				]
 			}
