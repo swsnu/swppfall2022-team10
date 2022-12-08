@@ -108,8 +108,8 @@ export default function Signup() {
 			setPasswordConfirmMessage('비밀번호가 일치하지 않습니다.')
 			return
 		}
-		var pattern1 = /[0-9]/
-		var pattern2 = /[a-zA-Z]/
+		const pattern1 = /[0-9]/
+		const pattern2 = /[a-zA-Z]/
 		if (
 			password.length < 10 ||
 			!(pattern1.test(password) && pattern2.test(password))
