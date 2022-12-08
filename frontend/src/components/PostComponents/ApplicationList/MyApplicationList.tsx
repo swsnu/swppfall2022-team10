@@ -9,7 +9,8 @@ import { useState, useCallback, useEffect } from 'react'
 import {
 	getMyApplications,
 	selectApplication,
-	applicationType
+	applicationType,
+	deleteApplication
 } from '../../../store/slices/application'
 import { AppDispatch } from '../../../store'
 import Table from 'react-bootstrap/Table'
@@ -24,18 +25,24 @@ export default function MyApplicationList(props: IProps) {
 	const applicationState = useSelector(selectApplication)
 	const dispatch = useDispatch<AppDispatch>()
 	const example = [{
-		id: 28,
+		id: 23,
         file: "dog_form.docx",
         created_at: "2022-12-07 05:36:25",
         post_id: 33,
         author_id: 3,
         author_name: "lenyakim"
 	}]
+	const [isDelete, setIsDelete] = useState<boolean>(false)
 
 	useEffect(() => {
 		// eslint-disable-next-line @typescript-eslint/no-floating-promises
 		dispatch(getMyApplications(props.id))
 	}, [])
+
+	const onDeleteHandler = (apply: applicationType) => {
+		dispatch(deleteApplication(apply))
+		dispatch(getMyApplications(props.id))
+	}
 
 	return (
 		<div className='application-list'>
@@ -63,8 +70,7 @@ export default function MyApplicationList(props: IProps) {
 										<button
 											id='apply-button'
 											onClick={() => {
-												// dispatch(deleteApplication(apply))
-												console.log("hello")
+												onDeleteHandler(apply)
 											}}
 										>
 											<RiDeleteBin6Line />

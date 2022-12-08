@@ -32,7 +32,7 @@ export const getApplications = createAsyncThunk(
 )
 
 export const getMyApplications = createAsyncThunk(
-	'application/getApplications',
+	'application/getMyApplications',
 	async (postId: string, { dispatch }) => {
 		const response = await axios.get<applicationType[]>(
 			`/api/myposts/${postId}/applications/`
@@ -67,12 +67,12 @@ export const acceptApplication = createAsyncThunk(
 	}
 )
 
-// export const deleteApplication = createAsyncThunk(
-// 	'application/deleteApplication',
-// 	async (app: applicationType, { dispatch }) => {
-// 		await axios.delete(`/api/posts/${app.post_id}/applications/${app.id}/`)
-// 	}
-// )
+export const deleteApplication = createAsyncThunk(
+	'application/deleteApplication',
+	async (app: applicationType, { dispatch }) => {
+		await axios.delete(`/api/posts/${app.post_id}/applications/${app.id}/`)
+	}
+)
 
 export const applicationSlice = createSlice({
 	name: 'application',
