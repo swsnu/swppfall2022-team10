@@ -211,3 +211,25 @@ def post_bookmark(request, pid):
     return Response(status=status.HTTP_200_OK, data={
         "bookmark": True
     })
+
+
+@api_view(["DELETE"])
+@authentication_classes([SessionAuthentication])
+@permission_classes([IsAuthenticated])
+@log_error(logger)
+def delete_post_photo(request, pid, iid):
+    try:
+        p = Post.objects.get(id=pid)
+        i = PostImage.objects.get(id=iid)
+    except:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if i.post != p:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    if p.author != request.user:
+        return Response(status=status.HTTP_403_FORBIDDEN)
+
+    i.delete()
+
+    return Response(status=status.HTTP_200_OK)
