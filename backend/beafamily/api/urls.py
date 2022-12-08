@@ -28,4 +28,5 @@ urlpatterns = [
     ),  # GET, PUT: Update application, DELETE: Delete application
     path("signup/", views.signup),
     path("username/", views.check_username),
+    path("posts/<int:pid>/bookmark/", views.post_bookmark),
 ]

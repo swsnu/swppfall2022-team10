@@ -1,4 +1,4 @@
-from .PostSerializer import PostValidator, PostQueryValidator, PostSerializer
+from .PostSerializer import *
 from .ReviewSerializer import ReviewSerializer, ReviewQueryValidator, ReviewValidator
 from .ImageSerializer import ImageValidator, ImageURLField
 from .QuestionSerializer import *
@@ -11,6 +11,7 @@ __all__ = [
     "PostSerializer",
     "PostValidator",
     "PostQueryValidator",
+    "PostDetailSerializer",
     "ReviewValidator",
     "ReviewQueryValidator",
     "ReviewSerializer",

@@ -182,3 +182,43 @@ class PostSerializer(SerializerWithAuth):
             "comments",
             "form",
         ]
+
+class PostDetailSerializer(serializers.ModelSerializer):
+    created_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
+    comments = PostCommentSerializer(many=True)
+    photo_path = ImageURLField(read_only=True, many=True)
+    author_name = UserNameField(source="author", read_only=True)
+    form = serializers.FileField(validators=[form_validator])
+
+    def to_representation(self, instance):
+        ret_ = super().to_representation(instance)
+        ret = dict()
+        ret["post"] = ret_
+        if self.context:
+            user = self.context["user"]
+            ret["editable"] = user == instance.author
+            ret["bookmark"] = user.likes.filter(post=instance).exists()
+
+        return ret
+
+    class Meta:
+        model = Post
+        fields = [
+            "id",
+            "author_id",
+            "author_name",
+            "created_at",
+            "title",
+            "animal_type",
+            "name",
+            "content",
+            "neutering",
+            "vaccination",
+            "age",
+            "gender",
+            "species",
+            "is_active",
+            "photo_path",
+            "comments",
+            "form",
+        ]

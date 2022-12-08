@@ -15,11 +15,12 @@ from rest_framework.parsers import FileUploadParser, JSONParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework.response import Response
 
-from ..models import Post, PostImage, Application
+from ..models import Post, PostImage, Application, User
 from ..serializers import (
     PostSerializer,
     PostQueryValidator,
     PostValidator,
+    PostDetailSerializer,
     ApplicationValidator,
     ApplicationSerializer,
 )
@@ -42,7 +43,7 @@ def post_id(request, pid=0):
 
     if request.method == "GET":
 
-        info_response = PostSerializer(post, context={"user": request.user}).data
+        info_response = PostDetailSerializer(post, context={"user": request.user}).data
 
         return Response(info_response)
 
@@ -192,3 +193,21 @@ def post_id_application_id(request, pid, aid):
             return Response(status=status.HTTP_403_FORBIDDEN)
         app.delete()
         return Response(status=status.HTTP_200_OK)
+
+
+@api_view(["PUT"])
+@authentication_classes([SessionAuthentication])
+@permission_classes([IsAuthenticated])
+@log_error(logger)
+def post_bookmark(request, pid):
+    try:
+        post = Post.objects.get(id=pid)
+    except:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    user: User = request.user
+    user.likes.add(post)
+
+    return Response(status=status.HTTP_200_OK, data={
+        "bookmark": True
+    })
