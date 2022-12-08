@@ -34,7 +34,8 @@ const stubInitialState: reviewState = {
 			content: 'REVIEW_CONTENT',
 			animal_type: 'REVIEW_ANIMAL_TYPE',
 			species: 'REVIEW_ANIMAL_SPECIES',
-			created_at: 'REVIEW_CREATED_AT'
+			created_at: 'REVIEW_CREATED_AT',
+			post_id: 1
 		}
 	],
 	selectedReview: null,

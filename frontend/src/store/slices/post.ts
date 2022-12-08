@@ -125,6 +125,11 @@ export const editPost = createAsyncThunk(
 	}
 )
 
+export const checkPost = createAsyncThunk('post/checkPost', async () => {
+	const response = await axios.get<postType[]>('/api/reviews/check/')
+	return response.data
+})
+
 export const postSlice = createSlice({
 	name: 'post',
 	initialState,
@@ -218,6 +223,9 @@ export const postSlice = createSlice({
 		builder.addCase(getPosts.fulfilled, (state, action) => {
 			// Add post to the state array
 			state.posts = action.payload.results
+		})
+		builder.addCase(checkPost.fulfilled, (state, action) => {
+			state.posts = action.payload
 		})
 		builder.addCase(getPost.fulfilled, (state, action) => {
 			state.selectedPost = action.payload
