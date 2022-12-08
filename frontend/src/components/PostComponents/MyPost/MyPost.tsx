@@ -11,7 +11,7 @@ import { useEffect, useState, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import Post from '../Post/Post'
-import { postType } from '../../../store/slices/post'
+import { postListType, postType } from '../../../store/slices/post'
 import { getMyPosts, selectMyPost } from '../../../store/slices/mypost'
 import { AppDispatch } from '../../../store'
 
@@ -36,7 +36,7 @@ export default function MyPost() {
 	}, [])
 
 	const post = useMemo(() => {
-		const shortMypost: postType[] = mypost.slice(0, 4)
+		const shortMypost: postListType[] = mypost.slice(0, 4)
 		if (mypost.length > 4) {
 			if (mypostMore) {
 				return mypost
@@ -47,7 +47,7 @@ export default function MyPost() {
 	}, [mypostMore, mypost])
 
 	const like = useMemo(() => {
-		const shortMyLike: postType[] = mylike.slice(0, 4)
+		const shortMyLike: postListType[] = mylike.slice(0, 4)
 		if (mylike.length > 4) {
 			if (mylikeMore) {
 				return mylike
@@ -58,7 +58,7 @@ export default function MyPost() {
 	}, [mylikeMore, mylike])
 
 	const apply = useMemo(() => {
-		const shortMyapply: postType[] = myapply.slice(0, 4)
+		const shortMyapply: postListType[] = myapply.slice(0, 4)
 		if (myapply.length > 4) {
 			if (myapplyMore) {
 				return myapply
@@ -80,7 +80,7 @@ export default function MyPost() {
 						</button>
 					</div>
 					<div className='posts-post'>
-						{post.map((post: postType) => {
+						{post.map((post: postListType) => {
 							return (
 								<Post
 									key={`${post.id}_post`}
@@ -108,7 +108,7 @@ export default function MyPost() {
 						</button>
 					</div>
 					<div className='posts-like'>
-						{like.map((post: postType) => {
+						{like.map((post: postListType) => {
 							return (
 								<Post
 									key={`${post.id}_post`}
@@ -136,7 +136,8 @@ export default function MyPost() {
 						</button>
 					</div>
 					<div className='posts-apply'>
-						{apply.map((post: postType) => {
+						{/* {apply.map((post: postListType) => {
+							console.log(post.photo_path)
 							return (
 								<Post
 									key={`${post.id}_post`}
@@ -152,7 +153,7 @@ export default function MyPost() {
 									}
 								/>
 							)
-						})}
+						})} */}
 					</div>
 				</div>
 			</div>
