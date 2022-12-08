@@ -197,7 +197,8 @@ class PostDetailSerializer(serializers.ModelSerializer):
         if self.context:
             user = self.context["user"]
             ret["editable"] = user == instance.author
-            ret["bookmark"] = user.likes.filter(post=instance).exists()
+            if user.is_authenticated:
+                ret["bookmark"] = user.likes.filter(post=instance).exists()
 
         return ret
 
