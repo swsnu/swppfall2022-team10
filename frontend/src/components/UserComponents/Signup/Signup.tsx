@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 
 import Layout from '../../Layout/Layout'
-import basicProfileImage from '../../data/basic_profile_image.png'
+import basicProfileImage from '../../../data/basic_profile_image.png'
 
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
@@ -18,19 +18,18 @@ import { useNavigate } from 'react-router-dom'
 import { MdDone, MdClear } from 'react-icons/md'
 import './Signup.scss'
 
-const basicImageUrl =
-	'https://www.civictheatre.ie/wp-content/uploads/2016/05/blank-profile-picture-973460_960_720-250x250.png'
-
 export default function Signup() {
-	const [name, setName] = useState<string>('')
 	const [username, setUserName] = useState<string>('')
-	const [checked, setChecked] = useState<boolean>(false)
+	const [usernameMessage, setUserNameMessage] = useState<string | null>(null)
+	const [checked, setChecked] = useState<boolean | null>(null)
 	const [password, setPassword] = useState<string>('')
+	const [passwordMessage, setPasswordMessage] = useState<string | null>(null)
 	const [passwordConfirm, setPasswordConfirm] = useState<string>('')
-	const [matchPassword, setMatchPassword] = useState<boolean>(true)
-	const [phoneNumber, setPhoneNumber] = useState<string>('')
+	const [passwordConfirmMessage, setPasswordConfirmMessage] = useState<
+		string | null
+	>(null)
+	const [matchPassword, setMatchPassword] = useState<boolean | null>(null)
 	const [email, setEmail] = useState<string>('')
-	const [address, setAddress] = useState<string>('')
 	const [file, setFile] = useState<File[]>([])
 	const [imageUrl, setImageUrl] = useState<string>('')
 
@@ -47,10 +46,29 @@ export default function Signup() {
 	}, [])
 
 	useEffect(() => {
-		if (password !== passwordConfirm) setMatchPassword(false)
+		if (password.length === 0 || passwordConfirm.length === 0)
+			setMatchPassword(null)
+		else if (password !== passwordConfirm) setMatchPassword(false)
 		else setMatchPassword(true)
 	}, [password, passwordConfirm])
 
+	const checkDuplicateHandler = async (
+		event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+	) => {
+		event.preventDefault()
+		if (username === '') {
+			setUserNameMessage('아이디를 입력해주세요!')
+			return
+		}
+		dispatch(checkUsername(username)).then((result) => {
+			const confirm: boolean = (
+				result.payload as {
+					confirm: boolean
+				}
+			).confirm
+			if (confirm) setChecked(true)
+		})
+	}
 	const fileChangedHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const reader = new FileReader()
 		const files = event.target.files
@@ -64,19 +82,35 @@ export default function Signup() {
 	}
 
 	const signUpHandler = async () => {
+		if (username === '') {
+			setUserNameMessage('아이디를 입력해주세요.')
+			return
+		}
+		if (checked == null) {
+			setUserNameMessage('아이디 중복확인을 해주세요.')
+			return
+		}
+		if (password === '') {
+			setPasswordMessage('비밀번호를 입력해주세요.')
+			return
+		}
+		if (passwordConfirm === '') {
+			setPasswordConfirmMessage('비밀번호를 다시 한 번 입력해주세요.')
+			return
+		}
+		if (matchPassword === false) {
+			setPasswordConfirmMessage('비밀번호가 일치하지 않습니다.')
+			return
+		}
 		const userData: UserSignupType = {
 			username: username,
 			password: password,
-			name: name,
-			phoneNumber: phoneNumber,
-			email: email,
-			address: address
+			email: email
 		}
 
 		const formData = new FormData()
 		formData.append('content', JSON.stringify(userData))
 		file.forEach((f, i) => formData.append('photos', f))
-		console.log(formData.get('content'))
 
 		dispatch(signupUser(formData))
 			// .unwrap()
@@ -87,15 +121,16 @@ export default function Signup() {
 				// console.log(err)
 				alert('Sign up Error')
 				setUserName('')
-				setChecked(false)
+				setChecked(null)
+				setUserNameMessage(null)
+				setPasswordConfirmMessage(null)
+				setPasswordMessage(null)
 				setPassword('')
 				setPasswordConfirm('')
-				setName('')
-				setAddress('')
-				setPhoneNumber('')
 				setEmail('')
 			})
 	}
+
 	return (
 		<Layout>
 			<div className='SignupContainer'>
@@ -112,7 +147,7 @@ export default function Signup() {
 										src={
 											imageUrl !== ''
 												? imageUrl
-												: basicImageUrl
+												: basicProfileImage
 										}
 									/>
 									<label
@@ -134,69 +169,50 @@ export default function Signup() {
 							<div className='signup-input'>
 								<div className='input-container'>
 									<label
-										htmlFor='name-input'
-										className='required'
-									>
-										닉네임
-									</label>
-									<input
-										className='user-input'
-										id='name-input'
-										type='text'
-										name='name'
-										onChange={(event) =>
-											setName(event.target.value)
-										}
-										value={name}
-									/>
-									<div className='input-status'></div>
-								</div>
-								<div className='input-container'>
-									<label
 										htmlFor='username-input'
 										className='required'
 									>
 										아이디
 									</label>
-									<input
-										className='user-input'
-										id='username-input'
-										type='text'
-										name='username'
-										onChange={(event) => {
-											setUserName(event.target.value)
-											setChecked(false)
-										}}
-										value={username}
-									/>
-									<div className='input-status'>
-										{checked ? (
-											<MdDone
-												size={30}
-												style={{ color: 'green' }}
-											/>
-										) : (
-											<button
-												id='duplicate-check'
-												onClick={(event) => {
-													event.preventDefault()
-													dispatch(
-														checkUsername(username)
-													).then((result) => {
-														const confirm: boolean =
-															(
-																result.payload as {
-																	confirm: boolean
-																}
-															).confirm
-														if (confirm)
-															setChecked(true)
-													})
-												}}
-											>
-												중복확인
-											</button>
+									<div className='signup-input-input'>
+										<input
+											className='user-input'
+											id='username-input'
+											type='text'
+											name='username'
+											onChange={(event) => {
+												setUserName(event.target.value)
+												setUserNameMessage(null)
+												setChecked(null)
+											}}
+											value={username}
+										/>
+										{checked !== null &&
+											(checked ? (
+												<span className='input-message green'>
+													이용 가능한 아이디입니다.
+												</span>
+											) : (
+												<span className='input-message red'>
+													중복된 아이디입니다. 다른
+													아이디를 입력해주세요.
+												</span>
+											))}
+										{usernameMessage !== null && (
+											<span className='input-message red'>
+												{usernameMessage}
+											</span>
 										)}
+									</div>
+									<div className='input-status'>
+										<button
+											id='duplicate-check'
+											onClick={(event) => {
+												checkDuplicateHandler(event)
+											}}
+										>
+											중복확인
+										</button>
 									</div>
 								</div>
 								<div className='input-container'>
@@ -206,16 +222,28 @@ export default function Signup() {
 									>
 										비밀번호
 									</label>
-									<input
-										className='user-input'
-										id='password-input'
-										type='password'
-										name='password'
-										onChange={(event) =>
-											setPassword(event.target.value)
-										}
-										value={password}
-									/>
+									<div className='signup-input-input'>
+										<input
+											className='user-input'
+											id='password-input'
+											type='password'
+											name='password'
+											onChange={(event) => {
+												setPassword(event.target.value)
+												setPasswordMessage(null)
+											}}
+											value={password}
+										/>
+										<span className='input-message'>
+											영문자, 숫자 포함 10자 이상
+											입력해주세요.
+										</span>
+										{passwordMessage !== null && (
+											<span className='input-message red'>
+												{passwordMessage}
+											</span>
+										)}
+									</div>
 									<div className='input-status'></div>
 								</div>
 								<div className='input-container'>
@@ -225,58 +253,55 @@ export default function Signup() {
 									>
 										비밀번호 확인
 									</label>
-									<input
-										className='user-input'
-										id='password-confirm-input'
-										type='password'
-										name='password-confirm'
-										onChange={(event) =>
-											setPasswordConfirm(
-												event.target.value
-											)
-										}
-										value={passwordConfirm}
-									/>
-									<div className='input-status'>
-										{matchPassword ? (
-											<MdDone
-												size={30}
-												style={{ color: 'green' }}
-											/>
-										) : (
-											<MdClear
-												size={30}
-												style={{ color: 'red' }}
-											/>
+									<div className='signup-input-input'>
+										<input
+											className='user-input'
+											id='password-confirm-input'
+											type='password'
+											name='password-confirm'
+											onChange={(event) => {
+												setPasswordConfirm(
+													event.target.value
+												)
+												setPasswordConfirmMessage(null)
+											}}
+											value={passwordConfirm}
+										/>
+										{passwordConfirmMessage !== null && (
+											<span className='input-message red'>
+												{passwordConfirmMessage}
+											</span>
 										)}
+									</div>
+									<div className='input-status'>
+										{matchPassword !== null &&
+											(matchPassword ? (
+												<MdDone
+													size={30}
+													style={{ color: 'green' }}
+												/>
+											) : (
+												<MdClear
+													size={30}
+													style={{ color: 'red' }}
+												/>
+											))}
 									</div>
 								</div>
 								<div className='input-container'>
 									<label htmlFor='email-input'>이메일</label>
-									<input
-										className='user-input'
-										id='email-input'
-										type='text'
-										name='email'
-										onChange={(event) =>
-											setEmail(event.target.value)
-										}
-										value={email}
-									/>
-									<div className='input-status'></div>
-								</div>
-								<div className='input-container'>
-									<label htmlFor='address-input'>주소</label>
-									<input
-										className='user-input'
-										id='address-input'
-										type='text'
-										name='address'
-										onChange={(event) =>
-											setAddress(event.target.value)
-										}
-										value={address}
-									/>
+									<div className='signup-input-input'>
+										<input
+											className='user-input'
+											id='email-input'
+											type='text'
+											name='email'
+											onChange={(event) =>
+												setEmail(event.target.value)
+											}
+											value={email}
+										/>
+									</div>
 									<div className='input-status'></div>
 								</div>
 							</div>

@@ -1,7 +1,9 @@
 .SignupContainer {
+	width: 1200px;
 	padding-top: 10px;
 	padding-bottom: 50px;
-	margin: 0 50px;
+	margin: auto;
+	// margin: 0 50px;
 	display: flex;
 	flex-direction: column;
 	font-family: 'Pretendard-Regular', sans-serif;
@@ -15,15 +17,8 @@
 	display: flex;
 	flex-direction: column;
 
-	.signup-input-container {
-		display: flex;
-		flex-direction: row;
-	}
 	.signup-photo {
-		width: 35%;
-	}
-	.signup-input {
-		width: 65%;
+		width: 25%;
 	}
 
 	#signup-button,
@@ -68,22 +63,46 @@
 		font-size: 23px;
 		line-height: 40px;
 
+		.signup-input {
+			width: 75%;
+			margin-left: 70px;
+			margin-top: 30px;
+		}
+
+		.signup-input-container {
+			display: flex;
+			flex-direction: row;
+		}
+
 		.input-container {
 			display: flex;
 			flex-direction: row;
 			align-self: flex-start;
-			width: 700px;
-			justify-content: right;
-			margin-left: 50px;
+			width: 750px;
 			label {
 				text-align: left;
-				margin-right: 50px;
+				margin-right: 20px;
 				width: 200px;
 			}
-			.user-input {
-				width: 400px;
+			.signup-input-input {
+				display: flex;
+				flex-direction: column;
+				margin-bottom: 20px;
+				.user-input {
+					width: 400px;
+				}
+				.input-message {
+					font-size: 17px;
+					padding-left: 10px;
+					text-align: left;
+				}
+				.green {
+					color: green;
+				}
+				.red {
+					color: red;
+				}
 			}
-			margin-bottom: 15px;
 			.input-status {
 				margin-left: 10px;
 				width: 100px;

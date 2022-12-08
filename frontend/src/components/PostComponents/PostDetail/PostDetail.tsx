@@ -26,11 +26,12 @@ const PostDetail = (props: IProps) => {
 	const postState = useSelector(selectPost)
 	const navigate = useNavigate()
 	const [editable, setEditable] = useState<boolean>(false)
+	const [bookmark, setBookmark] = useState<boolean>(false)
 
 	useEffect(() => {
 		dispatch(getPost(Number(id))).then((result) => {
-			// setEditable(result.payload.editable)
-			setEditable(true)
+			setEditable(result.payload.editable)
+			setBookmark(result.payload.bookmark)
 		})
 	}, [id])
 
@@ -38,7 +39,7 @@ const PostDetail = (props: IProps) => {
 		<Layout>
 			<div className='DetailContainer'>
 				<div className='PostDetail'>
-					<PostHeader is_author={props.is_author} />
+					<PostHeader is_author={props.is_author} is_bookmark={bookmark}/>
 					<div className='post-content-container'>
 						<div className='first-line'>
 							새로운 집을 찾고 있는,{' '}

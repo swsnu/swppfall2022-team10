@@ -2,6 +2,7 @@
 import './App.css'
 import Login from './components/UserComponents/Login/Login'
 import Signup from './components/UserComponents/Signup/Signup'
+import MyPage from './components/UserComponents/MyPage/MyPage'
 import PostList from './components/PostComponents/PostList/PostList'
 import PostDetail from './components/PostComponents/PostDetail/PostDetail'
 import PostCreate from './components/PostComponents/PostCreate/PostCreate'
@@ -23,6 +24,7 @@ function App() {
 					<Route path='/' element={<PostList />} />
 					<Route path='/login' element={<Login />} />
 					<Route path='/signup' element={<Signup />} />
+					<Route path='/myinfo' element={<MyPage />} />
 					<Route
 						path='/post/:id'
 						element={<PostDetail is_author={false} />}

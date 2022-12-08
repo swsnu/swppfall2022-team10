@@ -18,7 +18,7 @@ export interface postType {
 	content: string
 	created_at: string
 	is_active: boolean
-	editable: boolean
+	// editable: boolean
 }
 
 export interface postFilterType {
@@ -45,6 +45,11 @@ export interface postCreateType {
 	vaccination: boolean
 	neutering: boolean
 	content: string
+}
+
+export interface deleteImageType {
+	id: number
+	photo_path: string
 }
 
 export interface postState {
@@ -80,7 +85,7 @@ export const getPost = createAsyncThunk(
 	'post/getPost',
 	async (id: postType['id'], { dispatch }) => {
 		const response = await axios.get(`/api/posts/${id}/`)
-		return response.data ?? null
+		return response.data
 	}
 )
 
@@ -120,6 +125,24 @@ export const editPost = createAsyncThunk(
 		// 		content: post.content
 		// 	})
 		// )
+		return response.data
+	}
+)
+
+export const bookmarkPost = createAsyncThunk(
+	'post/bookmarkPost',
+	async (postId: postType['id'], { dispatch }) => {
+		const response = await axios.put(`/api/posts/${postId}/bookmark/`)
+		return response.data
+	}
+)
+
+export const deletePostImage = createAsyncThunk(
+	'post/deletePostImage',
+	async (data: deleteImageType, { dispatch }) => {
+		const response = await axios.put(`/api/posts/${data.id}/delete/`, {
+			photo_path: data.photo_path
+		})
 		return response.data
 	}
 )
@@ -219,7 +242,7 @@ export const postSlice = createSlice({
 			state.posts = action.payload.results
 		})
 		builder.addCase(getPost.fulfilled, (state, action) => {
-			state.selectedPost = action.payload
+			state.selectedPost = action.payload.post
 		})
 		builder.addCase(createPost.rejected, (_state, action) => {
 			// console.error(action.error)

@@ -64,6 +64,7 @@ export default function PostCreate() {
 
 	const fileChangedHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const files = event.target.files
+		console.log(event.target.files)
 		if (files !== null) setFile(file.concat(Array.from(files)))
 	}
 

@@ -13,13 +13,17 @@ export interface UserSignupType {
 	username: string
 	email: string
 	password: string
-	name: string
-	phoneNumber: string
-	address: string
+	// phoneNumber: string
+	// address: string
 }
 export interface UserLoginType {
 	username: string
 	password: string
+}
+export interface UserType {
+	username: string
+	email: string
+	photo_path: string
 }
 
 // export interface UserState {
@@ -47,30 +51,14 @@ export const checkLogin = createAsyncThunk(
 // 	return response.data
 // })
 
-// export const getUser = createAsyncThunk(
-// 	'user/getUsers',
-// 	async (id: UserType['id']) => {
-// 		const response = await axios.get(`/api/user/${id}/`)
-// 		return response.data
-// 	}
-// )
-
-// example for login request
-// const sendLoginRequest = async (username: string, password: string) => {
-// 	await axios.get(`/api/token/`) // get csrf token
-// 	const response = await axios.post(
-// 		`/api/signin/`,
-// 		{},
-// 		{
-// 			auth: {
-// 				username: username,
-// 				password: password
-// 			}
-// 		}
-// 	)
-// 	if (response.status === 200) return true
-// 	else return false
-// }
+export const getUser = createAsyncThunk('user/getUser', async () => {
+	const response = await axios.get(`/api/user/`)
+	return response.data
+})
+export const deleteUser = createAsyncThunk('user/deleteUser', async () => {
+	const response = await axios.delete(`/api/user/`)
+	return response.status
+})
 
 export const checkUsername = createAsyncThunk(
 	'user/checkUsername',
@@ -89,6 +77,15 @@ export const signupUser = createAsyncThunk(
 		await axios.get(`/api/token/`) // get csrf token
 		const response = await axios.post(`/api/signup/`, user)
 		return response.status
+	}
+)
+
+export const editUser = createAsyncThunk(
+	'user/editUser',
+	async (user: FormData, { dispatch }) => {
+		await axios.get(`/api/token/`) // get csrf token
+		const response = await axios.post(`/api/edit/`, user)
+		return response.data
 	}
 )
 
