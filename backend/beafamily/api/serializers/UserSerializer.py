@@ -17,9 +17,11 @@ class UserPostSerializer(serializers.ModelSerializer):
 
 
 class UserInfoSerializer(serializers.ModelSerializer):
+    photo_path = serializers.ImageField(source="profile", use_url=True)
+
     class Meta:
         model = User
-        fields = ["username", "nickname", "profile"]
+        fields = ["username", "photo_path", "email"]
 
 
 class SignUpValidator(serializers.ModelSerializer):
@@ -28,10 +30,8 @@ class SignUpValidator(serializers.ModelSerializer):
             if val == "":
                 data[key] = None
 
-        data["nickname"] = data["name"]
-
         return super().to_internal_value(data)
 
     class Meta:
         model = User
-        fields = ["username", "password", "nickname", "email", "address"]
+        fields = ["username", "password", "email"]

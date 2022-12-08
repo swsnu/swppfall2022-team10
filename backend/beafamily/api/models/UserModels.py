@@ -12,7 +12,6 @@ class UserManager(BaseUserManager):
 
         if nickname is None:
             nickname = username
-            # raise ValueError("Nickname is required")
 
         if type(username) != str:
             raise TypeError("Username must be string")
