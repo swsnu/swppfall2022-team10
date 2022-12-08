@@ -1,7 +1,7 @@
 from ..models import Post, PostImage, PostComment
 from rest_framework import serializers
 from django.utils import timezone
-from .ImageSerializer import ImageURLField
+from .ImageSerializer import ImageURLField, PostImageSerializer
 from .AbstractTypes import SerializerWithAuth, PaginationValidator
 from .utils import UserNameField, ApplicationFieldSerializer, form_validator
 
@@ -184,10 +184,15 @@ class PostSerializer(SerializerWithAuth):
         ]
 
 
-class PostDetailSerializer(serializers.Serializer):
+class PostDetailSerializer(serializers.ModelSerializer):
+    created_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
+    comments = PostCommentSerializer(many=True)
+    photo_path = PostImageSerializer(many=True)
+    author_name = UserNameField(source="author", read_only=True)
+    form = serializers.FileField(validators=[form_validator])
 
     def to_representation(self, instance):
-        ret_ = PostSerializer(instance).data
+        ret_ = super().to_representation(instance)
         ret = dict()
         ret["post"] = ret_
         if self.context:
@@ -200,7 +205,23 @@ class PostDetailSerializer(serializers.Serializer):
         return ret
 
     class Meta:
+        model = Post
         fields = [
-            "post",
-            "bookmark"
+            "id",
+            "author_id",
+            "author_name",
+            "created_at",
+            "title",
+            "animal_type",
+            "name",
+            "content",
+            "neutering",
+            "vaccination",
+            "age",
+            "gender",
+            "species",
+            "is_active",
+            "photo_path",
+            "comments",
+            "form",
         ]

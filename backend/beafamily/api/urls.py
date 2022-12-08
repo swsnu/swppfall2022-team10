@@ -30,4 +30,5 @@ urlpatterns = [
     path("username/", views.check_username),
     path("posts/<int:pid>/bookmark/", views.post_bookmark),
     path("users/", views.delete_user),
+    path("posts/<int:pid>/photos/<int:iid>/", views.delete_post_photo),
 ]
