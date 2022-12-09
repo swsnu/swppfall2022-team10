@@ -48,6 +48,7 @@ class User(AbstractBaseUser):
     nickname = models.CharField(max_length=30, unique=True, null=True)
     address = models.CharField(max_length=100, null=True)
     profile = models.ImageField(null=True)
+    shelter = models.BooleanField(default=False)
 
     objects = UserManager()
 

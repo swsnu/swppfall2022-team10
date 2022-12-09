@@ -11,6 +11,7 @@ class Review(AbstractArticleType):
     post = models.OneToOneField("Post", on_delete=models.CASCADE, related_name="review_post", null=True, default=None)
 
     class Meta:
+        db_table = "review"
         ordering = ["-created_at"]
 
 
@@ -26,3 +27,5 @@ class ReviewImage(AbstractImageType):
 
     def __str__(self):
         return self.image.url
+    class Meta:
+        db_table = "review_image"

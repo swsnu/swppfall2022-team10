@@ -3,6 +3,7 @@ import os
 import random
 
 import tqdm
+import sys
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.dev_settings")
 from django.core.wsgi import get_wsgi_application
@@ -235,6 +236,9 @@ if __name__ == "__main__":
     print(f"Number of post images: {n_pimage}")
     print(f"Number of review images: {n_rimage}")
     print("-" * 30)
+
+    if len(sys.argv) > 1 and sys.argv[1] == "--stat":
+        exit(0)
 
     if n_user == 0:
         usernames = ["yeomjy", "seorin55", "lenyakim", "jhpyun"]

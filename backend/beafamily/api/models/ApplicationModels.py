@@ -20,3 +20,4 @@ class Application(AbstractMetaDataType):
 
     class Meta:
         ordering = ["-created_at"]
+        db_table = "application"

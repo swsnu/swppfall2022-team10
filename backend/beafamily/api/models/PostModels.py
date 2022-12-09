@@ -34,6 +34,7 @@ class Post(AbstractArticleType):
     thumbnail = models.ImageField(upload_to=thumbnail_upload_to)
 
     class Meta:
+        db_table = "post"
         ordering = ["-created_at"]
 
 
@@ -48,6 +49,12 @@ class PostImage(AbstractImageType):
     def __str__(self):
         return self.image.url
 
+    class Meta:
+        db_table = "post_image"
+
 
 class PostComment(AbstractCommentType):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
+
+    class Meta:
+        db_table = "post_comment"
