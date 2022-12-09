@@ -1,0 +1,10 @@
+.screen{
+    display: inline-block;
+    .chat-content{
+        height: 630px;
+        flex-direction: column;
+    }
+    .message-input{
+        height: 65px;
+    }
+}

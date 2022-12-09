@@ -12,26 +12,21 @@ import { AppDispatch } from '../../../store'
 import { selectPost, getPost, deletePost } from '../../../store/slices/post'
 import { FaSyringe, FaRegMeh } from 'react-icons/fa'
 import PostHeader from '../PostHeader/PostHeader'
-import ApplicationList from '../ApplicationList/ApplicationList'
+import MyApplicationList from '../ApplicationList/MyApplicationList'
 
-import './PostDetail.scss'
+import '../PostDetail/PostDetail.scss'
 
-interface IProps {
-	is_author: boolean
-}
 
-const PostDetail = (props: IProps) => {
+const MyApplyPost = () => {
 	const { id } = useParams()
 	const dispatch = useDispatch<AppDispatch>()
 	const postState = useSelector(selectPost)
 	const navigate = useNavigate()
 	const [editable, setEditable] = useState<boolean>(false)
-	const [bookmark, setBookmark] = useState<boolean>(false)
 
 	useEffect(() => {
 		dispatch(getPost(Number(id))).then((result) => {
 			setEditable(result.payload.editable)
-			setBookmark(result.payload.bookmark)
 		})
 	}, [id])
 
@@ -39,11 +34,7 @@ const PostDetail = (props: IProps) => {
 		<Layout>
 			<div className='DetailContainer'>
 				<div className='PostDetail'>
-					<PostHeader
-						is_author={props.is_author}
-						is_bookmark={bookmark}
-						setBookmark={setBookmark}
-					/>
+					<PostHeader is_author={editable} />
 					<div className='post-content-container'>
 						<div className='first-line'>
 							새로운 집을 찾고 있는,{' '}
@@ -94,7 +85,7 @@ const PostDetail = (props: IProps) => {
 							<a href={`http://localhost:8000${postState.selectedPost?.form}`}>입양신청서 서식</a>
 						</div>
 					</div>
-					{editable && id && <ApplicationList id={id} />}
+					{id && <MyApplicationList id={id} />}
 					{editable && (
 						<div className='post-buttons'>
 							<button
@@ -121,4 +112,4 @@ const PostDetail = (props: IProps) => {
 		</Layout>
 	)
 }
-export default PostDetail
+export default MyApplyPost

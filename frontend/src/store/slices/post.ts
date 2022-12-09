@@ -36,6 +36,7 @@ export interface postListType {
 	content: string
 	created_at: string
 	is_active: boolean
+	form: string
 }
 
 export interface postFilterType {
@@ -145,6 +146,11 @@ export const editPost = createAsyncThunk(
 		return response.data
 	}
 )
+
+export const checkPost = createAsyncThunk('post/checkPost', async () => {
+	const response = await axios.get<postListType[]>('/api/reviews/check/')
+	return response.data
+})
 
 export const bookmarkPost = createAsyncThunk(
 	'post/bookmarkPost',
@@ -257,6 +263,9 @@ export const postSlice = createSlice({
 		builder.addCase(getPosts.fulfilled, (state, action) => {
 			// Add post to the state array
 			state.posts = action.payload.results
+		})
+		builder.addCase(checkPost.fulfilled, (state, action) => {
+			state.posts = action.payload
 		})
 		builder.addCase(getPost.fulfilled, (state, action) => {
 			state.selectedPost = action.payload.post

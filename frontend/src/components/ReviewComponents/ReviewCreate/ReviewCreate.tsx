@@ -10,15 +10,20 @@ import { useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, Navigate } from 'react-router-dom'
 import { AppDispatch } from '../../../store'
+import { checkPost, postType, selectPost } from '../../../store/slices/post'
 import { createReview } from '../../../store/slices/review'
 import { checkLogin } from '../../../store/slices/user'
 import { MdArrowBack } from 'react-icons/md'
 
 import './ReviewCreate.scss'
+import Combobox from "react-widgets/Combobox";
+import {selectApplication} from "../../../store/slices/application";
 
 export default function ReviewCreate() {
+	const postState = useSelector(selectPost)
 	const [title, setTitle] = useState<string>('')
 	const [animalType, setAnimalType] = useState<string>('')
+	const [postId, setPostId] = useState<string>("")
 	const [content, setContent] = useState<string>('')
 	const [file, setFile] = useState<File[]>([])
 
@@ -34,6 +39,10 @@ export default function ReviewCreate() {
 				navigate('/login')
 			}
 		})
+	}, [])
+
+	useEffect(() => {
+		dispatch(checkPost())
 	}, [])
 
 	const fileChangedHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -97,6 +106,7 @@ export default function ReviewCreate() {
 									제목:
 								</label>
 								<input
+									className="review-input"
 									id='review-title-input'
 									type='text'
 									name='title'
@@ -111,6 +121,7 @@ export default function ReviewCreate() {
 									동물:
 								</label>
 								<input
+									className="review-input"
 									id='review-animal-type-input'
 									type='text'
 									name='animalType'
@@ -118,6 +129,25 @@ export default function ReviewCreate() {
 									onChange={(event) =>
 										setAnimalType(event.target.value)
 									}
+								/>
+							</div>
+							<div className='input-container'>
+								<label htmlFor='review-post-input'>
+									입양공고 정보:
+								</label>
+								<Combobox
+									id='review-post-input'
+									className='review-combobox'
+									name='type'
+									data={[
+										'post 1',
+										'post 2',
+										'post 3'
+									]}
+									onChange={(event) =>
+										setPostId(event)
+									}
+									value={postId}
 								/>
 							</div>
 							<div className='content-container'>

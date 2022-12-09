@@ -22,7 +22,7 @@ describe('application reducer', () => {
 		id: 1,
 		author_id: 1,
 		author_name: 'test_author_name',
-		files: [],
+		file: null,
 		created_at: 'test_created_at',
 		post_id: 1
 	}
@@ -38,7 +38,7 @@ describe('application reducer', () => {
 	})
 	it('should handle getApplications', async () => {
 		axios.get = jest.fn().mockResolvedValue({ data: [fakeApplication] })
-		await store.dispatch(getApplications(1))
+		await store.dispatch(getApplications("1"))
 		expect(store.getState().application.applications).toEqual([
 			fakeApplication
 		])

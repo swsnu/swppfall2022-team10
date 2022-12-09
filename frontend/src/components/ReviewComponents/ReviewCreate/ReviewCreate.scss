@@ -15,7 +15,8 @@
 	display: flex;
 	flex-direction: column;
 
-	button {
+	#confirm-create-review-button,
+	#back-create-review-button{
 		width: fit-content;
 		padding: 10px 15px;
 		margin: 3px;
@@ -63,11 +64,16 @@
 			flex-direction: row;
 			align-self: flex-start;
 			padding: 0 20px;
+			width: 650px;
 			label {
 				width: 300px;
 				text-align: left;
 			}
 			margin-bottom: 15px;
+			.review-input,
+			.review-combobox {
+				width: 350px;
+			}
 		}
 		.content-container {
 			display: flex;
@@ -115,7 +121,7 @@
 			border-color: #d4b886;
 		}
 		#review-title-input,
-		#review-animal-type-input {
+		#review-animal-type-input{
 			border: 2.5px solid;
 			border-radius: 18px;
 			border-color: #d4b886;
@@ -128,6 +134,16 @@
 		#photoLabel {
 			width: 150px;
 			text-align: left;
+		}
+		.rw-widget-container {
+			border: 2.5px solid;
+			border-radius: 18px;
+			border-color: #d4b886;
+			text-align: center;
+			.rw-combobox-input {
+				text-align: center;
+			}
+			box-shadow: none;
 		}
 	}
 }

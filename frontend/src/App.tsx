@@ -9,11 +9,13 @@ import PostCreate from './components/PostComponents/PostCreate/PostCreate'
 import PostEdit from './components/PostComponents/PostEdit/PostEdit'
 import PostApply from './components/PostComponents/PostApply/PostApply'
 import MyPost from './components/PostComponents/MyPost/MyPost'
+import MyApplyPost from './components/PostComponents/MyApplyPost/MyApplyPost'
 import ReviewList from './components/ReviewComponents/ReviewList/ReviewList'
 import ReviewCreate from './components/ReviewComponents/ReviewCreate/ReviewCreate'
 import QnaList from './components/QnaComponents/QnaList/QnaList'
 import QnaDetail from './components/QnaComponents/QnaDetail/QnaDetail'
 import QnaCreate from './components/QnaComponents/QnaCreate/QnaCreate'
+// import Chatting from './components/ChattingComponets/Chatting/Chatting'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 
 function App() {
@@ -34,8 +36,8 @@ function App() {
 					<Route path='/post/create' element={<PostCreate />} />
 					<Route path='/mypost' element={<MyPost />} />
 					<Route
-						path='/mypost/:id'
-						element={<PostDetail is_author={true} />}
+						path='/myapply/:id'
+						element={<MyApplyPost />}
 					/>
 					<Route path='/review' element={<ReviewList />} />
 					{/* <Route
@@ -46,6 +48,7 @@ function App() {
 					<Route path='/qna' element={<QnaList />} />
 					<Route path='/qna/create' element={<QnaCreate />} />
 					<Route path='/qna/:id' element={<QnaDetail />} />
+					{/* <Route path='/chat' element={<Chatting />} /> */}
 					<Route path='*' element={<h1>Not Found</h1>} />
 				</Routes>
 			</BrowserRouter>

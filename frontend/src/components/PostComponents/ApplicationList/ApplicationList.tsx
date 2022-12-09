@@ -5,11 +5,12 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useDispatch, useSelector } from 'react-redux'
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import {
 	getApplications,
 	selectApplication,
-	applicationType
+	applicationType,
+	acceptApplication
 } from '../../../store/slices/application'
 import { AppDispatch } from '../../../store'
 
@@ -18,35 +19,8 @@ import Modal from 'react-bootstrap/Modal'
 import './ApplicationList.scss'
 
 interface IProps {
-	id: string | undefined
+	id: string
 }
-
-const dummyList = [
-	{
-		id: 1,
-		author_id: 1,
-		author_name: 'jhpyun1',
-		files: [],
-		created_at: '2022-06-22',
-		post_id: 1
-	},
-	{
-		id: 2,
-		author_id: 1,
-		author_name: 'jhpyun2',
-		files: [],
-		created_at: '2022-06-23',
-		post_id: 1
-	},
-	{
-		id: 3,
-		author_id: 1,
-		author_name: 'jhpyun3',
-		files: [],
-		created_at: '2022-06-24',
-		post_id: 1
-	}
-]
 
 export default function ApplicationList(props: IProps) {
 	const applicationState = useSelector(selectApplication)
@@ -58,10 +32,16 @@ export default function ApplicationList(props: IProps) {
 			id: 1,
 			author_id: 1,
 			author_name: 'jhpyun1',
-			files: [],
+			file: "",
 			created_at: '2022-06-22',
 			post_id: 1
 		})
+
+	useEffect(() => {
+		// eslint-disable-next-line @typescript-eslint/no-floating-promises
+		dispatch(getApplications(props.id))
+	}, [])
+
 	const handleClose = () => setShow(false)
 	const onClickApp = useCallback(
 		(apply: applicationType) => {
@@ -70,6 +50,9 @@ export default function ApplicationList(props: IProps) {
 		},
 		[show, clickedApplication]
 	)
+	const acceptHandler = (aid: number) => {
+		dispatch(acceptApplication({id: aid.toString(), postId: props.id}))
+	}
 
 	return (
 		<div className='application-list'>
@@ -84,7 +67,7 @@ export default function ApplicationList(props: IProps) {
 						</tr>
 					</thead>
 					<tbody>
-						{dummyList.map((apply: applicationType) => {
+						{applicationState.applications.map((apply: applicationType) => {
 							return (
 								<tr key={`${apply.id}_apply`}>
 									<td>{apply.id}</td>
@@ -114,8 +97,9 @@ export default function ApplicationList(props: IProps) {
 					<div>신청자: {clickedApplication.author_name}</div>
 					<div>신청일시: {clickedApplication.created_at}</div>
 					<div>신청서:</div>
+					<a href={`http://localhost:8000/api/posts/${clickedApplication?.post_id}/applications/${clickedApplication?.id}`}>{clickedApplication?.file}</a>
 					<div className='buttons'>
-						<button id='accept-button'>수락</button>
+						<button id='accept-button' onClick={() => acceptHandler(clickedApplication.id)}>수락</button>
 						<button id='reject-button'>거절</button>
 					</div>
 				</Modal.Body>

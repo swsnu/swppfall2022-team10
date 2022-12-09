@@ -12,6 +12,7 @@ export interface reviewType {
 	photo_path: string[]
 	species: string
 	created_at: string
+	post_id: number
 }
 
 export interface reviewFilterType {
@@ -105,6 +106,7 @@ export const reviewSlice = createSlice({
 				animal_type: string
 				species: string
 				photo_path: string[]
+				post_id: number
 			}>
 		) => {
 			const newReview = {
@@ -116,7 +118,8 @@ export const reviewSlice = createSlice({
 				animal_type: action.payload.animal_type,
 				species: action.payload.species,
 				photo_path: action.payload.photo_path,
-				created_at: ''
+				created_at: '',
+				post_id: action.payload.post_id,
 			}
 			state.reviews.push(newReview)
 		}

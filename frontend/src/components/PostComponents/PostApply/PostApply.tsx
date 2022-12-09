@@ -11,7 +11,7 @@ import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { useParams } from 'react-router'
 import { AppDispatch } from '../../../store'
-// import { createApplication } from '../../../store/slices/application'
+import { createApplication } from '../../../store/slices/application'
 import { getPost } from '../../../store/slices/post'
 import { checkLogin } from '../../../store/slices/user'
 import './PostApply.scss'
@@ -19,7 +19,7 @@ import PostHeader from '../PostHeader/PostHeader'
 
 export default function PostApply() {
 	const { id } = useParams()
-	const [file, setFile] = useState<File[]>([])
+	const [file, setFile] = useState<File>()
 
 	const navigate = useNavigate()
 	const dispatch = useDispatch<AppDispatch>()
@@ -36,33 +36,32 @@ export default function PostApply() {
 	}, [])
 
 	useEffect(() => {
-		dispatch(getPost(Number(id))).then((result) => {
-			// setEditable(result.payload.editable)
-			// setEditable(true)
-		})
+		dispatch(getPost(Number(id)))
 	}, [id])
 
 	const fileChangedHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const files = event.target.files
-		if (files !== null) setFile(file.concat(Array.from(files)))
+		if (files !== null) setFile(files[0])
 	}
 
 	const ApplyHandler = (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault()
 
-		if (file.length === 0) return
+		if (!file) return
+		if (!id) return
 		const formData = new FormData()
-		file.forEach((f, i) => formData.append('files', f))
-		console.log(formData)
+		// formData.append('id', id)
+		formData.append('form', file)
+		// console.log(formData.get("id"))
 
-		// dispatch(createApplication(formData))
-		//	.then((result) => {
-		//	    navigate(`/post/${id}`)
-		//	})
-		//	.catch((err) => {
-		//		console.log(err)
-		//		alert('ERROR')
-		//	})
+		dispatch(createApplication({application: formData, postId: id}))
+			.then((result) => {
+			    navigate(`/post/${id}`)
+			})
+			.catch((err) => {
+				console.log(err)
+				alert('ERROR')
+		 	})
 	}
 
 	return (
@@ -81,8 +80,8 @@ export default function PostApply() {
 									<input
 										id='apply-file-input'
 										type='file'
-										multiple
 										name='photo'
+										accept='.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document'
 										onChange={fileChangedHandler}
 									/>
 								</div>
