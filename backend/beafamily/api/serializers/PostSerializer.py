@@ -154,33 +154,22 @@ class PostCommentSerializer(SerializerWithAuth):
         fields = ["id", "author_id", "author_name", "content", "created_at"]
 
 
-class PostSerializer(SerializerWithAuth):
-    created_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
-    comments = PostCommentSerializer(many=True)
-    photo_path = ImageURLField(read_only=True, many=True)
+class PostSerializer(serializers.ModelSerializer):
     author_name = UserNameField(source="author", read_only=True)
-    form = serializers.FileField(validators=[form_validator])
+    thumbnail = serializers.ImageField(use_url=True)
+
 
     class Meta:
         model = Post
         fields = [
             "id",
-            "author_id",
             "author_name",
-            "created_at",
             "title",
             "animal_type",
-            "name",
-            "content",
-            "neutering",
-            "vaccination",
             "age",
             "gender",
             "species",
-            "is_active",
-            "photo_path",
-            "comments",
-            "form",
+            "thumbnail",
         ]
 
 

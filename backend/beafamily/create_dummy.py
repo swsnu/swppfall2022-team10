@@ -138,6 +138,7 @@ def create(a, b, model_id):
             animal_type = post.animal_type == "개"
 
             photos = dog_list if animal_type else cat_list
+            post.thumbnail = photos[0]
             photos = [
                 PostImage.objects.create(author=user, post=post, image=p)
                 for p in photos

@@ -71,7 +71,7 @@ def post_id(request, pid=0):
 @log_error(logger)
 def posts(request):
     if request.method == "GET":
-        post_list = Post.objects.prefetch_related("photo_path", "comments")
+        post_list = Post.objects.all()
         query = request.query
 
         date = query.get("date")
@@ -117,10 +117,16 @@ def posts(request):
 
         with transaction.atomic():
             post = Post.objects.create(author=request.user, is_active=True, **query)
+            thumbnail = None
             for photo in photos:
                 image = PostImage.objects.create(
                     author=request.user, post=post, image=photo
                 )
+                if thumbnail is None:
+                    thumbnail = image
+
+            post.thumbnail = thumbnail.image
+            post.save()
 
         return Response(status=status.HTTP_201_CREATED, data=PostSerializer(post).data)
 

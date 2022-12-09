@@ -96,6 +96,16 @@ def datebetween(start, end, date):
     return end >= date >= start
 
 
+def compare_post_detail(a, b):
+    for aa, bb in zip(a, b):
+        for key in aa.keys():
+            if key == "thumbnail":
+                continue
+
+            if aa[key] != bb[key]:
+                return False
+    return True
+
 class PostTestCase(APITestCase):
     def setUp(self):
         u1 = User.objects.create_user(username="abc", password="1234")
@@ -421,7 +431,7 @@ class PostTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_valid_query(self):
-        reversed_list = [PostSerializer(i).data for i in reversed(self.post_list)]
+        reversed_list = [PostDetailSerializer(i).data["post"] for i in reversed(self.post_list)]
 
         valid = {
             "age": 3,
@@ -435,7 +445,8 @@ class PostTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         expected = list(filter(lambda x: check_exact(x, valid), reversed_list[0:100]))
-        self.assertEqual(response.json()["results"], expected)
+        # self.assertEqual(response.json()["results"], expected)
+        self.assertTrue(compare_post_detail(response.json()["results"], expected))
 
         valid = {
             "age": 3,
@@ -449,7 +460,7 @@ class PostTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         expected = list(filter(lambda x: check_exact(x, valid), reversed_list[0:100]))
-        self.assertEqual(response.json()["results"], expected)
+        self.assertTrue(compare_post_detail(response.json()["results"], expected))
 
         valid = {
             "age_min": 2,
@@ -461,6 +472,7 @@ class PostTestCase(APITestCase):
 
         response = self.client.get("/api/posts/?page=1&page_size=100", valid)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(compare_post_detail(response.json()["results"], expected))
 
         expected = list(
             filter(lambda x: check_age_range(x, valid), reversed_list[0:100])
@@ -479,7 +491,8 @@ class PostTestCase(APITestCase):
         expected = list(
             filter(lambda x: check_date_range(x, valid), reversed_list[0:100])
         )
-        self.assertEqual(response.json()["results"], expected)
+        # self.assertEqual(response.json()["results"], expected)
+        self.assertTrue(compare_post_detail(response.json()["results"], expected))
 
     def test_editable(self):
         response = self.client.get("/api/token/")

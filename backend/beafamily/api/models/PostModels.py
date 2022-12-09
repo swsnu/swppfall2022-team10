@@ -8,6 +8,9 @@ from .AbstractTypes import (
 from django.contrib.auth import get_user_model
 
 
+def thumbnail_upload_to(instance, filename):
+    return f'post/{instance.id}/thumbnail/{filename}'
+
 class Post(AbstractArticleType):
     author = models.ForeignKey(
         get_user_model(), on_delete=models.CASCADE, related_name="posts"
@@ -28,6 +31,7 @@ class Post(AbstractArticleType):
         default=None,
         related_name="accepted_application",
     )
+    thumbnail = models.ImageField(upload_to=thumbnail_upload_to)
 
     class Meta:
         ordering = ["-created_at"]
