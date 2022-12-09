@@ -1,23 +1,92 @@
 #!/usr/bin/env python
 import os
-import shutil
 import random
-import json
-import string
+
+import tqdm
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.dev_settings")
 from django.core.wsgi import get_wsgi_application
 
 application = get_wsgi_application()
 
-from api.models import *
-from config.dev_settings import DATA_DIR, BASE_DIR
-from django.contrib.auth import get_user_model
-from django.contrib.auth import models
-from django.core.files import File
-from django.db.models import ImageField
+from string import ascii_letters
 
-User: models.User = get_user_model()
+from django.contrib.auth import get_user_model, models
+
+from api.models import *
+from config.dev_settings import BASE_DIR, DATA_DIR
+from django.utils import timezone
+
+
+# User: User = get_user_model()
+
+
+def get_random_review():
+    animal_type = random.choice(["고양이", "개"])
+    title = f"{animal_type}가 아주 귀여워요!"
+    content = title
+    delta = timezone.timedelta(random.randint(0, 10))
+
+    return (
+        dict(title=title, content=content, created_at=timezone.now() - delta),
+        animal_type,
+    )
+
+
+def get_random_post():
+    names = ["해피", "나비"]
+    delta = timezone.timedelta(random.randint(0, 10))
+    age = random.randint(1, 25)
+    len_contents = random.randint(30, 200)
+    contents = "".join(random.choices(ascii_letters, k=len_contents))
+    name = random.choice(names)
+    animal_type = random.choice(["고양이", "개"])
+
+    dog_species = [
+        "포메라니안",
+        "치와와",
+        "파피용",
+        "닥스훈트",
+        "요크셔테리어",
+        "말티즈",
+        "슈나우저",
+        "시츄",
+        "푸들",
+        "웰시코기",
+    ]
+    cat_species = [
+        "러시안 블루",
+        "페르시안",
+        "뱅갈",
+        "봄베이",
+        "샴",
+        "메인쿤",
+        "스코티쉬폴드",
+        "아메리칸 숏헤이",
+        "캘리포니아 스팽글드",
+        "이집트안마우",
+    ]
+
+    if animal_type == "개":
+        species = random.choice(dog_species)
+    else:
+        species = random.choice(cat_species)
+
+    gender, vaccination, neutering, is_active = random.choices([True, False], k=4)
+
+    return dict(
+        animal_type=animal_type,
+        neutering=neutering,
+        vaccination=vaccination,
+        age=age,
+        name=name,
+        gender=gender,
+        species=species,
+        title=f"{animal_type} {name} 입양하실 분 구해요",
+        is_active=is_active,
+        content=contents,
+        created_at=timezone.now() - delta,
+    )
 
 
 def get_model_name(model_id):
@@ -33,18 +102,7 @@ def get_model_name(model_id):
     return ""
 
 
-# def create_image(path, user, category="post", number=1):
-#
-#     img = AbstractImageType(user=user, category=category, number=number, image=path)
-#
-#     img.save()
-#
-#     return img
-
-
 def create(a, b, model_id):
-    if model_id in ["q", "a"]:
-        raise NotImplementedError("Not implemented Yet")
     model_name = get_model_name(model_id)
 
     if not os.path.exists(DATA_DIR):
@@ -54,64 +112,72 @@ def create(a, b, model_id):
 
     users = list(User.objects.all().iterator())
 
-    for i in range(a, b + 1):
+    for i in tqdm.tqdm(range(a, b + 1)):
 
-        ri = random.randint(0, 100)
-        if ri % 2 == 0:
-            animal_type = "dog"
-        else:
-            animal_type = "cat"
-
-        # user = User.objects.get(username="yeomjy")
         user = random.choice(users)
-        if not os.path.exists(DATA_DIR / f"{model_name}/{i}"):
-            shutil.copytree(
-                BASE_DIR / f"dummy/{model_name}/{animal_type}_dummy",
-                DATA_DIR / f"{model_name}/{i}",
-            )
-
-        info_filename = DATA_DIR / f"{model_name}/{i}/info.json"
-        with open(info_filename, "r", encoding="UTF-8") as f:
-            j = json.loads(f.read())
+        cat_list = [
+            "dummy/post/cat_dummy/cat.webp",
+            "dummy/post/cat_dummy/cat2.jpg",
+            "dummy/post/cat_dummy/cat3.jpg",
+        ]
+        dog_list = [
+            "dummy/post/dog_dummy/dog.jpeg",
+            "dummy/post/dog_dummy/golden-retriever.webp",
+        ]
 
         if model_id == "p":
+            data = get_random_post()
 
-            # raise NotImplementedError()
+            post = Post.objects.create(author=user, **data)
+            post.created_at = data["created_at"]
+            post.save()
 
-            data = Post.objects.create(
-                author=user,
-                animal_type=j["animal_type"],
-                neutering=j["neutering"],
-                vaccination=j["vaccination"],
-                age=j["age"],
-                name=j["name"],
-                gender=j["gender"],
-                species=j["species"],
-                title=j["title"],
-                is_active=j["is_active"],
-                content=j["content"],
-            )
-            photos = [f"{model_name}/{i}/{p}" for p in j["photo_list"]]
+            animal_type = post.animal_type == "개"
+
+            photos = dog_list if animal_type else cat_list
             photos = [
-                PostImage.objects.create(author=user, post=data, image=p)
+                PostImage.objects.create(author=user, post=post, image=p)
                 for p in photos
             ]
+            num_comments = random.randint(0, 5)
+            user_comment = random.choices(users, k=num_comments)
+            comments = [
+                PostComment.objects.create(author=u, content="comment", post=post)
+                for u in user_comment
+            ]
+
         elif model_id == "q":
-            data = Question(author=user, content=DATA_DIR / f"{model_name}/{i}")
+            data = Question.objects.create(
+                author=user, content=f"content_{i}", title=f"title_{i}"
+            )
+            num_comments = random.randint(0, 5)
+            user_comment = random.choices(users, k=num_comments)
+            comments = [
+                QuestionComment.objects.create(
+                    author=u, content="comment", question=data
+                )
+                for u in user_comment
+            ]
         elif model_id == "r":
 
-            data = Review.objects.create(
-                author=user,
-                title=j["title"],
-                content=j["content"],
-            )
-            photos = [f"{model_name}/{i}/{p}" for p in j["photo_list"]]
+            data, animal_type = get_random_review()
+
+            review = Review.objects.create(author=user, animal_type=animal_type, **data)
+            review.created_at = data["created_at"]
+            review.save()
+
+            photos = dog_list if animal_type == "개" else cat_list
             photos = [
-                ReviewImage.objects.create(author=user, review=data, image=p)
+                ReviewImage.objects.create(author=user, review=review, image=p)
                 for p in photos
             ]
         elif model_id == "a":
-            data = Application(author=user, content=DATA_DIR / f"{model_name}/{i}")
+            posts = list(Post.objects.all().iterator())
+
+            post = random.choice(posts)
+            data = Application.objects.create(
+                author=user, content=f"content_{i}", title=f"title_{i}", post=post
+            )
 
 
 if __name__ == "__main__":
@@ -153,18 +219,41 @@ if __name__ == "__main__":
         "Please type which model to create dummy\n"
         "p: Post, r: Review, a: Application, q: Question, d: Default, otherwise: Quit\n"
         "Default: create every model which has zero element\n"
+        "Number to create: (50, 50, 30, 40)"
     )
+    a_p, a_q, a_r, a_a = (50, 50, 30, 40)
 
     if model in ["p", "q", "r", "a"]:
-        create(1, 12, model)
+        n = 0
+        if model == "p":
+            n = n_post
+            a = a_p
+        elif model == "q":
+            n = n_question
+            a = a_q
+        elif model == "r":
+            n = n_review
+            a = a_r
+        elif model == "a":
+            n = n_application
+            a = a_a
+        create(n + 1, n + a, model)
     elif model == "d":
         if n_post == 0:
-            create(1, 12, "p")
-        # if n_application == 0:
-        #     create(1, 12, "a")
-        # if n_question == 0:
-        #     create(1, 12, "q")
+            create(n_post + 1, n_post + a_p, "p")
+        if n_application == 0:
+            create(n_application + 1, n_application + a_a, "a")
+        if n_question == 0:
+            create(n_question + 1, n_question + a_q, "q")
         if n_review == 0:
-            create(1, 12, "r")
+            create(n_review + 1, n_review + a_r, "r")
+
+        users: list[User] = list(User.objects.all().iterator())
+        posts = list(Post.objects.all().iterator())
+
+        for u in users:
+            posts_to_like = random.choices(posts, k=3)
+            for p in posts_to_like:
+                u.likes.add(p)
     else:
         print("Quit...")

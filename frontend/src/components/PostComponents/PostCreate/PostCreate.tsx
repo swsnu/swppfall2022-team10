@@ -31,6 +31,7 @@ export default function PostCreate() {
 	const [neutering, setNeutering] = useState<string>('')
 	const [content, setContent] = useState<string>('')
 	const [file, setFile] = useState<File[]>([])
+	const [applyForm, setApplyForm] = useState<File[]>([])
 
 	const navigate = useNavigate()
 	const dispatch = useDispatch<AppDispatch>()
@@ -53,6 +54,13 @@ export default function PostCreate() {
 		if (files !== null) setFile(file.concat(Array.from(files)))
 	}
 
+	const applyFormChangedHandler = (
+		event: React.ChangeEvent<HTMLInputElement>
+	) => {
+		const applyForms = event.target.files
+		if (applyForms !== null) setApplyForm([applyForms[0]])
+	}
+
 	const createPostHandler = (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault()
 		if (!userState.logged_in) {
@@ -65,6 +73,7 @@ export default function PostCreate() {
 		if (emptyField.length !== 0) return
 
 		if (file.length === 0) return
+		if (applyForm.length === 0) return
 
 		const ageInt = parseInt(age)
 		if (isNaN(ageInt) || ageInt <= 0 || ageInt > 30) return
@@ -80,12 +89,11 @@ export default function PostCreate() {
 			neutering: neutering === 'O',
 			vaccination: vaccination === 'O',
 			content: content
-			// photo_path: [],
-			// author_id: 0
 		}
 		const formData = new FormData()
 		formData.append('content', JSON.stringify(data))
 		file.forEach((f, i) => formData.append('photos', f))
+		formData.append('application', applyForm[0])
 
 		dispatch(createPost(formData))
 			.then((result) => {
@@ -285,7 +293,7 @@ export default function PostCreate() {
 								/>
 							</div>
 							<div className='input-container'>
-								<label htmlFor='post-age-input'>사진:</label>
+								<label htmlFor='post-photo-input'>사진:</label>
 								<input
 									id='post-photo-input'
 									type='file'
@@ -294,6 +302,25 @@ export default function PostCreate() {
 									accept='image/*'
 									onChange={fileChangedHandler}
 								/>
+							</div>
+							<div id='apply-form-container'>
+								<div className='input-container'>
+									<label htmlFor='post-application-input'>
+										입양신청서 양식:
+									</label>
+									<input
+										id='post-application-input'
+										type='file'
+										name='application'
+										accept='.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+										onChange={applyFormChangedHandler}
+									/>
+								</div>
+								<span id='apply-form-text'>
+									입양신청서 표준 양식은{' '}
+									<a href='/adoptinfo/'>입양절차 안내</a>
+									에서 확인할 수 있습니다.
+								</span>
 							</div>
 							<button
 								id='confirm-create-post-button'

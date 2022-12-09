@@ -1,17 +1,15 @@
-from django.contrib.auth import get_user_model
-from django.contrib.auth import authenticate, login, logout
-from django.views.decorators.csrf import ensure_csrf_cookie
-from rest_framework.decorators import api_view, authentication_classes
-from rest_framework.authentication import (
-    BasicAuthentication,
-    SessionAuthentication,
-)
-from rest_framework.response import Response
-from rest_framework import status
-from .utils import log_error
 import logging
 
-logger = logging.getLogger("auth_view")
+from django.contrib.auth import authenticate, get_user_model, login, logout
+from django.views.decorators.csrf import ensure_csrf_cookie
+from rest_framework import status
+from rest_framework.authentication import BasicAuthentication, SessionAuthentication
+from rest_framework.decorators import api_view, authentication_classes
+from rest_framework.response import Response
+
+from .utils import log_error
+
+logger = logging.getLogger("view_logger")
 
 User = get_user_model()
 

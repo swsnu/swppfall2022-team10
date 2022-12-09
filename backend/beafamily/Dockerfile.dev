@@ -1,0 +1,19 @@
+FROM python:3.9
+WORKDIR /backend
+COPY config /backend/config
+COPY api /backend/api
+COPY beafamily /backend/beafamily
+COPY manage.py /backend/manage.py
+COPY create_dummy.py /backend/create_dummy.py
+COPY dummy /backend/dummy
+COPY requirements.txt /backend/requirements.txt
+
+ENV DJANGO_SETTINGS_MODULE="config.dev_settings"
+
+RUN pip install -r requirements.txt
+RUN mkdir -p logs 
+RUN mkdir -p data
+RUN mv dummy data
+RUN python manage.py makemigrations 
+RUN python manage.py migrate
+RUN (echo "Y" && echo "d") | python create_dummy.py

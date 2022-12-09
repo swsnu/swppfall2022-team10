@@ -1,57 +1,52 @@
-from ..models import Post, post_serializer, PostImage
-from .utils import verify_image, verify_json, log_error
-import json
-from rest_framework.parsers import MultiPartParser, JSONParser, FileUploadParser
-from rest_framework.decorators import (
-    api_view,
-    parser_classes,
-    permission_classes,
-    authentication_classes,
-)
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from rest_framework.authentication import SessionAuthentication
-from rest_framework.response import Response
-from rest_framework import status
-from django.db import transaction
 import logging
 
-logger = logging.getLogger("post_view")
+from django.db import transaction
+from django.urls import reverse
+from rest_framework import status
+from rest_framework.authentication import SessionAuthentication
+from rest_framework.decorators import (
+    api_view,
+    authentication_classes,
+    parser_classes,
+    permission_classes,
+)
+from rest_framework.parsers import FileUploadParser, JSONParser, MultiPartParser
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.response import Response
+
+from ..models import Post, PostImage
+from ..serializers import PostSerializer, PostQueryValidator, PostValidator
+from .utils import log_error, pagination, verify
+
+logger = logging.getLogger("view_logger")
 
 
 @api_view(["GET", "PUT", "DELETE"])
 @authentication_classes([SessionAuthentication])
 @permission_classes([IsAuthenticatedOrReadOnly])
-@parser_classes([MultiPartParser, JSONParser, FileUploadParser])
+@parser_classes([MultiPartParser])
+# @verify(PostValidator, PostQueryValidator)
+@log_error(logger)
 def post_id(request, pid=0):
-    if request.method == "GET":
-        try:
-            post = Post.objects.get(id=pid)
-        except Post.DoesNotExist as e:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+    try:
+        post = Post.objects.get(id=pid)
+    except Post.DoesNotExist as e:
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
-        info_response = post_serializer(post)
+    if request.method == "GET":
+
+        info_response = PostSerializer(post, context={"user": request.user}).data
+
         return Response(info_response)
 
     elif request.method == "PUT":
 
-        try:
-            post = Post.objects.get(id=pid)
-        except Post.DoesNotExist as e:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-
         if post.author != request.user:
             return Response(status=status.HTTP_403_FORBIDDEN)
-
-        # TODO: edit post
 
         return Response(status=status.HTTP_200_OK)
 
     else:
-
-        try:
-            post = Post.objects.get(id=pid)
-        except Post.DoesNotExist as e:
-            return Response(status=status.HTTP_404_NOT_FOUND)
 
         if post.author != request.user:
             return Response(status=status.HTTP_403_FORBIDDEN)
@@ -64,49 +59,59 @@ def post_id(request, pid=0):
 @authentication_classes([SessionAuthentication])
 @permission_classes([IsAuthenticatedOrReadOnly])
 @parser_classes([MultiPartParser])
-@verify_image(["POST"])
-@verify_json(["POST"])
+@verify(PostValidator, PostQueryValidator)
 @log_error(logger)
 def posts(request):
     if request.method == "GET":
-        post_list = Post.objects.all().order_by("-created_at")
-        response_list = []
-        for post in post_list.iterator():
-            response = post_serializer(post)
-            response_list.append(response)
+        post_list = Post.objects.prefetch_related("photo_path", "comments")
+        query = request.query
 
-        return Response(response_list)
+        date = query.get("date")
+        date_min, date_max = query.get("date_min"), query.get("date_max")
+        if date is not None:
+            post_list = post_list.filter(created_at__date=date)
+        elif date_min is not None:
+            post_list = post_list.filter(created_at__date__range=[date_min, date_max])
+
+        age = query.get("age")
+        age_min, age_max = query.get("age_min"), query.get("age_max")
+        if age is not None:
+            post_list = post_list.filter(age=age)
+        elif age_min is not None:
+            post_list = post_list.filter(age__range=[age_min, age_max])
+
+        is_active = query.get("is_active")
+        if is_active:
+            post_list = post_list.filter(is_active=is_active)
+
+        gender = query.get("gender")
+        if gender is not None:
+            post_list = post_list.filter(gender=gender)
+
+        animal_type = query.get("animal_type")
+        if animal_type:
+            post_list = post_list.filter(animal_type=animal_type)
+
+        species = query.get("species")
+        if query.get("species"):
+            post_list = post_list.filter(species=species)
+
+        api_url = reverse(posts)
+        response = pagination(request, post_list, api_url, PostSerializer)
+        if not response:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(response)
 
     else:
+        query = request.parsed
         photos = request.data.pop("photos")
-        content_json = request.data.pop("content")
-
-        if len(request.data) != 0:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-
-        try:
-
-            content_dict = json.loads(content_json[0])
-            content = {
-                "animal_type": content_dict["animal_type"],
-                "age": content_dict["age"],
-                "name": content_dict["name"],
-                "gender": content_dict["gender"],
-                "title": content_dict["title"],
-                "species": content_dict["species"],
-                "neutering": content_dict["neutering"],
-                "vaccination": content_dict["vaccination"],
-                "content": content_dict["content"],
-            }
-
-        except KeyError as e:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
 
         with transaction.atomic():
-            post = Post.objects.create(author=request.user, is_active=True, **content)
+            post = Post.objects.create(author=request.user, is_active=True, **query)
             for photo in photos:
                 image = PostImage.objects.create(
                     author=request.user, post=post, image=photo
                 )
 
-        return Response(status=status.HTTP_201_CREATED, data=post_serializer(post))
+        return Response(status=status.HTTP_201_CREATED, data=PostSerializer(post).data)

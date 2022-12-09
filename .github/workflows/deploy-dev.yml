@@ -8,6 +8,7 @@ on:
         - completed
       branches: 
         - dev
+
   workflow_dispatch:
     inputs:
       logLevel:
@@ -16,6 +17,7 @@ on:
         default: 'warning'
       tags:
         description: 'Manually Deploy'
+
 jobs:
     dev-deploy:
         runs-on: ubuntu-latest
@@ -28,14 +30,18 @@ jobs:
         steps:
           - uses: "actions/checkout@v3"
 
+
           - id: "auth"
             uses: "google-github-actions/auth@v1"
             with:
                 workload_identity_provider: ${{ secrets.DEV_DEPLOY_PROVIDER }}
                 service_account: ${{ secrets.DEV_DEPLOY_ACCOUNT }}
 
+
+
           - name: "Set up Cloud SDK"
             uses: "google-github-actions/setup-gcloud@v1"
+
 
           - name: "Deploy"
             uses: "google-github-actions/ssh-compute@v0"
@@ -43,4 +49,6 @@ jobs:
                 instance_name: "dev-deploy@dev-deploy"
                 zone: "asia-northeast3-a"
                 ssh_private_key: "${{ secrets.DEV_DEPLOY_KEY }}"
+
                 command: "$HOME/deploy.sh"
+

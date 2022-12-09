@@ -4,7 +4,7 @@
 	margin: 0 50px;
 	display: flex;
 	flex-direction: column;
-	font-family: "Pretendard-Regular";
+	font-family: 'Pretendard-Regular';
 }
 
 .ReviewCreate {
@@ -99,9 +99,9 @@
 			cursor: pointer;
 			height: 40px;
 			margin-left: 0px;
-			text-align:center;
+			text-align: center;
 		}
-		#filebox input[type="file"] {
+		#filebox input[type='file'] {
 			width: 0;
 			height: 0;
 			padding: 0;
@@ -114,20 +114,20 @@
 			border-radius: 18px;
 			border-color: #d4b886;
 		}
-		#review-title-input{
-		    border: 2.5px solid;
+		#review-title-input,
+		#review-animal-type-input {
+			border: 2.5px solid;
 			border-radius: 18px;
 			border-color: #d4b886;
 			text-align: center;
 		}
-		#filenameList{
-		    text-align: left;
-		    margin-left: 160px;
-	    }
-	    #photoLabel{
+		#filenameList {
+			text-align: left;
+			margin-left: 160px;
+		}
+		#photoLabel {
 			width: 150px;
 			text-align: left;
-	    }
-
+		}
 	}
 }

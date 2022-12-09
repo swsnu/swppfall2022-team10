@@ -46,6 +46,7 @@ backend/beafamily/data/post/*
 backend/beafamily/data/application/*
 backend/beafamily/data/question/*
 backend/beafamily/data/review/*
+backend/beafamily/data/dummy/*
 logs/
 
 # IDE Cache

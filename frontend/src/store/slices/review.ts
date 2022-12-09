@@ -14,20 +14,39 @@ export interface reviewType {
 	created_at: string
 }
 
+export interface reviewFilterType {
+	page: number
+	animal_type: string | null
+}
+
 export interface reviewState {
 	reviews: reviewType[]
 	selectedReview: reviewType | null
+	selectedAnimal: string
 }
 
 const initialState: reviewState = {
 	reviews: [],
-	selectedReview: null
+	selectedReview: null,
+	selectedAnimal: ''
 }
 
-export const getReviews = createAsyncThunk('review/getReviews', async () => {
-	const response = await axios.get<reviewType[]>('/api/reviews/')
-	return response.data
-})
+export const selectAnimal = createAsyncThunk(
+	'review/selectAnimal',
+	async (animalType: string, { dispatch }) => {
+		dispatch(reviewActions.selectAnimal({ animal_type: animalType }))
+	}
+)
+
+export const getReviews = createAsyncThunk(
+	'review/getReviews',
+	async (data: reviewFilterType, { dispatch }) => {
+		const response = await axios.get('/api/reviews/', {
+			params: data
+		})
+		return response.data
+	}
+)
 
 export const getReview = createAsyncThunk(
 	'review/getReview',
@@ -57,49 +76,17 @@ export const deleteReview = createAsyncThunk(
 	}
 )
 
-export const editReview = createAsyncThunk(
-	'review/editReview',
-	async (review: reviewType, { dispatch }) => {
-		const response = await axios.put(`/api/reviews/${review.id}/`, review)
-		dispatch(
-			reviewActions.editReview({
-				targetId: review.id,
-				title: review.title,
-				content: review.content,
-				animal_type: review.animal_type,
-				species: review.species,
-				photo_path: review.photo_path
-			})
-		)
-		return response.data
-	}
-)
-
 export const reviewSlice = createSlice({
 	name: 'review',
 	initialState,
 	reducers: {
-		editReview: (
+		selectAnimal: (
 			state,
 			action: PayloadAction<{
-				targetId: number
-				title: string
-				content: string
 				animal_type: string
-				species: string
-				photo_path: string[]
 			}>
 		) => {
-			const review = state.reviews.find(
-				(value: reviewType) => value.id === action.payload.targetId
-			)
-			if (review != null) {
-				review.title = action.payload.title
-				review.content = action.payload.content
-				review.animal_type = action.payload.animal_type
-				review.species = action.payload.species
-				review.photo_path = action.payload.photo_path
-			}
+			state.selectedAnimal = action.payload.animal_type
 		},
 		deleteReview: (state, action: PayloadAction<{ targetId: number }>) => {
 			const deleted = state.reviews.filter((review: reviewType) => {
@@ -136,13 +123,14 @@ export const reviewSlice = createSlice({
 	},
 	extraReducers: (builder) => {
 		builder.addCase(getReviews.fulfilled, (state, action) => {
-			state.reviews = action.payload
+			state.reviews = action.payload.results
 		})
 		builder.addCase(getReview.fulfilled, (state, action) => {
 			state.selectedReview = action.payload
 		})
 		builder.addCase(createReview.rejected, (_state, action) => {
-			console.error(action.error)
+			// console.error(action.error)
+			alert('ERROR')
 		})
 	}
 })

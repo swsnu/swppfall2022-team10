@@ -29,9 +29,9 @@
 		}
 	}
 
-	.dropdown-non-user, .dropdown-user {
+	.dropdown-non-user,
+	.dropdown-user {
 		display: flex;
 		flex-direction: column;
 	}
-	
 }

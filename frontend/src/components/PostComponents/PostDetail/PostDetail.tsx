@@ -12,6 +12,7 @@ import { AppDispatch } from '../../../store'
 import { selectPost, getPost, deletePost } from '../../../store/slices/post'
 import { FaSyringe, FaRegMeh } from 'react-icons/fa'
 import PostHeader from '../PostHeader/PostHeader'
+import ApplicationList from '../ApplicationList/ApplicationList'
 
 import './PostDetail.scss'
 
@@ -79,6 +80,7 @@ const PostDetail = (props: IProps) => {
 								})}
 						</div>
 					</div>
+					{props.is_author && <ApplicationList id={id} />}
 					{editable && (
 						<div className='post-buttons'>
 							<button

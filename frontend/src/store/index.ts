@@ -2,6 +2,9 @@ import { configureStore } from '@reduxjs/toolkit'
 import userReducer from './slices/user'
 import postReducer from './slices/post'
 import reviewReducer from './slices/review'
+import applicationReducer from './slices/application'
+import qnaReducer from './slices/qna'
+import mypostReducer from './slices/mypost'
 import axios from 'axios'
 
 axios.defaults.xsrfCookieName = 'csrftoken'
@@ -12,7 +15,10 @@ export const store = configureStore({
 	reducer: {
 		user: userReducer,
 		post: postReducer,
-		review: reviewReducer
+		review: reviewReducer,
+		application: applicationReducer,
+		qna: qnaReducer,
+		mypost: mypostReducer
 	}
 })
 

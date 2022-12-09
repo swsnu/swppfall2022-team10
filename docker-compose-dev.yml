@@ -1,0 +1,30 @@
+version: "3.8"
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+
+    command: yarn start
+    ports:
+      - "3000:3000"
+
+  backend:
+    build:
+      context: ./backend/beafamily
+      dockerfile: Dockerfile.dev
+
+    command: ./manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+
+    volumes:
+      - logs:/backend/logs
+
+volumes:
+  logs:
+    driver: local
+    driver_opts:
+      type: "none"
+      o: "bind"
+      device: /var/log/beafamily

@@ -4,13 +4,7 @@ import { AnyAction, configureStore, EnhancedStore } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { ThunkMiddleware } from 'redux-thunk'
 import reducer, { reviewState } from './review'
-import {
-	getReviews,
-	getReview,
-	createReview,
-	deleteReview,
-	editReview
-} from './review'
+import { getReviews, getReview, createReview, deleteReview } from './review'
 
 describe('review reducer', () => {
 	let store: EnhancedStore<
@@ -36,12 +30,15 @@ describe('review reducer', () => {
 	it('should handle initial state', () => {
 		expect(reducer(undefined, { type: 'unknown' })).toEqual({
 			reviews: [],
-			selectedReview: null
+			selectedReview: null,
+			selectedAnimal: ''
 		})
 	})
 	it('should handle getReviews', async () => {
-		axios.get = jest.fn().mockResolvedValue({ data: [fakeReview] })
-		await store.dispatch(getReviews())
+		axios.get = jest
+			.fn()
+			.mockResolvedValue({ data: { count: 1, results: [fakeReview] } })
+		await store.dispatch(getReviews({ page: 1, animal_type: '' }))
 		expect(store.getState().review.reviews).toEqual([fakeReview])
 	})
 	it('should handle getReview', async () => {

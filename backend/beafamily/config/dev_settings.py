@@ -190,8 +190,6 @@ LOGGING = {
             "level": "INFO",
             "propagate": False,
         },
-        "post_view": {"handlers": ["error_log"], "level": "WARNING"},
-        "review_view": {"handlers": ["error_log"], "level": "WARNING"},
-        "auth_view": {"handlers": ["error_log"], "level": "WARNING"},
+        "view_logger": {"handlers": ["error_log"], "level": "WARNING"},
     },
 }

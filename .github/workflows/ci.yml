@@ -1,0 +1,90 @@
+name: CI
+on: [push, pull_request]
+
+jobs:
+    test:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: "actions/checkout@v3"
+
+            - uses: ruby/setup-ruby@v1
+              with:
+                  ruby-version: 2.6
+
+            - name: "frontend setup"
+              run: |
+                  cd $GITHUB_WORKSPACE/frontend 
+                  yarn install
+                  gem install coveralls-lcov
+
+            - name: "frontend test"
+              run: |
+                  cd $GITHUB_WORKSPACE/frontend 
+                  yarn test --coverage --watchAll=false
+                  coveralls-lcov -v -n coverage/lcov.info > coverage.json
+
+            - name: "backend setup"
+              run: |
+                  cd $GITHUB_WORKSPACE/backend/beafamily
+                  pip install -r requirements.txt
+                  mkdir -p logs
+                  python manage.py makemigrations
+                  python manage.py migrate
+
+            - name: "backend test"
+              run: |
+                  cd $GITHUB_WORKSPACE/backend/beafamily
+                  coverage run --source="./api" manage.py test 
+                  coverage xml
+                  cd $GITHUB_WORKSPACE
+                  sed 's/SF:src\//SF:frontend\/src\//g' frontend/coverage/lcov.info > lcov.info
+                  coverage lcov --data-file=backend/beafamily/.coverage -o backend_cov.lcov
+                  coverage xml --data-file=backend/beafamily/.coverage
+                  cat backend_cov.lcov >> lcov.info
+
+            - name: Coveralls
+              uses: coverallsapp/github-action@master
+              with:
+                  github-token: ${{ secrets.GITHUB_TOKEN }}
+                  path-to-lcov: lcov.info
+
+            - name: SonarCloud Scan
+              uses: sonarsource/sonarcloud-github-action@master
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+    frontend_check:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: "actions/checkout@v3"
+            - uses: actions/setup-node@v3
+              with:
+                  node-version: 16
+
+            - name: "frontend lint/format"
+              run: |
+                  export NODEPATH=$GITHUB_WORKSPACE/frontend/node_modules/.bin
+                  cd frontend 
+                  yarn install
+                  $NODEPATH/prettier --check src/**/*.tsx
+                  $NODEPATH/prettier --check src/**/*.ts
+                  $NODEPATH/eslint src
+
+    backend_check:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: "actions/checkout@v3"
+            - uses: actions/setup-python@v4
+              with:
+                  python-version: "3.9"
+
+            - name: "backend lint/format"
+              run: |
+                  cd backend/beafamily
+                  pip install -r requirements.txt
+                  mkdir -p logs
+                  python manage.py makemigrations
+                  python manage.py migrate
+                  black --check **/*.py
+                  pylint **/*.py --load-plugins pylint_django
