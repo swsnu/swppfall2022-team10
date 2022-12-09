@@ -1,0 +1,39 @@
+FROM python:3.9
+
+ARG IP_ADDRESS
+ARG SECRET_KEY
+
+WORKDIR /backend 
+RUN pip install uwsgi
+COPY uwsgi /backend/uwsgi
+
+COPY requirements.txt /backend/requirements.txt
+RUN pip install -r requirements.txt
+
+COPY config /backend/config
+COPY api /backend/api
+COPY beafamily /backend/beafamily
+COPY manage.py /backend/manage.py
+COPY create_dummy.py /backend/create_dummy.py
+COPY dummy /backend/dummy
+
+ENV DEBUG=False
+
+ENV IP_ADDRESS=${IP_ADDRESS}
+ENV SECRET_KEY=${SECRET_KEY}
+ENV SECURE_HSTS_SECONDS=31536000
+ENV SECURE_SSL_REDIRECT=True
+ENV SESSION_COOKIE_SECURE=True
+ENV CSRF_COOKIE_SECURE=True
+ENV SECURE_HSTS_INCLUDE_SUBDOMAINS=True
+ENV SECURE_HSTS_PRELOAD=True
+ENV DJANGO_SETTINGS_MODULE="config.dev_deploy"
+
+RUN mkdir -p logs 
+RUN mkdir -p data
+RUN mkdir -p /log
+RUN touch /log/uwsgi.log
+RUN cp -r dummy data/dummy
+RUN python manage.py makemigrations 
+RUN python manage.py migrate
+RUN (echo "Y" && echo "d") | python create_dummy.py
