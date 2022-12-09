@@ -86,7 +86,7 @@ export default function MyPost() {
 									key={`${post.id}_post`}
 									title={post.title}
 									animal_type={post.animal_type}
-									photo_path={post.photo_path}
+									thumbnail={post.thumbnail}
 									species={post.species}
 									age={post.age}
 									gender={post.gender}
@@ -114,7 +114,7 @@ export default function MyPost() {
 									key={`${post.id}_post`}
 									title={post.title}
 									animal_type={post.animal_type}
-									photo_path={post.photo_path}
+									thumbnail={post.thumbnail}
 									species={post.species}
 									age={post.age}
 									gender={post.gender}
@@ -136,14 +136,13 @@ export default function MyPost() {
 						</button>
 					</div>
 					<div className='posts-apply'>
-						{/* {apply.map((post: postListType) => {
-							console.log(post.photo_path)
+						{apply.map((post: postListType) => {
 							return (
 								<Post
 									key={`${post.id}_post`}
 									title={post.title}
 									animal_type={post.animal_type}
-									photo_path={post.photo_path}
+									thumbnail={post.thumbnail}
 									species={post.species}
 									age={post.age}
 									gender={post.gender}
@@ -153,7 +152,7 @@ export default function MyPost() {
 									}
 								/>
 							)
-						})} */}
+						})}
 					</div>
 				</div>
 			</div>

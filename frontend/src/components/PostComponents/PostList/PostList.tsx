@@ -258,7 +258,7 @@ export default function PostList() {
 									key={`${post.id}_post`}
 									title={post.title}
 									animal_type={post.animal_type}
-									photo_path={post.photo_path}
+									thumbnail={post.thumbnail}
 									species={post.species}
 									age={post.age}
 									gender={post.gender}

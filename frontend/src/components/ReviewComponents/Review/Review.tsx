@@ -3,7 +3,7 @@ import Card from 'react-bootstrap/Card'
 
 export interface IProps {
 	title: string
-	photo_path: string[]
+	thumbnail: string
 	author: string
 	clickDetail?: React.MouseEventHandler<HTMLButtonElement>
 }
@@ -14,7 +14,7 @@ const Review = (props: IProps) => {
 			<Card style={{ width: '17rem', height: '21rem' }}>
 				<Card.Img
 					variant='top'
-					src={props.photo_path[0]}
+					src={props.thumbnail}
 					style={{ height: '15rem' }}
 				/>
 				<Card.Body>

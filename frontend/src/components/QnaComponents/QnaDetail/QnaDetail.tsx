@@ -9,7 +9,7 @@ import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router'
 import { AppDispatch } from '../../../store'
-import { selectQna, createComment, qnaActions } from '../../../store/slices/qna'
+import { selectQna, createComment, getQna } from '../../../store/slices/qna'
 import { useNavigate, Navigate } from 'react-router-dom'
 // import { selectComment, createComment } from '../../../store/slices/comment'
 import CommentList from '../CommentList/CommentList'
@@ -34,20 +34,20 @@ const QnaDetail = () => {
 
 		formData.append('content', JSON.stringify(data)) */
 		const idNum = id !== undefined ? parseInt(id) : -1
-		dispatch(createComment({
-			comment: { content: content },
-			id: idNum
-		}))
-			.catch((err) => {
-				console.log(err)
-				alert('ERROR')
+		dispatch(
+			createComment({
+				comment: { content: content },
+				id: idNum
 			})
+		).catch((err) => {
+			console.log(err)
+			alert('ERROR')
+		})
 	}
 
 	useEffect(() => {
-		dispatch(qnaActions.getQna({ targetId: Number(id) }))
-	}, [dispatch, id]
-	)
+		dispatch(getQna(Number(id)))
+	}, [dispatch, id])
 
 	return (
 		<Layout>
@@ -71,14 +71,15 @@ const QnaDetail = () => {
 							id='confirm-create-content-button'
 							type='submit'
 							disabled={content.length === 0}
-						>댓글 작성하기
+						>
+							댓글 작성하기
 						</button>
-						<div><CommentList /></div>
+						<div>
+							<CommentList />
+						</div>
 					</form>
 				</div>
 			</div>
-
-
 		</Layout>
 	)
 }
