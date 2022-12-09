@@ -58,7 +58,7 @@ export default function PostApply() {
 		if (!id) return
 		const formData = new FormData()
 		// formData.append('id', id)
-		formData.append('form', file)
+		formData.append('application', file)
 		// console.log(formData.get("id"))
 
 		dispatch(createApplication({application: formData, postId: id}))
