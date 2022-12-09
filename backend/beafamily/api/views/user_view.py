@@ -40,7 +40,9 @@ def user_post(request):
 
     response = [u["posts"], u["likes"], [
         i["post"] for i in u["applies"]
-    ]]
+    ],
+    u["reviews"],
+    u["questions"]]
 
     return Response(response)
 
