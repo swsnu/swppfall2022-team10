@@ -40,7 +40,7 @@ const PostDetail = (props: IProps) => {
 			<div className='DetailContainer'>
 				<div className='PostDetail'>
 					<PostHeader
-						is_author={props.is_author}
+						is_author={editable}
 						is_bookmark={bookmark}
 						setBookmark={setBookmark}
 					/>

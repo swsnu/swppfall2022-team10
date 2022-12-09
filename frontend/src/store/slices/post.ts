@@ -18,6 +18,7 @@ export interface postType {
 	content: string
 	created_at: string
 	is_active: boolean
+	form: string
 }
 
 export interface postListType {
