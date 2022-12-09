@@ -133,7 +133,6 @@ def create(a, b, model_id):
 
             post = Post.objects.create(author=user, **data)
             post.created_at = data["created_at"]
-            post.save()
 
             animal_type = post.animal_type == "개"
 
@@ -168,9 +167,10 @@ def create(a, b, model_id):
 
             review = Review.objects.create(author=user, animal_type=animal_type, **data)
             review.created_at = data["created_at"]
-            review.save()
 
             photos = dog_list if animal_type == "개" else cat_list
+            review.thumbnail = photos[0]
+            review.save()
             photos = [
                 ReviewImage.objects.create(author=user, review=review, image=p)
                 for p in photos

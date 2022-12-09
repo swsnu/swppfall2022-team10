@@ -17,7 +17,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
 from ..models import Review, ReviewImage
-from ..serializers import ReviewSerializer, ReviewQueryValidator, ReviewValidator
+from ..serializers import ReviewDetailSerializer, ReviewQueryValidator, ReviewValidator, ReviewListSerializer, PostSerializer
 from .utils import log_error, pagination, verify
 
 logger = logging.getLogger("view_logger")
@@ -31,7 +31,7 @@ logger = logging.getLogger("view_logger")
 @log_error(logger)
 def reviews(request):
     if request.method == "GET":
-        review_list = Review.objects.prefetch_related("photo_path")
+        review_list = Review.objects.all()
         query = request.query
 
         animal_type = query.get("animal_type")
@@ -39,7 +39,7 @@ def reviews(request):
             review_list = review_list.filter(animal_type=animal_type)
 
         api_url = reverse(reviews)
-        response = pagination(request, review_list, api_url, ReviewSerializer)
+        response = pagination(request, review_list, api_url, ReviewListSerializer)
         if not response:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
@@ -51,15 +51,21 @@ def reviews(request):
 
         with transaction.atomic():
             review = Review.objects.create(author=request.user, **content)
+            thumbnail = None
             for photo in photos:
                 image = ReviewImage.objects.create(
                     author=request.user,
                     review=review,
                     image=photo,
                 )
+                if thumbnail is None:
+                    thumbnail = image
+
+            review.thumbnail = thumbnail.image
+            review.save()
 
         return Response(
-            status=status.HTTP_201_CREATED, data=ReviewSerializer(review).data
+            status=status.HTTP_201_CREATED, data=ReviewDetailSerializer(review).data
         )
 
 
@@ -71,5 +77,5 @@ def review_id(request, rid: int):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     # response = review_serializer(review)
-    response = ReviewSerializer(review)
+    response = ReviewDetailSerializer(review)
     return Response(response.data)

@@ -7,7 +7,7 @@ from rest_framework import status
 
 from ..models import *
 from .utils import *
-from ..serializers import ReviewSerializer
+from ..serializers import ReviewDetailSerializer, ReviewListSerializer
 
 User: AbstractBaseUser = get_user_model()
 
@@ -54,9 +54,10 @@ class ReviewTestCase(TestCase):
     def test_getreview(self):
         response = self.client.get("/api/reviews/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        r1 = ReviewSerializer(self.r1).data
-        r2 = ReviewSerializer(self.r2).data
-        self.assertEqual(response.json()["results"], [r2, r1])
+        r1 = ReviewDetailSerializer(self.r1).data
+        r2 = ReviewDetailSerializer(self.r2).data
+        expected = ReviewListSerializer([self.r2, self.r1], many=True).data
+        self.assertEqual(response.json()["results"], expected)
 
         response = self.client.get("/api/reviews/1/")
         self.assertEqual(response.status_code, status.HTTP_200_OK)

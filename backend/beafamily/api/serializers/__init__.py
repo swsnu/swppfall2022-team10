@@ -1,5 +1,5 @@
 from .PostSerializer import *
-from .ReviewSerializer import ReviewSerializer, ReviewQueryValidator, ReviewValidator
+from .ReviewDetailSerializer import *
 from .ImageSerializer import *
 from .QuestionSerializer import *
 from .AbstractTypes import PaginationValidator
