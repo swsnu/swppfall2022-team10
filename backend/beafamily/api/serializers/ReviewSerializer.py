@@ -22,6 +22,7 @@ class ReviewListSerializer(serializers.ModelSerializer):
 class ReviewDetailSerializer(SerializerWithAuth):
     author_name = UserNameField(source="author", read_only=True)
     photo_path = ImageURLField(read_only=True, many=True)
+    post = PostSerializer()
 
     class Meta:
         model = Review
@@ -33,6 +34,7 @@ class ReviewDetailSerializer(SerializerWithAuth):
             "photo_path",
             "content",
             "animal_type",
+            "post"
         ]
 
 

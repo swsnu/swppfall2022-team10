@@ -168,7 +168,7 @@ def create():
 
     is_actives = random.choices([True, False], k=n_post)
     posts = list(Post.objects.all().iterator())
-    num_app = random.choices(range(0, 3), k=n_post)
+    num_app = random.choices(range(0, 4), k=n_post)
     for i in tqdm.tqdm(range(0, n_post)):
         post = posts[i]
         user_excluded = set(users)
@@ -178,7 +178,7 @@ def create():
         post.save()
         num = num_app[i]
         if post.is_active:
-            for j in range(0, num+1):
+            for j in range(0, num):
                 user = user_excluded[j]
                 data = Application.objects.create(
                     author=user, post=post, file="dummy/post/dog_dummy/dog_form.docx"
@@ -187,8 +187,8 @@ def create():
             # Must have at least 1 application
             if num == 0:
                 num = 1
-            selected = random.randint(1, num)
-            for j in range(1, num+1):
+            selected = random.randint(0, num-1)
+            for j in range(0, num):
                 user = user_excluded[j]
                 data = Application.objects.create(
                     author=user, post=post, file="dummy/post/dog_dummy/dog_form.docx"

@@ -16,7 +16,7 @@ from rest_framework.parsers import FileUploadParser, JSONParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
-from ..models import Review, ReviewImage
+from ..models import Review, ReviewImage, Post
 from ..serializers import ReviewDetailSerializer, ReviewQueryValidator, ReviewValidator, ReviewListSerializer, PostSerializer
 from .utils import log_error, pagination, verify
 
@@ -48,9 +48,21 @@ def reviews(request):
     else:
         content = request.parsed
         photos = request.data.pop("photos")
+        post_id = request.data.getlist("post_id")[0]
+
+        try:
+            post = Post.objects.get(id=post_id)
+        except:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+        if not post.accepted_application:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+        if post.accepted_application.author != request.user:
+            return Response(status=status.HTTP_403_FORBIDDEN)
 
         with transaction.atomic():
-            review = Review.objects.create(author=request.user, **content)
+            review = Review.objects.create(author=request.user,post=post, **content)
             thumbnail = None
             for photo in photos:
                 image = ReviewImage.objects.create(
