@@ -17,13 +17,14 @@ import {
 	reviewListType,
 	reviewType
 } from '../../../store/slices/review'
-import { QnaType } from '../../../store/slices/qna'
-import { getMyPosts, selectMyPost } from '../../../store/slices/mypost'
+import {QnaType} from '../../../store/slices/qna'
+import { getMyPosts, selectMyPost, deleteQna } from '../../../store/slices/mypost'
 import { AppDispatch } from '../../../store'
 import Review from '../../ReviewComponents/Review/Review'
 import ReviewModal from '../../ReviewComponents/ReviewModal/ReviewModal'
 import ReviewDetail from '../../ReviewComponents/ReviewDetail/ReviewDetail'
 import Table from 'react-bootstrap/Table'
+import { RiDeleteBin6Line } from 'react-icons/ri'
 
 import './MyPost.scss'
 
@@ -117,7 +118,7 @@ export default function MyPost() {
 			return shortMyqna
 		}
 		return myqna
-	}, [myqnaMore, myreview])
+	}, [myqnaMore, myqna])
 
 	return (
 		<Layout>
@@ -255,7 +256,7 @@ export default function MyPost() {
 									<th>#</th>
 									<th>무엇이 궁금하세요?</th>
 									<th>날짜</th>
-									<th>조회수</th>
+									<th>삭제</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -263,14 +264,20 @@ export default function MyPost() {
 									return (
 										<tr
 											key={`${td.id}_qna`}
-											onClick={() =>
-												navigate(`/qna/${td.id}`)
-											}
 										>
-											<td>{td.id}</td>
-											<td>{td.title}</td>
-											<td>{td.created_at}</td>
-											<td>{td.hits}</td>
+											<td onClick={() => navigate(`/qna/${td.id}`)}>{td.id}</td>
+											<td onClick={() => navigate(`/qna/${td.id}`)}>{td.title}</td>
+											<td onClick={() => navigate(`/qna/${td.id}`)}>{td.created_at}</td>
+											<td>
+												<button
+													id='qna-delete-button'
+													onClick={() => {
+														dispatch(deleteQna(td.id))
+													}}
+												>
+													<RiDeleteBin6Line />
+												</button>
+											</td>
 										</tr>
 									)
 								})}

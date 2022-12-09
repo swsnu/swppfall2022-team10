@@ -1,9 +1,9 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit'
 import axios from 'axios'
 import { RootState } from '..'
 import { postListType } from './post'
 import { reviewListType } from './review'
-import { QnaType } from './qna'
+import {QnaType} from './qna'
 
 export interface mypostState {
 	posts: postListType[]
@@ -21,6 +21,14 @@ const initialState: mypostState = {
 	qnas: []
 }
 
+export const deleteQna = createAsyncThunk(
+	'mypost/deleteQna',
+	async (id: QnaType['id'], { dispatch }) => {
+		await axios.delete(`/api/questions/${id}/`)
+		dispatch(mypostActions.deleteQna({ targetId: id }))
+	}
+)
+
 export const getMyPosts = createAsyncThunk('mypost/getMyPosts', async () => {
 	const response = await axios.get('/api/users/post')
 	return response.data
@@ -29,7 +37,15 @@ export const getMyPosts = createAsyncThunk('mypost/getMyPosts', async () => {
 export const mypostSlice = createSlice({
 	name: 'mypost',
 	initialState,
-	reducers: {},
+	reducers: {
+		deleteQna: (state, action: PayloadAction<{ targetId: number }>) => {
+			const deleted = state.qnas.filter((qna: QnaType) => {
+				return qna.id !== action.payload.targetId
+			})
+			console.log(deleted)
+			state.qnas = deleted
+		}
+	},
 	extraReducers: (builder) => {
 		// Add reducers for additional action types here, and handle loading state as needed
 		builder.addCase(getMyPosts.fulfilled, (state, action) => {
