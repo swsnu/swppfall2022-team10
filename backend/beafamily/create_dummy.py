@@ -166,11 +166,11 @@ def create():
 
         posts = list(Post.objects.all().iterator())
 
-    is_actives = random.choices([True, False], k=n_post)
     posts = list(Post.objects.all().iterator())
+    n_post = len(posts)
+    is_actives = random.choices([True, False], k=n_post)
     num_app = random.choices(range(0, 4), k=n_post)
-    for i in tqdm.tqdm(range(0, n_post)):
-        post = posts[i]
+    for i, post in enumerate(tqdm.tqdm(posts)):
         user_excluded = set(users)
         user_excluded.discard(post.author)
         user_excluded = list(user_excluded)
@@ -187,7 +187,7 @@ def create():
             # Must have at least 1 application
             if num == 0:
                 num = 1
-            selected = random.randint(0, num-1)
+            selected = random.randint(0, num - 1)
             for j in range(0, num):
                 user = user_excluded[j]
                 data = Application.objects.create(
@@ -197,14 +197,14 @@ def create():
                     post.accepted_application = data
                     post.save()
 
-    for i in tqdm.tqdm(range(n_post)):
-        if posts[i].is_active:
+    for post in tqdm.tqdm(posts):
+        if post.is_active or hasattr(post, 'review_post'):
             continue
-        animal_type = posts[i].animal_type
+        animal_type = post.animal_type
         data = get_random_review(animal_type)
-        user = posts[i].accepted_application.author
+        user = post.accepted_application.author
 
-        review = Review.objects.create(author=user, post=posts[i], animal_type=animal_type, **data)
+        review = Review.objects.create(author=user, post=post, animal_type=animal_type, **data)
         review.created_at = data["created_at"]
 
         photos = dog_list if animal_type == "개" else cat_list
@@ -237,7 +237,6 @@ if __name__ == "__main__":
     print("-" * 30)
 
     if n_user == 0:
-        yn = input("Create user? [Y/n] ")
         usernames = ["yeomjy", "seorin55", "lenyakim", "jhpyun"]
         passwords = ["1q2w3e4r", "password", "12345678", "qwerty"]
         nicknames = ["염준영", "최서린", "김수빈", "편진희"]
@@ -247,21 +246,31 @@ if __name__ == "__main__":
 
     create()
 
-    # if n_post == 0:
-    #         create(n_post + 1, n_post + a_p, "p")
-    #     if n_application == 0:
-    #         create(n_application + 1, n_application + a_a, "a")
-    #     if n_question == 0:
-    #         create(n_question + 1, n_question + a_q, "q")
-    #     if n_review == 0:
-    #         create(n_review + 1, n_review + a_r, "r")
-    #
-    #     users: list[User] = list(User.objects.all().iterator())
-    #     posts = list(Post.objects.all().iterator())
-    #
-    #     for u in users:
-    #         posts_to_like = random.choices(posts, k=3)
-    #         for p in posts_to_like:
-    #             u.likes.add(p)
-    # else:
-    #     print("Quit...")
+    # check all data are valid
+
+    pls: list[Post] = list(Post.objects.all().iterator())
+    for p in pls:
+        if not p.is_active:
+            if not p.accepted_application:
+                raise Exception()
+        else:
+            if p.accepted_application:
+                raise Exception()
+            if hasattr(p, 'review_post'):
+                raise Exception()
+
+        for app in p.applications.all():
+            if app.author == p.author:
+                raise Exception()
+
+            if not p.is_active:
+                if p.accepted_application not in p.applications.all():
+                    raise Exception()
+
+        if hasattr(p, 'review_post'):
+            if p.review_post.author != p.accepted_application.author:
+                raise Exception()
+
+    for r in Review.objects.all().iterator():
+        if r.author != r.post.accepted_application.author:
+            raise Exception()

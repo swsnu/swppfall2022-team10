@@ -55,7 +55,6 @@ def reviews(request):
         except:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-
         if not post.accepted_application:
             return Response(status=status.HTTP_403_FORBIDDEN)
         if post.accepted_application.author != request.user:

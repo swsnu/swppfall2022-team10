@@ -133,15 +133,12 @@ def create():
             PostImage.objects.create(author=user, post=post, image=p)
             for p in photos
         ]
-        num_comments = random.randint(0, 5)
-        user_comment = random.choices(users, k=num_comments)
-        comments = [
-            PostComment.objects.create(author=u, content="comment", post=post)
-            for u in user_comment
-        ]
+        if post.id == n_post:
+            post.author = User.objects.get(username='seorin55')
+            post.save()
 
     is_actives = [True, True, False, False, False]
-    posts = list(Post.objects.all().order_by('created_at').iterator())
+    posts = list(Post.objects.all().order_by('id').iterator())
     num_app = [0, 3, 2, 3, 3]
     for i in range(0, n_post):
         post = posts[i]
@@ -168,10 +165,8 @@ def create():
             # Must have at least 1 application
             if num == 0:
                 num = 1
-                selected = random.randint(0, num-1)
-            else:
-                selected = random.randint(0, num)
 
+            selected = random.randint(0, num-1)
 
             if post.id == n_post:
                 selected = 0
@@ -180,8 +175,6 @@ def create():
                 data = Application.objects.create(
                     author=user, post=post, file="dummy/post/dog_dummy/dog_form.docx"
                 )
-                if post.id == n_post:
-                    print(j, selected, user)
                 if j == selected:
                     post.accepted_application = data
                     post.save()
@@ -208,12 +201,6 @@ def create():
 
 
 def create_all():
-    # n_review = len(Review.objects.all())
-    # n_application = len(Application.objects.all())
-    # n_question = len(Question.objects.all())
-    # n_pimage = len(PostImage.objects.all())
-    # n_rimage = len(ReviewImage.objects.all())
-    # n_user = len(User.objects.all())
 
 
     usernames = ["yeomjy", "seorin55", "lenyakim", "jhpyun"]

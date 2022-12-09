@@ -8,7 +8,7 @@ class Review(AbstractArticleType):
     author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name="reviews")
     animal_type = models.CharField(max_length=10)
     thumbnail = models.ImageField()
-    post = models.OneToOneField("Post", on_delete=models.CASCADE)
+    post = models.OneToOneField("Post", on_delete=models.CASCADE, related_name="review_post", null=True, default=None)
 
     class Meta:
         ordering = ["-created_at"]
