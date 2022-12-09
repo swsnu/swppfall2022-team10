@@ -5,7 +5,7 @@ import Card from 'react-bootstrap/Card'
 export interface IProps {
 	title: string
 	animal_type: string
-	photo_path: string[]
+	thumbnail: string
 	species: string
 	age: number
 	gender: boolean
@@ -20,7 +20,7 @@ const Post = (props: IProps) => {
 				<Card style={{ width: '17rem', height: '30rem' }}>
 					<Card.Img
 						variant='top'
-						src={props.photo_path[0]}
+						src={props.thumbnail}
 						style={{ height: '15rem' }}
 					/>
 					<Card.Body>

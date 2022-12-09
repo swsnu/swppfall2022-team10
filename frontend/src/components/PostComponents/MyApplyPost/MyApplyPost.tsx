@@ -23,10 +23,12 @@ const MyApplyPost = () => {
 	const postState = useSelector(selectPost)
 	const navigate = useNavigate()
 	const [editable, setEditable] = useState<boolean>(false)
+	const [bookmark, setBookmark] = useState<boolean>(false)
 
 	useEffect(() => {
 		dispatch(getPost(Number(id))).then((result) => {
 			setEditable(result.payload.editable)
+			setBookmark(result.payload.bookmark)
 		})
 	}, [id])
 
@@ -34,7 +36,11 @@ const MyApplyPost = () => {
 		<Layout>
 			<div className='DetailContainer'>
 				<div className='PostDetail'>
-					<PostHeader is_author={editable} />
+					<PostHeader
+						is_author={editable}
+						is_bookmark={bookmark}
+						setBookmark={setBookmark}
+					/>
 					<div className='post-content-container'>
 						<div className='first-line'>
 							새로운 집을 찾고 있는,{' '}

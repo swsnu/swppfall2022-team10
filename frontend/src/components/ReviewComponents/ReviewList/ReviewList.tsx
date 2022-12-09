@@ -12,7 +12,9 @@ import { useNavigate } from 'react-router-dom'
 import Review from '../Review/Review'
 import {
 	getReviews,
+	getReview,
 	reviewType,
+	reviewListType,
 	selectReview
 } from '../../../store/slices/review'
 import { AppDispatch } from '../../../store'
@@ -62,13 +64,13 @@ export default function ReviewList() {
 	const onClickToggleModal = useCallback(() => {
 		setModalOpen(!modalOpen)
 	}, [modalOpen])
-	const [clickedReview, setClickedReview] = useState<reviewType>(
-		reviewState.reviews[0]
-	)
+	const [clickedReview, setClickedReview] = useState<reviewType | null>(null)
 	const onClickReview = useCallback(
-		(review: reviewType) => {
+		(id: number) => {
 			setModalOpen(!modalOpen)
-			setClickedReview(review)
+			dispatch(getReview(id)).then((result) => {
+				setClickedReview(result.payload)
+			})
 		},
 		[modalOpen, clickedReview]
 	)
@@ -78,23 +80,23 @@ export default function ReviewList() {
 			<div className='ReviewListContainer'>
 				<div className='ReviewList'>
 					<div className='reviews'>
-						{reviewState.reviews.map((review: reviewType) => {
+						{reviewState.reviews.map((review: reviewListType) => {
 							return (
 								<button
 									className='review-container'
-									onClick={() => onClickReview(review)}
+									onClick={() => onClickReview(review.id)}
 									key={`${review.id}`}
 								>
 									<Review
 										key={`${review.id}_review`}
 										title={review.title}
-										photo_path={review.photo_path}
+										thumbnail={review.thumbnail}
 										author={review.author_name}
 									/>
 								</button>
 							)
 						})}
-						{modalOpen && (
+						{modalOpen && clickedReview !== null && (
 							<ReviewModal
 								onClickToggleModal={onClickToggleModal}
 							>

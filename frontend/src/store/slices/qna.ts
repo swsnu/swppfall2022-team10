@@ -68,6 +68,22 @@ export const createQna = createAsyncThunk(
 	}
 )
 
+export const editQna = createAsyncThunk(
+	'post/editPost',
+	async (qna: QnaType, { dispatch }) => {
+		const response = await axios.put(`/api/questions/${qna.id}/`, qna)
+		dispatch(
+			qnaActions.editQna({
+				id: response.data.id,
+				title: response.data.title,
+				content: response.data.content,
+				created_at: response.data.created_at
+			})
+		)
+		return response.data
+	}
+)
+
 export const deleteQna = createAsyncThunk(
 	'qna/deleteQna',
 	async (id: QnaType['id'], { dispatch }) => {
@@ -91,18 +107,29 @@ export const qnaSlice = createSlice({
 	name: 'qna',
 	initialState,
 	reducers: {
-		getAll: (state, action: PayloadAction<{ qnas: QnaType[] }>) => {},
-		getQna: (state, action: PayloadAction<{ targetId: number }>) => {
-			const target = state.qnas.find(
-				(td) => td.id === action.payload.targetId
-			)
-			state.selectedQna = target ?? null
-		},
 		deleteQna: (state, action: PayloadAction<{ targetId: number }>) => {
 			const deleted = state.qnas.filter((qna: QnaType) => {
 				return qna.id !== action.payload.targetId
 			})
 			state.qnas = deleted
+		},
+		editQna: (
+			state,
+			action: PayloadAction<{
+				id: number
+				title: string
+				content: string
+				created_at: string
+			}>
+		) => {
+			const qna = state.qnas.find(
+				(value: QnaType) => value.id === action.payload.id
+			)
+			if (qna != null) {
+				qna.title = action.payload.title
+				qna.content = action.payload.content
+				qna.created_at = action.payload.created_at
+			}
 		},
 		addQna: (
 			state,

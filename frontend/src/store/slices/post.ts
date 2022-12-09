@@ -23,21 +23,21 @@ export interface postType {
 
 export interface postListType {
 	id: number
-	author_id: number
+	// author_id: number
 	author_name: string
-	name: string
-	vaccination: boolean
-	neutering: boolean
+	// name: string
+	// vaccination: boolean
+	// neutering: boolean
 	title: string
 	animal_type: string
-	photo_path: string[]
+	thumbnail: string
 	species: string
 	age: number
 	gender: boolean
-	content: string
-	created_at: string
-	is_active: boolean
-	form: string
+	// content: string
+	// created_at: string
+	// is_active: boolean
+	// form: string
 }
 
 export interface postFilterType {

@@ -22,6 +22,10 @@ export default function PostApply() {
 	const [file, setFile] = useState<File>()
 
 	const navigate = useNavigate()
+
+	const [editable, setEditable] = useState<boolean>(false)
+	const [bookmark, setBookmark] = useState<boolean>(false)
+
 	const dispatch = useDispatch<AppDispatch>()
 
 	useEffect(() => {
@@ -36,7 +40,10 @@ export default function PostApply() {
 	}, [])
 
 	useEffect(() => {
-		dispatch(getPost(Number(id)))
+		dispatch(getPost(Number(id))).then((result) => {
+			setEditable(result.payload.editable)
+			setBookmark(result.payload.bookmark)
+		})
 	}, [id])
 
 	const fileChangedHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,7 +75,11 @@ export default function PostApply() {
 		<Layout>
 			<div className='apply'>
 				<div className='application'>
-					<PostHeader is_author={true} />
+					<PostHeader
+						is_author={true}
+						is_bookmark={bookmark}
+						setBookmark={setBookmark}
+					/>
 					<div>
 						<form className='applyForm' onSubmit={ApplyHandler}>
 							<div className='apply-container'>

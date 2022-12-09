@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { RootState } from '..'
-import { postListType, postType } from './post'
+import { postListType } from './post'
 
 export interface mypostState {
 	posts: postListType[]
