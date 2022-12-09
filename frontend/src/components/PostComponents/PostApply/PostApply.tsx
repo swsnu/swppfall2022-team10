@@ -76,7 +76,7 @@ export default function PostApply() {
 			<div className='apply'>
 				<div className='application'>
 					<PostHeader
-						is_author={editable}
+						is_author={true}
 						is_bookmark={bookmark}
 						setBookmark={setBookmark}
 					/>
