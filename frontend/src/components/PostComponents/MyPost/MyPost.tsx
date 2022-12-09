@@ -218,12 +218,18 @@ export default function MyPost() {
 					<div className='reviews'>
 						{review.map((review: reviewListType) => {
 							return (
-								<Review
-									key={`${review.id}_review`}
-									title={review.title}
-									thumbnail={review.thumbnail}
-									author={review.author_name}
-								/>
+								<button
+									className='review-container'
+									onClick={() => onClickReview(review.id)}
+									key={`${review.id}`}
+								>
+									<Review
+										key={`${review.id}_review`}
+										title={review.title}
+										thumbnail={review.thumbnail}
+										author={review.author_name}
+									/>
+								</button>
 							)
 						})}
 						{modalOpen && clickedReview !== null && (
