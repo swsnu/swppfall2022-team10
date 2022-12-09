@@ -54,7 +54,8 @@ const mockStore = getMockStore({
 	review: { reviews: [], selectedReview: null, selectedAnimal: '' },
 	application: { applications: [], selectedApplication: null },
 	qna: { qnas: [], selectedQna: null },
-	mypost: { posts: [fakepost], likes: [fakepost], applys: [fakepost] }
+	mypost: { posts: [fakepost], likes: [fakepost], applys: [fakepost] },
+	comment: { comments: [], selectedComment: null },
 })
 
 const mockNavigate = jest.fn()

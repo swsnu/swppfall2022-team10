@@ -55,4 +55,4 @@ class User(AbstractBaseUser):
         db_table = "user"
 
     USERNAME_FIELD = "username"
-    REQUIRED_FIELDS = [nickname]
+    REQUIRED_FIELDS = []

@@ -13,7 +13,8 @@ const mockState = {
 	review: { reviews: [], selectedReview: null, selectedAnimal: '' },
 	application: { applications: [], selectedApplication: null },
 	qna: { qnas: [], selectedQna: null },
-	mypost: { posts: [], likes: [], applys: [] }
+	mypost: { posts: [], likes: [], applys: [] },
+	comment: { comments: [], selectedComment: null },
 }
 
 const mockNavigate = jest.fn()
