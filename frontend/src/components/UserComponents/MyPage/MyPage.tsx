@@ -42,7 +42,7 @@ export default function MyPage() {
 		dispatch(checkLogin()).then((result) => {
 			const loggedIn: boolean = (result.payload as { logged_in: boolean })
 				.logged_in
-			if (!loggedIn) navigate('/')
+			if (!loggedIn) navigate('/login')
 		})
 		dispatch(getUser()).then((result) => {
 			console.log(result.payload)

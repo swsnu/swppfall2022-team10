@@ -179,6 +179,9 @@ export const postSlice = createSlice({
 		builder.addCase(getPost.fulfilled, (state, action) => {
 			state.selectedPost = action.payload.post
 		})
+		builder.addCase(getPost.rejected, (state, action) => {
+			state.selectedPost = null
+		})
 		builder.addCase(createPost.rejected, (_state, action) => {
 			// console.error(action.error)
 			alert('ERROR')

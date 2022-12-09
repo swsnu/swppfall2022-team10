@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable react/display-name */
-import { fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { Provider } from 'react-redux'
 import axios from 'axios'
 import { MemoryRouter, Route, Routes } from 'react-router'
@@ -22,6 +22,8 @@ jest.mock('../Review/Review', () => (props: ReviewProps) => (
 		</div>
 	</div>
 ))
+
+jest.mock('../ReviewDetail/ReviewDetail', () => () => <div>Review Detail</div>)
 
 const stubInitialState: reviewState = {
 	reviews: [
@@ -42,7 +44,6 @@ const stubInitialState: reviewState = {
 }
 const mockStore = getMockStore({
 	review: stubInitialState,
-	// user: { users: [], currentUser: null, logged_in: false },
 	post: { posts: [], selectedPost: null, selectedAnimal: '' },
 	application: { applications: [], selectedApplication: null },
 	qna: { qnas: [], selectedQna: null },
@@ -126,16 +127,14 @@ describe('<ReviewList />', () => {
 		})
 		const button = document.querySelector('.review-container')
 		// fireEvent.scroll(window, { target: { scrollY: 100 } });
-		const top = '-'.concat(global.window.scrollY.toString()).concat('px')
 		fireEvent.click(button!)
+		await screen.findByText('Review Detail')
 		const closeButton = await screen.findByRole('button', {
 			name: /Close/i
 		})
 		fireEvent.click(closeButton!)
-		!document.querySelector('.Modal')
-		expect(scrollToSpy).toHaveBeenCalledWith(
-			0,
-			parseInt(top || '0', 10) * -1
-		)
+		await waitFor(() => {
+			expect(screen.queryByText('Review Detail')).toBeEmptyDOMElement
+		})
 	})
 })

@@ -4,6 +4,11 @@ import { MemoryRouter, Route, Routes } from 'react-router'
 import { Provider } from 'react-redux'
 import Layout from './Layout'
 
+interface IProps {
+	animalOption: boolean
+	pageName: string
+}
+
 const mockStore = getMockStore({
 	post: { posts: [], selectedPost: null, selectedAnimal: '' },
 	// user: { users: [], currentUser: null, logged_in: true },
@@ -16,6 +21,13 @@ const mockStore = getMockStore({
 const scrollToSpy = jest.fn()
 global.scrollTo = scrollToSpy
 
+const mockHeader = jest.fn()
+const Header = (props: IProps) => {
+	mockHeader(props)
+	return <div>헤더</div>
+}
+jest.mock('../Header/Header', () => Header)
+
 describe('<Layout />', () => {
 	it('should render without errors', () => {
 		render(
@@ -26,7 +38,7 @@ describe('<Layout />', () => {
 							path='/'
 							element={
 								<Layout>
-									<div>통과</div>
+									<div className='Else'>통과</div>
 								</Layout>
 							}
 						/>
@@ -34,8 +46,66 @@ describe('<Layout />', () => {
 				</MemoryRouter>
 			</Provider>
 		)
+		screen.getByText('헤더')
 		screen.getByText('개인정보처리방침')
-		screen.getByText('입양 절차 소개')
 		screen.getByText('통과')
+		expect(mockHeader).toHaveBeenCalledWith(
+			expect.objectContaining({
+				animalOption: false,
+				pageName: ''
+			})
+		)
+	})
+	it('should render with post list', () => {
+		render(
+			<Provider store={mockStore}>
+				<MemoryRouter>
+					<Routes>
+						<Route
+							path='/'
+							element={
+								<Layout>
+									<div className='PostListContainer'>
+										통과
+									</div>
+								</Layout>
+							}
+						/>
+					</Routes>
+				</MemoryRouter>
+			</Provider>
+		)
+		expect(mockHeader).toHaveBeenCalledWith(
+			expect.objectContaining({
+				animalOption: true,
+				pageName: 'post'
+			})
+		)
+	})
+	it('should render with review list', () => {
+		render(
+			<Provider store={mockStore}>
+				<MemoryRouter>
+					<Routes>
+						<Route
+							path='/'
+							element={
+								<Layout>
+									<div className='ReviewListContainer'>
+										통과
+									</div>
+								</Layout>
+							}
+						/>
+					</Routes>
+				</MemoryRouter>
+			</Provider>
+		)
+		expect(mockHeader).toHaveBeenCalledWith(
+			expect.objectContaining({
+				animalOption: true,
+				pageName: 'review'
+			})
+		)
 	})
 })

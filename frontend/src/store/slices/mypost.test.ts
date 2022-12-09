@@ -38,7 +38,9 @@ describe('mypost reducer', () => {
 		expect(reducer(undefined, { type: 'unknown' })).toEqual({
 			posts: [],
 			likes: [],
-			applys: []
+			applys: [],
+			qnas: [],
+			reviews: []
 		})
 	})
 	it('should handle getMyPosts', async () => {

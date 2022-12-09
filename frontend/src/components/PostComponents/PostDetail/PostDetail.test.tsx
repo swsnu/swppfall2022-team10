@@ -22,12 +22,11 @@ const testPost = {
 	vaccination: true,
 	neutering: true,
 	is_active: true,
-	editable: true
+	form: ''
 }
 
 const mockState = {
 	post: { posts: [], selectedPost: testPost, selectedAnimal: '' },
-	// user: { users: [], currentUser: null, logged_in: true },
 	review: { reviews: [], selectedReview: null, selectedAnimal: '' },
 	application: { applications: [], selectedApplication: null },
 	qna: { qnas: [], selectedQna: null },
@@ -85,35 +84,40 @@ describe('<PostDetail />', () => {
 	it('should render without errors', async () => {
 		jest.spyOn(axios, 'get').mockResolvedValue({
 			data: {
-				...testPostFormat,
-				gender: true,
-				vaccination: true,
-				neutering: true,
-				is_active: true,
-				editable: true
+				post: {
+					...testPostFormat,
+					gender: true,
+					vaccination: true,
+					neutering: true,
+					is_active: true,
+					editable: true
+				},
+				editable: true,
+				bookmark: true
 			}
 		})
 		await act(() => {
 			render(postDetail)
 		})
-		// render(postDetail);
-		await screen.findByText('백신 접종 완료한 동물입니다.')
+		await screen.findByText(/POST_TEST_SPECIES/)
 	})
 	it('should render edit/delete button when user is the author', async () => {
 		jest.spyOn(axios, 'get').mockResolvedValue({
 			data: {
-				...testPostFormat,
-				gender: true,
-				vaccination: true,
-				neutering: true,
-				is_active: true,
-				editable: true
+				post: {
+					...testPostFormat,
+					gender: true,
+					vaccination: true,
+					neutering: true,
+					is_active: true
+				},
+				editable: true,
+				bookmark: true
 			}
 		})
 		await act(() => {
 			render(postDetail)
 		})
-		// render(postDetail);
 		const editButton = await screen.findByText('수정')
 		await waitFor(() => {
 			expect(editButton).toBeInTheDocument()
@@ -137,7 +141,6 @@ describe('<PostDetail />', () => {
 		await act(() => {
 			render(postDetail)
 		})
-		// render(postDetail);
 		const editButton = await screen.findByText('수정')
 		fireEvent.click(editButton)
 		await waitFor(() =>
@@ -160,7 +163,6 @@ describe('<PostDetail />', () => {
 		await act(() => {
 			render(postDetail)
 		})
-		// render(postDetail);
 		const deleteButton = await screen.findByText('삭제')
 		fireEvent.click(deleteButton)
 		await waitFor(() => expect(mockDeleteArticle).toHaveBeenCalled())
@@ -170,7 +172,6 @@ describe('<PostDetail />', () => {
 		await act(() => {
 			render(postDetail)
 		})
-		// render(postDetail);
 		jest.spyOn(axios, 'get').mockRejectedValue({})
 		await waitFor(() => {
 			expect(

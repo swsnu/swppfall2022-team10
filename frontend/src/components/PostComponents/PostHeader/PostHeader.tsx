@@ -27,14 +27,10 @@ interface IProps {
 }
 
 const PostHeader = (props: IProps) => {
-	// const [isBookmark, setIsBookmark] = useState<boolean>(false)
-
 	const postState = useSelector(selectPost)
 	const navigate = useNavigate()
 	const dispatch = useDispatch<AppDispatch>()
 
-	console.log(props.is_bookmark)
-	// console.log(isBookmark)
 	const bookmarkPostHandler = () => {
 		if (postState.selectedPost === null) return
 		dispatch(checkLogin())
@@ -88,17 +84,23 @@ const PostHeader = (props: IProps) => {
 				)}
 
 				<div className='bookmark-button-container'>
-					<button
-						id='bookmark-button'
-						aria-label='bookmark-button'
-						onClick={bookmarkPostHandler}
-					>
-						{props.is_bookmark ? (
+					{props.is_bookmark ? (
+						<button
+							className='bookmark-button'
+							aria-label='bookmark-button bookmarked'
+							onClick={bookmarkPostHandler}
+						>
 							<IoPaw size={40} />
-						) : (
+						</button>
+					) : (
+						<button
+							className='bookmark-button'
+							aria-label='bookmark-button un-bookmarked'
+							onClick={bookmarkPostHandler}
+						>
 							<IoPawOutline size={40} />
-						)}
-					</button>
+						</button>
+					)}
 				</div>
 			</div>
 

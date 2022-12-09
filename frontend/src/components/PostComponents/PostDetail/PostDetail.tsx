@@ -29,10 +29,14 @@ const PostDetail = (props: IProps) => {
 	const [bookmark, setBookmark] = useState<boolean>(false)
 
 	useEffect(() => {
-		dispatch(getPost(Number(id))).then((result) => {
-			setEditable(result.payload.editable)
-			setBookmark(result.payload.bookmark)
-		})
+		dispatch(getPost(Number(id)))
+			.then((result) => {
+				setEditable(result.payload.editable)
+				setBookmark(result.payload.bookmark)
+			})
+			.catch((err) => {
+				console.log(err)
+			})
 	}, [id])
 
 	return (

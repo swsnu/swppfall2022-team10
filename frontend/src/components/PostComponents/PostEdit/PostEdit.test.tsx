@@ -17,7 +17,7 @@ const tempState = {
 	review: { reviews: [], selectedReview: null, selectedAnimal: '' },
 	application: { applications: [], selectedApplication: null },
 	qna: { qnas: [], selectedQna: null },
-	mypost: { posts: [], likes: [], applys: [], reviews: [], qnas: [] },
+	mypost: { posts: [], likes: [], applys: [], reviews: [], qnas: [] }
 }
 
 const testPostFormat = {
@@ -78,6 +78,9 @@ describe('<PostEdit />', () => {
 		jest.spyOn(axios, 'get').mockResolvedValueOnce({
 			data: { logged_in: false }
 		})
+		jest.spyOn(axios, 'get').mockResolvedValueOnce({
+			data: { post: testPostFormat }
+		})
 		await act(() => {
 			render(postEdit)
 		})
@@ -89,7 +92,9 @@ describe('<PostEdit />', () => {
 		jest.spyOn(axios, 'get').mockResolvedValueOnce({
 			data: { logged_in: true }
 		})
-		jest.spyOn(axios, 'get').mockResolvedValueOnce({ data: testPostFormat })
+		jest.spyOn(axios, 'get').mockResolvedValueOnce({
+			data: { post: testPostFormat }
+		})
 		await act(() => {
 			render(postEdit)
 		})
