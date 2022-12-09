@@ -6,6 +6,7 @@ from .AbstractTypes import AbstractArticleType, AbstractImageType
 class Review(AbstractArticleType):
     animal_type = models.CharField(max_length=10)
     thumbnail = models.ImageField()
+    post = models.OneToOneField("Post", on_delete=models.CASCADE)
 
     class Meta:
         ordering = ["-created_at"]

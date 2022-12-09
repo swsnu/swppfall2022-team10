@@ -3,7 +3,6 @@
 
 pip install -r requirements.txt
 mkdir -p logs
-rm db.sqlite3
 
 ./cleanup_db.sh
 

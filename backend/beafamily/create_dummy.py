@@ -21,16 +21,12 @@ from django.utils import timezone
 # User: User = get_user_model()
 
 
-def get_random_review():
-    animal_type = random.choice(["고양이", "개"])
+def get_random_review(animal_type):
     title = f"{animal_type}가 아주 귀여워요!"
     content = title
     delta = timezone.timedelta(random.randint(0, 10))
 
-    return (
-        dict(title=title, content=content, created_at=timezone.now() - delta),
-        animal_type,
-    )
+    return dict(title=title, content=content, created_at=timezone.now() - delta)
 
 
 def get_random_post():
@@ -74,7 +70,7 @@ def get_random_post():
         species = random.choice(cat_species)
         form = "dummy/post/cat_dummy/cat_form.docx"
 
-    gender, vaccination, neutering, is_active = random.choices([True, False], k=4)
+    gender, vaccination, neutering = random.choices([True, False], k=3)
 
     return dict(
         animal_type=animal_type,
@@ -85,7 +81,7 @@ def get_random_post():
         gender=gender,
         species=species,
         title=f"{animal_type} {name} 입양하실 분 구해요",
-        is_active=is_active,
+        is_active=True,
         content=contents,
         created_at=timezone.now() - delta,
         form=form,
@@ -105,83 +101,119 @@ def get_model_name(model_id):
     return ""
 
 
-def create(a, b, model_id):
-    model_name = get_model_name(model_id)
+def create():
+    n_post = 50
+    n_question = 20
 
     if not os.path.exists(DATA_DIR):
         os.mkdir(DATA_DIR)
-    if not os.path.exists(DATA_DIR / model_name):
-        os.mkdir(DATA_DIR / model_name)
+    if not os.path.exists(DATA_DIR / 'post'):
+        os.mkdir(DATA_DIR / 'post')
+    if not os.path.exists(DATA_DIR / 'application'):
+        os.mkdir(DATA_DIR / 'application')
+    if not os.path.exists(DATA_DIR / 'review'):
+        os.mkdir(DATA_DIR / 'review')
+    if not os.path.exists(DATA_DIR / 'question'):
+        os.mkdir(DATA_DIR / 'question')
 
-    users = list(User.objects.all().iterator())
+    users: list[User] = list(User.objects.all().iterator())
+    cat_list = [
+        "dummy/post/cat_dummy/cat.webp",
+        "dummy/post/cat_dummy/cat2.jpg",
+        "dummy/post/cat_dummy/cat3.jpg",
+    ]
+    dog_list = [
+        "dummy/post/dog_dummy/dog.jpeg",
+        "dummy/post/dog_dummy/golden-retriever.webp",
+    ]
 
-    for i in tqdm.tqdm(range(a, b + 1)):
-
+    for i in tqdm.tqdm(range(0, n_post)):
         user = random.choice(users)
-        cat_list = [
-            "dummy/post/cat_dummy/cat.webp",
-            "dummy/post/cat_dummy/cat2.jpg",
-            "dummy/post/cat_dummy/cat3.jpg",
+
+        data = get_random_post()
+
+        post = Post.objects.create(author=user, **data)
+        post.created_at = data["created_at"]
+
+        animal_type = post.animal_type == "개"
+
+        photos = dog_list if animal_type else cat_list
+        post.thumbnail = photos[0]
+        post.save()
+        photos = [
+            PostImage.objects.create(author=user, post=post, image=p)
+            for p in photos
         ]
-        dog_list = [
-            "dummy/post/dog_dummy/dog.jpeg",
-            "dummy/post/dog_dummy/golden-retriever.webp",
+        num_comments = random.randint(0, 5)
+        user_comment = random.choices(users, k=num_comments)
+        comments = [
+            PostComment.objects.create(author=u, content="comment", post=post)
+            for u in user_comment
         ]
-
-        if model_id == "p":
-            data = get_random_post()
-
-            post = Post.objects.create(author=user, **data)
-            post.created_at = data["created_at"]
-
-            animal_type = post.animal_type == "개"
-
-            photos = dog_list if animal_type else cat_list
-            post.thumbnail = photos[0]
-            photos = [
-                PostImage.objects.create(author=user, post=post, image=p)
-                for p in photos
-            ]
-            num_comments = random.randint(0, 5)
-            user_comment = random.choices(users, k=num_comments)
-            comments = [
-                PostComment.objects.create(author=u, content="comment", post=post)
-                for u in user_comment
-            ]
-
-        elif model_id == "q":
-            data = Question.objects.create(
-                author=user, content=f"content_{i}", title=f"title_{i}"
+    for i in tqdm.tqdm(range(0, n_question)):
+        user = random.choice(users)
+        data = Question.objects.create(
+            author=user, content=f"content_{i}", title=f"title_{i}"
+        )
+        num_comments = random.randint(0, 5)
+        user_comment = random.choices(users, k=num_comments)
+        comments = [
+            QuestionComment.objects.create(
+                author=u, content="comment", question=data
             )
-            num_comments = random.randint(0, 5)
-            user_comment = random.choices(users, k=num_comments)
-            comments = [
-                QuestionComment.objects.create(
-                    author=u, content="comment", question=data
+            for u in user_comment
+        ]
+
+        posts = list(Post.objects.all().iterator())
+
+    is_actives = random.choices([True, False], k=n_post)
+    posts = list(Post.objects.all().iterator())
+    num_app = random.choices(range(0, 3), k=n_post)
+    for i in tqdm.tqdm(range(0, n_post)):
+        post = posts[i]
+        user_excluded = set(users)
+        user_excluded.discard(post.author)
+        user_excluded = list(user_excluded)
+        post.is_active = is_actives[i]
+        post.save()
+        num = num_app[i]
+        if post.is_active:
+            for j in range(0, num+1):
+                user = user_excluded[j]
+                data = Application.objects.create(
+                    author=user, post=post, file="dummy/post/dog_dummy/dog_form.docx"
                 )
-                for u in user_comment
-            ]
-        elif model_id == "r":
+        else:
+            # Must have at least 1 application
+            if num == 0:
+                num = 1
+            selected = random.randint(1, num)
+            for j in range(1, num+1):
+                user = user_excluded[j]
+                data = Application.objects.create(
+                    author=user, post=post, file="dummy/post/dog_dummy/dog_form.docx"
+                )
+                if j == selected:
+                    post.accepted_application = data
+                    post.save()
 
-            data, animal_type = get_random_review()
+    for i in tqdm.tqdm(range(n_post)):
+        if posts[i].is_active:
+            continue
+        animal_type = posts[i].animal_type
+        data = get_random_review(animal_type)
+        user = posts[i].accepted_application.author
 
-            review = Review.objects.create(author=user, animal_type=animal_type, **data)
-            review.created_at = data["created_at"]
+        review = Review.objects.create(author=user, post=posts[i], animal_type=animal_type, **data)
+        review.created_at = data["created_at"]
 
-            photos = dog_list if animal_type == "개" else cat_list
-            review.thumbnail = photos[0]
-            review.save()
-            photos = [
-                ReviewImage.objects.create(author=user, review=review, image=p)
-                for p in photos
-            ]
-        elif model_id == "a":
-            posts = list(Post.objects.all().iterator())
-
-            post = random.choice(posts)
-            data = Application.objects.create(
-                author=user, post=post, file="dummy/post/dog_dummy/dog_form.docx"
-            )
+        photos = dog_list if animal_type == "개" else cat_list
+        review.thumbnail = photos[0]
+        review.save()
+        photos = [
+            ReviewImage.objects.create(author=user, review=review, image=p)
+            for p in photos
+        ]
 
 
 if __name__ == "__main__":
@@ -206,57 +238,30 @@ if __name__ == "__main__":
 
     if n_user == 0:
         yn = input("Create user? [Y/n] ")
-        if yn.lower() == "y" or yn == "":
-            usernames = ["yeomjy", "seorin55", "lenyakim", "jhpyun"]
-            passwords = ["1q2w3e4r", "password", "12345678", "qwerty"]
-            nicknames = ["염준영", "최서린", "김수빈", "편진희"]
+        usernames = ["yeomjy", "seorin55", "lenyakim", "jhpyun"]
+        passwords = ["1q2w3e4r", "password", "12345678", "qwerty"]
+        nicknames = ["염준영", "최서린", "김수빈", "편진희"]
 
-            for un, pw, nn in zip(usernames, passwords, nicknames):
-                u = User.objects.create_user(username=un, password=pw, nickname=nn)
+        for un, pw, nn in zip(usernames, passwords, nicknames):
+            u = User.objects.create_user(username=un, password=pw, nickname=nn)
 
-        else:
-            print("You should first create user...")
-            exit()
+    create()
 
-    model = input(
-        "Please type which model to create dummy\n"
-        "p: Post, r: Review, a: Application, q: Question, d: Default, otherwise: Quit\n"
-        "Default: create every model which has zero element\n"
-        "Number to create: (50, 50, 30, 40)"
-    )
-    a_p, a_r, a_a, a_q = (50, 50, 30, 40)
-
-    if model in ["p", "q", "r", "a"]:
-        n = 0
-        if model == "p":
-            n = n_post
-            a = a_p
-        elif model == "q":
-            n = n_question
-            a = a_q
-        elif model == "r":
-            n = n_review
-            a = a_r
-        elif model == "a":
-            n = n_application
-            a = a_a
-        create(n + 1, n + a, model)
-    elif model == "d":
-        if n_post == 0:
-            create(n_post + 1, n_post + a_p, "p")
-        if n_application == 0:
-            create(n_application + 1, n_application + a_a, "a")
-        if n_question == 0:
-            create(n_question + 1, n_question + a_q, "q")
-        if n_review == 0:
-            create(n_review + 1, n_review + a_r, "r")
-
-        users: list[User] = list(User.objects.all().iterator())
-        posts = list(Post.objects.all().iterator())
-
-        for u in users:
-            posts_to_like = random.choices(posts, k=3)
-            for p in posts_to_like:
-                u.likes.add(p)
-    else:
-        print("Quit...")
+    # if n_post == 0:
+    #         create(n_post + 1, n_post + a_p, "p")
+    #     if n_application == 0:
+    #         create(n_application + 1, n_application + a_a, "a")
+    #     if n_question == 0:
+    #         create(n_question + 1, n_question + a_q, "q")
+    #     if n_review == 0:
+    #         create(n_review + 1, n_review + a_r, "r")
+    #
+    #     users: list[User] = list(User.objects.all().iterator())
+    #     posts = list(Post.objects.all().iterator())
+    #
+    #     for u in users:
+    #         posts_to_like = random.choices(posts, k=3)
+    #         for p in posts_to_like:
+    #             u.likes.add(p)
+    # else:
+    #     print("Quit...")
