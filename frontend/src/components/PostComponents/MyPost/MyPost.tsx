@@ -7,13 +7,23 @@
 
 import Layout from '../../Layout/Layout'
 
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useState, useMemo, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import Post from '../Post/Post'
 import { postListType, postType } from '../../../store/slices/post'
+import {
+	getReview,
+	reviewListType,
+	reviewType
+} from '../../../store/slices/review'
+import { QnaType } from '../../../store/slices/qna'
 import { getMyPosts, selectMyPost } from '../../../store/slices/mypost'
 import { AppDispatch } from '../../../store'
+import Review from '../../ReviewComponents/Review/Review'
+import ReviewModal from '../../ReviewComponents/ReviewModal/ReviewModal'
+import ReviewDetail from '../../ReviewComponents/ReviewDetail/ReviewDetail'
+import Table from 'react-bootstrap/Table'
 
 import './MyPost.scss'
 
@@ -25,10 +35,14 @@ export default function MyPost() {
 	const [mypostMore, setMypostMore] = useState<boolean>(false)
 	const [mylikeMore, setMylikeMore] = useState<boolean>(false)
 	const [myapplyMore, setMyapplyMore] = useState<boolean>(false)
+	const [myreviewMore, setMyreviewMore] = useState<boolean>(false)
+	const [myqnaMore, setMyqnaMore] = useState<boolean>(false)
 
 	const mypost = postState.posts
 	const mylike = postState.likes
 	const myapply = postState.applys
+	const myreview = postState.reviews
+	const myqna = postState.qnas
 
 	useEffect(() => {
 		// eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -67,6 +81,43 @@ export default function MyPost() {
 		}
 		return myapply
 	}, [myapplyMore, myapply])
+
+	const review = useMemo(() => {
+		const shortMyreview: reviewListType[] = myreview.slice(0, 4)
+		if (myreview.length > 4) {
+			if (myreviewMore) {
+				return myreview
+			}
+			return shortMyreview
+		}
+		return myreview
+	}, [myreviewMore, myreview])
+
+	const [modalOpen, setModalOpen] = useState<boolean>(false)
+	const onClickToggleModal = useCallback(() => {
+		setModalOpen(!modalOpen)
+	}, [modalOpen])
+	const [clickedReview, setClickedReview] = useState<reviewType | null>(null)
+	const onClickReview = useCallback(
+		(id: number) => {
+			setModalOpen(!modalOpen)
+			dispatch(getReview(id)).then((result) => {
+				setClickedReview(result.payload)
+			})
+		},
+		[modalOpen, clickedReview]
+	)
+
+	const qna = useMemo(() => {
+		const shortMyqna: QnaType[] = myqna.slice(0, 4)
+		if (myqna.length > 4) {
+			if (myqnaMore) {
+				return myqna
+			}
+			return shortMyqna
+		}
+		return myqna
+	}, [myqnaMore, myreview])
 
 	return (
 		<Layout>
@@ -153,6 +204,78 @@ export default function MyPost() {
 								/>
 							)
 						})}
+					</div>
+				</div>
+				<div className='MyReview'>
+					<h1>입양 후기</h1>
+					<div className='showMore'>
+						<button onClick={() => setMyreviewMore(!myreviewMore)}>
+							{myreview.length > 4 &&
+								(myreviewMore ? '닫기' : '전체보기')}
+						</button>
+					</div>
+					<div className='reviews'>
+						{review.map((review: reviewListType) => {
+							return (
+								<Review
+									key={`${review.id}_review`}
+									title={review.title}
+									thumbnail={review.thumbnail}
+									author={review.author_name}
+								/>
+							)
+						})}
+						{modalOpen && clickedReview !== null && (
+							<ReviewModal
+								onClickToggleModal={onClickToggleModal}
+							>
+								<ReviewDetail
+									key={`${clickedReview.id}_review`}
+									title={clickedReview.title}
+									photo_path={clickedReview.photo_path}
+									author={clickedReview.author_name}
+									content={clickedReview.content}
+								/>
+							</ReviewModal>
+						)}
+					</div>
+				</div>
+				<div className='MyQna'>
+					<h1>내 Qna</h1>
+					<div className='showMore'>
+						<button onClick={() => setMyqnaMore(!myqnaMore)}>
+							{myqna.length > 4 &&
+								(myqnaMore ? '닫기' : '전체보기')}
+						</button>
+					</div>
+					<div className='qnas'>
+						<Table striped bordered hover>
+							<thead>
+								<tr>
+									<th>#</th>
+									<th>무엇이 궁금하세요?</th>
+									<th>날짜</th>
+									<th>조회수</th>
+								</tr>
+							</thead>
+							<tbody>
+								{qna.map((td: QnaType) => {
+									return (
+										<tr
+											key={`${td.id}_qna`}
+											onClick={() =>
+												navigate(`/qna/${td.id}`)
+											}
+										>
+											<td>{td.id}</td>
+											<td>{td.title}</td>
+											<td>{td.created_at}</td>
+											<td>{td.hits}</td>
+										</tr>
+									)
+								})}
+							</tbody>
+						</Table>
 					</div>
 				</div>
 			</div>

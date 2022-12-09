@@ -10,7 +10,7 @@ describe('<Post />', () => {
 				age={1}
 				gender={true}
 				author={'POST_AUTHOR'}
-				photo_path={[]}
+				thumbnail={''}
 				clickDetail={undefined}
 			/>
 		)
@@ -29,7 +29,7 @@ describe('<Post />', () => {
 				age={1}
 				gender={false}
 				author={'POST_AUTHOR'}
-				photo_path={[]}
+				thumbnail={''}
 				clickDetail={undefined}
 			/>
 		)

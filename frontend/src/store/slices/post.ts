@@ -129,21 +129,6 @@ export const editPost = createAsyncThunk(
 	'post/editPost',
 	async (post: postType, { dispatch }) => {
 		const response = await axios.put(`/api/posts/${post.id}/`, post)
-		// dispatch(
-		// 	postActions.editPost({
-		// 		targetId: post.id,
-		// 		title: post.title,
-		// 		name: post.name,
-		// 		vaccination: post.vaccination,
-		// 		neutering: post.neutering,
-		// 		animal_type: post.animal_type,
-		// 		species: post.species,
-		// 		photo_path: post.photo_path,
-		// 		age: post.age,
-		// 		gender: post.gender,
-		// 		content: post.content
-		// 	})
-		// )
 		return response.data
 	}
 )
@@ -183,81 +168,12 @@ export const postSlice = createSlice({
 		) => {
 			state.selectedAnimal = action.payload.animal_type
 		}
-		// editPost: (
-		// 	state,
-		// 	action: PayloadAction<{
-		// 		targetId: number
-		// 		name: string
-		// 		vaccination: boolean
-		// 		neutering: boolean
-		// 		title: string
-		// 		animal_type: string
-		// 		species: string
-		// 		photo_path: string[]
-		// 		age: number
-		// 		gender: boolean
-		// 		content: string
-		// 	}>
-		// ) => {
-		// 	const post = state.posts.find(
-		// 		(value: postType) => value.id === action.payload.targetId
-		// 	)
-		// 	if (post != null) {
-		// 		post.name = action.payload.name
-		// 		post.vaccination = action.payload.vaccination
-		// 		post.neutering = action.payload.neutering
-		// 		post.title = action.payload.title
-		// 		post.animal_type = action.payload.animal_type
-		// 		post.species = action.payload.species
-		// 		post.photo_path = action.payload.photo_path
-		// 		post.age = action.payload.age
-		// 		post.gender = action.payload.gender
-		// 		post.content = action.payload.content
-		// 	}
-		// },
 		// deletePost: (state, action: PayloadAction<{ targetId: number }>) => {
 		// 	const deleted = state.posts.filter((post: postType) => {
 		// 		return post.id !== action.payload.targetId
 		// 	})
 		// 	state.posts = deleted
 		// },
-		// addPost: (
-		// 	state,
-		// 	action: PayloadAction<{
-		// 		id: number
-		// 		author_id: number
-		// 		author_name: string
-		// 		title: string
-		// 		name: string
-		// 		vaccination: boolean
-		// 		neutering: boolean
-		// 		animal_type: string
-		// 		species: string
-		// 		photo_path: string[]
-		// 		age: number
-		// 		gender: boolean
-		// 		content: string
-		// 	}>
-		// ) => {
-		// 	const newPost = {
-		// 		id: action.payload.id,
-		// 		author_id: action.payload.author_id,
-		// 		author_name: action.payload.author_name,
-		// 		name: action.payload.name,
-		// 		vaccination: action.payload.vaccination,
-		// 		neutering: action.payload.neutering,
-		// 		title: action.payload.title,
-		// 		animal_type: action.payload.animal_type,
-		// 		species: action.payload.species,
-		// 		photo_path: action.payload.photo_path,
-		// 		age: action.payload.age,
-		// 		gender: action.payload.gender,
-		// 		content: action.payload.content,
-		// 		created_at: '',
-		// 		is_active: true,
-		// 	}
-		// 	state.posts.push(newPost)
-		// }
 	},
 	extraReducers: (builder) => {
 		// Add reducers for additional action types here, and handle loading state as needed

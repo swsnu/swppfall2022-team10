@@ -79,6 +79,14 @@ export default function ReviewList() {
 		<Layout>
 			<div className='ReviewListContainer'>
 				<div className='ReviewList'>
+					<div className='create-review'>
+						<button
+							id='create-review-button'
+							onClick={() => navigate('/reviews/create')}
+						>
+							<MdOutlineAddBox size='50' />
+						</button>
+					</div>
 					<div className='reviews'>
 						{reviewState.reviews.map((review: reviewListType) => {
 							return (
@@ -109,14 +117,6 @@ export default function ReviewList() {
 								/>
 							</ReviewModal>
 						)}
-					</div>
-					<div className='create-review'>
-						<button
-							id='create-review-button'
-							onClick={() => navigate('/reviews/create')}
-						>
-							<MdOutlineAddBox size='50' />
-						</button>
 					</div>
 				</div>
 				<Pagination

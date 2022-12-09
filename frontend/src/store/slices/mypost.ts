@@ -2,17 +2,23 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { RootState } from '..'
 import { postListType } from './post'
+import { reviewListType } from './review'
+import { QnaType } from './qna'
 
 export interface mypostState {
 	posts: postListType[]
 	likes: postListType[]
 	applys: postListType[]
+	reviews: reviewListType[]
+	qnas: QnaType[]
 }
 
 const initialState: mypostState = {
 	posts: [],
 	likes: [],
-	applys: []
+	applys: [],
+	reviews: [],
+	qnas: []
 }
 
 export const getMyPosts = createAsyncThunk('mypost/getMyPosts', async () => {
@@ -30,6 +36,8 @@ export const mypostSlice = createSlice({
 			state.posts = action.payload[0]
 			state.likes = action.payload[1]
 			state.applys = action.payload[2]
+			state.reviews = action.payload[3]
+			state.qnas = action.payload[4]
 		})
 	}
 })
