@@ -7,7 +7,7 @@ import { fireEvent, render, screen } from '@testing-library/react'
 import { Provider } from 'react-redux'
 import axios from 'axios'
 import { MemoryRouter, Route, Routes } from 'react-router'
-import { postType } from '../../../store/slices/post'
+import { postListType } from '../../../store/slices/post'
 import { getMockStore } from '../../../test-utils/mock'
 import MyPost from './MyPost'
 import { IProps as PostProps } from '../Post/Post'
@@ -30,24 +30,15 @@ jest.mock('../Post/Post', () => (props: PostProps) => (
 	</div>
 ))
 
-const fakepost: postType = {
+const fakepost: postListType = {
 	id: 1,
-	author_id: 1,
 	author_name: 'POST_AUTHOR',
-	name: 'POST_NAME',
-	vaccination: true,
-	neutering: true,
 	title: 'POST_TITLE_1',
 	animal_type: 'POST_ANIMAL_TYPE',
-	photo_path: [],
+	thumbnail: '',
 	species: 'POST_SPECIES',
 	age: 1,
-	gender: true,
-	content: 'POST_CONTENT',
-	created_at: 'POST_CREATED_AT',
-	is_active: true,
-	editable: false,
-	form: ""
+	gender: true
 }
 const mockStore = getMockStore({
 	post: { posts: [], selectedPost: null, selectedAnimal: '' },
@@ -55,8 +46,13 @@ const mockStore = getMockStore({
 	review: { reviews: [], selectedReview: null, selectedAnimal: '' },
 	application: { applications: [], selectedApplication: null },
 	qna: { qnas: [], selectedQna: null },
-	mypost: { posts: [fakepost], likes: [fakepost], applys: [fakepost] },
-	comment: { comments: [], selectedComment: null },
+	mypost: {
+		posts: [fakepost],
+		likes: [fakepost],
+		applys: [fakepost],
+		reviews: [],
+		qnas: []
+	}
 })
 
 const mockNavigate = jest.fn()

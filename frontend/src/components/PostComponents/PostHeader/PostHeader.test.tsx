@@ -19,7 +19,7 @@ const tempState = {
 			name: 'POST_TEST_NAME',
 			title: 'POST_TEST_TITLE',
 			animal_type: 'POST_TEST_ANIMAL_TYPE',
-			photo_path: ['POST_TEST_PHOTO_PATH'],
+			photo_path: [{ id: 1, photo_path: 'POST_TEST_PHOTO_PATH' }],
 			species: 'POST_TEST_SPECIES',
 			age: 0,
 			content: 'POST_TEST_CONTENT',
@@ -29,7 +29,7 @@ const tempState = {
 			neutering: true,
 			is_active: true,
 			editable: true,
-			form: ""
+			form: ''
 		},
 		selectedAnimal: ''
 	},
@@ -37,15 +37,18 @@ const tempState = {
 	review: { reviews: [], selectedReview: null, selectedAnimal: '' },
 	application: { applications: [], selectedApplication: null },
 	qna: { qnas: [], selectedQna: null },
-	mypost: { posts: [], likes: [], applys: [] },
-	comment: { comments: [], selectedComment: null },
+	mypost: { posts: [], likes: [], applys: [], reviews: [], qnas: [] }
 }
 
 describe('<PostHeader />', () => {
 	it('should render without errors', async () => {
 		render(
 			<Provider store={getMockStore(tempState)}>
-				<PostHeader is_author={false} />
+				<PostHeader
+					is_author={false}
+					is_bookmark={true}
+					setBookmark={(number) => null}
+				/>
 			</Provider>
 		)
 		await screen.findByText('POST_TEST_TITLE')
@@ -60,7 +63,11 @@ describe('<PostHeader />', () => {
 	it('should not render adopt button when author', async () => {
 		render(
 			<Provider store={getMockStore(tempState)}>
-				<PostHeader is_author={true} />
+				<PostHeader
+					is_author={true}
+					is_bookmark={true}
+					setBookmark={(number) => null}
+				/>
 			</Provider>
 		)
 		await waitFor(() => {
@@ -70,7 +77,11 @@ describe('<PostHeader />', () => {
 	it('should render without errors', async () => {
 		render(
 			<Provider store={getMockStore(tempState)}>
-				<PostHeader is_author={true} />
+				<PostHeader
+					is_author={true}
+					is_bookmark={true}
+					setBookmark={(number) => null}
+				/>
 			</Provider>
 		)
 		const bookmarkButton = await screen.findByRole('button', {
@@ -81,7 +92,11 @@ describe('<PostHeader />', () => {
 	it('should navigate to submit page when adopt button clicked', async () => {
 		render(
 			<Provider store={getMockStore(tempState)}>
-				<PostHeader is_author={false} />
+				<PostHeader
+					is_author={false}
+					is_bookmark={true}
+					setBookmark={(number) => null}
+				/>
 			</Provider>
 		)
 		const adoptButton = await screen.findByText('입양하기')

@@ -91,7 +91,11 @@ const PostDetail = (props: IProps) => {
 							<br />
 						</div>
 						<div className='det2'>
-							<a href={`http://localhost:8000${postState.selectedPost?.form}`}>입양신청서 서식</a>
+							<a
+								href={`http://localhost:8000${postState.selectedPost?.form}`}
+							>
+								입양신청서 서식
+							</a>
 						</div>
 					</div>
 					{editable && id && <ApplicationList id={id} />}

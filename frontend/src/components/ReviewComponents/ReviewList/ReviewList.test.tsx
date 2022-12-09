@@ -28,10 +28,9 @@ const stubInitialState: reviewState = {
 		{
 			title: 'REVIEW_TITLE_1',
 			author_name: 'REVIEW_AUTHOR',
-			photo_path: [],
+			thumbnail: '',
 			id: 1,
 			author_id: 1,
-			content: 'REVIEW_CONTENT',
 			animal_type: 'REVIEW_ANIMAL_TYPE',
 			species: 'REVIEW_ANIMAL_SPECIES',
 			created_at: 'REVIEW_CREATED_AT',
@@ -47,8 +46,7 @@ const mockStore = getMockStore({
 	post: { posts: [], selectedPost: null, selectedAnimal: '' },
 	application: { applications: [], selectedApplication: null },
 	qna: { qnas: [], selectedQna: null },
-	mypost: { posts: [], likes: [], applys: [] },
-	comment: { comments: [], selectedComment: null },
+	mypost: { posts: [], likes: [], applys: [], reviews: [], qnas: [] }
 })
 
 const mockNavigate = jest.fn()

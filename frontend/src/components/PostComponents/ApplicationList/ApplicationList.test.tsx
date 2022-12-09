@@ -17,7 +17,7 @@ const stubInitialState: applicationState = {
 			id: 1,
 			author_id: 1,
 			author_name: 'Application_Author',
-			file: "",
+			file: '',
 			created_at: 'Application_Date',
 			post_id: 1
 		}
@@ -30,8 +30,7 @@ const mockStore = getMockStore({
 	review: { reviews: [], selectedReview: null, selectedAnimal: '' },
 	application: stubInitialState,
 	qna: { qnas: [], selectedQna: null },
-	mypost: { posts: [], likes: [], applys: [] },
-	comment: { comments: [], selectedComment: null },
+	mypost: { posts: [], likes: [], applys: [], reviews: [], qnas: [] }
 })
 
 describe('<ApplicationList />', () => {

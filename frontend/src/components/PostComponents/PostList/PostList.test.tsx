@@ -31,22 +31,13 @@ const stubInitialState: postSlice.postState = {
 	posts: [
 		{
 			id: 1,
-			author_id: 1,
 			author_name: 'POST_AUTHOR',
-			name: 'POST_NAME',
-			vaccination: true,
-			neutering: true,
 			title: 'POST_TITLE_1',
 			animal_type: 'POST_ANIMAL_TYPE',
-			photo_path: [],
+			thumbnail: '',
 			species: 'POST_SPECIES',
 			age: 1,
-			gender: true,
-			content: 'POST_CONTENT',
-			created_at: 'POST_CREATED_AT',
-			is_active: true,
-			editable: false,
-			form: ""
+			gender: true
 		}
 	],
 	selectedPost: null,
@@ -58,8 +49,7 @@ const mockStore = getMockStore({
 	review: { reviews: [], selectedReview: null, selectedAnimal: '' },
 	application: { applications: [], selectedApplication: null },
 	qna: { qnas: [], selectedQna: null },
-	mypost: { posts: [], likes: [], applys: [] },
-	comment: { comments: [], selectedComment: null },
+	mypost: { posts: [], likes: [], applys: [], reviews: [], qnas: [] }
 })
 
 const mockNavigate = jest.fn()
@@ -97,7 +87,7 @@ describe('<PostList />', () => {
 						created_at: 'POST_CREATED_AT',
 						is_active: true,
 						editable: false,
-						form: ""
+						form: ''
 					}
 				]
 			}

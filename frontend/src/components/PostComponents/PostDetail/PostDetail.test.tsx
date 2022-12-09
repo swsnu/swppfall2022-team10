@@ -6,14 +6,32 @@ import { getMockStore } from '../../../test-utils/mock'
 import * as postSlice from '../../../store/slices/post'
 import PostDetail from './PostDetail'
 
+const testPost = {
+	id: 1,
+	author_id: 1,
+	author_name: 'POST_TEST_AUTHOR',
+	name: 'POST_TEST_NAME',
+	title: 'POST_TEST_TITLE',
+	animal_type: 'POST_TEST_ANIMAL_TYPE',
+	photo_path: [],
+	species: 'POST_TEST_SPECIES',
+	age: 0,
+	content: 'POST_TEST_CONTENT',
+	created_at: 'POST_TEST_CREATED_AT',
+	gender: true,
+	vaccination: true,
+	neutering: true,
+	is_active: true,
+	editable: true
+}
+
 const mockState = {
-	post: { posts: [], selectedPost: null, selectedAnimal: '' },
+	post: { posts: [], selectedPost: testPost, selectedAnimal: '' },
 	// user: { users: [], currentUser: null, logged_in: true },
 	review: { reviews: [], selectedReview: null, selectedAnimal: '' },
 	application: { applications: [], selectedApplication: null },
 	qna: { qnas: [], selectedQna: null },
-	mypost: { posts: [], likes: [], applys: [] },
-	comment: { comments: [], selectedComment: null },
+	mypost: { posts: [], likes: [], applys: [], reviews: [], qnas: [] }
 }
 
 const mockNavigate = jest.fn()
@@ -26,6 +44,8 @@ jest.mock('../../Header/Dropdown/Dropdown', () => () => 'Dropdown')
 jest.mock('../../Header/Header', () => () => 'Header')
 jest.mock('../../Footer/Footer', () => () => 'Footer')
 jest.mock('../../Layout/ScrollToTop', () => () => '')
+jest.mock('../ApplicationList/ApplicationList', () => () => '')
+jest.mock('../PostHeader/PostHeader', () => () => '')
 
 const testPostFormat = {
 	id: 1,
@@ -77,8 +97,7 @@ describe('<PostDetail />', () => {
 			render(postDetail)
 		})
 		// render(postDetail);
-		await screen.findByText('POST_TEST_TITLE')
-		await screen.findByText('POST_TEST_CONTENT')
+		await screen.findByText('백신 접종 완료한 동물입니다.')
 	})
 	it('should render edit/delete button when user is the author', async () => {
 		jest.spyOn(axios, 'get').mockResolvedValue({
@@ -154,7 +173,9 @@ describe('<PostDetail />', () => {
 		// render(postDetail);
 		jest.spyOn(axios, 'get').mockRejectedValue({})
 		await waitFor(() => {
-			expect(screen.queryAllByText('POST_TEST_TITLE')).toHaveLength(0)
+			expect(
+				screen.queryAllByText('백신 접종 완료한 동물입니다.')
+			).toHaveLength(0)
 		})
 	})
 })
