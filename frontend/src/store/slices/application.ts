@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit'
 import axios from 'axios'
 import { RootState } from '..'
 
@@ -77,7 +77,15 @@ export const deleteApplication = createAsyncThunk(
 export const applicationSlice = createSlice({
 	name: 'application',
 	initialState,
-	reducers: {},
+	reducers: {
+		deleteApplication: (state, action: PayloadAction<{ targetId: number }>) => {
+			const deleted = state.applications.filter((apply: applicationType) => {
+				return apply.id !== action.payload.targetId
+			})
+			console.log(deleted)
+			state.applications = deleted
+		}
+	},
 	extraReducers: (builder) => {
 		// Add reducers for additional action types here, and handle loading state as needed
 		builder.addCase(getApplications.fulfilled, (state, action) => {
