@@ -1,16 +1,26 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable import/no-duplicates */
-import { AnyAction, configureStore, EnhancedStore } from '@reduxjs/toolkit'
+import * as redux from '@reduxjs/toolkit'
 import axios from 'axios'
-import { ThunkMiddleware } from 'redux-thunk'
+import thunk, { ThunkMiddleware } from 'redux-thunk'
 import reducer, { postState } from './post'
-import { getPosts, getPost, createPost, deletePost, editPost } from './post'
+import configureStore from 'redux-mock-store'
+import {
+	deletePostImage,
+	getPosts,
+	getPost,
+	createPost,
+	deletePost,
+	editPost
+} from './post'
+const middlewares = [thunk]
+const mockStore = configureStore(middlewares)
 
 describe('post reducer', () => {
-	let store: EnhancedStore<
+	let store: redux.EnhancedStore<
 		{ post: postState },
-		AnyAction,
-		[ThunkMiddleware<{ post: postState }, AnyAction, undefined>]
+		redux.AnyAction,
+		[ThunkMiddleware<{ post: postState }, redux.AnyAction, undefined>]
 	>
 	const fakePost = {
 		id: 1,
@@ -29,7 +39,7 @@ describe('post reducer', () => {
 		created_at: 'test_created_at',
 		is_active: false,
 		editable: true,
-		form: ""
+		form: ''
 	}
 
 	const fakePostCreate = {
@@ -60,7 +70,7 @@ describe('post reducer', () => {
 	}
 
 	beforeAll(() => {
-		store = configureStore({ reducer: { post: reducer } })
+		store = redux.configureStore({ reducer: { post: reducer } })
 	})
 	it('should handle initial state', () => {
 		expect(reducer(undefined, { type: 'unknown' })).toEqual({
@@ -77,7 +87,9 @@ describe('post reducer', () => {
 		expect(store.getState().post.posts).toEqual([fakePost])
 	})
 	it('should handle getPost', async () => {
-		axios.get = jest.fn().mockResolvedValue({ data: fakePost })
+		axios.get = jest.fn().mockResolvedValue({
+			data: { post: fakePost }
+		})
 		await store.dispatch(getPost(1))
 		expect(store.getState().post.selectedPost).toEqual(fakePost)
 	})
@@ -102,6 +114,20 @@ describe('post reducer', () => {
 			store.getState().post.posts.find((v) => v.id === fakePost.id)?.id
 		).toEqual(1)
 	})
+	it('should handle deletePostImage', async () => {
+		jest.spyOn(axios, 'delete').mockResolvedValue({
+			data: fakePost
+		})
+		const store = mockStore({})
+		await store.dispatch(deletePostImage({ id: 1, photo_id: 1 }) as any)
+		expect(store.getActions()[0].type).toEqual(deletePostImage.pending.type)
+		expect(store.getActions()[1]).toEqual(
+			expect.objectContaining({
+				type: deletePostImage.fulfilled.type,
+				payload: fakePost
+			})
+		)
+	})
 
 	it('should handle error on createPost', async () => {
 		/* const mockConsoleError = jest.fn();
@@ -113,7 +139,7 @@ describe('post reducer', () => {
         expect(mockConsoleError).toBeCalled(); */
 	})
 	it('should handle null on getPost', async () => {
-		axios.get = jest.fn().mockResolvedValue({ data: null })
+		axios.get = jest.fn().mockResolvedValue({ data: { post: null } })
 		await store.dispatch(getPost(1))
 		expect(store.getState().post.selectedPost).toEqual(null)
 	})

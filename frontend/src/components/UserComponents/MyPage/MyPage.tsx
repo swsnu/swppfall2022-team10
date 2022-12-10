@@ -42,10 +42,9 @@ export default function MyPage() {
 		dispatch(checkLogin()).then((result) => {
 			const loggedIn: boolean = (result.payload as { logged_in: boolean })
 				.logged_in
-			if (!loggedIn) navigate('/')
+			if (!loggedIn) navigate('/login')
 		})
 		dispatch(getUser()).then((result) => {
-			console.log(result.payload)
 			setCurrentUser(result.payload)
 			setEmail(result.payload.email)
 			setImageUrl(result.payload.photo_path)
@@ -105,20 +104,24 @@ export default function MyPage() {
 		formData.append('content', JSON.stringify(userData))
 		if (file !== undefined) formData.append('photos', file)
 
-		dispatch(editUser(formData))
-			.then((result) => {
-				setCurrentUser(result.payload)
-				setEdit(false)
-			})
-			.catch((err) => {
-				// console.log(err)
-				alert('Edit User Error')
-				setPassword('')
-				setPasswordConfirm('')
-				setEmail(currentUser.email)
-				setPasswordConfirmMessage(null)
-				setPasswordMessage(null)
-			})
+		dispatch(editUser(formData)).then((result) => {
+			setCurrentUser(result.payload)
+			setEdit(false)
+		})
+		setPassword('')
+		setPasswordConfirm('')
+		setEmail(currentUser.email)
+		setPasswordConfirmMessage(null)
+		setPasswordMessage(null)
+		// .catch((err) => {
+		// 	// console.log(err)
+		// 	alert('Edit User Error')
+		// 	setPassword('')
+		// 	setPasswordConfirm('')
+		// 	setEmail(currentUser.email)
+		// 	setPasswordConfirmMessage(null)
+		// 	setPasswordMessage(null)
+		// })
 	}
 	return (
 		<Layout>

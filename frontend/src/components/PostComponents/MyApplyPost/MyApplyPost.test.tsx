@@ -4,7 +4,7 @@ import { Provider } from 'react-redux'
 import { MemoryRouter, Navigate, Route, Routes } from 'react-router'
 import { getMockStore } from '../../../test-utils/mock'
 import * as postSlice from '../../../store/slices/post'
-import PostDetail from './PostDetail'
+import MyApplyPost from './MyApplyPost'
 
 const testPost = {
 	id: 1,
@@ -43,7 +43,7 @@ jest.mock('../../Header/Dropdown/Dropdown', () => () => 'Dropdown')
 jest.mock('../../Header/Header', () => () => 'Header')
 jest.mock('../../Footer/Footer', () => () => 'Footer')
 jest.mock('../../Layout/ScrollToTop', () => () => '')
-jest.mock('../ApplicationList/ApplicationList', () => () => '')
+jest.mock('../ApplicationList/MyApplicationList', () => () => '')
 jest.mock('../PostHeader/PostHeader', () => () => '')
 
 const testPostFormat = {
@@ -60,17 +60,17 @@ const testPostFormat = {
 	created_at: 'POST_TEST_CREATED_AT'
 }
 
-describe('<PostDetail />', () => {
-	let postDetail: JSX.Element
+describe('<MyApplyPost />', () => {
+	let myApplyPost: JSX.Element
 	beforeEach(() => {
 		jest.clearAllMocks()
-		postDetail = (
+		myApplyPost = (
 			<Provider store={getMockStore(mockState)}>
 				<MemoryRouter>
 					<Routes>
 						<Route
 							path='/post-detail/:id'
-							element={<PostDetail is_author={true} />}
+							element={<MyApplyPost />}
 						/>
 						<Route
 							path='/'
@@ -97,7 +97,7 @@ describe('<PostDetail />', () => {
 			}
 		})
 		await act(() => {
-			render(postDetail)
+			render(myApplyPost)
 		})
 		await screen.findByText(/POST_TEST_SPECIES/)
 	})
@@ -116,7 +116,7 @@ describe('<PostDetail />', () => {
 			}
 		})
 		await act(() => {
-			render(postDetail)
+			render(myApplyPost)
 		})
 		const editButton = await screen.findByText('수정')
 		await waitFor(() => {
@@ -127,50 +127,9 @@ describe('<PostDetail />', () => {
 			expect(deleteButton).toBeInTheDocument()
 		})
 	})
-	it('should render navigate to edit page when edit Button clicked', async () => {
-		jest.spyOn(axios, 'get').mockResolvedValue({
-			data: {
-				...testPostFormat,
-				gender: true,
-				vaccination: true,
-				neutering: true,
-				is_active: true,
-				editable: true
-			}
-		})
-		await act(() => {
-			render(postDetail)
-		})
-		const editButton = await screen.findByText('수정')
-		fireEvent.click(editButton)
-		await waitFor(() =>
-			expect(mockNavigate).toHaveBeenCalledWith('/post/1/edit')
-		)
-	})
-	it('should delete when delete Button clicked', async () => {
-		jest.spyOn(axios, 'get').mockResolvedValue({
-			data: {
-				...testPostFormat,
-				gender: true,
-				vaccination: true,
-				neutering: true,
-				is_active: true,
-				editable: true
-			}
-		})
-		jest.spyOn(axios, 'delete').mockResolvedValue({})
-		const mockDeleteArticle = jest.spyOn(postSlice, 'deletePost')
-		await act(() => {
-			render(postDetail)
-		})
-		const deleteButton = await screen.findByText('삭제')
-		fireEvent.click(deleteButton)
-		await waitFor(() => expect(mockDeleteArticle).toHaveBeenCalled())
-		await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith('/'))
-	})
 	it('should not render if there is no post', async () => {
 		await act(() => {
-			render(postDetail)
+			render(myApplyPost)
 		})
 		jest.spyOn(axios, 'get').mockRejectedValue({})
 		await waitFor(() => {

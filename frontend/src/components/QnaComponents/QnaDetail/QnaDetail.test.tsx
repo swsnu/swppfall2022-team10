@@ -13,8 +13,7 @@ const mockState = {
 	review: { reviews: [], selectedReview: null, selectedAnimal: '' },
 	application: { applications: [], selectedApplication: null },
 	qna: { qnas: [], selectedQna: null },
-	mypost: { posts: [], likes: [], applys: [] },
-	comment: { comments: [], selectedComment: null },
+	mypost: { posts: [], likes: [], applys: [], reviews: [], qnas: [] }
 }
 
 const mockNavigate = jest.fn()
@@ -27,6 +26,7 @@ jest.mock('../../Header/Dropdown/Dropdown', () => () => 'Dropdown')
 jest.mock('../../Header/Header', () => () => 'Header')
 jest.mock('../../Footer/Footer', () => () => 'Footer')
 jest.mock('../../Layout/ScrollToTop', () => () => '')
+jest.mock('../CommentList/CommentList', () => () => '')
 
 const testQnaFormat = {
 	id: 1,

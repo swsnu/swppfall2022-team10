@@ -28,6 +28,7 @@ export const getUser = createAsyncThunk('user/getUser', async () => {
 	const response = await axios.get(`/api/users/info`)
 	return response.data
 })
+
 export const deleteUser = createAsyncThunk('user/deleteUser', async () => {
 	const response = await axios.delete(`/api/users/`)
 	return response.status

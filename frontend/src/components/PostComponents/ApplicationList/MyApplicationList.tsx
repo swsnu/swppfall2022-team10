@@ -7,7 +7,7 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { useState, useCallback, useEffect } from 'react'
 import {
-	getMyApplications,
+	getApplications,
 	selectApplication,
 	applicationType,
 	deleteApplication
@@ -24,25 +24,12 @@ interface IProps {
 export default function MyApplicationList(props: IProps) {
 	const applicationState = useSelector(selectApplication)
 	const dispatch = useDispatch<AppDispatch>()
-	const example = [{
-		id: 23,
-        file: "dog_form.docx",
-        created_at: "2022-12-07 05:36:25",
-        post_id: 33,
-        author_id: 3,
-        author_name: "lenyakim"
-	}]
-	const [isDelete, setIsDelete] = useState<boolean>(false)
 
 	useEffect(() => {
 		// eslint-disable-next-line @typescript-eslint/no-floating-promises
-		dispatch(getMyApplications(props.id))
+		dispatch(getApplications(props.id))
 	}, [])
 
-	const onDeleteHandler = (apply: applicationType) => {
-		dispatch(deleteApplication(apply))
-		dispatch(getMyApplications(props.id))
-	}
 
 	return (
 		<div className='application-list'>
@@ -58,7 +45,7 @@ export default function MyApplicationList(props: IProps) {
 						</tr>
 					</thead>
 					<tbody>
-						{example.map((apply: applicationType) => {
+						{applicationState.applications.map((apply: applicationType) => {
 							return (
 								<tr key={`${apply.id}_apply`}>
 									<td>{apply.id}</td>
@@ -68,9 +55,9 @@ export default function MyApplicationList(props: IProps) {
 									<td>{apply.created_at}</td>
 									<td>
 										<button
-											id='apply-button'
+											id='delete-button'
 											onClick={() => {
-												onDeleteHandler(apply)
+												dispatch(deleteApplication(apply))
 											}}
 										>
 											<RiDeleteBin6Line />

@@ -31,7 +31,7 @@ const stubInitialState: qnaState = {
 			created_at: 'QNA_CREATED_AT',
 			hits: 3,
 			editable: false,
-			comments: [],
+			comments: []
 		}
 	],
 	selectedQna: null
@@ -43,8 +43,7 @@ const mockStore = getMockStore({
 	// user: { users: [], currentUser: null, logged_in: false },
 	review: { reviews: [], selectedReview: null, selectedAnimal: '' },
 	application: { applications: [], selectedApplication: null },
-	mypost: { posts: [], likes: [], applys: [] },
-	comment: { comments: [], selectedComment: null },
+	mypost: { posts: [], likes: [], applys: [], reviews: [], qnas: [] }
 })
 
 const mockNavigate = jest.fn()

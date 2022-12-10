@@ -29,10 +29,14 @@ const PostDetail = (props: IProps) => {
 	const [bookmark, setBookmark] = useState<boolean>(false)
 
 	useEffect(() => {
-		dispatch(getPost(Number(id))).then((result) => {
-			setEditable(result.payload.editable)
-			setBookmark(result.payload.bookmark)
-		})
+		dispatch(getPost(Number(id)))
+			.then((result) => {
+				setEditable(result.payload.editable)
+				setBookmark(result.payload.bookmark)
+			})
+			.catch((err) => {
+				console.log(err)
+			})
 	}, [id])
 
 	return (
@@ -91,7 +95,11 @@ const PostDetail = (props: IProps) => {
 							<br />
 						</div>
 						<div className='det2'>
-							<a href={`http://localhost:8000${postState.selectedPost?.form}`}>입양신청서 서식</a>
+							<a
+								href={`http://localhost:8000${postState.selectedPost?.form}`}
+							>
+								입양신청서 서식
+							</a>
 						</div>
 					</div>
 					{editable && id && <ApplicationList id={id} />}

@@ -18,11 +18,11 @@ const tempState = {
 				title: 'REVIEW_TEST_TITLE',
 				author_id: 1,
 				author_name: 'REVIEW_TEST_AUTHOR',
-				content: 'REVIEW_TEST_CONTENT',
 				animal_type: '강아지',
-				photo_path: [],
+				thumbnail: '',
 				species: '치와와',
-				created_at: '2022-11-18'
+				created_at: '2022-11-18',
+				post_id: 1
 			}
 		],
 		selectedReview: null,
@@ -30,8 +30,7 @@ const tempState = {
 	},
 	application: { applications: [], selectedApplication: null },
 	qna: { qnas: [], selectedQna: null },
-	mypost: { posts: [], likes: [], applys: [] },
-	comment: { comments: [], selectedComment: null },
+	mypost: { posts: [], likes: [], applys: [], reviews: [], qnas: [] }
 }
 const mockNavigate = jest.fn()
 jest.mock('react-router', () => ({

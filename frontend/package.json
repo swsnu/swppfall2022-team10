@@ -31,6 +31,7 @@
 		"react-scripts": "5.0.1",
 		"react-widgets": "^5.8.4",
 		"redux": "^4.2.0",
+		"redux-mock-store": "^1.5.4",
 		"sass": "^1.55.0",
 		"sass-loader": "^13.1.0",
 		"typescript": "*",
@@ -68,6 +69,7 @@
 		]
 	},
 	"devDependencies": {
+		"@types/redux-mock-store": "^1.0.3",
 		"@types/styled-components": "^5.1.26",
 		"@typescript-eslint/eslint-plugin": "^5.0.0",
 		"@typescript-eslint/parser": "^5.41.0",

@@ -8,7 +8,7 @@ import { Provider } from 'react-redux'
 import { MemoryRouter, Route, Routes } from 'react-router'
 import { applicationState } from '../../../store/slices/application'
 import { getMockStore } from '../../../test-utils/mock'
-import ApplicationList from './ApplicationList'
+import MyApplicationList from './MyApplicationList'
 import { act } from 'react-dom/test-utils'
 
 const stubInitialState: applicationState = {
@@ -25,7 +25,6 @@ const stubInitialState: applicationState = {
 	selectedApplication: null
 }
 const mockStore = getMockStore({
-	// user: { users: [], currentUser: null, logged_in: false },
 	post: { posts: [], selectedPost: null, selectedAnimal: '' },
 	review: { reviews: [], selectedReview: null, selectedAnimal: '' },
 	application: stubInitialState,
@@ -33,17 +32,17 @@ const mockStore = getMockStore({
 	mypost: { posts: [], likes: [], applys: [], reviews: [], qnas: [] }
 })
 
-describe('<ApplicationList />', () => {
-	let applicationList: JSX.Element
+describe('<MyApplicationList />', () => {
+	let myApplicationList: JSX.Element
 	beforeEach(() => {
 		jest.clearAllMocks()
-		applicationList = (
+		myApplicationList = (
 			<Provider store={mockStore}>
 				<MemoryRouter>
 					<Routes>
 						<Route
 							path='/'
-							element={<ApplicationList id={'1'} />}
+							element={<MyApplicationList id={'1'} />}
 						/>
 					</Routes>
 				</MemoryRouter>
@@ -52,20 +51,21 @@ describe('<ApplicationList />', () => {
 	})
 	it('should render Applicationlist', async () => {
 		await act(() => {
-			const { container } = render(applicationList)
+			const { container } = render(myApplicationList)
 			expect(container).toBeTruthy()
 		})
 	})
-	it('should handle modal open and close', async () => {
+	it('should render table', async () => {
 		await act(() => {
-			render(applicationList)
+			render(myApplicationList)
+		})
+		const tableRowElement = document.getElementsByTagName('th')
+		expect(tableRowElement).toHaveLength(4)
+	})
+	it('should delete applications', async () => {
+		await act(() => {
+			render(myApplicationList)
 		})
 		const button = document.querySelector('#apply-button')
-		fireEvent.click(button!)
-		const closeButton = await screen.findByRole('button', {
-			name: /Close/i
-		})
-		fireEvent.click(closeButton!)
-		!document.querySelector('.Modal')
 	})
 })
