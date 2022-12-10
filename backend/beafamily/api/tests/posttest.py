@@ -206,7 +206,7 @@ class PostTestCase(APITestCase):
 
     def test_getposts(self):
 
-        reversed_list = [PostSerializer(i).data for i in reversed(self.post_list)]
+        reversed_list = [PostSerializer(i).data for i in sorted(self.post_list, key=lambda x: x.created_at, reverse=True)]
 
         response = self.client.get("/api/posts/")
         self.assertEqual(response.json()["results"], reversed_list[0:20])
@@ -433,7 +433,7 @@ class PostTestCase(APITestCase):
 
     def test_valid_query(self):
         reversed_list = [
-            PostDetailSerializer(i).data["post"] for i in reversed(self.post_list)
+            PostDetailSerializer(i).data["post"] for i in sorted(self.post_list, key=lambda x: x.created_at, reverse=True)
         ]
 
         valid = {
