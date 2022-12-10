@@ -41,15 +41,6 @@ then
             fi
         fi
     done
-    pylint --load-plugins pylint_django --rcfile backend/beafamily/.pylintrc "$change_list"
-    ret=$?
-    if [ $ret -ne 0 ]
-    then
-        echo "ERROR on pylint"
-        exit 1
-    else
-        echo "pylint passed!"
-    fi
 else
     echo "we don't need to format any python files!"
 fi
@@ -88,17 +79,17 @@ then
                 echo "typescript/react formatting finished!"
             fi
         fi
+        "$eslint" $file
+        ret=$?
+        if [ $ret -ne 0 ]
+        then
+            echo "ERROR on eslint"
+            exit 1
+        else
+            echo "eslint passed!"
+        fi
     done
     
-    "$eslint" $change_list
-    ret=$?
-    if [ $ret -ne 0 ]
-    then
-        echo "ERROR on eslint"
-        exit 1
-    else
-        echo "eslint passed!"
-    fi
 else
     echo "we don't need to format any typescript/react files!"
 fi
