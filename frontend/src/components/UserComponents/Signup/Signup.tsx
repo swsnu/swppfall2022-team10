@@ -60,7 +60,7 @@ export default function Signup() {
 		setPasswordMessage(null)
 		event.preventDefault()
 		if (username === '') {
-			setUserNameMessage('아이디를 입력해주세요!')
+			setUserNameMessage('아이디를 입력해주세요.')
 			return
 		}
 		dispatch(checkUsername(username)).then((result) => {
@@ -70,6 +70,7 @@ export default function Signup() {
 				}
 			).confirm
 			if (confirm) setChecked(true)
+			else setChecked(false)
 		})
 	}
 	const fileChangedHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -92,7 +93,11 @@ export default function Signup() {
 			setUserNameMessage('아이디를 입력해주세요.')
 			return
 		}
-		if (checked == null) {
+		if (checked === false) {
+			setUserNameMessage('다른 아이디를 입력해주세요.')
+			return
+		}
+		if (checked === null) {
 			setUserNameMessage('아이디 중복확인을 해주세요.')
 			return
 		}
@@ -132,18 +137,17 @@ export default function Signup() {
 			.then((result) => {
 				navigate('/login')
 			})
-			.catch((err) => {
-				// console.log(err)
-				alert('Sign up Error')
-				setUserName('')
-				setChecked(null)
-				setUserNameMessage(null)
-				setPasswordConfirmMessage(null)
-				setPasswordMessage(null)
-				setPassword('')
-				setPasswordConfirm('')
-				setEmail('')
-			})
+		// .catch((err) => {
+		// 	alert('Sign up Error')
+		// 	setUserName('')
+		// 	setChecked(null)
+		// 	setUserNameMessage(null)
+		// 	setPasswordConfirmMessage(null)
+		// 	setPasswordMessage(null)
+		// 	setPassword('')
+		// 	setPasswordConfirm('')
+		// 	setEmail('')
+		// })
 	}
 
 	return (
@@ -209,8 +213,7 @@ export default function Signup() {
 												</span>
 											) : (
 												<span className='input-message red'>
-													중복된 아이디입니다. 다른
-													아이디를 입력해주세요.
+													중복된 아이디입니다.
 												</span>
 											))}
 										{usernameMessage !== null && (
