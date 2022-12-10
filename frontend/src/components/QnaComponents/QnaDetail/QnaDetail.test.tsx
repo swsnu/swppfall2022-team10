@@ -26,6 +26,7 @@ jest.mock('../../Header/Dropdown/Dropdown', () => () => 'Dropdown')
 jest.mock('../../Header/Header', () => () => 'Header')
 jest.mock('../../Footer/Footer', () => () => 'Footer')
 jest.mock('../../Layout/ScrollToTop', () => () => '')
+jest.mock('../CommentList/CommentList', () => () => '')
 
 const testQnaFormat = {
 	id: 1,
