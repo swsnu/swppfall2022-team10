@@ -5,9 +5,11 @@ from .utils import UserNameField
 from .ImageSerializer import ImageURLField
 from .PostSerializer import PostSerializer
 
+
 class ReviewListSerializer(serializers.ModelSerializer):
     thumbnail = serializers.ImageField(use_url=True)
     author_name = UserNameField(source="author", read_only=True)
+
     class Meta:
         model = Review
         fields = [
@@ -18,6 +20,7 @@ class ReviewListSerializer(serializers.ModelSerializer):
             "thumbnail",
             "animal_type",
         ]
+
 
 class ReviewDetailSerializer(SerializerWithAuth):
     author_name = UserNameField(source="author", read_only=True)
@@ -34,7 +37,7 @@ class ReviewDetailSerializer(SerializerWithAuth):
             "photo_path",
             "content",
             "animal_type",
-            "post"
+            "post",
         ]
 
 

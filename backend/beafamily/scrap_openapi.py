@@ -12,11 +12,7 @@ with open("key", "r") as f:
 def get_info():
     total = list()
     url = f"{baseurl}/abandonmentPublic"
-    params = {
-        "serviceKey": key,
-        "numOfRows": 1000,
-        "_type": "json"
-    }
+    params = {"serviceKey": key, "numOfRows": 1000, "_type": "json"}
     response = requests.get(url, params=params)
     data = json.loads(response.content)
     if data["response"]["header"]["resultCode"] != "00":
@@ -28,12 +24,7 @@ def get_info():
     total += data["response"]["body"]["items"]["item"]
 
     for i in range(2, num_pages + 1):
-        params = {
-            "serviceKey": key,
-            "numOfRows": 1000,
-            "_type": "json",
-            "pageNo": i
-        }
+        params = {"serviceKey": key, "numOfRows": 1000, "_type": "json", "pageNo": i}
         response = requests.get(url, params=params)
         data = json.loads(response.content)
         if data["response"]["header"]["resultCode"] != "00":
@@ -45,12 +36,7 @@ def get_info():
 
 def get_shelter(upr_cd, org_cd):
     url = f"{baseurl}/sigungu"
-    params = {
-        "serviceKey": key,
-        "upr_cd": upr_cd,
-        "org_cd": org_cd,
-        "_type": "json"
-    }
+    params = {"serviceKey": key, "upr_cd": upr_cd, "org_cd": org_cd, "_type": "json"}
     response = requests.get(url, params=params)
     data = json.loads(response.content)
     if data["response"]["header"]["resultCode"] != "00":
@@ -62,11 +48,7 @@ def get_shelter(upr_cd, org_cd):
 def get_sigungu(upr_cd):
     # upr_cd = orgCd
     url = f"{baseurl}/sigungu"
-    params = {
-        "serviceKey": key,
-        "upr_cd": upr_cd,
-        "_type": "json"
-    }
+    params = {"serviceKey": key, "upr_cd": upr_cd, "_type": "json"}
 
     response = requests.get(url, params=params)
     data = json.loads(response.content)
@@ -78,11 +60,7 @@ def get_sigungu(upr_cd):
 
 def get_sido():
     url = f"{baseurl}/sido"
-    params = {
-        "serviceKey": key,
-        "numOfRows": 30,
-        "_type": "json"
-    }
+    params = {"serviceKey": key, "numOfRows": 30, "_type": "json"}
     response = requests.get(url, params=params)
     data = json.loads(response.content)
     if data["response"]["header"]["resultCode"] != "00":
@@ -127,9 +105,11 @@ def main():
     conn = engine.connect()
 
     # GET ALL Data from shelter
-    res = conn.execute(r"""SELECT title,content FROM post WHERE author_id IN (
+    res = conn.execute(
+        r"""SELECT title,content FROM post WHERE author_id IN (
     SELECT id FROM user WHERE shelter=false
-    )""").fetchall()
+    )"""
+    ).fetchall()
     print(res)
     conn.close()
 

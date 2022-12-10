@@ -158,7 +158,6 @@ class PostSerializer(serializers.ModelSerializer):
     author_name = UserNameField(source="author", read_only=True)
     thumbnail = serializers.ImageField(use_url=True)
 
-
     class Meta:
         model = Post
         fields = [

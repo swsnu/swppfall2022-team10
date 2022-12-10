@@ -106,6 +106,7 @@ def compare_post_detail(a, b):
                 return False
     return True
 
+
 class PostTestCase(APITestCase):
     def setUp(self):
         u1 = User.objects.create_user(username="abc", password="1234")
@@ -431,7 +432,9 @@ class PostTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_valid_query(self):
-        reversed_list = [PostDetailSerializer(i).data["post"] for i in reversed(self.post_list)]
+        reversed_list = [
+            PostDetailSerializer(i).data["post"] for i in reversed(self.post_list)
+        ]
 
         valid = {
             "age": 3,

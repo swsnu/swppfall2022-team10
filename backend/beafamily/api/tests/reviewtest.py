@@ -100,7 +100,7 @@ class ReviewTestCase(TestCase):
                     "photos": [
                         f,
                     ],
-                    "post_id": 5
+                    "post_id": 5,
                 },
                 HTTP_X_CSRFTOKEN=token,
             )
