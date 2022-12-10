@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable import/no-duplicates */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
@@ -14,9 +16,9 @@ import { getMockStore } from '../../../test-utils/mock'
 import MyPost from './MyPost'
 import { IProps as PostProps } from '../Post/Post'
 import { act } from 'react-dom/test-utils'
-import {commentType} from "../../../store/slices/qna";
-import {IProps as ReviewProps} from "../../ReviewComponents/Review/Review";
-import {IProps as QnaProps} from "../../QnaComponents/Qna/Qna";
+import { commentType } from '../../../store/slices/qna'
+import { IProps as ReviewProps } from '../../ReviewComponents/Review/Review'
+import { IProps as QnaProps } from '../../QnaComponents/Qna/Qna'
 
 jest.mock('../Post/Post', () => (props: PostProps) => (
 	<div data-testid='spyPost'>
@@ -35,15 +37,19 @@ jest.mock('../Post/Post', () => (props: PostProps) => (
 	</div>
 ))
 
-jest.mock('../../ReviewComponents/Review/Review', () => (props: ReviewProps) => (
-	<div data-testid='spyReview'>
-		<div>
-			{props.title}
-			<br />
-			작성자: {props.author}
-		</div>
-	</div>
-))
+jest.mock(
+	'../../ReviewComponents/Review/Review',
+	() => (props: ReviewProps) =>
+		(
+			<div data-testid='spyReview'>
+				<div>
+					{props.title}
+					<br />
+					작성자: {props.author}
+				</div>
+			</div>
+		)
+)
 
 const fakepost: postListType = {
 	id: 1,
@@ -228,7 +234,7 @@ describe('<MyPost />', () => {
 
 		const tableRowElement = document.getElementsByTagName('tr')
 		const firstRow = tableRowElement[1]
-		let titleButton = firstRow.querySelectorAll('#qna-click')
+		const titleButton = firstRow.querySelectorAll('#qna-click')
 		expect(titleButton).toHaveLength(3)
 		fireEvent.click(titleButton[0]!)
 		expect(mockNavigate).toHaveBeenCalledTimes(4)

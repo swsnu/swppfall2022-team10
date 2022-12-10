@@ -16,14 +16,14 @@ import { checkLogin } from '../../../store/slices/user'
 import { MdArrowBack } from 'react-icons/md'
 
 import './ReviewCreate.scss'
-import Combobox from "react-widgets/Combobox";
-import {selectApplication} from "../../../store/slices/application";
+import Combobox from 'react-widgets/Combobox'
+import { selectApplication } from '../../../store/slices/application'
 
 export default function ReviewCreate() {
 	const postState = useSelector(selectPost)
 	const [title, setTitle] = useState<string>('')
 	const [animalType, setAnimalType] = useState<string>('')
-	const [postId, setPostId] = useState<string>("")
+	const [postId, setPostId] = useState<string>('')
 	const [content, setContent] = useState<string>('')
 	const [file, setFile] = useState<File[]>([])
 
@@ -106,7 +106,7 @@ export default function ReviewCreate() {
 									제목:
 								</label>
 								<input
-									className="review-input"
+									className='review-input'
 									id='review-title-input'
 									type='text'
 									name='title'
@@ -121,7 +121,7 @@ export default function ReviewCreate() {
 									동물:
 								</label>
 								<input
-									className="review-input"
+									className='review-input'
 									id='review-animal-type-input'
 									type='text'
 									name='animalType'
@@ -139,14 +139,8 @@ export default function ReviewCreate() {
 									id='review-post-input'
 									className='review-combobox'
 									name='type'
-									data={[
-										'post 1',
-										'post 2',
-										'post 3'
-									]}
-									onChange={(event) =>
-										setPostId(event)
-									}
+									data={['post 1', 'post 2', 'post 3']}
+									onChange={(event) => setPostId(event)}
 									value={postId}
 								/>
 							</div>

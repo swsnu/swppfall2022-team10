@@ -17,8 +17,12 @@ import {
 	reviewListType,
 	reviewType
 } from '../../../store/slices/review'
-import {QnaType} from '../../../store/slices/qna'
-import { getMyPosts, selectMyPost, deleteQna } from '../../../store/slices/mypost'
+import { QnaType } from '../../../store/slices/qna'
+import {
+	getMyPosts,
+	selectMyPost,
+	deleteQna
+} from '../../../store/slices/mypost'
 import { AppDispatch } from '../../../store'
 import Review from '../../ReviewComponents/Review/Review'
 import ReviewModal from '../../ReviewComponents/ReviewModal/ReviewModal'
@@ -268,17 +272,38 @@ export default function MyPost() {
 							<tbody>
 								{qna.map((td: QnaType) => {
 									return (
-										<tr
-											key={`${td.id}_qna`}
-										>
-											<td id='qna-click' onClick={() => navigate(`/qna/${td.id}`)}>{td.id}</td>
-											<td id='qna-click' onClick={() => navigate(`/qna/${td.id}`)}>{td.title}</td>
-											<td id='qna-click' onClick={() => navigate(`/qna/${td.id}`)}>{td.created_at}</td>
+										<tr key={`${td.id}_qna`}>
+											<td
+												id='qna-click'
+												onClick={() =>
+													navigate(`/qna/${td.id}`)
+												}
+											>
+												{td.id}
+											</td>
+											<td
+												id='qna-click'
+												onClick={() =>
+													navigate(`/qna/${td.id}`)
+												}
+											>
+												{td.title}
+											</td>
+											<td
+												id='qna-click'
+												onClick={() =>
+													navigate(`/qna/${td.id}`)
+												}
+											>
+												{td.created_at}
+											</td>
 											<td>
 												<button
 													id='qna-delete-button'
 													onClick={() => {
-														dispatch(deleteQna(td.id))
+														dispatch(
+															deleteQna(td.id)
+														)
 													}}
 												>
 													<RiDeleteBin6Line />

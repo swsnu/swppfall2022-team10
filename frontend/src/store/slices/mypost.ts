@@ -1,9 +1,9 @@
-import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { RootState } from '..'
 import { postListType } from './post'
 import { reviewListType } from './review'
-import {QnaType} from './qna'
+import { QnaType } from './qna'
 
 export interface mypostState {
 	posts: postListType[]

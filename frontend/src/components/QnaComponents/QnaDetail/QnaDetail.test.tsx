@@ -43,7 +43,7 @@ const testCommentFormat = {
 	author_name: 'COMMENT_AUTHOR_NAME',
 	content: 'COMMENT_CONTENT',
 	created_at: 'COMMENT_CREATED_AT',
-	editable: false,
+	editable: false
 }
 
 describe('<QnaDetail />', () => {
@@ -83,7 +83,9 @@ describe('<QnaDetail />', () => {
 		})
 		const { container } = render(qnaDetail)
 		const commentInput = await screen.findByLabelText('댓글:')
-		fireEvent.change(commentInput, { target: { value: 'COMMENT_TEST_CONTENT' } })
+		fireEvent.change(commentInput, {
+			target: { value: 'COMMENT_TEST_CONTENT' }
+		})
 
 		await waitFor(() => {
 			expect(commentInput).toHaveValue('COMMENT_TEST_CONTENT')
@@ -108,12 +110,12 @@ describe('<QnaDetail />', () => {
 		})
 		const { container } = render(qnaDetail)
 		const commentInput = await screen.findByLabelText('댓글:')
-		fireEvent.change(commentInput, { target: { value: 'COMMENT_TEST_CONTENT' } })
+		fireEvent.change(commentInput, {
+			target: { value: 'COMMENT_TEST_CONTENT' }
+		})
 
 		const commentButton = await screen.findByText('댓글 작성하기')
 		fireEvent.click(commentButton)
 		// await waitFor(() => expect(dispatchEvent).toHaveBeenCalled())
-
-
 	})
 })

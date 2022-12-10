@@ -1,3 +1,4 @@
+/* eslint-disable object-shorthand */
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
 

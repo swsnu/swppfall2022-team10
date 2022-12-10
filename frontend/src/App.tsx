@@ -35,10 +35,7 @@ function App() {
 					<Route path='/post/:id/submit' element={<PostApply />} />
 					<Route path='/post/create' element={<PostCreate />} />
 					<Route path='/mypost' element={<MyPost />} />
-					<Route
-						path='/myapply/:id'
-						element={<MyApplyPost />}
-					/>
+					<Route path='/myapply/:id' element={<MyApplyPost />} />
 					<Route path='/review' element={<ReviewList />} />
 					{/* <Route
 						path="/review/:id"
