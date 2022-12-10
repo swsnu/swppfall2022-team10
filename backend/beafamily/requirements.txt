@@ -9,3 +9,4 @@ tqdm
 python-docx
 sqlalchemy
 django-extensions
+requests
