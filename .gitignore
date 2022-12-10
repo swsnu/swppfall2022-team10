@@ -48,6 +48,7 @@ backend/beafamily/data/question/*
 backend/beafamily/data/review/*
 backend/beafamily/data/dummy/*
 logs/
+key
 
 # IDE Cache
 *.code-workspace
