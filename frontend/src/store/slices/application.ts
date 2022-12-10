@@ -77,15 +77,7 @@ export const deleteApplication = createAsyncThunk(
 export const applicationSlice = createSlice({
 	name: 'application',
 	initialState,
-	reducers: {
-		deleteApplication: (state, action: PayloadAction<{ targetId: number }>) => {
-			const deleted = state.applications.filter((apply: applicationType) => {
-				return apply.id !== action.payload.targetId
-			})
-			console.log(deleted)
-			state.applications = deleted
-		}
-	},
+	reducers: {},
 	extraReducers: (builder) => {
 		// Add reducers for additional action types here, and handle loading state as needed
 		builder.addCase(getApplications.fulfilled, (state, action) => {

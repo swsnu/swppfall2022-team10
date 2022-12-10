@@ -6,6 +6,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useDispatch, useSelector } from 'react-redux'
 import { useState, useCallback, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
 	getApplications,
 	selectApplication,
@@ -24,6 +25,7 @@ interface IProps {
 export default function MyApplicationList(props: IProps) {
 	const applicationState = useSelector(selectApplication)
 	const dispatch = useDispatch<AppDispatch>()
+	const navigate = useNavigate()
 
 	useEffect(() => {
 		// eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -58,6 +60,7 @@ export default function MyApplicationList(props: IProps) {
 											id='delete-button'
 											onClick={() => {
 												dispatch(deleteApplication(apply))
+												navigate(`/mypost/`)
 											}}
 										>
 											<RiDeleteBin6Line />
