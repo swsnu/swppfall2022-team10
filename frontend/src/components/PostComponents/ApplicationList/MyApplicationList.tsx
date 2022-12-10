@@ -7,7 +7,7 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { useState, useCallback, useEffect } from 'react'
 import {
-	getMyApplications,
+	getApplications,
 	selectApplication,
 	applicationType,
 	deleteApplication
@@ -36,12 +36,12 @@ export default function MyApplicationList(props: IProps) {
 
 	useEffect(() => {
 		// eslint-disable-next-line @typescript-eslint/no-floating-promises
-		dispatch(getMyApplications(props.id))
+		dispatch(getApplications(props.id))
 	}, [])
 
 	const onDeleteHandler = (apply: applicationType) => {
 		dispatch(deleteApplication(apply))
-		dispatch(getMyApplications(props.id))
+		dispatch(getApplications(props.id))
 	}
 
 	return (
@@ -58,7 +58,7 @@ export default function MyApplicationList(props: IProps) {
 						</tr>
 					</thead>
 					<tbody>
-						{example.map((apply: applicationType) => {
+						{applicationState.applications.map((apply: applicationType) => {
 							return (
 								<tr key={`${apply.id}_apply`}>
 									<td>{apply.id}</td>

@@ -8,10 +8,15 @@ import { Provider } from 'react-redux'
 import axios from 'axios'
 import { MemoryRouter, Route, Routes } from 'react-router'
 import { postListType } from '../../../store/slices/post'
+import { reviewListType } from '../../../store/slices/review'
+import { QnaType } from '../../../store/slices/qna'
 import { getMockStore } from '../../../test-utils/mock'
 import MyPost from './MyPost'
 import { IProps as PostProps } from '../Post/Post'
 import { act } from 'react-dom/test-utils'
+import {commentType} from "../../../store/slices/qna";
+import {IProps as ReviewProps} from "../../ReviewComponents/Review/Review";
+import {IProps as QnaProps} from "../../QnaComponents/Qna/Qna";
 
 jest.mock('../Post/Post', () => (props: PostProps) => (
 	<div data-testid='spyPost'>
@@ -30,6 +35,16 @@ jest.mock('../Post/Post', () => (props: PostProps) => (
 	</div>
 ))
 
+jest.mock('../../ReviewComponents/Review/Review', () => (props: ReviewProps) => (
+	<div data-testid='spyReview'>
+		<div>
+			{props.title}
+			<br />
+			작성자: {props.author}
+		</div>
+	</div>
+))
+
 const fakepost: postListType = {
 	id: 1,
 	author_name: 'POST_AUTHOR',
@@ -40,6 +55,29 @@ const fakepost: postListType = {
 	age: 1,
 	gender: true
 }
+const fakeReview: reviewListType = {
+	id: 1,
+	author_id: 1,
+	author_name: 'POST_AUTHOR',
+	title: 'POST_TITLE_1',
+	animal_type: 'POST_ANIMAL_TYPE',
+	thumbnail: '',
+	species: '',
+	created_at: '',
+	post_id: 1
+}
+const fakeQna: QnaType = {
+	id: 1,
+	author_id: 1,
+	author_name: 'POST_AUTHOR',
+	title: 'POST_TITLE_1',
+	content: 'POST_CONTENT',
+	created_at: '',
+	hits: 3,
+	comments: [],
+	editable: true
+}
+
 const mockStore = getMockStore({
 	post: { posts: [], selectedPost: null, selectedAnimal: '' },
 	// user: { users: [], currentUser: null, logged_in: false },
@@ -50,8 +88,8 @@ const mockStore = getMockStore({
 		posts: [fakepost],
 		likes: [fakepost],
 		applys: [fakepost],
-		reviews: [],
-		qnas: []
+		reviews: [fakeReview],
+		qnas: [fakeQna]
 	}
 })
 
@@ -90,6 +128,20 @@ describe('<MyPost />', () => {
 					{ ...fakepost, id: 13 },
 					{ ...fakepost, id: 14 },
 					{ ...fakepost, id: 15 }
+				],
+				[
+					{ ...fakeReview, id: 16 },
+					{ ...fakeReview, id: 17 },
+					{ ...fakeReview, id: 18 },
+					{ ...fakeReview, id: 19 },
+					{ ...fakeReview, id: 20 }
+				],
+				[
+					{ ...fakeQna, id: 21 },
+					{ ...fakeQna, id: 22 },
+					{ ...fakeQna, id: 23 },
+					{ ...fakeQna, id: 24 },
+					{ ...fakeQna, id: 25 }
 				]
 			]
 		})
@@ -134,6 +186,20 @@ describe('<MyPost />', () => {
 		fireEvent.click(ShowMoreButton!)
 		posts = screen.getAllByTestId('spyPost')
 		expect(posts).toHaveLength(15)
+
+		let reviews = screen.getAllByTestId('spyReview')
+		expect(reviews).toHaveLength(4)
+		ShowMoreButton = postShowMore[3].querySelector('button')
+		fireEvent.click(ShowMoreButton!)
+		reviews = screen.getAllByTestId('spyReview')
+		expect(reviews).toHaveLength(5)
+
+		let tableRowElement = document.getElementsByTagName('tr')
+		expect(tableRowElement).toHaveLength(5)
+		ShowMoreButton = postShowMore[4].querySelector('button')
+		fireEvent.click(ShowMoreButton!)
+		tableRowElement = document.getElementsByTagName('tr')
+		expect(tableRowElement).toHaveLength(6)
 	})
 	it('should handle clickDetail', async () => {
 		await act(() => {
@@ -154,5 +220,21 @@ describe('<MyPost />', () => {
 		button = post.querySelector('.post-container')
 		fireEvent.click(button!)
 		expect(mockNavigate).toHaveBeenCalledTimes(3)
+
+		const reviews = document.querySelector('.reviews')
+		const reviewButtons = reviews!.querySelectorAll('button')
+		fireEvent.click(reviewButtons[0])
+		document.querySelector('.Modal')
+
+		const tableRowElement = document.getElementsByTagName('tr')
+		const firstRow = tableRowElement[1]
+		let titleButton = firstRow.querySelectorAll('#qna-click')
+		expect(titleButton).toHaveLength(3)
+		fireEvent.click(titleButton[0]!)
+		expect(mockNavigate).toHaveBeenCalledTimes(4)
+		fireEvent.click(titleButton[1]!)
+		expect(mockNavigate).toHaveBeenCalledTimes(5)
+		fireEvent.click(titleButton[2]!)
+		expect(mockNavigate).toHaveBeenCalledTimes(6)
 	})
 })

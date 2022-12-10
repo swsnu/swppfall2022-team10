@@ -30,6 +30,9 @@ const MyApplyPost = () => {
 			setEditable(result.payload.editable)
 			setBookmark(result.payload.bookmark)
 		})
+		.catch((err) => {
+			console.log(err)
+		})
 	}, [id])
 
 	return (

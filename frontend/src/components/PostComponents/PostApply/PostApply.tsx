@@ -22,8 +22,6 @@ export default function PostApply() {
 	const [file, setFile] = useState<File>()
 
 	const navigate = useNavigate()
-
-	const [editable, setEditable] = useState<boolean>(false)
 	const [bookmark, setBookmark] = useState<boolean>(false)
 
 	const dispatch = useDispatch<AppDispatch>()
@@ -41,7 +39,6 @@ export default function PostApply() {
 
 	useEffect(() => {
 		dispatch(getPost(Number(id))).then((result) => {
-			setEditable(result.payload.editable)
 			setBookmark(result.payload.bookmark)
 		})
 	}, [id])

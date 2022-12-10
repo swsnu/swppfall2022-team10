@@ -271,9 +271,9 @@ export default function MyPost() {
 										<tr
 											key={`${td.id}_qna`}
 										>
-											<td onClick={() => navigate(`/qna/${td.id}`)}>{td.id}</td>
-											<td onClick={() => navigate(`/qna/${td.id}`)}>{td.title}</td>
-											<td onClick={() => navigate(`/qna/${td.id}`)}>{td.created_at}</td>
+											<td id='qna-click' onClick={() => navigate(`/qna/${td.id}`)}>{td.id}</td>
+											<td id='qna-click' onClick={() => navigate(`/qna/${td.id}`)}>{td.title}</td>
+											<td id='qna-click' onClick={() => navigate(`/qna/${td.id}`)}>{td.created_at}</td>
 											<td>
 												<button
 													id='qna-delete-button'
