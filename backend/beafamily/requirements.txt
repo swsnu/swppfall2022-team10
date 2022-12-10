@@ -8,3 +8,4 @@ black
 tqdm
 python-docx
 sqlalchemy
+django-extensions

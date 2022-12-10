@@ -134,7 +134,6 @@ def create():
         data = get_random_post()
 
         post = Post.objects.create(author=user, **data)
-        post.created_at = data["created_at"]
 
         animal_type = post.animal_type == "개"
 

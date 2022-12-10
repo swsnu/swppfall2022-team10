@@ -158,6 +158,15 @@ class PostSerializer(serializers.ModelSerializer):
     author_name = UserNameField(source="author", read_only=True)
     thumbnail = serializers.ImageField(use_url=True)
 
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+
+        if instance.shelter:
+            ret["thumbnail"] = instance.thumbnail_url
+            ret["author_name"] = instance.author.nickname
+
+        return ret
+
     class Meta:
         model = Post
         fields = [
@@ -190,6 +199,12 @@ class PostDetailSerializer(serializers.ModelSerializer):
                 ret["bookmark"] = user.likes.filter(id=instance.id).exists()
             else:
                 ret["bookmark"] = False
+
+        if instance.shelter:
+            ret["post"]["photo_path"] = [
+                {"id": 1, "photo_path": instance.thumbnail_url}
+            ]
+            ret["post"]["author_name"] = instance.author.nickname
         return ret
 
     class Meta:

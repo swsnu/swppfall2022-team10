@@ -33,6 +33,10 @@ class Post(AbstractArticleType):
         related_name="accepted_application",
     )
     thumbnail = models.ImageField(upload_to=thumbnail_upload_to)
+    thumbnail_url = models.URLField(default=None, null=True)
+    shelter = models.BooleanField(default=False)
+    end_date = models.DateField(null=True, default=None)
+    desertionNo = models.PositiveIntegerField(null=True, db_index=True, default=None)
 
     class Meta:
         db_table = "post"
