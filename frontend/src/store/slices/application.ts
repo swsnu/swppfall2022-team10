@@ -1,4 +1,4 @@
-import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { RootState } from '..'
 
@@ -53,16 +53,21 @@ export const getApplication = createAsyncThunk(
 
 export const createApplication = createAsyncThunk(
 	'application/createApplication',
-	async (arg: { application: FormData, postId: string }, { dispatch }) => {
-		const response = await axios.post(`/api/posts/${arg.postId}/applications/`, arg.application)
+	async (arg: { application: FormData; postId: string }, { dispatch }) => {
+		const response = await axios.post(
+			`/api/posts/${arg.postId}/applications/`,
+			arg.application
+		)
 		return response.data
 	}
 )
 
 export const acceptApplication = createAsyncThunk(
 	'application/acceptApplication',
-	async (arg: { id: string, postId: string }, { dispatch }) => {
-		const response = await axios.post(`/api/posts/${arg.postId}/applications/${arg.id}/accept`)
+	async (arg: { id: string; postId: string }, { dispatch }) => {
+		const response = await axios.post(
+			`/api/posts/${arg.postId}/applications/${arg.id}/accept`
+		)
 		return response.data
 	}
 )
@@ -97,7 +102,6 @@ export const applicationSlice = createSlice({
 		builder.addCase(acceptApplication.rejected, (_state, action) => {
 			alert('ERROR')
 		})
-
 	}
 })
 

@@ -11,6 +11,8 @@ from string import ascii_letters
 
 def basic_auth_encoder(username, password):
     return "Basic " + base64.b64encode(f"{username}:{password}".encode()).decode()
+
+
 def get_random_review(animal_type):
     title = f"{animal_type}가 아주 귀여워요!"
     content = title
@@ -96,14 +98,14 @@ def create():
 
     if not os.path.exists(DATA_DIR):
         os.mkdir(DATA_DIR)
-    if not os.path.exists(DATA_DIR / 'post'):
-        os.mkdir(DATA_DIR / 'post')
-    if not os.path.exists(DATA_DIR / 'application'):
-        os.mkdir(DATA_DIR / 'application')
-    if not os.path.exists(DATA_DIR / 'review'):
-        os.mkdir(DATA_DIR / 'review')
-    if not os.path.exists(DATA_DIR / 'question'):
-        os.mkdir(DATA_DIR / 'question')
+    if not os.path.exists(DATA_DIR / "post"):
+        os.mkdir(DATA_DIR / "post")
+    if not os.path.exists(DATA_DIR / "application"):
+        os.mkdir(DATA_DIR / "application")
+    if not os.path.exists(DATA_DIR / "review"):
+        os.mkdir(DATA_DIR / "review")
+    if not os.path.exists(DATA_DIR / "question"):
+        os.mkdir(DATA_DIR / "question")
 
     users: list[User] = list(User.objects.all().iterator())
     cat_list = [
@@ -130,15 +132,14 @@ def create():
         post.thumbnail = photos[0]
         post.save()
         photos = [
-            PostImage.objects.create(author=user, post=post, image=p)
-            for p in photos
+            PostImage.objects.create(author=user, post=post, image=p) for p in photos
         ]
         if post.id == n_post:
-            post.author = User.objects.get(username='seorin55')
+            post.author = User.objects.get(username="seorin55")
             post.save()
 
     is_actives = [True, True, False, False, False]
-    posts = list(Post.objects.all().order_by('id').iterator())
+    posts = list(Post.objects.all().order_by("id").iterator())
     num_app = [0, 3, 2, 3, 3]
     for i in range(0, n_post):
         post = posts[i]
@@ -147,9 +148,9 @@ def create():
         user_excluded = list(user_excluded)
         if post.id == n_post:
             user_excluded = [
-                User.objects.get(username='yeomjy'),
-                User.objects.get(username='lenyakim'),
-                User.objects.get(username='jhpyun'),
+                User.objects.get(username="yeomjy"),
+                User.objects.get(username="lenyakim"),
+                User.objects.get(username="jhpyun"),
             ]
         post.is_active = is_actives[i]
         post.save()
@@ -166,7 +167,7 @@ def create():
             if num == 0:
                 num = 1
 
-            selected = random.randint(0, num-1)
+            selected = random.randint(0, num - 1)
 
             if post.id == n_post:
                 selected = 0
@@ -188,7 +189,9 @@ def create():
         data = get_random_review(animal_type)
         user = posts[i].accepted_application.author
 
-        review = Review.objects.create(author=user, post=posts[i], animal_type=animal_type, **data)
+        review = Review.objects.create(
+            author=user, post=posts[i], animal_type=animal_type, **data
+        )
         review.created_at = data["created_at"]
 
         photos = dog_list if animal_type == "개" else cat_list
@@ -201,7 +204,6 @@ def create():
 
 
 def create_all():
-
 
     usernames = ["yeomjy", "seorin55", "lenyakim", "jhpyun"]
     passwords = ["1q2w3e4r", "password", "12345678", "qwerty"]

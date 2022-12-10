@@ -108,14 +108,14 @@ def create():
 
     if not os.path.exists(DATA_DIR):
         os.mkdir(DATA_DIR)
-    if not os.path.exists(DATA_DIR / 'post'):
-        os.mkdir(DATA_DIR / 'post')
-    if not os.path.exists(DATA_DIR / 'application'):
-        os.mkdir(DATA_DIR / 'application')
-    if not os.path.exists(DATA_DIR / 'review'):
-        os.mkdir(DATA_DIR / 'review')
-    if not os.path.exists(DATA_DIR / 'question'):
-        os.mkdir(DATA_DIR / 'question')
+    if not os.path.exists(DATA_DIR / "post"):
+        os.mkdir(DATA_DIR / "post")
+    if not os.path.exists(DATA_DIR / "application"):
+        os.mkdir(DATA_DIR / "application")
+    if not os.path.exists(DATA_DIR / "review"):
+        os.mkdir(DATA_DIR / "review")
+    if not os.path.exists(DATA_DIR / "question"):
+        os.mkdir(DATA_DIR / "question")
 
     users: list[User] = list(User.objects.all().iterator())
     cat_list = [
@@ -142,8 +142,7 @@ def create():
         post.thumbnail = photos[0]
         post.save()
         photos = [
-            PostImage.objects.create(author=user, post=post, image=p)
-            for p in photos
+            PostImage.objects.create(author=user, post=post, image=p) for p in photos
         ]
         num_comments = random.randint(0, 5)
         user_comment = random.choices(users, k=num_comments)
@@ -159,9 +158,7 @@ def create():
         num_comments = random.randint(0, 5)
         user_comment = random.choices(users, k=num_comments)
         comments = [
-            QuestionComment.objects.create(
-                author=u, content="comment", question=data
-            )
+            QuestionComment.objects.create(author=u, content="comment", question=data)
             for u in user_comment
         ]
 
@@ -199,13 +196,15 @@ def create():
                     post.save()
 
     for post in tqdm.tqdm(posts):
-        if post.is_active or hasattr(post, 'review_post'):
+        if post.is_active or hasattr(post, "review_post"):
             continue
         animal_type = post.animal_type
         data = get_random_review(animal_type)
         user = post.accepted_application.author
 
-        review = Review.objects.create(author=user, post=post, animal_type=animal_type, **data)
+        review = Review.objects.create(
+            author=user, post=post, animal_type=animal_type, **data
+        )
         review.created_at = data["created_at"]
 
         photos = dog_list if animal_type == "개" else cat_list
@@ -260,7 +259,7 @@ if __name__ == "__main__":
         else:
             if p.accepted_application:
                 raise Exception()
-            if hasattr(p, 'review_post'):
+            if hasattr(p, "review_post"):
                 raise Exception()
 
         for app in p.applications.all():
@@ -271,7 +270,7 @@ if __name__ == "__main__":
                 if p.accepted_application not in p.applications.all():
                     raise Exception()
 
-        if hasattr(p, 'review_post'):
+        if hasattr(p, "review_post"):
             if p.review_post.author != p.accepted_application.author:
                 raise Exception()
 

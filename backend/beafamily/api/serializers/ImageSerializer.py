@@ -24,11 +24,8 @@ class ImageURLField(serializers.RelatedField):
 
 
 class PostImageSerializer(serializers.ModelSerializer):
-    photo_path = serializers.ImageField(use_url=True, source='image')
+    photo_path = serializers.ImageField(use_url=True, source="image")
 
     class Meta:
         model = PostImage
-        fields = [
-            'id',
-            'photo_path'
-        ]
+        fields = ["id", "photo_path"]

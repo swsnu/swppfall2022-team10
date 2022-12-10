@@ -9,7 +9,8 @@ from django.contrib.auth import get_user_model
 
 
 def thumbnail_upload_to(instance, filename):
-    return f'post/{instance.id}/thumbnail/{filename}'
+    return f"post/{instance.id}/thumbnail/{filename}"
+
 
 class Post(AbstractArticleType):
     author = models.ForeignKey(

@@ -17,7 +17,13 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
 from ..models import Review, ReviewImage, Post
-from ..serializers import ReviewDetailSerializer, ReviewQueryValidator, ReviewValidator, ReviewListSerializer, PostSerializer
+from ..serializers import (
+    ReviewDetailSerializer,
+    ReviewQueryValidator,
+    ReviewValidator,
+    ReviewListSerializer,
+    PostSerializer,
+)
 from .utils import log_error, pagination, verify
 
 logger = logging.getLogger("view_logger")
@@ -61,7 +67,7 @@ def reviews(request):
             return Response(status=status.HTTP_403_FORBIDDEN)
 
         with transaction.atomic():
-            review = Review.objects.create(author=request.user,post=post, **content)
+            review = Review.objects.create(author=request.user, post=post, **content)
             thumbnail = None
             for photo in photos:
                 image = ReviewImage.objects.create(
