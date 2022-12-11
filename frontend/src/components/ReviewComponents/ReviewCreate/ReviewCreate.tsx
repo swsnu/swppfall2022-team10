@@ -63,12 +63,13 @@ export default function ReviewCreate() {
 		if (file.length === 0) return
 		if (postId.length === 0) return
 
-		console.log(postId)
+		const words = postId.split(' ')
 
-		const data = { title: title, animal_type: animalType, post_id: postId, content: content }
+		const data = { title: title, animal_type: animalType, content: content }
 		const formData = new FormData()
 		formData.append('content', JSON.stringify(data))
 		file.forEach((f, i) => formData.append('photos', f))
+		formData.append('post_id', words[0])
 		dispatch(createReview(formData))
 			.then((result) => {
 				navigate(`/review`)
