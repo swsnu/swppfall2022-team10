@@ -42,23 +42,13 @@ def check_date_range(x, filter_dict):
         if key != "date_min" and key != "date_max" and key in x and x[key] != val:
             return False
 
-        if key == "date":
-            date1 = (
-                (timezone.now() - timezone.timedelta(days=val))
-                .date()
-                .strftime("%Y-%m-%d")
-            )
-            date2 = x["created_at"][0 : len("0000-00-00")]
-            if date1 != date2:
-                return False
-
         if key not in x:
             continue
     s = filter_dict["date_min"]
     e = filter_dict["date_max"]
     date_min = (timezone.now() - timezone.timedelta(days=e)).date().strftime("%Y-%m-%d")
     date_max = (timezone.now() - timezone.timedelta(days=s)).date().strftime("%Y-%m-%d")
-    return date_max >= x["created_at"] >= date_min
+    return date_max >= x["created_at"][0 : len("0000-00-00")] >= date_min
 
 
 def check_age_range(x, filter_dict):
@@ -103,6 +93,7 @@ def compare_post_detail(a, b):
                 continue
 
             if aa[key] != bb[key]:
+                print(key, aa[key], bb[key])
                 return False
     return True
 
@@ -206,7 +197,10 @@ class PostTestCase(APITestCase):
 
     def test_getposts(self):
 
-        reversed_list = [PostSerializer(i).data for i in sorted(self.post_list, key=lambda x: x.created_at, reverse=True)]
+        reversed_list = [
+            PostSerializer(i).data
+            for i in sorted(self.post_list, key=lambda x: x.created_at, reverse=True)
+        ]
 
         response = self.client.get("/api/posts/")
         self.assertEqual(response.json()["results"], reversed_list[0:20])
@@ -433,7 +427,8 @@ class PostTestCase(APITestCase):
 
     def test_valid_query(self):
         reversed_list = [
-            PostDetailSerializer(i).data["post"] for i in sorted(self.post_list, key=lambda x: x.created_at, reverse=True)
+            PostDetailSerializer(i).data["post"]
+            for i in sorted(self.post_list, key=lambda x: x.created_at, reverse=True)
         ]
 
         valid = {
@@ -448,7 +443,6 @@ class PostTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         expected = list(filter(lambda x: check_exact(x, valid), reversed_list[0:100]))
-        # self.assertEqual(response.json()["results"], expected)
         self.assertTrue(compare_post_detail(response.json()["results"], expected))
 
         valid = {
@@ -475,12 +469,8 @@ class PostTestCase(APITestCase):
 
         response = self.client.get("/api/posts/?page=1&page_size=100", valid)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        expected = list(filter(lambda x: check_age_range(x, valid), reversed_list))
         self.assertTrue(compare_post_detail(response.json()["results"], expected))
-
-        expected = list(
-            filter(lambda x: check_age_range(x, valid), reversed_list[0:100])
-        )
-        self.assertEqual(response.json()["results"], expected)
 
         valid = {
             "date_min": 2,
@@ -491,10 +481,7 @@ class PostTestCase(APITestCase):
         response = self.client.get("/api/posts/?page=1&page_size=100", valid)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        expected = list(
-            filter(lambda x: check_date_range(x, valid), reversed_list[0:100])
-        )
-        # self.assertEqual(response.json()["results"], expected)
+        expected = list(filter(lambda x: check_date_range(x, valid), reversed_list))
         self.assertTrue(compare_post_detail(response.json()["results"], expected))
 
     def test_editable(self):

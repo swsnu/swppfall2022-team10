@@ -133,7 +133,7 @@ def posts(request):
 
 @api_view(["GET", "POST"])
 @authentication_classes([SessionAuthentication])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 @parser_classes([MultiPartParser])
 @verify(ApplicationValidator, None, has_form=True, has_content=False, has_image=False)
 @log_error(logger)
@@ -144,11 +144,13 @@ def post_id_application(request, pid):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == "GET":
-        # if request.user == post.author:
-        #     app = ApplicationSerializer(post.applications, many=True)
-        # else:
-        #     app = ApplicationSerializer(post.applications.filter(author=request.user), many=True)
-        app = ApplicationSerializer(post.applications, many=True)
+        if request.user == post.author:
+            app = ApplicationSerializer(post.applications, many=True)
+        else:
+            app = ApplicationSerializer(
+                post.applications.filter(author=request.user), many=True
+            )
+        # app = ApplicationSerializer(post.applications, many=True)
         return Response(status=status.HTTP_200_OK, data=app.data)
     else:
         if request.user == post.author:
@@ -165,7 +167,7 @@ def post_id_application(request, pid):
 
 @api_view(["GET", "PUT", "DELETE"])
 @authentication_classes([SessionAuthentication])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 @parser_classes([MultiPartParser])
 @verify(ApplicationValidator, None, has_form=True, has_content=False, has_image=False)
 @log_error(logger)
@@ -180,8 +182,8 @@ def post_id_application_id(request, pid, aid):
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
     if request.method == "GET":
-        # if post.author != request.user or app.author != request.user:
-        #     return Response(status=status.HTTP_204_NO_CONTENT)
+        if post.author != request.user or app.author != request.user:
+            return Response(status=status.HTTP_403_FORBIDDEN)
 
         return FileResponse(app.file.file, as_attachment=True)
     elif request.method == "PUT":

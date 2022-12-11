@@ -197,6 +197,8 @@ def create():
     for post in tqdm.tqdm(posts):
         if post.is_active or hasattr(post, "review_post"):
             continue
+        if random.choice([True, False]):
+            continue
         animal_type = post.animal_type
         data = get_random_review(animal_type)
         user = post.accepted_application.author
