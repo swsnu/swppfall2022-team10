@@ -4,9 +4,10 @@
 	width: 500px;
 	height: 600px;
 	.modal-header {
-		color: red;
+		color: black;
 		padding: 10px;
 		height: 30px;
+		border: none;
 	}
 	.modal-body {
 		padding: 30px 30px 30px 30px;
@@ -14,6 +15,29 @@
 		border-radius: 10px;
 		box-shadow: 0 2px 3px 0 rgba(34, 36, 38, 0.15);
 		overflow-y: auto;
+	}
+	.modal-footer {
+		padding: 3px;
+		#review-delete-button{
+			width: fit-content;
+			padding: 5px 10px;
+			margin: 3px;
+			background-color: #d4b886;
+			border: none;
+			border-radius: 15px;
+			box-shadow: 0 5px 10px rgb(0 0 0 / 20%);
+			transition: 0.25s;
+
+			&:hover {
+				letter-spacing: 1px;
+				transform: scale(1.1);
+				cursor: pointer;
+			}
+
+			&:active {
+				transform: scale(1.1);
+			}
+		}
 	}
 	#modalCloseBtn:hover {
 		cursor: pointer;

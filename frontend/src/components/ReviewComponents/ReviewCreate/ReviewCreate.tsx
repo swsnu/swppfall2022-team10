@@ -61,7 +61,7 @@ export default function ReviewCreate() {
 		if (animalType.length === 0) return
 		if (file.length === 0) return
 
-		const data = { title: title, animal_type: animalType, content: content }
+		const data = { title: title, animal_type: animalType, post_id: postId, content: content }
 		const formData = new FormData()
 		formData.append('content', JSON.stringify(data))
 		file.forEach((f, i) => formData.append('photos', f))
