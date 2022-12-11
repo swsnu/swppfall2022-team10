@@ -121,6 +121,7 @@ export default function ApplicationList(props: IProps) {
 					</div>
 				</Modal.Body>
 			</Modal>
+			<div className='notice'>※ 수락 버튼을 누르면 게시물은 마감되고, 입양신청서를 다시 받을 수 없으니 신중히게 눌러주세요.</div>
 		</div>
 	)
 }

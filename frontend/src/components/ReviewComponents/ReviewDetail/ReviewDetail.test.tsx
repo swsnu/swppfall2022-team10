@@ -5,8 +5,6 @@ import { MemoryRouter, Navigate, Route, Routes } from 'react-router'
 import { getMockStore } from '../../../test-utils/mock'
 import * as ReviewSlice from '../../../store/slices/review'
 import ReviewDetail from './ReviewDetail'
-import {postListType} from "../../../store/slices/post";
-import PostDetail from "../../PostComponents/PostDetail/PostDetail";
 
 const testReview = {
 	id: 1,
@@ -15,13 +13,13 @@ const testReview = {
 	title: 'REVIEW_TEST_TITLE',
 	content: 'REVIEW_TEST_CONTENT',
 	animal_type: 'REVIEW_TEST_ANIMAL_TYPE',
-	photo_path: [],
+	photo_path: [''],
 	species: 'REVIEW_TEST_SPECIES',
 	created_at: 'REVIEW_TEST_CREATED_AT',
 	post: {
 		id: 1,
 		author_name: 'POST_TEST_AUTHOR',
-		title: 'POST_TEST_AUTHOR',
+		title: 'POST_TEST_TITLE',
 		animal_type: 'POST_TEST_ANIMAL_TYPE',
 		thumbnail: '',
 		species: 'POST_TEST_SPECIES',
@@ -44,46 +42,47 @@ jest.mock('react-router', () => ({
 	useNavigate: () => mockNavigate
 }))
 
-const testReviewFormat = {
-	id: 1,
-	author_id: 1,
-	author_name: 'REVIEW_TEST_AUTHOR',
-	title: 'REVIEW_TEST_TITLE',
-	content: 'REVIEW_TEST_CONTENT',
-	animal_type: 'REVIEW_TEST_ANIMAL_TYPE',
-	photo_path: [],
-	species: 'REVIEW_TEST_SPECIES',
-	created_at: 'REVIEW_TEST_CREATED_AT',
-	post: {
-		id: 1,
-		author_name: 'POST_TEST_AUTHOR',
-		title: 'POST_TEST_AUTHOR',
-		animal_type: 'POST_TEST_ANIMAL_TYPE',
-		thumbnail: '',
-		species: 'POST_TEST_SPECIES',
-		age: 2,
-		gender: true
-	}
-}
-
 describe('<ReviewDetail />', () => {
 	let reviewDetail: JSX.Element
 	beforeEach(() => {
 		jest.clearAllMocks()
+		jest.spyOn(axios, 'get').mockResolvedValue({
+			data: {
+				id: 1,
+				author_id: 1,
+				author_name: 'REVIEW_TEST_AUTHOR',
+				title: 'REVIEW_TEST_TITLE',
+				content: 'REVIEW_TEST_CONTENT',
+				animal_type: 'REVIEW_TEST_ANIMAL_TYPE',
+				photo_path: [],
+				species: 'REVIEW_TEST_SPECIES',
+				created_at: 'REVIEW_TEST_CREATED_AT',
+				post: {
+					id: 1,
+					author_name: 'POST_TEST_AUTHOR',
+					title: 'POST_TEST_TITLE',
+					animal_type: 'POST_TEST_ANIMAL_TYPE',
+					thumbnail: '',
+					species: 'POST_TEST_SPECIES',
+					age: 2,
+					gender: true
+				}
+			}
+		})
 		reviewDetail = (
 			<Provider store={getMockStore(mockState)}>
-				<ReviewDetail
-					id={1}
-				/>
+				<MemoryRouter>
+					<Routes>
+						<Route
+							path='/'
+							element={<ReviewDetail id={1} />}
+						/>
+					</Routes>
+				</MemoryRouter>
 			</Provider>
 		)
 	})
 	it('should render without errors', async () => {
-		jest.spyOn(axios, 'get').mockResolvedValue({
-			data: {
-				testReviewFormat
-			}
-		})
 		await act(() => {
 			render(reviewDetail)
 		})
@@ -91,5 +90,20 @@ describe('<ReviewDetail />', () => {
 		screen.getByText('REVIEW_TEST_TITLE')
 		screen.getByText(/REVIEW_TEST_AUTHOR/)
 		screen.getByText(/REVIEW_TEST_CONTENT/)
+		screen.getByText(/아래 입양게시글을 통해 입양한 후기입니다./)
+		const header = document.getElementById('header')
+		expect(header).toBeTruthy()
+	})
+	it('should navigate to post page', async () => {
+		await act(() => {
+			render(reviewDetail)
+		})
+		screen.getByText(/POST_TEST_TITLE/)
+		screen.getByText(/POST_TEST_ANIMAL_TYPE/)
+		screen.getByText(/나이:/)
+
+		const post_info = document.querySelector('.post-info')
+		fireEvent.click(post_info!)
+		expect(mockNavigate).toHaveBeenCalledTimes(1)
 	})
 })
