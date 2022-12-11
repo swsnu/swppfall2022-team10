@@ -26,6 +26,9 @@ urlpatterns = [
     path(
         "posts/<int:pid>/applications/<int:aid>/", views.post_id_application_id
     ),  # GET, PUT: Update application, DELETE: Delete application
+    path(
+        "posts/<int:pid>/applications/<int:aid>/accept/", views.post_id_application_id
+    ),
     path("signup/", views.signup),
     path("username/", views.check_username),
     path("posts/<int:pid>/bookmark/", views.post_bookmark),
