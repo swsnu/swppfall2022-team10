@@ -74,7 +74,7 @@ describe('<ReviewDetail />', () => {
 			<Provider store={getMockStore(mockState)}>
 				<ReviewDetail
 					id={1}
-				 />
+				/>
 			</Provider>
 		)
 	})
