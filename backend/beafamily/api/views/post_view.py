@@ -104,7 +104,10 @@ def posts(request):
 
         animal_type = query.get("animal_type")
         if animal_type:
-            post_list = post_list.filter(animal_type=animal_type)
+            if animal_type in ["개", "고양이"]:
+                post_list = post_list.filter(animal_type=animal_type)
+            else:
+                post_list = post_list.exclude(animal_type__in=["개", "고양이"])
 
         species = query.get("species")
         if query.get("species"):
