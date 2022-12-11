@@ -51,7 +51,11 @@ export default function ApplicationList(props: IProps) {
 		[show, clickedApplication]
 	)
 	const acceptHandler = (aid: number) => {
-		dispatch(acceptApplication({ id: aid.toString(), postId: props.id }))
+		dispatch(acceptApplication({ id: aid.toString(), postId: props.id })).then((result)=>{
+			handleClose()
+			alert('입양신청서 수락이 완료되었습니다. 입양게시글이 마감으로 표시되며, 게시글로 온 신청서는 더 이상 보이지 않습니다.')
+			dispatch(getApplications(props.id))
+		})
 	}
 
 	return (
