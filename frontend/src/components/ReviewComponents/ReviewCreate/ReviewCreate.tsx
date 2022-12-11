@@ -10,14 +10,15 @@ import { useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, Navigate } from 'react-router-dom'
 import { AppDispatch } from '../../../store'
-import { checkPost, postType, selectPost } from '../../../store/slices/post'
-import { createReview } from '../../../store/slices/review'
+import { checkPost, postListType, selectPost } from '../../../store/slices/post'
+import {createReview, reviewListType} from '../../../store/slices/review'
 import { checkLogin } from '../../../store/slices/user'
 import { MdArrowBack } from 'react-icons/md'
 
 import './ReviewCreate.scss'
 import Combobox from 'react-widgets/Combobox'
 import { selectApplication } from '../../../store/slices/application'
+import Review from "../Review/Review";
 
 export default function ReviewCreate() {
 	const postState = useSelector(selectPost)
@@ -60,8 +61,11 @@ export default function ReviewCreate() {
 		if (title.length === 0) return
 		if (animalType.length === 0) return
 		if (file.length === 0) return
+		if (postId.length === 0) return
 
-		const data = { title: title, animal_type: animalType, content: content }
+		console.log(postId)
+
+		const data = { title: title, animal_type: animalType, post_id: postId, content: content }
 		const formData = new FormData()
 		formData.append('content', JSON.stringify(data))
 		file.forEach((f, i) => formData.append('photos', f))
@@ -139,7 +143,11 @@ export default function ReviewCreate() {
 									id='review-post-input'
 									className='review-combobox'
 									name='type'
-									data={['post 1', 'post 2', 'post 3']}
+									data={postState.posts.map((post: postListType) => {
+										return(
+											post.id.toString() + ' ' + post.title
+										)
+									})}
 									onChange={(event) => setPostId(event)}
 									value={postId}
 								/>
@@ -195,7 +203,7 @@ export default function ReviewCreate() {
 							<button
 								id='confirm-create-review-button'
 								type='submit'
-								disabled={!(title && content)}
+								disabled={!(title && content && postId)}
 								// onClick={createReviewHandler}
 							>
 								게시하기

@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { RootState } from '..'
+import {postListType} from "./post";
 
 export interface reviewType {
 	id: number
@@ -12,7 +13,7 @@ export interface reviewType {
 	photo_path: string[]
 	species: string
 	created_at: string
-	post_id: number
+	post: postListType
 }
 
 export interface reviewListType {

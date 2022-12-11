@@ -110,10 +110,7 @@ export default function ReviewList() {
 							>
 								<ReviewDetail
 									key={`${clickedReview.id}_review`}
-									title={clickedReview.title}
-									photo_path={clickedReview.photo_path}
-									author={clickedReview.author_name}
-									content={clickedReview.content}
+									id={clickedReview.id}
 								/>
 							</ReviewModal>
 						)}

@@ -66,7 +66,7 @@ export const acceptApplication = createAsyncThunk(
 	'application/acceptApplication',
 	async (arg: { id: string; postId: string }, { dispatch }) => {
 		const response = await axios.post(
-			`/api/posts/${arg.postId}/applications/${arg.id}/accept`
+			`/api/posts/${arg.postId}/applications/${arg.id}/accept/`
 		)
 		return response.data
 	}
