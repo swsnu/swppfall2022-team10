@@ -15,6 +15,13 @@
 		border-radius: 10px;
 		box-shadow: 0 2px 3px 0 rgba(34, 36, 38, 0.15);
 		overflow-y: auto;
+		&::-webkit-scrollbar {
+    		width: 4px;
+  		}
+  		&::-webkit-scrollbar-thumb {
+    		border-radius: 2px;
+    		background: #ccc;
+  		}
 	}
 	.modal-footer {
 		padding: 3px;
