@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 import os
+import io
 import environ
 import google.auth
 from google.cloud import secretmanager
@@ -22,29 +23,48 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env(DEBUG=(bool, False))
 env_file = os.path.join(BASE_DIR, ".env")
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
+try:
+    _, os.environ["GOOGLE_CLOUD_PROJECT"] = google.auth.default()
+except google.auth.exceptions.DefaultCredentialsError:
+    pass
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY_DEFAULT = (
-    "django-insecure-g+1wzo(%7f$auhj&)w_s6a9y^rndcx&jej*7(k)(&=_!3ghvd1"
-)
-SECRET_KEY = os.environ.get("SECRET_KEY", SECRET_KEY_DEFAULT)
-DEBUG = os.environ.get("DEBUG", "True") == "True"
+if os.path.isfile(env_file):
+    # Use a local secret file, if provided
 
-IP_ADDRESS = os.environ.get("IP_ADDRESS", "127.0.0.1")
+    env.read_env(env_file)
+elif os.environ.get("GOOGLE_CLOUD_PROJECT", None):
+    # Pull secrets from Secret Manager
+    project_id = os.environ.get("GOOGLE_CLOUD_PROJECT")
+
+    client = secretmanager.SecretManagerServiceClient()
+    settings_name = os.environ.get("SETTINGS_NAME", "django_settings")
+    name = f"projects/{project_id}/secrets/{settings_name}/versions/latest"
+    payload = client.access_secret_version(name=name).payload.data.decode("UTF-8")
+
+    env.read_env(io.StringIO(payload))
+else:
+    raise Exception("No local .env or GOOGLE_CLOUD_PROJECT detected. No secrets found.")
+
+# TODO:
+# 1. update env file
+# 2. cloud run configure
+# 3. cdn configure
+# 4. deploy
+
+SECRET_KEY = env("SECRET_KEY")
+API_KEY = env("API_KEY")
+DEBUG = env("DEBUG")
+IP_ADDRESS = env("IP_ADDRESS")
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "beafamily.site", IP_ADDRESS]
 CSRF_TRUSTED_ORIGINS = ["https://beafamily.site"]
 
-SECURE_HSTS_SECONDS = int(os.environ.get("SECURES_HSTS_SECONDS", 31536000))
-SESSION_COOKIE_SECURE = os.environ.get("SESSION_COOKIE_SECURE", "False") == "True"
-CSRF_COOKIE_SECURE = os.environ.get("CSRF_COOKIE_SECURE", "False") == "True"
-SECURE_HSTS_INCLUDE_SUBDOMAINS = (
-    os.environ.get("SECURE_HSTS_INCLUDE_SUBDOMAINS", "False") == "True"
-)
-SECURE_HSTS_PRELOAD = os.environ.get("SECURE_HSTS_PRELOAD", "False") == "True"
-# SECURE_SSL_REDIRECT = os.environ.get("SECURE_SSL_REDIRECT", "False") == "True"
+SECURE_HSTS_SECONDS = env("SECURES_HSTS_SECONDS", int)
+SESSION_COOKIE_SECURE = env("SESSION_COOKIE_SECURE", bool)
+CSRF_COOKIE_SECURE = env("CSRF_COOKIE_SECURE", bool)
+SECURE_HSTS_INCLUDE_SUBDOMAINS = env("SECURE_HSTS_INCLUDE_SUBDOMAINS", bool)
+SECURE_HSTS_PRELOAD = env("SECURE_HSTS_PRELOAD", bool)
+SECURE_SSL_REDIRECT = env("SECURE_SSL_REDIRECT", bool)
 
 # Application definition
 
@@ -63,7 +83,7 @@ INSTALLED_APPS = [
 DEFAULT_FILE_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"
 STATICFILES_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"
 GS_DEFAULT_ACL = "publicRead"
-GS_BUCKET_NAME = os.environ.get("GS_BUCKET_NAME", "media")
+GS_BUCKET_NAME = env("GS_BUCKET_NAME")
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",

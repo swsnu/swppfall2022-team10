@@ -14,3 +14,5 @@ docker run --rm -it \
     frontend_build:dev \
     npm run build --prod --silent
 
+tar czf build.tar.gz --directory=build .  
+gcloud storage cp build.tar.gz gs://swpp22-team10-frontend-build/
