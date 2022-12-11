@@ -243,3 +243,29 @@ def delete_post_photo(request, pid, iid):
     i.delete()
 
     return Response(status=status.HTTP_200_OK)
+
+
+@api_view(["POST"])
+@authentication_classes([SessionAuthentication])
+@permission_classes([IsAuthenticated])
+@log_error(logger)
+def accept(request, pid, aid):
+    try:
+        p = Post.objects.get(id=pid)
+        a = Application.objects.get(id=aid)
+    except:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if a.post != p:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    if p.author != request.user:
+        return Response(status=status.HTTP_403_FORBIDDEN)
+
+    if hasattr(p, "accepted_application"):
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    p.accepted_application = a
+    p.save()
+
+    return Response(status=status.HTTP_200_OK)
