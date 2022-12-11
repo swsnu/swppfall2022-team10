@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import axios from 'axios'
 import { Provider } from 'react-redux'

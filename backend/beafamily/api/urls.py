@@ -31,4 +31,5 @@ urlpatterns = [
     path("posts/<int:pid>/bookmark/", views.post_bookmark),
     path("users/", views.delete_user),
     path("posts/<int:pid>/photos/<int:iid>/", views.delete_post_photo),
+    path("reviews/check/", views.review_check),
 ]

@@ -13,10 +13,10 @@ from rest_framework.decorators import (
     permission_classes,
 )
 from rest_framework.parsers import FileUploadParser, JSONParser, MultiPartParser
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework.response import Response
 
-from ..models import Review, ReviewImage, Post
+from ..models import Review, ReviewImage, Post, Application
 from ..serializers import (
     ReviewDetailSerializer,
     ReviewQueryValidator,
@@ -86,13 +86,30 @@ def reviews(request):
         )
 
 
-@api_view(["GET"])
+@api_view(["GET", "DELETE"])
 def review_id(request, rid: int):
     try:
         review = Review.objects.get(id=rid)
     except Review.DoesNotExist as e:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    # response = review_serializer(review)
-    response = ReviewDetailSerializer(review)
-    return Response(response.data)
+    if request.method == "GET":
+        response = ReviewDetailSerializer(review)
+        return Response(response.data)
+    else:
+        if request.user != review.author:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+        review.delete()
+        return Response(status=status.HTTP_200_OK)
+
+
+@api_view(["GET"])
+@authentication_classes([SessionAuthentication])
+@permission_classes([IsAuthenticated])
+def review_check(request):
+    p = Post.objects.filter(accepted_application__author=request.user).filter(
+        review_post=None
+    )
+    response = PostSerializer(p, many=True).data
+
+    return Response(status=status.HTTP_200_OK, data=response)

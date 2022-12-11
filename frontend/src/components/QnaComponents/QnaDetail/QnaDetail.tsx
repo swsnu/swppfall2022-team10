@@ -60,9 +60,7 @@ const QnaDetail = () => {
 						className='create-comment-container'
 						onSubmit={createCommentHandler}
 					>
-						<label htmlFor='comment-input'>
-							댓글:
-						</label>
+						<label htmlFor='comment-input'>댓글:</label>
 						<input
 							id='comment-input'
 							type='text'

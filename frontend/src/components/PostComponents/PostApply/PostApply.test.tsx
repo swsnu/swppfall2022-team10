@@ -20,12 +20,12 @@ const tempState = {
 }
 
 const testApplicationFormat = {
-    id: 1,
-    author_id: 1,
-    author_name: 'jhpyun1',
-    file: "",
-    created_at: '2022-06-22',
-    post_id: 1
+	id: 1,
+	author_id: 1,
+	author_name: 'jhpyun1',
+	file: '',
+	created_at: '2022-06-22',
+	post_id: 1
 }
 
 const mockNavigate = jest.fn()
@@ -49,7 +49,7 @@ describe('<PostApply />', () => {
 			<Provider store={getMockStore(tempState)}>
 				<MemoryRouter>
 					<Routes>
-						<Route path='/post/:id/apply' element={<PostApply  />} />
+						<Route path='/post/:id/apply' element={<PostApply />} />
 						<Route
 							path='/'
 							element={<Navigate to={'/post/1/apply'} />}

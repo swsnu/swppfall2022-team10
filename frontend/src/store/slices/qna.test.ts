@@ -21,15 +21,13 @@ describe('qna reducer', () => {
 		created_at: 'test_created_at',
 		hits: 1,
 		comments: [],
-		editable: false,
+		editable: false
 	}
 
-	const fakeComment =
-	{
+	const fakeComment = {
 		content: 'test_content',
-		id: 1,
+		id: 1
 	}
-
 
 	beforeAll(() => {
 		store = configureStore({ reducer: { qna: reducer } })
@@ -70,7 +68,9 @@ describe('qna reducer', () => {
 		})
 		await store.dispatch(editQna(fakeQna))
 		expect(
-			store.getState().qna.qnas.find((v) => v.author_id === fakeQna.author_id)?.id
+			store
+				.getState()
+				.qna.qnas.find((v) => v.author_id === fakeQna.author_id)?.id
 		).toEqual(undefined)
 	})
 	it('should handle error on createQna', async () => {
