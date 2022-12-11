@@ -145,15 +145,18 @@ def post_id_application(request, pid):
 
     if request.method == "GET":
         if request.user == post.author:
-            app = ApplicationSerializer(post.applications, many=True)
+            if post.is_active:
+                app = ApplicationSerializer(post.applications, many=True).data
+            else:
+                app = []
         else:
             app = ApplicationSerializer(
                 post.applications.filter(author=request.user), many=True
-            )
+            ).data
         # app = ApplicationSerializer(post.applications, many=True)
-        return Response(status=status.HTTP_200_OK, data=app.data)
+        return Response(status=status.HTTP_200_OK, data=app)
     else:
-        if request.user == post.author:
+        if request.user == post.author or not post.is_active:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         file = request.data.getlist("application")[0]
@@ -262,10 +265,11 @@ def accept(request, pid, aid):
     if p.author != request.user:
         return Response(status=status.HTTP_403_FORBIDDEN)
 
-    if hasattr(p, "accepted_application"):
+    if p.accepted_application:
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
     p.accepted_application = a
+    p.is_active = False
     p.save()
 
     return Response(status=status.HTTP_200_OK)
