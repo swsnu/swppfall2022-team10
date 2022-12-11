@@ -48,6 +48,7 @@ class PostQueryValidator(PaginationValidator):
 
     gender = serializers.BooleanField(required=False)
     is_active = serializers.BooleanField(required=False)
+    shelter = serializers.BooleanField(required=False)
 
     def to_internal_value(self, data):
 

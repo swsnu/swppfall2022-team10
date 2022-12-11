@@ -12,3 +12,4 @@ django-extensions
 requests
 django-storages[google]
 django-environ
+google-cloud-secret-manager

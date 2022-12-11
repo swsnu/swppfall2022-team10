@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 import os
 import environ
+import google.auth
+from google.cloud import secretmanager
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -32,19 +34,17 @@ DEBUG = os.environ.get("DEBUG", "True") == "True"
 
 IP_ADDRESS = os.environ.get("IP_ADDRESS", "127.0.0.1")
 
-# SECURITY WARNING: don't run with debug turned on in production!
-
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "beafamily.site", IP_ADDRESS]
 CSRF_TRUSTED_ORIGINS = ["https://beafamily.site"]
 
 SECURE_HSTS_SECONDS = int(os.environ.get("SECURES_HSTS_SECONDS", 31536000))
-# SECURE_SSL_REDIRECT = os.environ.get("SECURE_SSL_REDIRECT", "False") == "True"
 SESSION_COOKIE_SECURE = os.environ.get("SESSION_COOKIE_SECURE", "False") == "True"
 CSRF_COOKIE_SECURE = os.environ.get("CSRF_COOKIE_SECURE", "False") == "True"
 SECURE_HSTS_INCLUDE_SUBDOMAINS = (
     os.environ.get("SECURE_HSTS_INCLUDE_SUBDOMAINS", "False") == "True"
 )
 SECURE_HSTS_PRELOAD = os.environ.get("SECURE_HSTS_PRELOAD", "False") == "True"
+# SECURE_SSL_REDIRECT = os.environ.get("SECURE_SSL_REDIRECT", "False") == "True"
 
 # Application definition
 
@@ -58,8 +58,7 @@ INSTALLED_APPS = [
     "api.apps.APIConfig",
     "rest_framework",
     "django_extensions",
-    "django_storage",
-    "django_environ",
+    "storages",
 ]
 DEFAULT_FILE_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"
 STATICFILES_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"

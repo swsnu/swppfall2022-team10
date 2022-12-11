@@ -96,6 +96,10 @@ def posts(request):
         if gender is not None:
             post_list = post_list.filter(gender=gender)
 
+        shelter = query.get("shelter")
+        if shelter is not None:
+            post_list = post_list.filter(shelter=shelter)
+
         animal_type = query.get("animal_type")
         if animal_type:
             post_list = post_list.filter(animal_type=animal_type)
