@@ -99,6 +99,9 @@ class PostQueryValidator(PaginationValidator):
             gender = data.get("gender")
             if gender:
                 validated_query["gender"] = gender
+            shelter = data.get("shelter")
+            if shelter:
+                validated_query["shelter"] = shelter
             is_active = data.get("is_active")
             if is_active is not None:
                 validated_query["is_active"] = is_active
@@ -122,6 +125,7 @@ class PostQueryValidator(PaginationValidator):
             "is_active",
             "page",
             "page_size",
+            "shelter",
         ]
 
 
