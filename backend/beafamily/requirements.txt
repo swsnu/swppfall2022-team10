@@ -10,3 +10,5 @@ python-docx
 sqlalchemy
 django-extensions
 requests
+django-storages[google]
+django-environ
