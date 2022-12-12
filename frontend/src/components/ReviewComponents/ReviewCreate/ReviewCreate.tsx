@@ -137,7 +137,7 @@ export default function ReviewCreate() {
 								/>
 							</div>
 							<div className='input-container'>
-								<label htmlFor='review-post-input'>
+								<label htmlFor='review-post-input_input'>
 									입양공고 정보:
 								</label>
 								<Combobox

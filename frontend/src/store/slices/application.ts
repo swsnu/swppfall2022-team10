@@ -31,16 +31,6 @@ export const getApplications = createAsyncThunk(
 	}
 )
 
-export const getMyApplications = createAsyncThunk(
-	'application/getMyApplications',
-	async (postId: string, { dispatch }) => {
-		const response = await axios.get<applicationType[]>(
-			`/api/myposts/${postId}/applications/`
-		)
-		return response.data ?? null
-	}
-)
-
 export const getApplication = createAsyncThunk(
 	'application/getApplication',
 	async (app: applicationType, { dispatch }) => {
@@ -86,10 +76,6 @@ export const applicationSlice = createSlice({
 	extraReducers: (builder) => {
 		// Add reducers for additional action types here, and handle loading state as needed
 		builder.addCase(getApplications.fulfilled, (state, action) => {
-			// Add post to the state array
-			state.applications = action.payload
-		})
-		builder.addCase(getMyApplications.fulfilled, (state, action) => {
 			// Add post to the state array
 			state.applications = action.payload
 		})

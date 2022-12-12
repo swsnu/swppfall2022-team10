@@ -139,4 +139,30 @@ describe('<MyApplyPost />', () => {
 			).toHaveLength(0)
 		})
 	})
+	it('should handle edit and delete button', async () => {
+		jest.spyOn(axios, 'get').mockResolvedValue({
+			data: {
+				post: {
+					...testPostFormat,
+					gender: true,
+					vaccination: true,
+					neutering: true,
+					is_active: true
+				},
+				editable: true,
+				bookmark: true
+			}
+		})
+		await act(() => {
+			render(myApplyPost)
+		})
+		const edit_button = document.querySelector('#edit-post-button')
+		fireEvent.click(edit_button!)
+		expect(mockNavigate).toHaveBeenCalledTimes(1)
+
+		const delete_button = document.querySelector('#delete-post-button')
+		fireEvent.click(delete_button!)
+		expect(mockNavigate).toHaveBeenCalledTimes(2)
+	})
+
 })

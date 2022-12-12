@@ -68,4 +68,14 @@ describe('<ApplicationList />', () => {
 		fireEvent.click(closeButton!)
 		!document.querySelector('.Modal')
 	})
+	it('should handle accept button', async () => {
+		await act(() => {
+			render(applicationList)
+		})
+		const button = document.querySelector('#apply-button')
+		fireEvent.click(button!)
+		const accept_button = document.querySelector('#accept-button')
+		fireEvent.click(accept_button!)
+		!document.querySelector('.Modal')
+	})
 })

@@ -33,6 +33,12 @@ const mockStore = getMockStore({
 	mypost: { posts: [], likes: [], applys: [], reviews: [], qnas: [] }
 })
 
+const mockNavigate = jest.fn()
+jest.mock('react-router', () => ({
+	...jest.requireActual('react-router'),
+	useNavigate: () => mockNavigate
+}))
+
 describe('<MyApplicationList />', () => {
 	let myApplicationList: JSX.Element
 	beforeEach(() => {
@@ -67,6 +73,8 @@ describe('<MyApplicationList />', () => {
 		await act(() => {
 			render(myApplicationList)
 		})
-		const button = document.querySelector('#apply-button')
+		const button = document.querySelector('#delete-button')
+		fireEvent.click(button!)
+		expect(mockNavigate).toHaveBeenCalledTimes(1)
 	})
 })
