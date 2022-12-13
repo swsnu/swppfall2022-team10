@@ -6,6 +6,16 @@ from .AbstractTypes import (
     comment_serializer,
 )
 from django.contrib.auth import get_user_model
+from django.db.models.signals import pre_save, pre_delete
+from django.dispatch.dispatcher import receiver
+
+
+def thumbnail_upload_to(instance, filename):
+    return f"post/{instance.id}/thumbnail/{filename}"
+
+
+def form_upload_to(instance, filename):
+    return f"post/{instance.id}/form/{filename}"
 
 
 class Post(AbstractArticleType):
@@ -20,8 +30,22 @@ class Post(AbstractArticleType):
     gender = models.BooleanField()
     species = models.CharField(max_length=30)
     is_active = models.BooleanField()
+    form = models.FileField(upload_to=form_upload_to)
+    accepted_application = models.OneToOneField(
+        "Application",
+        on_delete=models.CASCADE,
+        null=True,
+        default=None,
+        related_name="accepted_application",
+    )
+    thumbnail = models.ImageField(upload_to=thumbnail_upload_to)
+    thumbnail_url = models.URLField(default=None, null=True)
+    shelter = models.BooleanField(default=False)
+    end_date = models.DateField(null=True, default=None)
+    desertionNo = models.PositiveIntegerField(null=True, db_index=True, default=None)
 
     class Meta:
+        db_table = "post"
         ordering = ["-created_at"]
 
 
@@ -36,6 +60,28 @@ class PostImage(AbstractImageType):
     def __str__(self):
         return self.image.url
 
+    class Meta:
+        db_table = "post_image"
+
 
 class PostComment(AbstractCommentType):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
+
+    class Meta:
+        db_table = "post_comment"
+
+
+@receiver(pre_delete, sender=PostImage)
+def cleanup_image(sender, instance, *args, **kwargs):
+    if instance.image and instance.image.url:
+        storage = instance.image.storage
+        if storage.exists(instance.image.name):
+            storage.delete(instance.image.name)
+
+
+@receiver(pre_delete, sender=Post)
+def cleanup_form(sender, instance, *args, **kwargs):
+    if instance.form and instance.form.url:
+        storage = instance.form.storage
+        if storage.exists(instance.form.name):
+            storage.delete(instance.form.name)

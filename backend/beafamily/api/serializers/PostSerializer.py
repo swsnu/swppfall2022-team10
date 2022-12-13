@@ -1,9 +1,9 @@
 from ..models import Post, PostImage, PostComment
 from rest_framework import serializers
 from django.utils import timezone
-from .ImageSerializer import ImageURLField
+from .ImageSerializer import ImageURLField, PostImageSerializer
 from .AbstractTypes import SerializerWithAuth, PaginationValidator
-from .utils import UserNameField
+from .utils import UserNameField, ApplicationFieldSerializer, form_validator
 
 
 def validate_nonnegative_int(x):
@@ -48,6 +48,7 @@ class PostQueryValidator(PaginationValidator):
 
     gender = serializers.BooleanField(required=False)
     is_active = serializers.BooleanField(required=False)
+    shelter = serializers.BooleanField(required=False)
 
     def to_internal_value(self, data):
 
@@ -98,6 +99,9 @@ class PostQueryValidator(PaginationValidator):
             gender = data.get("gender")
             if gender:
                 validated_query["gender"] = gender
+            shelter = data.get("shelter")
+            if shelter:
+                validated_query["shelter"] = shelter
             is_active = data.get("is_active")
             if is_active is not None:
                 validated_query["is_active"] = is_active
@@ -121,6 +125,7 @@ class PostQueryValidator(PaginationValidator):
             "is_active",
             "page",
             "page_size",
+            "shelter",
         ]
 
 
@@ -153,20 +158,59 @@ class PostCommentSerializer(SerializerWithAuth):
         model = PostComment
         fields = ["id", "author_id", "author_name", "content", "created_at"]
 
+
+class PostSerializer(serializers.ModelSerializer):
+    author_name = UserNameField(source="author", read_only=True)
+    thumbnail = serializers.ImageField(use_url=True)
+
     def to_representation(self, instance):
-        ret = super(PostCommentSerializer, self).to_representation(instance)
-        if self.context:
-            user = self.context["user"]
-            ret["editable"] = user == instance.author
+        ret = super().to_representation(instance)
+
+        if instance.shelter:
+            ret["thumbnail"] = instance.thumbnail_url
+            ret["author_name"] = instance.author.nickname
 
         return ret
 
+    class Meta:
+        model = Post
+        fields = [
+            "id",
+            "author_name",
+            "title",
+            "animal_type",
+            "age",
+            "gender",
+            "species",
+            "thumbnail",
+        ]
 
-class PostSerializer(SerializerWithAuth):
+
+class PostDetailSerializer(serializers.ModelSerializer):
     created_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S")
     comments = PostCommentSerializer(many=True)
-    photo_path = ImageURLField(read_only=True, many=True)
-    author_name = UserNameField(source="author")
+    photo_path = PostImageSerializer(many=True)
+    author_name = UserNameField(source="author", read_only=True)
+    form = serializers.FileField(validators=[form_validator])
+
+    def to_representation(self, instance):
+        ret_ = super().to_representation(instance)
+        ret = dict()
+        ret["post"] = ret_
+        if self.context:
+            user = self.context["user"]
+            ret["editable"] = user == instance.author
+            if user.is_authenticated:
+                ret["bookmark"] = user.likes.filter(id=instance.id).exists()
+            else:
+                ret["bookmark"] = False
+
+        if instance.shelter:
+            ret["post"]["photo_path"] = [
+                {"id": 1, "photo_path": instance.thumbnail_url}
+            ]
+            ret["post"]["author_name"] = instance.author.nickname
+        return ret
 
     class Meta:
         model = Post
@@ -187,4 +231,5 @@ class PostSerializer(SerializerWithAuth):
             "is_active",
             "photo_path",
             "comments",
+            "form",
         ]

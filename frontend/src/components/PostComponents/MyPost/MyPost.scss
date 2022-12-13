@@ -9,7 +9,9 @@
 
 .MyPost,
 .MyLike,
-.MyApply {
+.MyApply,
+.MyReview,
+.MyQna {
 	position: relative;
 	z-index: 1;
 	margin-top: 10px;
@@ -41,11 +43,21 @@
 
 	.posts-post,
 	.posts-apply,
-	.posts-like {
+	.posts-like,
+	.reviews,
+	.qnas {
 		display: flex;
 		flex-direction: row;
 		justify-content: left;
 		flex-wrap: wrap;
 		padding: 20px 32px 10px 32px;
+		#qna-delete-button {
+			border: none;
+			background-color: transparent;
+		}
+		.review-container {
+			border: none;
+			background-color: transparent;
+		}
 	}
 }

@@ -66,6 +66,8 @@
 			padding: 0 20px;
 			width: 650px;
 			justify-content: space-between;
+			margin-bottom: 15px;
+
 			label {
 				text-align: left;
 			}
@@ -74,7 +76,64 @@
 			.post-combobox {
 				width: 350px;
 			}
+		}
+
+		.file-input-container {
+			display: flex;
+			flex-direction: row;
+			align-self: flex-start;
+			padding: 0 20px;
+			width: 900px;
+			justify-content: space-between;
 			margin-bottom: 15px;
+			#photo-title,
+			#apply-form-title {
+				text-align: left;
+			}
+			.photo-input,
+			.apply-form-input {
+				width: 600px;
+				display: flex;
+				flex-direction: column;
+				align-items: flex-start;
+				.current-list {
+					text-align: left;
+					ul {
+						width: 400px;
+						padding: 0px;
+
+						margin-left: 30px;
+						li {
+							display: flex;
+							flex-direction: row;
+							justify-content: space-between;
+							.delete-image-button {
+								all: unset;
+								&:hover {
+									font-weight: bolder;
+								}
+							}
+						}
+						li:hover {
+							cursor: pointer;
+						}
+					}
+				}
+				.current-form {
+					text-align: left;
+				}
+				.new-input {
+					display: flex;
+					flex-direction: column;
+					align-items: flex-start;
+					label {
+						width: fit-content;
+					}
+					input {
+						margin-left: 30px;
+					}
+				}
+			}
 		}
 
 		.content-container {

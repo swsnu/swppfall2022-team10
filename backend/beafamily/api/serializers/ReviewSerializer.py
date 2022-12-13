@@ -1,11 +1,31 @@
 from ..models import Review, ReviewImage
 from rest_framework import serializers
 from .AbstractTypes import SerializerWithAuth, PaginationValidator
+from .utils import UserNameField
+from .ImageSerializer import ImageURLField
+from .PostSerializer import PostSerializer
 
 
-class ReviewSerializer(SerializerWithAuth):
-    author_name = serializers.StringRelatedField(source="author", read_only=True)
-    photo_path = serializers.StringRelatedField(many=True, read_only=True)
+class ReviewListSerializer(serializers.ModelSerializer):
+    thumbnail = serializers.ImageField(use_url=True)
+    author_name = UserNameField(source="author", read_only=True)
+
+    class Meta:
+        model = Review
+        fields = [
+            "author_id",
+            "author_name",
+            "id",
+            "title",
+            "thumbnail",
+            "animal_type",
+        ]
+
+
+class ReviewDetailSerializer(SerializerWithAuth):
+    author_name = UserNameField(source="author", read_only=True)
+    photo_path = ImageURLField(read_only=True, many=True)
+    post = PostSerializer()
 
     class Meta:
         model = Review
@@ -17,6 +37,7 @@ class ReviewSerializer(SerializerWithAuth):
             "photo_path",
             "content",
             "animal_type",
+            "post",
         ]
 
 

@@ -6,7 +6,7 @@ describe('<Review />', () => {
 			<Review
 				title={'REVIEW_TITLE'}
 				author={'REVIEW_AUTHOR'}
-				photo_path={[]}
+				thumbnail={''}
 				clickDetail={undefined}
 			/>
 		)

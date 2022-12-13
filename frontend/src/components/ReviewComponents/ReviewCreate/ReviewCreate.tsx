@@ -10,24 +10,41 @@ import { useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, Navigate } from 'react-router-dom'
 import { AppDispatch } from '../../../store'
-import { createReview } from '../../../store/slices/review'
-import { selectUser } from '../../../store/slices/user'
+import { checkPost, postListType, selectPost } from '../../../store/slices/post'
+import { createReview, reviewListType } from '../../../store/slices/review'
+import { checkLogin } from '../../../store/slices/user'
 import { MdArrowBack } from 'react-icons/md'
 
 import './ReviewCreate.scss'
+import Combobox from 'react-widgets/Combobox'
+import { selectApplication } from '../../../store/slices/application'
+import Review from '../Review/Review'
 
 export default function ReviewCreate() {
+	const postState = useSelector(selectPost)
 	const [title, setTitle] = useState<string>('')
 	const [animalType, setAnimalType] = useState<string>('')
+	const [postId, setPostId] = useState<string>('')
 	const [content, setContent] = useState<string>('')
 	const [file, setFile] = useState<File[]>([])
 
 	const navigate = useNavigate()
 	const dispatch = useDispatch<AppDispatch>()
-	const userState = useSelector(selectUser)
-	// useEffect(() => {
-	// 	if (!userState.currentUser) navigate("/login");
-	// }, [userState.currentUser, navigate]);
+
+	useEffect(() => {
+		dispatch(checkLogin()).then((result) => {
+			const loggedIn: boolean = (result.payload as { logged_in: boolean })
+				.logged_in
+			if (!loggedIn) {
+				alert('You should log in')
+				navigate('/login')
+			}
+		})
+	}, [])
+
+	useEffect(() => {
+		dispatch(checkPost())
+	}, [])
 
 	const fileChangedHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const files = event.target.files
@@ -36,10 +53,7 @@ export default function ReviewCreate() {
 
 	const createReviewHandler = (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault()
-		if (!userState.logged_in) {
-			alert('You should login')
-			return
-		}
+
 		// console.log(title)
 		// console.log(content)
 		// console.log(file)
@@ -47,11 +61,15 @@ export default function ReviewCreate() {
 		if (title.length === 0) return
 		if (animalType.length === 0) return
 		if (file.length === 0) return
+		if (postId.length === 0) return
+
+		const words = postId.split(' ')
 
 		const data = { title: title, animal_type: animalType, content: content }
 		const formData = new FormData()
 		formData.append('content', JSON.stringify(data))
 		file.forEach((f, i) => formData.append('photos', f))
+		formData.append('post_id', words[0])
 		dispatch(createReview(formData))
 			.then((result) => {
 				navigate(`/review`)
@@ -93,6 +111,7 @@ export default function ReviewCreate() {
 									제목:
 								</label>
 								<input
+									className='review-input'
 									id='review-title-input'
 									type='text'
 									name='title'
@@ -107,6 +126,7 @@ export default function ReviewCreate() {
 									동물:
 								</label>
 								<input
+									className='review-input'
 									id='review-animal-type-input'
 									type='text'
 									name='animalType'
@@ -114,6 +134,27 @@ export default function ReviewCreate() {
 									onChange={(event) =>
 										setAnimalType(event.target.value)
 									}
+								/>
+							</div>
+							<div className='input-container'>
+								<label htmlFor='review-post-input_input'>
+									입양공고 정보:
+								</label>
+								<Combobox
+									id='review-post-input'
+									className='review-combobox'
+									name='type'
+									data={postState.posts.map(
+										(post: postListType) => {
+											return (
+												post.id.toString() +
+												' ' +
+												post.title
+											)
+										}
+									)}
+									onChange={(event) => setPostId(event)}
+									value={postId}
 								/>
 							</div>
 							<div className='content-container'>
@@ -167,7 +208,7 @@ export default function ReviewCreate() {
 							<button
 								id='confirm-create-review-button'
 								type='submit'
-								disabled={!(title && content)}
+								disabled={!(title && content && postId)}
 								// onClick={createReviewHandler}
 							>
 								게시하기

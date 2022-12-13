@@ -15,6 +15,8 @@ COPY api /backend/api
 COPY beafamily /backend/beafamily
 COPY manage.py /backend/manage.py
 COPY create_dummy.py /backend/create_dummy.py
+COPY scrap_openapi.py /backend/scrap_openapi.py
+COPY scrapping_data /backend/scrapping_data
 COPY dummy /backend/dummy
 
 ENV DEBUG=False
@@ -36,4 +38,5 @@ RUN touch /log/uwsgi.log
 RUN cp -r dummy data/dummy
 RUN python manage.py makemigrations 
 RUN python manage.py migrate
-RUN (echo "Y" && echo "d") | python create_dummy.py
+RUN python create_dummy.py
+RUN python scrap_openapi.py

@@ -19,12 +19,7 @@ services:
       - "8000:8000"
 
     volumes:
-      - logs:/backend/logs
+      - type: bind
+        source: $PWD/backend/beafamily/logs/
+        target: /backend/logs/
 
-volumes:
-  logs:
-    driver: local
-    driver_opts:
-      type: "none"
-      o: "bind"
-      device: /var/log/beafamily

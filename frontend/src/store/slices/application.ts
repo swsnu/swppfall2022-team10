@@ -6,7 +6,7 @@ export interface applicationType {
 	id: number
 	author_id: number
 	author_name: string
-	files: string[]
+	file: string
 	created_at: string
 	post_id: number
 }
@@ -23,9 +23,19 @@ const initialState: applicationState = {
 
 export const getApplications = createAsyncThunk(
 	'application/getApplications',
-	async (postId: applicationType['post_id'], { dispatch }) => {
+	async (postId: string, { dispatch }) => {
 		const response = await axios.get<applicationType[]>(
-			`/api/apply/${postId}/`
+			`/api/posts/${postId}/applications/`
+		)
+		return response.data ?? null
+	}
+)
+
+export const getApplication = createAsyncThunk(
+	'application/getApplication',
+	async (app: applicationType, { dispatch }) => {
+		const response = await axios.get<applicationType>(
+			`/api/posts/${app.post_id}/applications/${app.id}/`
 		)
 		return response.data ?? null
 	}
@@ -33,9 +43,29 @@ export const getApplications = createAsyncThunk(
 
 export const createApplication = createAsyncThunk(
 	'application/createApplication',
-	async (application: FormData, { dispatch }) => {
-		const response = await axios.post('/api/apply/', application)
+	async (arg: { application: FormData; postId: string }, { dispatch }) => {
+		const response = await axios.post(
+			`/api/posts/${arg.postId}/applications/`,
+			arg.application
+		)
 		return response.data
+	}
+)
+
+export const acceptApplication = createAsyncThunk(
+	'application/acceptApplication',
+	async (arg: { id: string; postId: string }, { dispatch }) => {
+		const response = await axios.post(
+			`/api/posts/${arg.postId}/applications/${arg.id}/accept/`
+		)
+		return response.data
+	}
+)
+
+export const deleteApplication = createAsyncThunk(
+	'application/deleteApplication',
+	async (app: applicationType, { dispatch }) => {
+		await axios.delete(`/api/posts/${app.post_id}/applications/${app.id}/`)
 	}
 )
 
@@ -49,7 +79,13 @@ export const applicationSlice = createSlice({
 			// Add post to the state array
 			state.applications = action.payload
 		})
+		builder.addCase(getApplication.fulfilled, (state, action) => {
+			state.selectedApplication = action.payload
+		})
 		builder.addCase(createApplication.rejected, (_state, action) => {
+			alert('ERROR')
+		})
+		builder.addCase(acceptApplication.rejected, (_state, action) => {
 			alert('ERROR')
 		})
 	}
@@ -57,5 +93,4 @@ export const applicationSlice = createSlice({
 
 export const applicationActions = applicationSlice.actions
 export const selectApplication = (state: RootState) => state.application
-
 export default applicationSlice.reducer

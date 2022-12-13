@@ -1,17 +1,21 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import './App.css'
-import Login from './components/Login/Login'
+import Login from './components/UserComponents/Login/Login'
+import Signup from './components/UserComponents/Signup/Signup'
+import MyPage from './components/UserComponents/MyPage/MyPage'
 import PostList from './components/PostComponents/PostList/PostList'
 import PostDetail from './components/PostComponents/PostDetail/PostDetail'
 import PostCreate from './components/PostComponents/PostCreate/PostCreate'
 import PostEdit from './components/PostComponents/PostEdit/PostEdit'
 import PostApply from './components/PostComponents/PostApply/PostApply'
 import MyPost from './components/PostComponents/MyPost/MyPost'
+import MyApplyPost from './components/PostComponents/MyApplyPost/MyApplyPost'
 import ReviewList from './components/ReviewComponents/ReviewList/ReviewList'
 import ReviewCreate from './components/ReviewComponents/ReviewCreate/ReviewCreate'
 import QnaList from './components/QnaComponents/QnaList/QnaList'
 import QnaDetail from './components/QnaComponents/QnaDetail/QnaDetail'
 import QnaCreate from './components/QnaComponents/QnaCreate/QnaCreate'
+// import Chatting from './components/ChattingComponets/Chatting/Chatting'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 
 function App() {
@@ -21,6 +25,8 @@ function App() {
 				<Routes>
 					<Route path='/' element={<PostList />} />
 					<Route path='/login' element={<Login />} />
+					<Route path='/signup' element={<Signup />} />
+					<Route path='/myinfo' element={<MyPage />} />
 					<Route
 						path='/post/:id'
 						element={<PostDetail is_author={false} />}
@@ -29,10 +35,7 @@ function App() {
 					<Route path='/post/:id/submit' element={<PostApply />} />
 					<Route path='/post/create' element={<PostCreate />} />
 					<Route path='/mypost' element={<MyPost />} />
-					<Route
-						path='/mypost/:id'
-						element={<PostDetail is_author={true} />}
-					/>
+					<Route path='/myapply/:id' element={<MyApplyPost />} />
 					<Route path='/review' element={<ReviewList />} />
 					{/* <Route
 						path="/review/:id"
@@ -42,6 +45,7 @@ function App() {
 					<Route path='/qna' element={<QnaList />} />
 					<Route path='/qna/create' element={<QnaCreate />} />
 					<Route path='/qna/:id' element={<QnaDetail />} />
+					{/* <Route path='/chat' element={<Chatting />} /> */}
 					<Route path='*' element={<h1>Not Found</h1>} />
 				</Routes>
 			</BrowserRouter>

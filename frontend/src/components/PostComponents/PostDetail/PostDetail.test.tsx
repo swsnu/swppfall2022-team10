@@ -6,13 +6,31 @@ import { getMockStore } from '../../../test-utils/mock'
 import * as postSlice from '../../../store/slices/post'
 import PostDetail from './PostDetail'
 
+const testPost = {
+	id: 1,
+	author_id: 1,
+	author_name: 'POST_TEST_AUTHOR',
+	name: 'POST_TEST_NAME',
+	title: 'POST_TEST_TITLE',
+	animal_type: 'POST_TEST_ANIMAL_TYPE',
+	photo_path: [],
+	species: 'POST_TEST_SPECIES',
+	age: 0,
+	content: 'POST_TEST_CONTENT',
+	created_at: 'POST_TEST_CREATED_AT',
+	gender: true,
+	vaccination: true,
+	neutering: true,
+	is_active: true,
+	form: ''
+}
+
 const mockState = {
-	post: { posts: [], selectedPost: null, selectedAnimal: '' },
-	user: { users: [], currentUser: null, logged_in: true },
+	post: { posts: [], selectedPost: testPost, selectedAnimal: '' },
 	review: { reviews: [], selectedReview: null, selectedAnimal: '' },
 	application: { applications: [], selectedApplication: null },
 	qna: { qnas: [], selectedQna: null },
-	mypost: { posts: [], likes: [], applys: [] }
+	mypost: { posts: [], likes: [], applys: [], reviews: [], qnas: [] }
 }
 
 const mockNavigate = jest.fn()
@@ -25,6 +43,8 @@ jest.mock('../../Header/Dropdown/Dropdown', () => () => 'Dropdown')
 jest.mock('../../Header/Header', () => () => 'Header')
 jest.mock('../../Footer/Footer', () => () => 'Footer')
 jest.mock('../../Layout/ScrollToTop', () => () => '')
+jest.mock('../ApplicationList/ApplicationList', () => () => '')
+jest.mock('../PostHeader/PostHeader', () => () => '')
 
 const testPostFormat = {
 	id: 1,
@@ -64,36 +84,40 @@ describe('<PostDetail />', () => {
 	it('should render without errors', async () => {
 		jest.spyOn(axios, 'get').mockResolvedValue({
 			data: {
-				...testPostFormat,
-				gender: true,
-				vaccination: true,
-				neutering: true,
-				is_active: true,
-				editable: true
+				post: {
+					...testPostFormat,
+					gender: true,
+					vaccination: true,
+					neutering: true,
+					is_active: true,
+					editable: true
+				},
+				editable: true,
+				bookmark: true
 			}
 		})
 		await act(() => {
 			render(postDetail)
 		})
-		// render(postDetail);
-		await screen.findByText('POST_TEST_TITLE')
-		await screen.findByText('POST_TEST_CONTENT')
+		await screen.findByText(/POST_TEST_SPECIES/)
 	})
 	it('should render edit/delete button when user is the author', async () => {
 		jest.spyOn(axios, 'get').mockResolvedValue({
 			data: {
-				...testPostFormat,
-				gender: true,
-				vaccination: true,
-				neutering: true,
-				is_active: true,
-				editable: true
+				post: {
+					...testPostFormat,
+					gender: true,
+					vaccination: true,
+					neutering: true,
+					is_active: true
+				},
+				editable: true,
+				bookmark: true
 			}
 		})
 		await act(() => {
 			render(postDetail)
 		})
-		// render(postDetail);
 		const editButton = await screen.findByText('수정')
 		await waitFor(() => {
 			expect(editButton).toBeInTheDocument()
@@ -117,7 +141,6 @@ describe('<PostDetail />', () => {
 		await act(() => {
 			render(postDetail)
 		})
-		// render(postDetail);
 		const editButton = await screen.findByText('수정')
 		fireEvent.click(editButton)
 		await waitFor(() =>
@@ -140,7 +163,6 @@ describe('<PostDetail />', () => {
 		await act(() => {
 			render(postDetail)
 		})
-		// render(postDetail);
 		const deleteButton = await screen.findByText('삭제')
 		fireEvent.click(deleteButton)
 		await waitFor(() => expect(mockDeleteArticle).toHaveBeenCalled())
@@ -150,10 +172,11 @@ describe('<PostDetail />', () => {
 		await act(() => {
 			render(postDetail)
 		})
-		// render(postDetail);
 		jest.spyOn(axios, 'get').mockRejectedValue({})
 		await waitFor(() => {
-			expect(screen.queryAllByText('POST_TEST_TITLE')).toHaveLength(0)
+			expect(
+				screen.queryAllByText('백신 접종 완료한 동물입니다.')
+			).toHaveLength(0)
 		})
 	})
 })

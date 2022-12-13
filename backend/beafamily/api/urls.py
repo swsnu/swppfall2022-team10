@@ -16,9 +16,21 @@ urlpatterns = [
     # TODO:
     # path("users/", views),
     path("users/info/", views.user_info),
-    path("users/post/", views.user_post)
+    path("users/post/", views.user_post),
     # path("posts/<int:pid>/comments/"), GET / POST / PUT / DELETE comments
-    # path("questions/<int:qid>/comments/"), GET / POST / PUT / DELETE comments
-    # path("apply/") GET / POST application
-    # path("apply/<int:aid>/) GET / PUT / DELETE application
+    path("questions/<int:qid>/comments/", views.questions_comment),
+    path("questions/<int:qid>/comments/<int:cid>/", views.question_comment_id),
+    path(
+        "posts/<int:pid>/applications/", views.post_id_application
+    ),  # POST: add new application
+    path(
+        "posts/<int:pid>/applications/<int:aid>/", views.post_id_application_id
+    ),  # GET, PUT: Update application, DELETE: Delete application
+    path("posts/<int:pid>/applications/<int:aid>/accept/", views.accept),
+    path("signup/", views.signup),
+    path("username/", views.check_username),
+    path("posts/<int:pid>/bookmark/", views.post_bookmark),
+    path("users/", views.delete_user),
+    path("posts/<int:pid>/photos/<int:iid>/", views.delete_post_photo),
+    path("reviews/check/", views.review_check),
 ]

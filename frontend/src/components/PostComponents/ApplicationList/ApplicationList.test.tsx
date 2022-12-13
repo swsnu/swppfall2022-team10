@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
@@ -17,7 +18,7 @@ const stubInitialState: applicationState = {
 			id: 1,
 			author_id: 1,
 			author_name: 'Application_Author',
-			files: [],
+			file: '',
 			created_at: 'Application_Date',
 			post_id: 1
 		}
@@ -25,12 +26,12 @@ const stubInitialState: applicationState = {
 	selectedApplication: null
 }
 const mockStore = getMockStore({
-	user: { users: [], currentUser: null, logged_in: false },
+	// user: { users: [], currentUser: null, logged_in: false },
 	post: { posts: [], selectedPost: null, selectedAnimal: '' },
 	review: { reviews: [], selectedReview: null, selectedAnimal: '' },
 	application: stubInitialState,
 	qna: { qnas: [], selectedQna: null },
-	mypost: { posts: [], likes: [], applys: [] }
+	mypost: { posts: [], likes: [], applys: [], reviews: [], qnas: [] }
 })
 
 describe('<ApplicationList />', () => {
@@ -66,6 +67,16 @@ describe('<ApplicationList />', () => {
 			name: /Close/i
 		})
 		fireEvent.click(closeButton!)
+		!document.querySelector('.Modal')
+	})
+	it('should handle accept button', async () => {
+		await act(() => {
+			render(applicationList)
+		})
+		const button = document.querySelector('#apply-button')
+		fireEvent.click(button!)
+		const accept_button = document.querySelector('#accept-button')
+		fireEvent.click(accept_button!)
 		!document.querySelector('.Modal')
 	})
 })

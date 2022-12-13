@@ -12,7 +12,9 @@ import { useNavigate } from 'react-router-dom'
 import Review from '../Review/Review'
 import {
 	getReviews,
+	getReview,
 	reviewType,
+	reviewListType,
 	selectReview
 } from '../../../store/slices/review'
 import { AppDispatch } from '../../../store'
@@ -62,13 +64,13 @@ export default function ReviewList() {
 	const onClickToggleModal = useCallback(() => {
 		setModalOpen(!modalOpen)
 	}, [modalOpen])
-	const [clickedReview, setClickedReview] = useState<reviewType>(
-		reviewState.reviews[0]
-	)
+	const [clickedReview, setClickedReview] = useState<reviewType | null>(null)
 	const onClickReview = useCallback(
-		(review: reviewType) => {
+		(id: number) => {
 			setModalOpen(!modalOpen)
-			setClickedReview(review)
+			dispatch(getReview(id)).then((result) => {
+				setClickedReview(result.payload)
+			})
 		},
 		[modalOpen, clickedReview]
 	)
@@ -77,37 +79,6 @@ export default function ReviewList() {
 		<Layout>
 			<div className='ReviewListContainer'>
 				<div className='ReviewList'>
-					<div className='reviews'>
-						{reviewState.reviews.map((review: reviewType) => {
-							return (
-								<button
-									className='review-container'
-									onClick={() => onClickReview(review)}
-									key={`${review.id}`}
-								>
-									<Review
-										key={`${review.id}_review`}
-										title={review.title}
-										photo_path={review.photo_path}
-										author={review.author_name}
-									/>
-								</button>
-							)
-						})}
-						{modalOpen && (
-							<ReviewModal
-								onClickToggleModal={onClickToggleModal}
-							>
-								<ReviewDetail
-									key={`${clickedReview.id}_review`}
-									title={clickedReview.title}
-									photo_path={clickedReview.photo_path}
-									author={clickedReview.author_name}
-									content={clickedReview.content}
-								/>
-							</ReviewModal>
-						)}
-					</div>
 					<div className='create-review'>
 						<button
 							id='create-review-button'
@@ -115,6 +86,34 @@ export default function ReviewList() {
 						>
 							<MdOutlineAddBox size='50' />
 						</button>
+					</div>
+					<div className='reviews'>
+						{reviewState.reviews.map((review: reviewListType) => {
+							return (
+								<button
+									className='review-container'
+									onClick={() => onClickReview(review.id)}
+									key={`${review.id}`}
+								>
+									<Review
+										key={`${review.id}_review`}
+										title={review.title}
+										thumbnail={review.thumbnail}
+										author={review.author_name}
+									/>
+								</button>
+							)
+						})}
+						{modalOpen && clickedReview !== null && (
+							<ReviewModal
+								onClickToggleModal={onClickToggleModal}
+							>
+								<ReviewDetail
+									key={`${clickedReview.id}_review`}
+									id={clickedReview.id}
+								/>
+							</ReviewModal>
+						)}
 					</div>
 				</div>
 				<Pagination

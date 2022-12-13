@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from PIL import Image
+from ..models import Application, PostImage
 
 
 def validate_image(f):
@@ -20,3 +21,11 @@ class ImageURLField(serializers.RelatedField):
 
     def to_internal_value(self, data):
         pass
+
+
+class PostImageSerializer(serializers.ModelSerializer):
+    photo_path = serializers.ImageField(use_url=True, source="image")
+
+    class Meta:
+        model = PostImage
+        fields = ["id", "photo_path"]
