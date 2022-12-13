@@ -119,8 +119,8 @@ export const deletePost = createAsyncThunk(
 
 export const editPost = createAsyncThunk(
 	'post/editPost',
-	async (post: postType, { dispatch }) => {
-		const response = await axios.put(`/api/posts/${post.id}/`, post)
+	async (data: { id: string; post: FormData }, { dispatch }) => {
+		const response = await axios.put(`/api/posts/${data.id}/`, data.post)
 		return response.data
 	}
 )

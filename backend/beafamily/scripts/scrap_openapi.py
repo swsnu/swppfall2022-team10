@@ -2,32 +2,30 @@
 import requests
 import os
 import json
-from sqlalchemy import create_engine
 from django.utils import timezone
-from django.db.models import ImageField
 from hashlib import sha1
-import datetime
 from tqdm import tqdm
 from django.contrib.auth.hashers import make_password
-import sys
+from django.conf import settings
+from django.contrib.auth import get_user_model
+from api.models import Post
+
+User = get_user_model()
+local = False
 
 import re
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.dev_settings")
-import django
-
-django.setup()
-from api.models import User, Post
-
-GET_ALL = False
+try:
+    key = settings.API_KEY
+except:
+    with open(settings.BASE_DIR / "scrapping_data" / "key", "r") as f:
+        key = f.read().strip()
+    local = True
 
 baseurl = "http://apis.data.go.kr/1543061/abandonmentPublicSrvc"
-# key = os.environ.get("API_KEY")
-with open("scrapping_data/key", "r") as f:
-    key = f.read().strip()
 
 
-def get_info(GET_ALL=False):
+def get_info():
     total = list()
     url = f"{baseurl}/abandonmentPublic"
     params = {"serviceKey": key, "numOfRows": 1000, "_type": "json"}
@@ -40,9 +38,6 @@ def get_info(GET_ALL=False):
 
     num_pages = n // 1000 + 1
     total += data["response"]["body"]["items"]["item"]
-
-    if not GET_ALL:
-        return total
 
     for i in range(2, num_pages + 1):
         params = {"serviceKey": key, "numOfRows": 1000, "_type": "json", "pageNo": i}
@@ -59,7 +54,10 @@ def get_shelter(upr_cd, org_cd):
     url = f"{baseurl}/shelter"
     params = {"serviceKey": key, "upr_cd": upr_cd, "org_cd": org_cd, "_type": "json"}
     response = requests.get(url, params=params)
-    data = json.loads(response.content)
+    try:
+        data = json.loads(response.content)
+    except:
+        return []
     if data["response"]["header"]["resultCode"] != "00":
         return None
 
@@ -75,7 +73,10 @@ def get_sigungu(upr_cd):
     params = {"serviceKey": key, "upr_cd": upr_cd, "_type": "json"}
 
     response = requests.get(url, params=params)
-    data = json.loads(response.content)
+    try:
+        data = json.loads(response.content)
+    except:
+        return []
     if data["response"]["header"]["resultCode"] != "00":
         return None
 
@@ -89,7 +90,10 @@ def get_sido():
     url = f"{baseurl}/sido"
     params = {"serviceKey": key, "numOfRows": 30, "_type": "json"}
     response = requests.get(url, params=params)
-    data = json.loads(response.content)
+    try:
+        data = json.loads(response.content)
+    except:
+        return []
     if data["response"]["header"]["resultCode"] != "00":
         return None
 
@@ -103,7 +107,7 @@ def get_datetime(s):
     return timezone.datetime(year, month, day)
 
 
-def create_shelter_user(GET_ALL=False):
+def create_shelter_user():
     shelter_list = User.objects.filter(shelter=True)
 
     if not shelter_list.filter(username="default_shelter").exists():
@@ -115,88 +119,73 @@ def create_shelter_user(GET_ALL=False):
             address="Unknown",
         )
 
-    count = 0
-    count2 = 0
     users = []
-    if not shelter_list.exclude(
-        username="default_shelter"
-    ).exists() and not os.path.exists("scrapping_data/users_hashed.json"):
-        region_info = get_sido()
-        if not region_info:
+    # with open(settings.BASE_DIR / "scrapping_data" / "users_hashed.json", "r") as f:
+    #     users = json.loads(f.read())
+
+    # users = [
+    #     User(
+    #         username=u["username"],
+    #         password=u["hashed"],
+    #         nickname=u["nickname"],
+    #         address=u["address"],
+    #         shelter=True
+    #     )
+    #     for u in users
+    # ]
+    region_info = get_sido()
+    if not region_info:
+        raise Exception()
+    for region in region_info:
+        city_info = get_sigungu(region["orgCd"])
+        if city_info is None:
             raise Exception()
-        for region in region_info:
-            city_info = get_sigungu(region["orgCd"])
-            if city_info is None:
+
+        for city in city_info:
+            shelter_info = get_shelter(city["uprCd"], city["orgCd"])
+
+            if shelter_info is None:
                 raise Exception()
 
-            if not GET_ALL and count > 1:
-                break
-
-            for city in city_info:
-                shelter_info = get_shelter(city["uprCd"], city["orgCd"])
-
-                if shelter_info is None:
-                    raise Exception()
-
-                for shelter in shelter_info:
-                    if not shelter_list.filter(username=shelter["careRegNo"]).exists():
-                        password = sha1(shelter["careRegNo"].encode()).hexdigest()
-                        username = shelter["careRegNo"]
-                        nickname = shelter["careNm"]
-                        address = f"{region['orgdownNm']} {city['orgdownNm']} {shelter['careNm']}"
-                        users.append(
-                            {
-                                "username": username,
-                                "nickname": nickname,
-                                "address": address,
-                                "hashed": make_password(password),
-                            }
-                        )
-
-                        User.objects.create_user(
+            for shelter in shelter_info:
+                if not shelter_list.filter(username=shelter["careRegNo"]).exists():
+                    password = sha1(shelter["careRegNo"].encode()).hexdigest()
+                    username = shelter["careRegNo"]
+                    nickname = shelter["careNm"]
+                    address = (
+                        f"{region['orgdownNm']} {city['orgdownNm']} {shelter['careNm']}"
+                    )
+                    # users.append(
+                    #     {
+                    #         "username": username,
+                    #         "nickname": nickname,
+                    #         "address": address,
+                    #         "password": make_password(password),
+                    #         "shelter": True
+                    #     }
+                    # )
+                    users.append(
+                        User(
                             username=username,
-                            password=password,
                             nickname=nickname,
                             address=address,
+                            password=make_password(password),
                             shelter=True,
                         )
-                    count2 += 1
-            count += 1
-        with open("scrapping_data/users_hashed.json", "w") as j:
-            j.write(json.dumps(users))
-    elif not shelter_list.exclude(username="default_shelter").exists():
-        with open("scrapping_data/users_hashed.json", "r") as j:
-            users_data = json.loads(j.read())
-        users = [
-            User(
-                username=user["username"],
-                password=user["hashed"],
-                nickname=user["nickname"],
-                address=user["address"],
-                shelter=True,
-            )
-            for user in tqdm(users_data)
-        ]
-        User.objects.bulk_create(users)
-        # [User.objects.create_user(**user) for user in users]
-    print(f"API CALL: {count2}")
+                    )
+
+    User.objects.bulk_create(users)
 
 
-def fetch_posts(GET_ALL=False):
-    if not os.path.exists("scrapping_data/total.json"):
-        info = get_info(GET_ALL)
-        with open("scrapping_data/total.json", "w") as j:
-            j.write(json.dumps(info))
+def fetch_posts():
+    info = get_info()
 
-    with open("scrapping_data/total.json", "r") as j:
-        data = json.loads(j.read())
-    return data
+    return info
 
 
 def main():
-    GET_ALL = len(sys.argv) > 1 and sys.argv[1] == "--all"
-    create_shelter_user(GET_ALL)
-    data = fetch_posts(GET_ALL)
+    create_shelter_user()
+    data = fetch_posts()
 
     shelter_posts = Post.objects.filter(shelter=True)
 
@@ -216,6 +205,7 @@ def main():
     for i, v in enumerate(valid):
         valid_key_map[int(v["desertionNo"])] = v
 
+    print(shelter_posts.values("desertionNo"))
     valid_ids_in_db = set(shelter_posts.values("desertionNo"))
 
     notin_ids = list(set(valid_ids) - valid_ids_in_db)
@@ -237,14 +227,23 @@ def main():
         gender = post_info["sexCd"] == "M"
         vaccination = False
 
-        try:
-            author: User = u.get(nickname=post_info["careNm"])
-        except:
-            author: User = u.get(username="default_shelter")
+        if animal_type == "개":
+            form = "dog_form.docx"
+        elif animal_type == "고양이":
+            form = "cat_form.docx"
+        else:
+            form = "etc_form.docx"
 
-        if not GET_ALL:
-            if author.username == "default_shelter":
-                continue
+        try:
+            author: User = u.filter(nickname=post_info["careNm"])[0]
+        except:
+            author: User = User.objects.create_user(
+                username=post_info["careNm"],
+                nickname=post_info["careNm"],
+                password=sha1(post_info["careNm"].encode()).hexdigest(),
+                shelter=True,
+                address=f"{post_info['careAddr']}{post_info['careNm']}",
+            )
 
         noticeSdt = get_datetime(post_info["noticeSdt"])
         noticeEdt = get_datetime(post_info["noticeEdt"])
@@ -257,6 +256,7 @@ def main():
             f"주소: {author.address}\n"
             f"나이: {post_info['age']}\n"
             f"무게: {post_info['weight']}\n"
+            f"연락처: {post_info['careTel']}\n"
             f"공고일시: {noticeSdt}\n"
             f"공고마감일시: {noticeEdt}\n"
             f"발견장소: {post_info['happenPlace']}\n"
@@ -282,7 +282,7 @@ def main():
             created_at=noticeSdt,
             end_date=noticeEdt,
             is_active=True,
-            form="dummy/post/dog_dummy/dog_form.docx",
+            form=form,
             name="보호소 동물",
             title="보호소 동물",
             shelter=True,
@@ -292,10 +292,7 @@ def main():
 
     Post.objects.bulk_create(new_posts)
 
-    # ids = [i['desertionNo'] for i in data]
 
-    # today = timezone.localdate()
-
-
-if __name__ == "__main__":
+# if __name__ == "__main__": main()
+def run():
     main()

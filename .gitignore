@@ -54,3 +54,9 @@ key
 *.code-workspace
 .idea/
 .vscode/
+
+
+key.json
+.env
+.env.debug
+cloud_sql_proxy

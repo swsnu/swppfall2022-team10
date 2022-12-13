@@ -8,8 +8,6 @@ COPY beafamily /backend/beafamily
 COPY manage.py /backend/manage.py
 COPY create_dummy.py /backend/create_dummy.py
 COPY dummy /backend/dummy
-COPY scrap_openapi.py /backend/scrap_openapi.py
-COPY scrapping_data /backend/scrapping_data
 
 ENV DJANGO_SETTINGS_MODULE="config.dev_settings"
 
@@ -19,4 +17,3 @@ RUN mv dummy data
 RUN python manage.py makemigrations 
 RUN python manage.py migrate
 RUN python create_dummy.py
-RUN python scrap_openapi.py

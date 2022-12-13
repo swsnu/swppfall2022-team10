@@ -110,7 +110,7 @@ export default function ApplicationList(props: IProps) {
 					<div>신청일시: {clickedApplication.created_at}</div>
 					<div>신청서:</div>
 					<a
-						href={`http://localhost:8000/api/posts/${clickedApplication?.post_id}/applications/${clickedApplication?.id}`}
+						href={`/api/posts/${clickedApplication?.post_id}/applications/${clickedApplication?.id}`}
 					>
 						{clickedApplication?.file}
 					</a>

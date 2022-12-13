@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable no-unneeded-ternary */
 /* eslint-disable object-shorthand */
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -29,7 +30,6 @@ import { List } from 'reselect/es/types'
 
 export default function PostEdit() {
 	const { id } = useParams()
-	// console.log(id)
 
 	const [title, setTitle] = useState<string>('')
 	const [name, setName] = useState<string>('')
@@ -47,6 +47,7 @@ export default function PostEdit() {
 	const [editable, setEditable] = useState<boolean>(true)
 	const [modalOpen, setModalOpen] = useState<boolean>(false)
 	const [clickedImage, setClickedImage] = useState<string>('')
+	const [applyForm, setApplyForm] = useState<File[]>([])
 
 	const navigate = useNavigate()
 	const dispatch = useDispatch<AppDispatch>()
@@ -84,34 +85,61 @@ export default function PostEdit() {
 		}
 	}, [editable])
 
+	const fields = [
+		title,
+		name,
+		animalType,
+		species,
+		age,
+		gender,
+		vaccination,
+		neutering,
+		content
+	]
+
 	const fileChangedHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const files = event.target.files
 		// console.log(files)
 		if (files !== null) setFile(file.concat(Array.from(files)))
 	}
 
+	const applyFormChangedHandler = (
+		event: React.ChangeEvent<HTMLInputElement>
+	) => {
+		const applyForms = event.target.files
+		if (applyForms !== null) setApplyForm([applyForms[0]])
+	}
+
 	const editPostHandler = async (event: React.FormEvent<HTMLFormElement>) => {
 		// console.log('editPost')
+		if (postState.selectedPost === null || id === undefined) return
 		event.preventDefault()
 		const data = {
 			title: title,
 			name: name,
 			animal_type: animalType,
 			species: species,
-			age: age,
-			gender: gender === '수컷' ? true : false,
-			neutering: neutering === 'O' ? true : false,
-			vaccination: vaccination === 'O' ? true : false,
-			content: content,
-			author_id: 0
+			age: parseInt(age),
+			gender: gender === '수컷',
+			neutering: neutering === 'O',
+			vaccination: vaccination === 'O',
+			content: content
 		}
-		// console.log(data)
-		navigate(`/post/1`) // for test
-		// const result = await dispatch(editPost(data));
-		// if (result.type === `${editPost.typePrefix}/fulfilled`) {
-		// 	navigate(`/post/${result.payload.id}`);
-		// } else {
-		// 	alert("Error on edit Post");
+		const formData = new FormData()
+		formData.append('content', JSON.stringify(data))
+		file.forEach((f, i) => formData.append('photos', f))
+		if (applyForm[0] !== null && applyForm[0] !== undefined)
+			formData.append('application', applyForm[0])
+
+		dispatch(editPost({ id: id, post: formData }))
+			.then((result) => {
+				// const id: number = result.payload.id
+				navigate(`/post/${id}`)
+			})
+			.catch((err) => {
+				console.log(err)
+				alert('ERROR')
+			})
 	}
 
 	const onClickToggleModal = useCallback(() => {
@@ -314,7 +342,7 @@ export default function PostEdit() {
 									value={content}
 								/>
 							</div>
-							<div className='photo-input-container'>
+							<div className='file-input-container'>
 								<div id='photo-title'>사진:</div>
 								<div className='photo-input'>
 									<div className='current-list'>
@@ -367,7 +395,7 @@ export default function PostEdit() {
 										)}
 									</div>
 									<div className='new-input'>
-										<label htmlFor='post-age-input'>
+										<label htmlFor='post-photo-input'>
 											추가로 등록할 사진
 										</label>
 										<input
@@ -381,11 +409,37 @@ export default function PostEdit() {
 									</div>
 								</div>
 							</div>
+							<div className='file-input-container'>
+								<div id='apply-form-title'>입양신청서:</div>
+								<div className='apply-form-input'>
+									<div className='current-apply-form'>
+										현재 등록된 파일 {''}
+										<a
+											href={`${postState.selectedPost?.form}`}
+										>
+											입양신청서 서식
+										</a>
+									</div>
+									<div className='new-input'>
+										<label htmlFor='post-application-input'>
+											재업로드하기
+										</label>
+										<input
+											id='post-application-input'
+											type='file'
+											name='application'
+											accept='.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+											onChange={applyFormChangedHandler}
+										/>
+									</div>
+								</div>
+							</div>
 							<button
 								id='confirm-edit-post-button'
 								type='submit'
-								// disabled={!(title && name && animalType && species && age
-								//     && gender && vaccination && neutering && character)}
+								disabled={
+									!!fields.filter((x) => x === '').length
+								}
 							>
 								수정하기
 							</button>

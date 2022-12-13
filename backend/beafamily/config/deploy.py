@@ -16,6 +16,7 @@ import io
 import environ
 import google.auth
 from google.cloud import secretmanager
+from google.oauth2 import service_account
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -54,17 +55,16 @@ else:
 SECRET_KEY = env("SECRET_KEY")
 API_KEY = env("API_KEY")
 DEBUG = env("DEBUG")
-IP_ADDRESS = env("IP_ADDRESS")
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "beafamily.site", IP_ADDRESS]
-CSRF_TRUSTED_ORIGINS = ["https://beafamily.site"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "api.beafamily.site", "beafamily.site", "*"]
+# CSRF_TRUSTED_ORIGINS = ["https://beafamily.site"]
 
-SECURE_HSTS_SECONDS = env("SECURES_HSTS_SECONDS", int)
+SECURE_HSTS_SECONDS = env("SECURE_HSTS_SECONDS", int)
 SESSION_COOKIE_SECURE = env("SESSION_COOKIE_SECURE", bool)
 CSRF_COOKIE_SECURE = env("CSRF_COOKIE_SECURE", bool)
 SECURE_HSTS_INCLUDE_SUBDOMAINS = env("SECURE_HSTS_INCLUDE_SUBDOMAINS", bool)
 SECURE_HSTS_PRELOAD = env("SECURE_HSTS_PRELOAD", bool)
-SECURE_SSL_REDIRECT = env("SECURE_SSL_REDIRECT", bool)
+# SECURE_SSL_REDIRECT = env("SECURE_SSL_REDIRECT", bool)
 
 # Application definition
 
@@ -79,6 +79,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "django_extensions",
     "storages",
+    "corsheaders",
 ]
 DEFAULT_FILE_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"
 STATICFILES_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"
@@ -86,6 +87,7 @@ GS_DEFAULT_ACL = "publicRead"
 GS_BUCKET_NAME = env("GS_BUCKET_NAME")
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -94,6 +96,45 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+CORS_ALLOWED_ORIGINS = [
+    "https://beafamily.site",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "https://localhost:3000",
+    "https://127.0.0.1:3000",
+    "https://beafamily-backend-rii2tck3sq-an.a.run.app",
+]
+CSRF_TRUSTED_ORIGINS = [
+    "https://beafamily.site",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "https://localhost:3000",
+    "https://127.0.0.1:3000",
+    "https://beafamily-backend-rii2tck3sq-an.a.run.app",
+]
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOW_HEADERS = (
+    "access-control-allow-credentials",
+    "access-control-allow-origin",
+    "access-control-request-method",
+    "access-control-request-headers",
+    "accept",
+    "accept-encoding",
+    "accept-language",
+    "authorization",
+    "connection",
+    "content-type",
+    "dnt",
+    "credentials",
+    "host",
+    "origin",
+    "user-agent",
+    "X-CSRFToken",
+    "csrftoken",
+    "x-requested-with",
+)
 
 ROOT_URLCONF = "beafamily.urls"
 

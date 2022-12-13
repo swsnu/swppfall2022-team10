@@ -13,3 +13,5 @@ requests
 django-storages[google]
 django-environ
 google-cloud-secret-manager
+psycopg2
+django-cors-headers

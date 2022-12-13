@@ -33,7 +33,7 @@ logger = logging.getLogger("view_logger")
 @authentication_classes([SessionAuthentication])
 @permission_classes([IsAuthenticatedOrReadOnly])
 @parser_classes([MultiPartParser])
-# @verify(PostValidator, PostQueryValidator)
+@verify(PostValidator, None, has_image=False)
 @log_error(logger)
 def post_id(request, pid=0):
     try:
@@ -52,7 +52,51 @@ def post_id(request, pid=0):
         if post.author != request.user:
             return Response(status=status.HTTP_403_FORBIDDEN)
 
-        return Response(status=status.HTTP_200_OK)
+        query = request.parsed
+        if "photos" in request.data:
+            photos = request.data.pop("photos")
+        else:
+            photos = []
+
+        with transaction.atomic():
+
+            is_active = post.is_active
+            post.title = query["title"]
+            post.content = query["content"]
+            post.animal_type = query["animal_type"]
+            post.species = query["species"]
+            post.neutering = query["neutering"]
+            post.vaccination = query["vaccination"]
+            post.age = query["age"]
+            post.gender = query["gender"]
+            post.name = query["name"]
+
+            thumbnail = post.thumbnail
+            storage = thumbnail.storage
+            deleted = False
+            post.save()
+
+            if not storage.exists(thumbnail.name):
+                thumbnail = None
+                deleted = True
+
+            for photo in photos:
+                image = PostImage.objects.create(
+                    author=request.user, post=post, image=photo
+                )
+                if thumbnail is None:
+                    thumbnail = image
+
+            if deleted:
+                post.thumbnail = thumbnail.image
+            if "application" in request.data:
+                post.form = request.data.pop("application")[0]
+            post.save()
+
+        data = PostDetailSerializer(post, context={"user": request.user}).data
+        print(data)
+
+        return Response(status=status.HTTP_200_OK, data=data)
 
     else:
 
@@ -97,9 +141,7 @@ def posts(request):
             post_list = post_list.filter(gender=gender)
 
         shelter = query.get("shelter")
-        print(query)
         if shelter is not None:
-            print(shelter)
             post_list = post_list.filter(shelter=shelter)
 
         animal_type = query.get("animal_type")
@@ -135,6 +177,7 @@ def posts(request):
                     thumbnail = image
 
             post.thumbnail = thumbnail.image
+            post.form = request.data.pop("application")[0]
             post.save()
 
         return Response(status=status.HTTP_201_CREATED, data=PostSerializer(post).data)
@@ -194,7 +237,7 @@ def post_id_application_id(request, pid, aid):
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
     if request.method == "GET":
-        if post.author != request.user or app.author != request.user:
+        if post.author != request.user and app.author != request.user:
             return Response(status=status.HTTP_403_FORBIDDEN)
 
         return FileResponse(app.file.file, as_attachment=True)
