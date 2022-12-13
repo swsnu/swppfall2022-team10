@@ -10,20 +10,21 @@ import { useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, Navigate } from 'react-router-dom'
 import { AppDispatch } from '../../../store'
-import { checkPost, postType, selectPost } from '../../../store/slices/post'
-import { createReview } from '../../../store/slices/review'
+import { checkPost, postListType, selectPost } from '../../../store/slices/post'
+import { createReview, reviewListType } from '../../../store/slices/review'
 import { checkLogin } from '../../../store/slices/user'
 import { MdArrowBack } from 'react-icons/md'
 
 import './ReviewCreate.scss'
-import Combobox from "react-widgets/Combobox";
-import {selectApplication} from "../../../store/slices/application";
+import Combobox from 'react-widgets/Combobox'
+import { selectApplication } from '../../../store/slices/application'
+import Review from '../Review/Review'
 
 export default function ReviewCreate() {
 	const postState = useSelector(selectPost)
 	const [title, setTitle] = useState<string>('')
 	const [animalType, setAnimalType] = useState<string>('')
-	const [postId, setPostId] = useState<string>("")
+	const [postId, setPostId] = useState<string>('')
 	const [content, setContent] = useState<string>('')
 	const [file, setFile] = useState<File[]>([])
 
@@ -60,11 +61,15 @@ export default function ReviewCreate() {
 		if (title.length === 0) return
 		if (animalType.length === 0) return
 		if (file.length === 0) return
+		if (postId.length === 0) return
+
+		const words = postId.split(' ')
 
 		const data = { title: title, animal_type: animalType, content: content }
 		const formData = new FormData()
 		formData.append('content', JSON.stringify(data))
 		file.forEach((f, i) => formData.append('photos', f))
+		formData.append('post_id', words[0])
 		dispatch(createReview(formData))
 			.then((result) => {
 				navigate(`/review`)
@@ -106,7 +111,7 @@ export default function ReviewCreate() {
 									제목:
 								</label>
 								<input
-									className="review-input"
+									className='review-input'
 									id='review-title-input'
 									type='text'
 									name='title'
@@ -121,7 +126,7 @@ export default function ReviewCreate() {
 									동물:
 								</label>
 								<input
-									className="review-input"
+									className='review-input'
 									id='review-animal-type-input'
 									type='text'
 									name='animalType'
@@ -132,21 +137,23 @@ export default function ReviewCreate() {
 								/>
 							</div>
 							<div className='input-container'>
-								<label htmlFor='review-post-input'>
+								<label htmlFor='review-post-input_input'>
 									입양공고 정보:
 								</label>
 								<Combobox
 									id='review-post-input'
 									className='review-combobox'
 									name='type'
-									data={[
-										'post 1',
-										'post 2',
-										'post 3'
-									]}
-									onChange={(event) =>
-										setPostId(event)
-									}
+									data={postState.posts.map(
+										(post: postListType) => {
+											return (
+												post.id.toString() +
+												' ' +
+												post.title
+											)
+										}
+									)}
+									onChange={(event) => setPostId(event)}
 									value={postId}
 								/>
 							</div>
@@ -201,7 +208,7 @@ export default function ReviewCreate() {
 							<button
 								id='confirm-create-review-button'
 								type='submit'
-								disabled={!(title && content)}
+								disabled={!(title && content && postId)}
 								// onClick={createReviewHandler}
 							>
 								게시하기

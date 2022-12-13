@@ -15,3 +15,24 @@ img {
 	overflow-y: auto;
 	max-height: 100%;
 }
+.post-info {
+	width: 423px;
+	border: 2.5px solid;
+	border-radius: 10px;
+	border-color: #bbbbbb;
+	display: flex;
+	vertical-align: middle;
+
+	#post-image {
+		vertical-align: middle;
+		margin: auto;
+		img {
+			width: 100px;
+			padding: 5px;
+		}
+	}
+	#post-content {
+		width: 300px;
+		padding: 10px;
+	}
+}

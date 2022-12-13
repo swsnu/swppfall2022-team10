@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable @typescript-eslint/naming-convention */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import axios from 'axios'
 import { Provider } from 'react-redux'
@@ -137,5 +140,30 @@ describe('<MyApplyPost />', () => {
 				screen.queryAllByText('백신 접종 완료한 동물입니다.')
 			).toHaveLength(0)
 		})
+	})
+	it('should handle edit and delete button', async () => {
+		jest.spyOn(axios, 'get').mockResolvedValue({
+			data: {
+				post: {
+					...testPostFormat,
+					gender: true,
+					vaccination: true,
+					neutering: true,
+					is_active: true
+				},
+				editable: true,
+				bookmark: true
+			}
+		})
+		await act(() => {
+			render(myApplyPost)
+		})
+		const edit_button = document.querySelector('#edit-post-button')
+		fireEvent.click(edit_button!)
+		expect(mockNavigate).toHaveBeenCalledTimes(1)
+
+		const delete_button = document.querySelector('#delete-post-button')
+		fireEvent.click(delete_button!)
+		expect(mockNavigate).toHaveBeenCalledTimes(2)
 	})
 })

@@ -48,8 +48,15 @@ backend/beafamily/data/question/*
 backend/beafamily/data/review/*
 backend/beafamily/data/dummy/*
 logs/
+key
 
 # IDE Cache
 *.code-workspace
 .idea/
 .vscode/
+
+
+key.json
+.env
+.env.debug
+cloud_sql_proxy

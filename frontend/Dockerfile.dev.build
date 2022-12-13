@@ -9,3 +9,5 @@ COPY .eslintrc.js /frontend/.eslintrc.js
 COPY .prettierrc /frontend/.prettierrc
 
 RUN yarn install 
+RUN sed 's/http:\/\/localhost:8000//' src/**/*.tsx -i
+RUN sed 's/http:\/\/localhost:8000//' src/**/*.ts -i

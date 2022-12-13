@@ -3,6 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable react/display-name */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { fireEvent, render, screen } from '@testing-library/react'
 import { Provider } from 'react-redux'
 import { MemoryRouter, Route, Routes } from 'react-router'
@@ -31,6 +32,12 @@ const mockStore = getMockStore({
 	qna: { qnas: [], selectedQna: null },
 	mypost: { posts: [], likes: [], applys: [], reviews: [], qnas: [] }
 })
+
+const mockNavigate = jest.fn()
+jest.mock('react-router', () => ({
+	...jest.requireActual('react-router'),
+	useNavigate: () => mockNavigate
+}))
 
 describe('<MyApplicationList />', () => {
 	let myApplicationList: JSX.Element
@@ -66,6 +73,8 @@ describe('<MyApplicationList />', () => {
 		await act(() => {
 			render(myApplicationList)
 		})
-		const button = document.querySelector('#apply-button')
+		const button = document.querySelector('#delete-button')
+		fireEvent.click(button!)
+		expect(mockNavigate).toHaveBeenCalledTimes(1)
 	})
 })

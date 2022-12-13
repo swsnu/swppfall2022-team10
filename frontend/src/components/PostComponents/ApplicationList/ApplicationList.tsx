@@ -32,7 +32,7 @@ export default function ApplicationList(props: IProps) {
 			id: 1,
 			author_id: 1,
 			author_name: 'jhpyun1',
-			file: "",
+			file: '',
 			created_at: '2022-06-22',
 			post_id: 1
 		})
@@ -51,7 +51,15 @@ export default function ApplicationList(props: IProps) {
 		[show, clickedApplication]
 	)
 	const acceptHandler = (aid: number) => {
-		dispatch(acceptApplication({id: aid.toString(), postId: props.id}))
+		dispatch(
+			acceptApplication({ id: aid.toString(), postId: props.id })
+		).then((result) => {
+			handleClose()
+			alert(
+				'입양신청서 수락이 완료되었습니다. 입양게시글이 마감으로 표시되며, 게시글로 온 신청서는 더 이상 보이지 않습니다.'
+			)
+			dispatch(getApplications(props.id))
+		})
 	}
 
 	return (
@@ -67,23 +75,27 @@ export default function ApplicationList(props: IProps) {
 						</tr>
 					</thead>
 					<tbody>
-						{applicationState.applications.map((apply: applicationType) => {
-							return (
-								<tr key={`${apply.id}_apply`}>
-									<td>{apply.id}</td>
-									<td>
-										<button
-											id='apply-button'
-											onClick={() => onClickApp(apply)}
-										>
-											{apply.author_name}님이 보낸 입양
-											신청서입니다.
-										</button>
-									</td>
-									<td>{apply.created_at}</td>
-								</tr>
-							)
-						})}
+						{applicationState.applications.map(
+							(apply: applicationType) => {
+								return (
+									<tr key={`${apply.id}_apply`}>
+										<td>{apply.id}</td>
+										<td>
+											<button
+												id='apply-button'
+												onClick={() =>
+													onClickApp(apply)
+												}
+											>
+												{apply.author_name}님이 보낸
+												입양 신청서입니다.
+											</button>
+										</td>
+										<td>{apply.created_at}</td>
+									</tr>
+								)
+							}
+						)}
 					</tbody>
 				</Table>
 			</div>
@@ -97,13 +109,26 @@ export default function ApplicationList(props: IProps) {
 					<div>신청자: {clickedApplication.author_name}</div>
 					<div>신청일시: {clickedApplication.created_at}</div>
 					<div>신청서:</div>
-					<a href={`http://localhost:8000/api/posts/${clickedApplication?.post_id}/applications/${clickedApplication?.id}`}>{clickedApplication?.file}</a>
+					<a
+						href={`/api/posts/${clickedApplication?.post_id}/applications/${clickedApplication?.id}`}
+					>
+						{clickedApplication?.file}
+					</a>
 					<div className='buttons'>
-						<button id='accept-button' onClick={() => acceptHandler(clickedApplication.id)}>수락</button>
+						<button
+							id='accept-button'
+							onClick={() => acceptHandler(clickedApplication.id)}
+						>
+							수락
+						</button>
 						<button id='reject-button'>거절</button>
 					</div>
 				</Modal.Body>
 			</Modal>
+			<div className='notice'>
+				※ 수락 버튼을 누르면 게시물은 마감되고, 입양신청서를 다시 받을
+				수 없으니 신중히게 눌러주세요.
+			</div>
 		</div>
 	)
 }

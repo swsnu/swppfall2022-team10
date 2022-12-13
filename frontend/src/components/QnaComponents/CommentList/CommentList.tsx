@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import Comment from "../Comment/Comment"
+import Comment from '../Comment/Comment'
 // import { selectComment, getComment } from '../../../store/slices/comment'
-import { selectQna, getQna } from "../../../store/slices/qna"
+import { selectQna, getQna } from '../../../store/slices/qna'
 import { useSelector, useDispatch } from 'react-redux'
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
@@ -13,7 +13,6 @@ export default function CommentList() {
     const dispatch = useDispatch<AppDispatch>()
     const { id } = useParams()
 
-
     useEffect(() => {
         dispatch(getQna(Number(id)))
     }, [id])
@@ -22,7 +21,7 @@ export default function CommentList() {
 
     return (
         <div className='CommentList'>
-            <br />
+            <div>Comment List</div>
             <div>
                 {qnaState.selectedQna?.comments.map((comment) => {
                     return (

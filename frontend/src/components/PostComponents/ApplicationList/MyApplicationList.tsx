@@ -32,7 +32,6 @@ export default function MyApplicationList(props: IProps) {
 		dispatch(getApplications(props.id))
 	}, [])
 
-
 	return (
 		<div className='application-list'>
 			<div className='title'>내가 작성한 입양신청서</div>
@@ -47,28 +46,36 @@ export default function MyApplicationList(props: IProps) {
 						</tr>
 					</thead>
 					<tbody>
-						{applicationState.applications.map((apply: applicationType) => {
-							return (
-								<tr key={`${apply.id}_apply`}>
-									<td>{apply.id}</td>
-									<td>
-										<a href={`http://localhost:8000/api/posts/${apply?.post_id}/applications/${apply?.id}`}>{apply?.file}</a>
-									</td>
-									<td>{apply.created_at}</td>
-									<td>
-										<button
-											id='delete-button'
-											onClick={() => {
-												dispatch(deleteApplication(apply))
-												navigate(`/mypost/`)
-											}}
-										>
-											<RiDeleteBin6Line />
-										</button>
-									</td>
-								</tr>
-							)
-						})}
+						{applicationState.applications.map(
+							(apply: applicationType) => {
+								return (
+									<tr key={`${apply.id}_apply`}>
+										<td>{apply.id}</td>
+										<td>
+											<a
+												href={`/api/posts/${apply?.post_id}/applications/${apply?.id}`}
+											>
+												{apply?.file}
+											</a>
+										</td>
+										<td>{apply.created_at}</td>
+										<td>
+											<button
+												id='delete-button'
+												onClick={() => {
+													dispatch(
+														deleteApplication(apply)
+													)
+													navigate(`/mypost/`)
+												}}
+											>
+												<RiDeleteBin6Line />
+											</button>
+										</td>
+									</tr>
+								)
+							}
+						)}
 					</tbody>
 				</Table>
 			</div>

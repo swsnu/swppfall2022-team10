@@ -16,7 +16,6 @@ import MyApplicationList from '../ApplicationList/MyApplicationList'
 
 import '../PostDetail/PostDetail.scss'
 
-
 const MyApplyPost = () => {
 	const { id } = useParams()
 	const dispatch = useDispatch<AppDispatch>()
@@ -26,13 +25,14 @@ const MyApplyPost = () => {
 	const [bookmark, setBookmark] = useState<boolean>(false)
 
 	useEffect(() => {
-		dispatch(getPost(Number(id))).then((result) => {
-			setEditable(result.payload.editable)
-			setBookmark(result.payload.bookmark)
-		})
-		.catch((err) => {
-			console.log(err)
-		})
+		dispatch(getPost(Number(id)))
+			.then((result) => {
+				setEditable(result.payload.editable)
+				setBookmark(result.payload.bookmark)
+			})
+			.catch((err) => {
+				console.log(err)
+			})
 	}, [id])
 
 	return (
@@ -91,10 +91,21 @@ const MyApplyPost = () => {
 							<br />
 						</div>
 						<div className='det2'>
-							<a href={`http://localhost:8000${postState.selectedPost?.form}`}>입양신청서 서식</a>
+							<a href={`${postState.selectedPost?.form}`}>
+								입양신청서 서식
+							</a>
 						</div>
+						<br />
+						{!postState.selectedPost?.is_active && (
+							<div className='det2'>
+								입양공고가 마감되어 입양신청서를 확인할 수
+								없습니다.
+							</div>
+						)}
 					</div>
-					{id && <MyApplicationList id={id} />}
+					{postState.selectedPost?.is_active && id && (
+						<MyApplicationList id={id} />
+					)}
 					{editable && (
 						<div className='post-buttons'>
 							<button

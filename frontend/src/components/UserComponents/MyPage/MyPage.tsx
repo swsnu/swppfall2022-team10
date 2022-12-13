@@ -1,3 +1,4 @@
+/* eslint-disable object-shorthand */
 /* eslint-disable n/handle-callback-err */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-floating-promises */
@@ -83,8 +84,8 @@ export default function MyPage() {
 			return
 		}
 
-		var pattern1 = /[0-9]/
-		var pattern2 = /[a-zA-Z]/
+		const pattern1 = /[0-9]/
+		const pattern2 = /[a-zA-Z]/
 		if (
 			password !== '' &&
 			(password.length < 10 ||

@@ -8,3 +8,10 @@ black
 tqdm
 python-docx
 sqlalchemy
+django-extensions
+requests
+django-storages[google]
+django-environ
+google-cloud-secret-manager
+psycopg2
+django-cors-headers

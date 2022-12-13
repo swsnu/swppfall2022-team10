@@ -4,7 +4,7 @@ import { AnyAction, configureStore, EnhancedStore } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { ThunkMiddleware } from 'redux-thunk'
 import reducer, { applicationState } from './application'
-import { getApplications } from './application'
+import { getApplications, getApplication, applicationType } from './application'
 
 describe('application reducer', () => {
 	let store: EnhancedStore<
@@ -18,11 +18,11 @@ describe('application reducer', () => {
 			>
 		]
 	>
-	const fakeApplication = {
+	const fakeApplication: applicationType = {
 		id: 1,
 		author_id: 1,
 		author_name: 'test_author_name',
-		file: null,
+		file: '',
 		created_at: 'test_created_at',
 		post_id: 1
 	}
@@ -38,7 +38,14 @@ describe('application reducer', () => {
 	})
 	it('should handle getApplications', async () => {
 		axios.get = jest.fn().mockResolvedValue({ data: [fakeApplication] })
-		await store.dispatch(getApplications("1"))
+		await store.dispatch(getApplications('1'))
+		expect(store.getState().application.applications).toEqual([
+			fakeApplication
+		])
+	})
+	it('should handle getApplication', async () => {
+		axios.get = jest.fn().mockResolvedValue({ data: [fakeApplication] })
+		await store.dispatch(getApplication(fakeApplication))
 		expect(store.getState().application.applications).toEqual([
 			fakeApplication
 		])

@@ -3,6 +3,8 @@ from django.db import models
 from .AbstractTypes import AbstractMetaDataType
 from .PostModels import Post
 from django.contrib.auth import get_user_model
+from django.db.models.signals import pre_save, pre_delete
+from django.dispatch.dispatcher import receiver
 
 
 def form_upload_to(instance, filename):
@@ -21,3 +23,11 @@ class Application(AbstractMetaDataType):
     class Meta:
         ordering = ["-created_at"]
         db_table = "application"
+
+
+@receiver(pre_delete, sender=Application)
+def cleanup_form(sender, instance, *args, **kwargs):
+    if instance.form and instance.form.url:
+        storage = instance.form.storage
+        if storage.exists(instance.form.name):
+            storage.delete(instance.form.name)

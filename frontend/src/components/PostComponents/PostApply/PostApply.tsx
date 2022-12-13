@@ -58,14 +58,14 @@ export default function PostApply() {
 		formData.append('application', file)
 		// console.log(formData.get("id"))
 
-		dispatch(createApplication({application: formData, postId: id}))
+		dispatch(createApplication({ application: formData, postId: id }))
 			.then((result) => {
-			    navigate(`/post/${id}`)
+				navigate(`/post/${id}`)
 			})
 			.catch((err) => {
 				console.log(err)
 				alert('ERROR')
-		 	})
+			})
 	}
 
 	return (

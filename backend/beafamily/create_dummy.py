@@ -134,7 +134,6 @@ def create():
         data = get_random_post()
 
         post = Post.objects.create(author=user, **data)
-        post.created_at = data["created_at"]
 
         animal_type = post.animal_type == "개"
 
@@ -197,6 +196,8 @@ def create():
 
     for post in tqdm.tqdm(posts):
         if post.is_active or hasattr(post, "review_post"):
+            continue
+        if random.choice([True, False]):
             continue
         animal_type = post.animal_type
         data = get_random_review(animal_type)

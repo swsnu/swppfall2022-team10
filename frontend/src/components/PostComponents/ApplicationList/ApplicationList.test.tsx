@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
@@ -66,6 +67,16 @@ describe('<ApplicationList />', () => {
 			name: /Close/i
 		})
 		fireEvent.click(closeButton!)
+		!document.querySelector('.Modal')
+	})
+	it('should handle accept button', async () => {
+		await act(() => {
+			render(applicationList)
+		})
+		const button = document.querySelector('#apply-button')
+		fireEvent.click(button!)
+		const accept_button = document.querySelector('#accept-button')
+		fireEvent.click(accept_button!)
 		!document.querySelector('.Modal')
 	})
 })

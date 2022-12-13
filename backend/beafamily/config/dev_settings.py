@@ -29,6 +29,7 @@ ALLOWED_HOSTS = ["0.0.0.0", "localhost", "127.0.0.1", "*"]
 # Application definition
 
 INSTALLED_APPS = [
+    "corsheaders",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -37,9 +38,11 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "api.apps.APIConfig",
     "rest_framework",
+    "django_extensions",
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -50,6 +53,14 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "beafamily.urls"
+
+CORS_ALLOWED_ORIGINS = [
+    "https://beafamily.site",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
+# CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
 
 TEMPLATES = [
     {

@@ -109,7 +109,8 @@ describe('post reducer', () => {
 		jest.spyOn(axios, 'put').mockResolvedValue({
 			data: fakePost
 		})
-		await store.dispatch(editPost(fakePost))
+		const formData = new FormData()
+		await store.dispatch(editPost({ id: '1', post: formData }))
 		expect(
 			store.getState().post.posts.find((v) => v.id === fakePost.id)?.id
 		).toEqual(1)

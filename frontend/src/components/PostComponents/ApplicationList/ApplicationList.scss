@@ -71,7 +71,7 @@
 				}
 			}
 		}
-		a{
+		a {
 			padding-left: 30px;
 		}
 	}
@@ -82,4 +82,10 @@
 	.modalContent {
 		position: relative;
 	}
+}
+.notice {
+	font-size: 15px;
+	color: grey;
+	text-align: left;
+	padding: 3px;
 }

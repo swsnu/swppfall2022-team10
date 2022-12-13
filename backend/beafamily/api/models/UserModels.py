@@ -5,13 +5,19 @@ from django.apps import apps
 
 class UserManager(BaseUserManager):
     def create_user(
-        self, username: str, password=None, email=None, nickname=None, address=None
+        self,
+        username: str,
+        password=None,
+        email=None,
+        nickname=None,
+        address=None,
+        shelter=False,
     ):
         if username is None:
             raise ValueError("Username is required")
 
-        if nickname is None:
-            nickname = username
+        # if nickname is None:
+        #     nickname = username
 
         if type(username) != str:
             raise TypeError("Username must be string")
@@ -28,7 +34,11 @@ class UserManager(BaseUserManager):
         username = GlobalUserModel.normalize_username(username)
 
         user = self.model(
-            username=username, email=email, nickname=nickname, address=address
+            username=username,
+            email=email,
+            nickname=nickname,
+            address=address,
+            shelter=shelter,
         )
         user.set_password(password)
         user.save(using=self._db)
@@ -45,7 +55,7 @@ class User(AbstractBaseUser):
     updated_on = models.DateTimeField(auto_now=True)
     likes = models.ManyToManyField("Post", related_name="likes")
     email = models.EmailField(null=True, unique=True)
-    nickname = models.CharField(max_length=30, unique=True, null=True)
+    nickname = models.CharField(max_length=30, unique=False, null=True)
     address = models.CharField(max_length=100, null=True)
     profile = models.ImageField(null=True)
     shelter = models.BooleanField(default=False)
@@ -53,7 +63,7 @@ class User(AbstractBaseUser):
     objects = UserManager()
 
     class Meta:
-        db_table = "user"
+        db_table = "UserInfo"
 
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = [nickname]

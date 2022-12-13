@@ -1,9 +1,9 @@
-import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { RootState } from '..'
 import { postListType } from './post'
-import { reviewListType } from './review'
-import {QnaType} from './qna'
+import { reviewListType, reviewType } from './review'
+import { QnaType } from './qna'
 
 export interface mypostState {
 	posts: postListType[]
@@ -28,6 +28,13 @@ export const deleteQna = createAsyncThunk(
 		dispatch(mypostActions.deleteQna({ targetId: id }))
 	}
 )
+export const deleteReview = createAsyncThunk(
+	'mypost/deleteReview',
+	async (id: reviewType['id'], { dispatch }) => {
+		await axios.delete(`/api/reviews/${id}/`)
+		dispatch(mypostActions.deleteReview({ targetId: id }))
+	}
+)
 
 export const getMyPosts = createAsyncThunk('mypost/getMyPosts', async () => {
 	const response = await axios.get('/api/users/post')
@@ -44,6 +51,13 @@ export const mypostSlice = createSlice({
 			})
 			console.log(deleted)
 			state.qnas = deleted
+		},
+		deleteReview: (state, action: PayloadAction<{ targetId: number }>) => {
+			const deleted = state.reviews.filter((review: reviewListType) => {
+				return review.id !== action.payload.targetId
+			})
+			console.log(deleted)
+			state.reviews = deleted
 		}
 	},
 	extraReducers: (builder) => {

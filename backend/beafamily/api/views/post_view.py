@@ -33,7 +33,7 @@ logger = logging.getLogger("view_logger")
 @authentication_classes([SessionAuthentication])
 @permission_classes([IsAuthenticatedOrReadOnly])
 @parser_classes([MultiPartParser])
-# @verify(PostValidator, PostQueryValidator)
+@verify(PostValidator, None, has_image=False)
 @log_error(logger)
 def post_id(request, pid=0):
     try:
@@ -52,7 +52,51 @@ def post_id(request, pid=0):
         if post.author != request.user:
             return Response(status=status.HTTP_403_FORBIDDEN)
 
-        return Response(status=status.HTTP_200_OK)
+        query = request.parsed
+        if "photos" in request.data:
+            photos = request.data.pop("photos")
+        else:
+            photos = []
+
+        with transaction.atomic():
+
+            is_active = post.is_active
+            post.title = query["title"]
+            post.content = query["content"]
+            post.animal_type = query["animal_type"]
+            post.species = query["species"]
+            post.neutering = query["neutering"]
+            post.vaccination = query["vaccination"]
+            post.age = query["age"]
+            post.gender = query["gender"]
+            post.name = query["name"]
+
+            thumbnail = post.thumbnail
+            storage = thumbnail.storage
+            deleted = False
+            post.save()
+
+            if not storage.exists(thumbnail.name):
+                thumbnail = None
+                deleted = True
+
+            for photo in photos:
+                image = PostImage.objects.create(
+                    author=request.user, post=post, image=photo
+                )
+                if thumbnail is None:
+                    thumbnail = image
+
+            if deleted:
+                post.thumbnail = thumbnail.image
+            if "application" in request.data:
+                post.form = request.data.pop("application")[0]
+            post.save()
+
+        data = PostDetailSerializer(post, context={"user": request.user}).data
+        print(data)
+
+        return Response(status=status.HTTP_200_OK, data=data)
 
     else:
 
@@ -96,9 +140,16 @@ def posts(request):
         if gender is not None:
             post_list = post_list.filter(gender=gender)
 
+        shelter = query.get("shelter")
+        if shelter is not None:
+            post_list = post_list.filter(shelter=shelter)
+
         animal_type = query.get("animal_type")
         if animal_type:
-            post_list = post_list.filter(animal_type=animal_type)
+            if animal_type in ["개", "고양이"]:
+                post_list = post_list.filter(animal_type=animal_type)
+            else:
+                post_list = post_list.exclude(animal_type__in=["개", "고양이"])
 
         species = query.get("species")
         if query.get("species"):
@@ -126,6 +177,7 @@ def posts(request):
                     thumbnail = image
 
             post.thumbnail = thumbnail.image
+            post.form = request.data.pop("application")[0]
             post.save()
 
         return Response(status=status.HTTP_201_CREATED, data=PostSerializer(post).data)
@@ -133,7 +185,7 @@ def posts(request):
 
 @api_view(["GET", "POST"])
 @authentication_classes([SessionAuthentication])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 @parser_classes([MultiPartParser])
 @verify(ApplicationValidator, None, has_form=True, has_content=False, has_image=False)
 @log_error(logger)
@@ -144,14 +196,19 @@ def post_id_application(request, pid):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == "GET":
-        # if request.user == post.author:
-        #     app = ApplicationSerializer(post.applications, many=True)
-        # else:
-        #     app = ApplicationSerializer(post.applications.filter(author=request.user), many=True)
-        app = ApplicationSerializer(post.applications, many=True)
-        return Response(status=status.HTTP_200_OK, data=app.data)
-    else:
         if request.user == post.author:
+            if post.is_active:
+                app = ApplicationSerializer(post.applications, many=True).data
+            else:
+                app = []
+        else:
+            app = ApplicationSerializer(
+                post.applications.filter(author=request.user), many=True
+            ).data
+        # app = ApplicationSerializer(post.applications, many=True)
+        return Response(status=status.HTTP_200_OK, data=app)
+    else:
+        if request.user == post.author or not post.is_active:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         file = request.data.getlist("application")[0]
@@ -165,7 +222,7 @@ def post_id_application(request, pid):
 
 @api_view(["GET", "PUT", "DELETE"])
 @authentication_classes([SessionAuthentication])
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 @parser_classes([MultiPartParser])
 @verify(ApplicationValidator, None, has_form=True, has_content=False, has_image=False)
 @log_error(logger)
@@ -180,8 +237,8 @@ def post_id_application_id(request, pid, aid):
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
     if request.method == "GET":
-        # if post.author != request.user or app.author != request.user:
-        #     return Response(status=status.HTTP_204_NO_CONTENT)
+        if post.author != request.user and app.author != request.user:
+            return Response(status=status.HTTP_403_FORBIDDEN)
 
         return FileResponse(app.file.file, as_attachment=True)
     elif request.method == "PUT":
@@ -239,5 +296,32 @@ def delete_post_photo(request, pid, iid):
         return Response(status=status.HTTP_403_FORBIDDEN)
 
     i.delete()
+
+    return Response(status=status.HTTP_200_OK)
+
+
+@api_view(["POST"])
+@authentication_classes([SessionAuthentication])
+@permission_classes([IsAuthenticated])
+@log_error(logger)
+def accept(request, pid, aid):
+    try:
+        p = Post.objects.get(id=pid)
+        a = Application.objects.get(id=aid)
+    except:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if a.post != p:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    if p.author != request.user:
+        return Response(status=status.HTTP_403_FORBIDDEN)
+
+    if p.accepted_application:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    p.accepted_application = a
+    p.is_active = False
+    p.save()
 
     return Response(status=status.HTTP_200_OK)
