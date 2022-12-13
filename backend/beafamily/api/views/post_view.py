@@ -97,9 +97,7 @@ def posts(request):
             post_list = post_list.filter(gender=gender)
 
         shelter = query.get("shelter")
-        print(query)
         if shelter is not None:
-            print(shelter)
             post_list = post_list.filter(shelter=shelter)
 
         animal_type = query.get("animal_type")
@@ -135,6 +133,7 @@ def posts(request):
                     thumbnail = image
 
             post.thumbnail = thumbnail.image
+            post.form = request.data.pop("application")[0]
             post.save()
 
         return Response(status=status.HTTP_201_CREATED, data=PostSerializer(post).data)
@@ -194,7 +193,7 @@ def post_id_application_id(request, pid, aid):
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
     if request.method == "GET":
-        if post.author != request.user or app.author != request.user:
+        if post.author != request.user and app.author != request.user:
             return Response(status=status.HTTP_403_FORBIDDEN)
 
         return FileResponse(app.file.file, as_attachment=True)

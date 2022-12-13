@@ -16,6 +16,7 @@ import io
 import environ
 import google.auth
 from google.cloud import secretmanager
+from google.oauth2 import service_account
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -56,15 +57,15 @@ API_KEY = env("API_KEY")
 DEBUG = env("DEBUG")
 IP_ADDRESS = env("IP_ADDRESS")
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "beafamily.site", IP_ADDRESS]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "beafamily.site", IP_ADDRESS, "*"]
 CSRF_TRUSTED_ORIGINS = ["https://beafamily.site"]
 
-SECURE_HSTS_SECONDS = env("SECURES_HSTS_SECONDS", int)
+SECURE_HSTS_SECONDS = env("SECURE_HSTS_SECONDS", int)
 SESSION_COOKIE_SECURE = env("SESSION_COOKIE_SECURE", bool)
 CSRF_COOKIE_SECURE = env("CSRF_COOKIE_SECURE", bool)
 SECURE_HSTS_INCLUDE_SUBDOMAINS = env("SECURE_HSTS_INCLUDE_SUBDOMAINS", bool)
 SECURE_HSTS_PRELOAD = env("SECURE_HSTS_PRELOAD", bool)
-SECURE_SSL_REDIRECT = env("SECURE_SSL_REDIRECT", bool)
+# SECURE_SSL_REDIRECT = env("SECURE_SSL_REDIRECT", bool)
 
 # Application definition
 

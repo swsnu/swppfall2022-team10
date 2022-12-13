@@ -63,7 +63,7 @@ class User(AbstractBaseUser):
     objects = UserManager()
 
     class Meta:
-        db_table = "user"
+        db_table = "UserInfo"
 
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = [nickname]

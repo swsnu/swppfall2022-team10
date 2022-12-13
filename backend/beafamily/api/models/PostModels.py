@@ -6,10 +6,16 @@ from .AbstractTypes import (
     comment_serializer,
 )
 from django.contrib.auth import get_user_model
+from django.db.models.signals import pre_save, pre_delete
+from django.dispatch.dispatcher import receiver
 
 
 def thumbnail_upload_to(instance, filename):
     return f"post/{instance.id}/thumbnail/{filename}"
+
+
+def form_upload_to(instance, filename):
+    return f"post/{instance.id}/form/{filename}"
 
 
 class Post(AbstractArticleType):
@@ -24,7 +30,7 @@ class Post(AbstractArticleType):
     gender = models.BooleanField()
     species = models.CharField(max_length=30)
     is_active = models.BooleanField()
-    form = models.FileField()
+    form = models.FileField(upload_to=form_upload_to)
     accepted_application = models.OneToOneField(
         "Application",
         on_delete=models.CASCADE,
@@ -63,3 +69,11 @@ class PostComment(AbstractCommentType):
 
     class Meta:
         db_table = "post_comment"
+
+
+@receiver(pre_delete, sender=PostImage)
+def cleanup_image(sender, instance, *args, **kwargs):
+    if instance.image and instance.image.url:
+        storage = instance.image.storage
+        if storage.exists(instance.image.name):
+            storage.delete(instance.image.name)
