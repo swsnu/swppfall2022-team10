@@ -5,7 +5,7 @@ import axios from 'axios'
 import { ThunkMiddleware } from 'redux-thunk'
 import reducer, { mypostState } from './mypost'
 import { getMyPosts, deleteReview, deleteQna } from './mypost'
-import {commentType} from "./qna";
+import { commentType } from './qna'
 
 describe('mypost reducer', () => {
 	let store: EnhancedStore<
@@ -67,9 +67,9 @@ describe('mypost reducer', () => {
 		})
 	})
 	it('should handle getMyPosts', async () => {
-		axios.get = jest
-			.fn()
-			.mockResolvedValue({ data: [[fakePost], [fakePost], [fakePost], [fakeReview], [fakeQna]] })
+		axios.get = jest.fn().mockResolvedValue({
+			data: [[fakePost], [fakePost], [fakePost], [fakeReview], [fakeQna]]
+		})
 		await store.dispatch(getMyPosts())
 		expect(store.getState().mypost.posts).toEqual([fakePost])
 		expect(store.getState().mypost.likes).toEqual([fakePost])
@@ -78,19 +78,19 @@ describe('mypost reducer', () => {
 		expect(store.getState().mypost.qnas).toEqual([fakeQna])
 	})
 	it('should handle deleteQna', async () => {
-		axios.get = jest
-			.fn()
-			.mockResolvedValue({ data: [[fakePost], [fakePost], [fakePost], [fakeReview], [fakeQna]] })
+		axios.get = jest.fn().mockResolvedValue({
+			data: [[fakePost], [fakePost], [fakePost], [fakeReview], [fakeQna]]
+		})
 		axios.delete = jest.fn().mockResolvedValue({ data: null })
 		await store.dispatch(deleteQna(1))
-		expect(store.getState().mypost.qnas).toEqual([]);
+		expect(store.getState().mypost.qnas).toEqual([])
 	})
 	it('should handle deleteReview', async () => {
-		axios.get = jest
-			.fn()
-			.mockResolvedValue({ data: [[fakePost], [fakePost], [fakePost], [fakeReview], [fakeQna]] })
+		axios.get = jest.fn().mockResolvedValue({
+			data: [[fakePost], [fakePost], [fakePost], [fakeReview], [fakeQna]]
+		})
 		axios.delete = jest.fn().mockResolvedValue({ data: null })
 		await store.dispatch(deleteReview(1))
-		expect(store.getState().mypost.reviews).toEqual([]);
+		expect(store.getState().mypost.reviews).toEqual([])
 	})
 })

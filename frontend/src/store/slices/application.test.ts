@@ -18,7 +18,7 @@ describe('application reducer', () => {
 			>
 		]
 	>
-	const fakeApplication : applicationType = {
+	const fakeApplication: applicationType = {
 		id: 1,
 		author_id: 1,
 		author_name: 'test_author_name',

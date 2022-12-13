@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable @typescript-eslint/naming-convention */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import axios from 'axios'
 import { Provider } from 'react-redux'
@@ -73,10 +76,7 @@ describe('<ReviewDetail />', () => {
 			<Provider store={getMockStore(mockState)}>
 				<MemoryRouter>
 					<Routes>
-						<Route
-							path='/'
-							element={<ReviewDetail id={1} />}
-						/>
+						<Route path='/' element={<ReviewDetail id={1} />} />
 					</Routes>
 				</MemoryRouter>
 			</Provider>

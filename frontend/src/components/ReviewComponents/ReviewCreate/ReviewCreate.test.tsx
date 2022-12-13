@@ -23,7 +23,8 @@ const tempState = {
 			}
 		],
 		selectedPost: null,
-		selectedAnimal: '' },
+		selectedAnimal: ''
+	},
 	// user: { users: [], currentUser: null, logged_in: true },
 	review: {
 		reviews: [

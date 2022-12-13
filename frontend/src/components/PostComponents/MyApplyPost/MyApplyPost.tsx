@@ -98,9 +98,16 @@ const MyApplyPost = () => {
 							</a>
 						</div>
 						<br />
-						{(!postState.selectedPost?.is_active) && (<div className='det2'>입양공고가 마감되어 입양신청서를 확인할 수 없습니다.</div>)}
+						{!postState.selectedPost?.is_active && (
+							<div className='det2'>
+								입양공고가 마감되어 입양신청서를 확인할 수
+								없습니다.
+							</div>
+						)}
 					</div>
-					{postState.selectedPost?.is_active && id && <MyApplicationList id={id} />}
+					{postState.selectedPost?.is_active && id && (
+						<MyApplicationList id={id} />
+					)}
 					{editable && (
 						<div className='post-buttons'>
 							<button

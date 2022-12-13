@@ -51,9 +51,13 @@ export default function ApplicationList(props: IProps) {
 		[show, clickedApplication]
 	)
 	const acceptHandler = (aid: number) => {
-		dispatch(acceptApplication({ id: aid.toString(), postId: props.id })).then((result)=>{
+		dispatch(
+			acceptApplication({ id: aid.toString(), postId: props.id })
+		).then((result) => {
 			handleClose()
-			alert('입양신청서 수락이 완료되었습니다. 입양게시글이 마감으로 표시되며, 게시글로 온 신청서는 더 이상 보이지 않습니다.')
+			alert(
+				'입양신청서 수락이 완료되었습니다. 입양게시글이 마감으로 표시되며, 게시글로 온 신청서는 더 이상 보이지 않습니다.'
+			)
 			dispatch(getApplications(props.id))
 		})
 	}
@@ -121,7 +125,10 @@ export default function ApplicationList(props: IProps) {
 					</div>
 				</Modal.Body>
 			</Modal>
-			<div className='notice'>※ 수락 버튼을 누르면 게시물은 마감되고, 입양신청서를 다시 받을 수 없으니 신중히게 눌러주세요.</div>
+			<div className='notice'>
+				※ 수락 버튼을 누르면 게시물은 마감되고, 입양신청서를 다시 받을
+				수 없으니 신중히게 눌러주세요.
+			</div>
 		</div>
 	)
 }

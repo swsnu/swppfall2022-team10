@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import axios from 'axios'
@@ -164,5 +166,4 @@ describe('<MyApplyPost />', () => {
 		fireEvent.click(delete_button!)
 		expect(mockNavigate).toHaveBeenCalledTimes(2)
 	})
-
 })

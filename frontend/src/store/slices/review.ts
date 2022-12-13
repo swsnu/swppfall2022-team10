@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { RootState } from '..'
-import {postListType} from "./post";
+import { postListType } from './post'
 
 export interface reviewType {
 	id: number

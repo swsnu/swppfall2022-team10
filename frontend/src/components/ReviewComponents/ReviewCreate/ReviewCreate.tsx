@@ -11,14 +11,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, Navigate } from 'react-router-dom'
 import { AppDispatch } from '../../../store'
 import { checkPost, postListType, selectPost } from '../../../store/slices/post'
-import {createReview, reviewListType} from '../../../store/slices/review'
+import { createReview, reviewListType } from '../../../store/slices/review'
 import { checkLogin } from '../../../store/slices/user'
 import { MdArrowBack } from 'react-icons/md'
 
 import './ReviewCreate.scss'
 import Combobox from 'react-widgets/Combobox'
 import { selectApplication } from '../../../store/slices/application'
-import Review from "../Review/Review";
+import Review from '../Review/Review'
 
 export default function ReviewCreate() {
 	const postState = useSelector(selectPost)
@@ -144,11 +144,15 @@ export default function ReviewCreate() {
 									id='review-post-input'
 									className='review-combobox'
 									name='type'
-									data={postState.posts.map((post: postListType) => {
-										return(
-											post.id.toString() + ' ' + post.title
-										)
-									})}
+									data={postState.posts.map(
+										(post: postListType) => {
+											return (
+												post.id.toString() +
+												' ' +
+												post.title
+											)
+										}
+									)}
 									onChange={(event) => setPostId(event)}
 									value={postId}
 								/>

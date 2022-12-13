@@ -17,8 +17,13 @@ import {
 	reviewListType,
 	reviewType
 } from '../../../store/slices/review'
-import {QnaType} from '../../../store/slices/qna'
-import { getMyPosts, selectMyPost, deleteQna, deleteReview } from '../../../store/slices/mypost'
+import { QnaType } from '../../../store/slices/qna'
+import {
+	getMyPosts,
+	selectMyPost,
+	deleteQna,
+	deleteReview
+} from '../../../store/slices/mypost'
 import { AppDispatch } from '../../../store'
 import Review from '../../ReviewComponents/Review/Review'
 import ReviewDetail from '../../ReviewComponents/ReviewDetail/ReviewDetail'
@@ -26,7 +31,7 @@ import Table from 'react-bootstrap/Table'
 import { RiDeleteBin6Line } from 'react-icons/ri'
 
 import './MyPost.scss'
-import Modal from "react-bootstrap/Modal";
+import Modal from 'react-bootstrap/Modal'
 
 export default function MyPost() {
 	const navigate = useNavigate()
@@ -120,8 +125,8 @@ export default function MyPost() {
 		return myqna
 	}, [myqnaMore, myqna])
 
-	const deleteReviewHandler = (id: number ) =>{
-		if(id !== null){
+	const deleteReviewHandler = (id: number) => {
+		if (id !== null) {
 			onClickToggleModal()
 			dispatch(deleteReview(id))
 		}
@@ -246,13 +251,26 @@ export default function MyPost() {
 						>
 							<Modal.Header closeButton></Modal.Header>
 							<Modal.Body>
-								{clickedReview !== null && (<ReviewDetail
-									key={`${clickedReview.id}_review`}
-									id={clickedReview.id}
-								/>)}
+								{clickedReview !== null && (
+									<ReviewDetail
+										key={`${clickedReview.id}_review`}
+										id={clickedReview.id}
+									/>
+								)}
 							</Modal.Body>
 							<Modal.Footer>
-								{clickedReview !== null && (<button id='review-delete-button' onClick={() => deleteReviewHandler(clickedReview.id)}>삭제하기</button>)}
+								{clickedReview !== null && (
+									<button
+										id='review-delete-button'
+										onClick={() =>
+											deleteReviewHandler(
+												clickedReview.id
+											)
+										}
+									>
+										삭제하기
+									</button>
+								)}
 							</Modal.Footer>
 						</Modal>
 					</div>
@@ -278,17 +296,38 @@ export default function MyPost() {
 							<tbody>
 								{qna.map((td: QnaType) => {
 									return (
-										<tr
-											key={`${td.id}_qna`}
-										>
-											<td id='qna-click' onClick={() => navigate(`/qna/${td.id}`)}>{td.id}</td>
-											<td id='qna-click' onClick={() => navigate(`/qna/${td.id}`)}>{td.title}</td>
-											<td id='qna-click' onClick={() => navigate(`/qna/${td.id}`)}>{td.created_at}</td>
+										<tr key={`${td.id}_qna`}>
+											<td
+												id='qna-click'
+												onClick={() =>
+													navigate(`/qna/${td.id}`)
+												}
+											>
+												{td.id}
+											</td>
+											<td
+												id='qna-click'
+												onClick={() =>
+													navigate(`/qna/${td.id}`)
+												}
+											>
+												{td.title}
+											</td>
+											<td
+												id='qna-click'
+												onClick={() =>
+													navigate(`/qna/${td.id}`)
+												}
+											>
+												{td.created_at}
+											</td>
 											<td>
 												<button
 													id='qna-delete-button'
 													onClick={() => {
-														dispatch(deleteQna(td.id))
+														dispatch(
+															deleteQna(td.id)
+														)
 													}}
 												>
 													<RiDeleteBin6Line />
