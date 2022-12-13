@@ -55,9 +55,8 @@ else:
 SECRET_KEY = env("SECRET_KEY")
 API_KEY = env("API_KEY")
 DEBUG = env("DEBUG")
-IP_ADDRESS = env("IP_ADDRESS")
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "beafamily.site", IP_ADDRESS, "*"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "api.beafamily.site", "*"]
 CSRF_TRUSTED_ORIGINS = ["https://beafamily.site"]
 
 SECURE_HSTS_SECONDS = env("SECURE_HSTS_SECONDS", int)
@@ -80,6 +79,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "django_extensions",
     "storages",
+    "corsheaders",
 ]
 DEFAULT_FILE_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"
 STATICFILES_STORAGE = "storages.backends.gcloud.GoogleCloudStorage"
@@ -87,6 +87,7 @@ GS_DEFAULT_ACL = "publicRead"
 GS_BUCKET_NAME = env("GS_BUCKET_NAME")
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -95,6 +96,15 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+CORS_ALLOWED_ORIGINS = [
+    "https://beafamily.site",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "https://localhost:3000",
+    "https://127.0.0.1:3000",
+]
+CORS_ALLOW_CREDENTIALS = True
 
 ROOT_URLCONF = "beafamily.urls"
 
