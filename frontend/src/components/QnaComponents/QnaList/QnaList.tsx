@@ -90,7 +90,7 @@ export default function QnaList() {
 				</div>
 				<div className='QnaContainer'>
 					<div className='title'>Q&As</div>
-					<div className='search-window'>Search-window</div>
+					<div className='search-window'></div>
 					<div className='Qnas'>
 						<Table striped bordered hover>
 							<thead>

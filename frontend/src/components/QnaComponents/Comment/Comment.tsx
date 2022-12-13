@@ -11,9 +11,9 @@ export interface IProps {
 const Comment = (props: IProps) => {
 	return (
 		<div className='Comment'>
-			<div className='author'>{props.author}</div>
-			<div>{props.content}</div>
-			<div>{props.created_at}</div>
+			<div className="author">{props.author}</div>
+			<div className="content">{props.content}</div>
+			<div className="created_at">{props.created_at}</div>
 		</div>
 	)
 }

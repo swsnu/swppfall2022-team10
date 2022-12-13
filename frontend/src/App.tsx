@@ -15,6 +15,7 @@ import ReviewCreate from './components/ReviewComponents/ReviewCreate/ReviewCreat
 import QnaList from './components/QnaComponents/QnaList/QnaList'
 import QnaDetail from './components/QnaComponents/QnaDetail/QnaDetail'
 import QnaCreate from './components/QnaComponents/QnaCreate/QnaCreate'
+import Introduction from './components/PostComponents/Introduction/Introduction'
 // import Chatting from './components/ChattingComponets/Chatting/Chatting'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 
@@ -45,6 +46,7 @@ function App() {
 					<Route path='/qna' element={<QnaList />} />
 					<Route path='/qna/create' element={<QnaCreate />} />
 					<Route path='/qna/:id' element={<QnaDetail />} />
+					<Route path='/introduction' element={<Introduction />} />
 					{/* <Route path='/chat' element={<Chatting />} /> */}
 					<Route path='*' element={<h1>Not Found</h1>} />
 				</Routes>

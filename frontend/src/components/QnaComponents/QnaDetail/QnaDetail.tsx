@@ -14,6 +14,7 @@ import { useNavigate, Navigate } from 'react-router-dom'
 // import { selectComment, createComment } from '../../../store/slices/comment'
 import CommentList from '../CommentList/CommentList'
 import './QnaDetail.scss'
+import { FaRegSmileBeam } from 'react-icons/fa'
 
 const QnaDetail = () => {
 	const { id } = useParams()
@@ -54,21 +55,31 @@ const QnaDetail = () => {
 			<div className='DetailContainer'>
 				<div className='title'>{qnaState.selectedQna?.title}</div>
 				<div className='content'>{qnaState.selectedQna?.content}</div>
+				<br />
+				<br />
 				<div className='CommentList'>
-					<div className='comment-title'>Comment 목록:</div>
+					<div className='comment-title'></div>
 					<form
 						className='create-comment-container'
 						onSubmit={createCommentHandler}
 					>
-						<label htmlFor='comment-input'>댓글:</label>
-						<input
-							id='comment-input'
-							type='text'
-							name='content'
-							value={content}
-							onChange={(event) => setContent(event.target.value)}
-						/>
+						<label className='input-text' htmlFor='comment-input'>
+							댓글을 남겨주세요 <FaRegSmileBeam />
+						</label>
+						<br />
+						<br />
+						<div className='input-box'>
+							<input
+								id='comment-input'
+								type='text'
+								name='content'
+								value={content}
+								onChange={(event) => setContent(event.target.value)}
+							/>
+						</div>
+						<br />
 						<button
+							className='input-button'
 							id='confirm-create-content-button'
 							type='submit'
 							disabled={content.length === 0}
