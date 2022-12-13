@@ -345,7 +345,9 @@ export default function PostCreate() {
 									</div>
 									<span id='apply-form-text'>
 										입양신청서 표준 양식은{' '}
-										<a href='/adoptinfo/'>입양절차 안내</a>
+										<a href='/introduction'>
+											입양절차 안내
+										</a>
 										에서 확인할 수 있습니다.
 									</span>
 								</div>
