@@ -71,6 +71,9 @@
 				}
 			}
 		}
+		a {
+			padding-left: 30px;
+		}
 	}
 
 	#modalCloseBtn:hover {
@@ -79,4 +82,10 @@
 	.modalContent {
 		position: relative;
 	}
+}
+.notice {
+	font-size: 15px;
+	color: grey;
+	text-align: left;
+	padding: 3px;
 }

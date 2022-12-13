@@ -5,23 +5,58 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import Layout from '../../Layout/Layout'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Dispatch, SetStateAction } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { selectPost, getPost, deletePost } from '../../../store/slices/post'
+import { AppDispatch } from '../../../store'
+import { checkLogin } from '../../../store/slices/user'
+import {
+	selectPost,
+	getPost,
+	deletePost,
+	bookmarkPost
+} from '../../../store/slices/post'
 import { IoPawOutline, IoPaw } from 'react-icons/io5'
 
 import './PostHeader.scss'
 
 interface IProps {
 	is_author: boolean
+	is_bookmark: boolean
+	setBookmark: Dispatch<SetStateAction<boolean>>
 }
 
 const PostHeader = (props: IProps) => {
 	const postState = useSelector(selectPost)
 	const navigate = useNavigate()
+	const dispatch = useDispatch<AppDispatch>()
 
-	const [isBookmark, setIsBookmark] = useState(false)
+	const bookmarkPostHandler = () => {
+		if (postState.selectedPost === null) return
+		dispatch(checkLogin())
+			.then((result) => {
+				const loggedIn: boolean = (
+					result.payload as { logged_in: boolean }
+				).logged_in
+				if (!loggedIn) {
+					alert('You should log in')
+					navigate('/login')
+				}
+			})
+			.catch((err) => {
+				console.log(err)
+				alert('ERROR')
+			})
+
+		dispatch(bookmarkPost(postState.selectedPost.id))
+			.then((result) => {
+				props.setBookmark(result.payload.bookmark)
+			})
+			.catch((err) => {
+				console.log(err)
+				alert('ERROR')
+			})
+	}
 
 	return (
 		<div className='PostHeaderContainer'>
@@ -49,19 +84,23 @@ const PostHeader = (props: IProps) => {
 				)}
 
 				<div className='bookmark-button-container'>
-					<button
-						id='bookmark-button'
-						aria-label='bookmark-button'
-						onClick={() => {
-							setIsBookmark(!isBookmark)
-						}}
-					>
-						{isBookmark ? (
+					{props.is_bookmark ? (
+						<button
+							className='bookmark-button'
+							aria-label='bookmark-button bookmarked'
+							onClick={bookmarkPostHandler}
+						>
 							<IoPaw size={40} />
-						) : (
+						</button>
+					) : (
+						<button
+							className='bookmark-button'
+							aria-label='bookmark-button un-bookmarked'
+							onClick={bookmarkPostHandler}
+						>
 							<IoPawOutline size={40} />
-						)}
-					</button>
+						</button>
+					)}
 				</div>
 			</div>
 
@@ -77,16 +116,18 @@ const PostHeader = (props: IProps) => {
 			)}
 
 			<div className='post-images'>
-				{postState.selectedPost?.photo_path.map((img_path, index) => {
-					return (
-						<img
-							className='post-image'
-							src={img_path}
-							key={index}
-							alt={postState.selectedPost?.animal_type}
-						/>
-					)
-				})}
+				{postState.selectedPost?.photo_path.map(
+					(img_path, index: number) => {
+						return (
+							<img
+								className='post-image'
+								src={img_path.photo_path}
+								key={index}
+								alt={postState.selectedPost?.animal_type}
+							/>
+						)
+					}
+				)}
 			</div>
 		</div>
 	)

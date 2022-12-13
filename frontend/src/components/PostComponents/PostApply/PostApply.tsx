@@ -6,64 +6,77 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import Layout from '../../Layout/Layout'
 
-import { useState, useEffect, useRef } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import { useParams } from 'react-router'
 import { AppDispatch } from '../../../store'
-// import { createApplication } from '../../../store/slices/application'
-import { selectPost, getPost } from '../../../store/slices/post'
-import { selectUser } from '../../../store/slices/user'
+import { createApplication } from '../../../store/slices/application'
+import { getPost } from '../../../store/slices/post'
+import { checkLogin } from '../../../store/slices/user'
 import './PostApply.scss'
 import PostHeader from '../PostHeader/PostHeader'
-import DropdownList from 'react-widgets/DropdownList'
 
 export default function PostApply() {
 	const { id } = useParams()
-	const [file, setFile] = useState<File[]>([])
+	const [file, setFile] = useState<File>()
 
 	const navigate = useNavigate()
+	const [bookmark, setBookmark] = useState<boolean>(false)
+
 	const dispatch = useDispatch<AppDispatch>()
-	const userState = useSelector(selectUser)
+
+	useEffect(() => {
+		dispatch(checkLogin()).then((result) => {
+			const loggedIn: boolean = (result.payload as { logged_in: boolean })
+				.logged_in
+			if (!loggedIn) {
+				alert('You should log in')
+				navigate('/login')
+			}
+		})
+	}, [])
+
 	useEffect(() => {
 		dispatch(getPost(Number(id))).then((result) => {
-			// setEditable(result.payload.editable)
-			// setEditable(true)
+			setBookmark(result.payload.bookmark)
 		})
 	}, [id])
 
 	const fileChangedHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const files = event.target.files
-		if (files !== null) setFile(file.concat(Array.from(files)))
+		if (files !== null) setFile(files[0])
 	}
 
 	const ApplyHandler = (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault()
-		if (!userState.logged_in) {
-			alert('You should log in')
-			navigate('/login')
-			return
-		}
-		if (file.length === 0) return
-		const formData = new FormData()
-		file.forEach((f, i) => formData.append('files', f))
-		console.log(formData)
 
-		// dispatch(createApplication(formData))
-		//	.then((result) => {
-		//	    navigate(`/post/${id}`)
-		//	})
-		//	.catch((err) => {
-		//		console.log(err)
-		//		alert('ERROR')
-		//	})
+		if (!file) return
+		if (!id) return
+		const formData = new FormData()
+		// formData.append('id', id)
+		formData.append('application', file)
+		// console.log(formData.get("id"))
+
+		dispatch(createApplication({ application: formData, postId: id }))
+			.then((result) => {
+				navigate(`/post/${id}`)
+			})
+			.catch((err) => {
+				console.log(err)
+				alert('ERROR')
+			})
 	}
 
 	return (
 		<Layout>
 			<div className='apply'>
 				<div className='application'>
-					<PostHeader is_author={true} />
+					<PostHeader
+						is_author={true}
+						is_bookmark={bookmark}
+						setBookmark={setBookmark}
+					/>
 					<div>
 						<form className='applyForm' onSubmit={ApplyHandler}>
 							<div className='apply-container'>
@@ -75,8 +88,8 @@ export default function PostApply() {
 									<input
 										id='apply-file-input'
 										type='file'
-										multiple
 										name='photo'
+										accept='.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document'
 										onChange={fileChangedHandler}
 									/>
 								</div>

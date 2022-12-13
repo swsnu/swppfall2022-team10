@@ -12,11 +12,11 @@ jest.mock('react-router', () => ({
 
 const mockStore = getMockStore({
 	post: { posts: [], selectedPost: null, selectedAnimal: '' },
-	user: { users: [], currentUser: null, logged_in: true },
+	// user: { users: [], currentUser: null, logged_in: true },
 	review: { reviews: [], selectedReview: null, selectedAnimal: '' },
 	application: { applications: [], selectedApplication: null },
 	qna: { qnas: [], selectedQna: null },
-	mypost: { posts: [], likes: [], applys: [] }
+	mypost: { posts: [], likes: [], applys: [], reviews: [], qnas: [] }
 })
 describe('<Dropdown />', () => {
 	beforeEach(() => {

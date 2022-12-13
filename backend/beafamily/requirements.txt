@@ -6,3 +6,10 @@ pillow==9.3.0
 djangorestframework
 black
 tqdm
+python-docx
+sqlalchemy
+django-extensions
+requests
+django-storages[google]
+django-environ
+google-cloud-secret-manager

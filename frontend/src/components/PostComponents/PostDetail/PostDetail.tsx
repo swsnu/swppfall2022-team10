@@ -26,19 +26,28 @@ const PostDetail = (props: IProps) => {
 	const postState = useSelector(selectPost)
 	const navigate = useNavigate()
 	const [editable, setEditable] = useState<boolean>(false)
+	const [bookmark, setBookmark] = useState<boolean>(false)
 
 	useEffect(() => {
-		dispatch(getPost(Number(id))).then((result) => {
-			// setEditable(result.payload.editable)
-			setEditable(true)
-		})
+		dispatch(getPost(Number(id)))
+			.then((result) => {
+				setEditable(result.payload.editable)
+				setBookmark(result.payload.bookmark)
+			})
+			.catch((err) => {
+				console.log(err)
+			})
 	}, [id])
 
 	return (
 		<Layout>
 			<div className='DetailContainer'>
 				<div className='PostDetail'>
-					<PostHeader is_author={props.is_author} />
+					<PostHeader
+						is_author={editable}
+						is_bookmark={bookmark}
+						setBookmark={setBookmark}
+					/>
 					<div className='post-content-container'>
 						<div className='first-line'>
 							새로운 집을 찾고 있는,{' '}
@@ -79,8 +88,30 @@ const PostDetail = (props: IProps) => {
 									)
 								})}
 						</div>
+
+						<br />
+						<div className='det1'>
+							입양신청 서식
+							<br />
+						</div>
+						<div className='det2'>
+							<a
+								href={`http://localhost:8000${postState.selectedPost?.form}`}
+							>
+								입양신청서 서식
+							</a>
+						</div>
+						<br />
+						{!postState.selectedPost?.is_active && (
+							<div className='det2'>
+								입양공고가 마감되어 입양신청서를 확인할 수
+								없습니다.
+							</div>
+						)}
 					</div>
-					{props.is_author && <ApplicationList id={id} />}
+					{postState.selectedPost?.is_active && editable && id && (
+						<ApplicationList id={id} />
+					)}
 					{editable && (
 						<div className='post-buttons'>
 							<button

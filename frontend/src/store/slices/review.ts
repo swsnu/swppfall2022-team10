@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { RootState } from '..'
+import { postListType } from './post'
 
 export interface reviewType {
 	id: number
@@ -12,6 +13,19 @@ export interface reviewType {
 	photo_path: string[]
 	species: string
 	created_at: string
+	post: postListType
+}
+
+export interface reviewListType {
+	id: number
+	author_id: number
+	author_name: string
+	title: string
+	animal_type: string
+	thumbnail: string
+	species: string
+	created_at: string
+	post_id: number
 }
 
 export interface reviewFilterType {
@@ -20,7 +34,7 @@ export interface reviewFilterType {
 }
 
 export interface reviewState {
-	reviews: reviewType[]
+	reviews: reviewListType[]
 	selectedReview: reviewType | null
 	selectedAnimal: string
 }
@@ -63,7 +77,7 @@ export const createReview = createAsyncThunk(
 		// console.log(signin.data)
 		// console.log('CREATE REVIEW')
 		const response = await axios.post('/api/reviews/', review)
-		dispatch(reviewActions.addReview(response.data))
+		// dispatch(reviewActions.addReview(response.data))
 		return response.data
 	}
 )
@@ -89,36 +103,10 @@ export const reviewSlice = createSlice({
 			state.selectedAnimal = action.payload.animal_type
 		},
 		deleteReview: (state, action: PayloadAction<{ targetId: number }>) => {
-			const deleted = state.reviews.filter((review: reviewType) => {
+			const deleted = state.reviews.filter((review: reviewListType) => {
 				return review.id !== action.payload.targetId
 			})
 			state.reviews = deleted
-		},
-		addReview: (
-			state,
-			action: PayloadAction<{
-				id: number
-				author_id: number
-				author_name: string
-				title: string
-				content: string
-				animal_type: string
-				species: string
-				photo_path: string[]
-			}>
-		) => {
-			const newReview = {
-				id: action.payload.id,
-				author_id: action.payload.author_id,
-				author_name: action.payload.author_name,
-				title: action.payload.title,
-				content: action.payload.content,
-				animal_type: action.payload.animal_type,
-				species: action.payload.species,
-				photo_path: action.payload.photo_path,
-				created_at: ''
-			}
-			state.reviews.push(newReview)
 		}
 	},
 	extraReducers: (builder) => {
@@ -129,7 +117,6 @@ export const reviewSlice = createSlice({
 			state.selectedReview = action.payload
 		})
 		builder.addCase(createReview.rejected, (_state, action) => {
-			// console.error(action.error)
 			alert('ERROR')
 		})
 	}

@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import Post from '../Post/Post'
-import { getPosts, postType, selectPost } from '../../../store/slices/post'
+import { getPosts, postListType, selectPost } from '../../../store/slices/post'
 import { AppDispatch } from '../../../store'
 import {
 	MdOutlineAddBox,
@@ -30,8 +30,6 @@ export default function PostList() {
 	const [currentPage, setCurrentPage] = useState<number>(1)
 	const [postsPerPage, setPostsPerPage] = useState<number>(20)
 	const [postCount, setPostCount] = useState<number>(0)
-	const [nextPage, setNextPage] = useState<string>('')
-	const [prevPage, setPrevPage] = useState<string>('')
 
 	const [headerAnimalType, setHeaderAnimalType] = useState<string>('')
 	const [searchAnimalType, setSearchAnimalType] = useState<string>('')
@@ -77,8 +75,6 @@ export default function PostList() {
 			if (pageResult) {
 				// setPostList(pageResult.results)
 				setPostCount(pageResult.count)
-				setNextPage(pageResult.next)
-				setPrevPage(pageResult.prev)
 			}
 		})
 		setLoading(false)
@@ -246,15 +242,23 @@ export default function PostList() {
 						</button>
 						<span>&lsquo;입양신청 진행 중&lsquo;만 표시</span>
 					</div>
+					<div className='create-post'>
+						<button
+							id='create-post-button'
+							onClick={() => navigate('/post/create')}
+						>
+							<MdOutlineAddBox size='50' />
+						</button>
+					</div>
 					<div className='posts'>
 						{loading && <div> loading... </div>}
-						{postState.posts.map((post: postType) => {
+						{postState.posts.map((post: postListType) => {
 							return (
 								<Post
 									key={`${post.id}_post`}
 									title={post.title}
 									animal_type={post.animal_type}
-									photo_path={post.photo_path}
+									thumbnail={post.thumbnail}
 									species={post.species}
 									age={post.age}
 									gender={post.gender}
@@ -265,14 +269,6 @@ export default function PostList() {
 								/>
 							)
 						})}
-					</div>
-					<div className='create-post'>
-						<button
-							id='create-post-button'
-							onClick={() => navigate('/post/create')}
-						>
-							<MdOutlineAddBox size='50' />
-						</button>
 					</div>
 				</div>
 				<Pagination

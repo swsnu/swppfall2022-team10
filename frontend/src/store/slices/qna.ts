@@ -1,6 +1,16 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { RootState } from '..'
+
+export interface commentType {
+	id: number
+	author_id: number
+	author_name: string
+	content: string
+	created_at: string
+	editable: boolean
+}
 
 export interface QnaType {
 	id: number
@@ -10,9 +20,17 @@ export interface QnaType {
 	content: string
 	created_at: string
 	hits: number
+	comments: commentType[]
+	editable: boolean
 }
+
 export interface QnaFilterType {
 	page: number
+}
+
+export interface commentState {
+	comments: commentType[]
+	selectedComment: commentType | null
 }
 
 export interface qnaState {
@@ -21,64 +39,7 @@ export interface qnaState {
 }
 
 const initialState: qnaState = {
-	// qnas: [],
-	// selectedQna: null
-	qnas: [
-		{
-			id: 1,
-			author_id: 1,
-			author_name: 'paw',
-			title: 'Be-a-family',
-			content: '개가 말을 듣지 않아요. 어떻게 하죠?',
-			created_at: '2022-11-20',
-			hits: 1
-		},
-		{
-			id: 2,
-			author_id: 1,
-			author_name: 'paw',
-			title: 'Be-a-family',
-			content: '고양이가 말을 듣지 않아요. 어떻게 하죠?',
-			created_at: '2022-11-20',
-			hits: 1
-		},
-		{
-			id: 3,
-			author_id: 1,
-			author_name: 'paw',
-			title: 'Be-a-family',
-			content: '앵무새가 말을 듣지 않아요. 어떻게 하죠?',
-			created_at: '2022-11-20',
-			hits: 1
-		},
-		{
-			id: 4,
-			author_id: 1,
-			author_name: 'paw',
-			title: 'working',
-			content: '햄스터가 말을 듣지 않아요. 어떻게 하죠?',
-			created_at: '2022-11-11',
-			hits: 3
-		},
-		{
-			id: 5,
-			author_id: 1,
-			author_name: 'paw',
-			title: 'eslint sucks',
-			content: '친칠라가 말을 듣지 않아요. 어떻게 하죠?',
-			created_at: '2022-11-11',
-			hits: 3
-		},
-		{
-			id: 6,
-			author_id: 1,
-			author_name: 'paw',
-			title: '6th',
-			content: '고슴도치가 말을 듣지 않아요. 어떻게 하죠?',
-			created_at: '2022-11-11',
-			hits: 4
-		}
-	],
+	qnas: [],
 	selectedQna: null
 }
 
@@ -99,10 +60,26 @@ export const getQna = createAsyncThunk(
 )
 
 export const createQna = createAsyncThunk(
-	'review/createQna',
+	'qna/createQna',
 	async (qna: FormData, { dispatch }) => {
 		const response = await axios.post('/api/questions/', qna)
 		dispatch(qnaActions.addQna(response.data))
+		return response.data
+	}
+)
+
+export const editQna = createAsyncThunk(
+	'post/editPost',
+	async (qna: QnaType, { dispatch }) => {
+		const response = await axios.put(`/api/questions/${qna.id}/`, qna)
+		dispatch(
+			qnaActions.editQna({
+				id: response.data.id,
+				title: response.data.title,
+				content: response.data.content,
+				created_at: response.data.created_at
+			})
+		)
 		return response.data
 	}
 )
@@ -115,22 +92,44 @@ export const deleteQna = createAsyncThunk(
 	}
 )
 
+export const createComment = createAsyncThunk(
+	'qna/createComment',
+	async (arg: { comment: { content: string }; id: number }, { dispatch }) => {
+		const response = await axios.post(
+			`/api/questions/${arg.id}/comments/`,
+			arg.comment
+		)
+		return response.data
+	}
+)
+
 export const qnaSlice = createSlice({
 	name: 'qna',
 	initialState,
 	reducers: {
-		getAll: (state, action: PayloadAction<{ qnas: QnaType[] }>) => {},
-		getQna: (state, action: PayloadAction<{ targetId: number }>) => {
-			const target = state.qnas.find(
-				(td) => td.id === action.payload.targetId
-			)
-			state.selectedQna = target ?? null
-		},
 		deleteQna: (state, action: PayloadAction<{ targetId: number }>) => {
 			const deleted = state.qnas.filter((qna: QnaType) => {
 				return qna.id !== action.payload.targetId
 			})
 			state.qnas = deleted
+		},
+		editQna: (
+			state,
+			action: PayloadAction<{
+				id: number
+				title: string
+				content: string
+				created_at: string
+			}>
+		) => {
+			const qna = state.qnas.find(
+				(value: QnaType) => value.id === action.payload.id
+			)
+			if (qna != null) {
+				qna.title = action.payload.title
+				qna.content = action.payload.content
+				qna.created_at = action.payload.created_at
+			}
 		},
 		addQna: (
 			state,
@@ -149,7 +148,9 @@ export const qnaSlice = createSlice({
 				title: action.payload.title,
 				content: action.payload.content,
 				created_at: '',
-				hits: 0
+				hits: 0,
+				comments: [],
+				editable: false
 			}
 			state.qnas.push(newQna)
 		}

@@ -5,8 +5,6 @@ import { MemoryRouter, Navigate, Route, Routes } from 'react-router'
 import PostEdit from './PostEdit'
 import { getMockStore } from '../../../test-utils/mock'
 import { Provider } from 'react-redux'
-import * as postSlice from '../../../store/slices/post'
-import { MdArrowBack } from 'react-icons/md'
 import { act } from 'react-dom/test-utils'
 
 const tempState = {
@@ -15,11 +13,11 @@ const tempState = {
 		selectedPost: null,
 		selectedAnimal: ''
 	},
-	user: { users: [], currentUser: null, logged_in: true },
+	// user: { users: [], currentUser: null, logged_in: true },
 	review: { reviews: [], selectedReview: null, selectedAnimal: '' },
 	application: { applications: [], selectedApplication: null },
 	qna: { qnas: [], selectedQna: null },
-	mypost: { posts: [], likes: [], applys: [] }
+	mypost: { posts: [], likes: [], applys: [], reviews: [], qnas: [] }
 }
 
 const testPostFormat = {
@@ -80,6 +78,9 @@ describe('<PostEdit />', () => {
 		jest.spyOn(axios, 'get').mockResolvedValueOnce({
 			data: { logged_in: false }
 		})
+		jest.spyOn(axios, 'get').mockResolvedValueOnce({
+			data: { post: testPostFormat }
+		})
 		await act(() => {
 			render(postEdit)
 		})
@@ -91,7 +92,9 @@ describe('<PostEdit />', () => {
 		jest.spyOn(axios, 'get').mockResolvedValueOnce({
 			data: { logged_in: true }
 		})
-		jest.spyOn(axios, 'get').mockResolvedValueOnce({ data: testPostFormat })
+		jest.spyOn(axios, 'get').mockResolvedValueOnce({
+			data: { post: testPostFormat }
+		})
 		await act(() => {
 			render(postEdit)
 		})

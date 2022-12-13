@@ -6,16 +6,22 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import Layout from '../../Layout/Layout'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router'
 import { Navigate, useNavigate } from 'react-router-dom'
 import { AppDispatch } from '../../../store'
-import { getPost, editPost, selectPost } from '../../../store/slices/post'
-import { selectUser, checkLogin } from '../../../store/slices/user'
+import {
+	getPost,
+	editPost,
+	selectPost,
+	deletePostImage
+} from '../../../store/slices/post'
+import { checkLogin } from '../../../store/slices/user'
 import { MdArrowBack } from 'react-icons/md'
 import Combobox from 'react-widgets/Combobox'
 import DropdownList from 'react-widgets/DropdownList'
+import ImageModal from './ImageModal/ImageModal'
 import 'react-widgets/scss/styles.scss'
 import './PostEdit.scss'
 import { Dictionary } from '@reduxjs/toolkit'
@@ -34,8 +40,13 @@ export default function PostEdit() {
 	const [vaccination, setVaccination] = useState<string>('')
 	const [neutering, setNeutering] = useState<string>('')
 	const [content, setContent] = useState<string>('')
-	const [file, setFile] = useState<{}>({ selectedFiles: null })
+	const [imageUrl, setImageUrl] = useState<
+		Array<{ id: number; photo_path: string }>
+	>([])
+	const [file, setFile] = useState<File[]>([])
 	const [editable, setEditable] = useState<boolean>(true)
+	const [modalOpen, setModalOpen] = useState<boolean>(false)
+	const [clickedImage, setClickedImage] = useState<string>('')
 
 	const navigate = useNavigate()
 	const dispatch = useDispatch<AppDispatch>()
@@ -50,7 +61,7 @@ export default function PostEdit() {
 			}
 		})
 		dispatch(getPost(Number(id))).then((result) => {
-			const currentPost = result.payload
+			const currentPost = result.payload.post
 			if (currentPost) {
 				setTitle(currentPost.title)
 				setName(currentPost.name)
@@ -61,10 +72,9 @@ export default function PostEdit() {
 				setVaccination(currentPost.vaccination ? 'O' : 'X')
 				setNeutering(currentPost.neutering ? 'O' : 'X')
 				setContent(currentPost.content)
-				setFile(currentPost.photo_path)
-				// setEditable(currentPost.editable)
-				setEditable(true)
+				setImageUrl(currentPost.photo_path)
 			}
+			setEditable(result.payload.editable)
 		})
 	}, [id])
 
@@ -77,9 +87,7 @@ export default function PostEdit() {
 	const fileChangedHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const files = event.target.files
 		// console.log(files)
-		setFile({
-			selectedFiles: files
-		})
+		if (files !== null) setFile(file.concat(Array.from(files)))
 	}
 
 	const editPostHandler = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -104,6 +112,29 @@ export default function PostEdit() {
 		// 	navigate(`/post/${result.payload.id}`);
 		// } else {
 		// 	alert("Error on edit Post");
+	}
+
+	const onClickToggleModal = useCallback(() => {
+		setModalOpen(!modalOpen)
+	}, [modalOpen])
+	const viewImageModal = useCallback(
+		(image: string) => {
+			setModalOpen(!modalOpen)
+			setClickedImage(image)
+		},
+		[modalOpen, clickedImage]
+	)
+
+	const deleteImageHandler = (imageId: number) => {
+		if (postState.selectedPost !== null) {
+			const input = {
+				id: postState.selectedPost.id,
+				photo_id: imageId
+			}
+			dispatch(deletePostImage(input))
+			const newImageUrl = imageUrl.filter((image) => image.id !== imageId)
+			setImageUrl(newImageUrl)
+		}
 	}
 
 	const speciesList: Dictionary<List> = {
@@ -283,16 +314,72 @@ export default function PostEdit() {
 									value={content}
 								/>
 							</div>
-							<div className='input-container'>
-								<label htmlFor='post-age-input'>사진:</label>
-								<input
-									id='post-photo-input'
-									type='file'
-									multiple
-									name='photo'
-									accept='image/*'
-									onChange={fileChangedHandler}
-								/>
+							<div className='photo-input-container'>
+								<div id='photo-title'>사진:</div>
+								<div className='photo-input'>
+									<div className='current-list'>
+										현재 등록된 사진
+										<ul>
+											{imageUrl.map((image) => {
+												const tempList =
+													image.photo_path.split('/')
+												const imageName =
+													tempList[
+														tempList.length - 1
+													]
+												return (
+													<li
+														key={`${imageName}_image`}
+													>
+														<div
+															onClick={(e) => {
+																e.preventDefault()
+																viewImageModal(
+																	image.photo_path
+																)
+															}}
+														>
+															{imageName}
+														</div>
+														<button
+															className='delete-image-button'
+															onClick={(e) => {
+																e.preventDefault()
+																deleteImageHandler(
+																	image.id
+																)
+															}}
+														>
+															삭제
+														</button>
+													</li>
+												)
+											})}
+										</ul>
+										{modalOpen && (
+											<ImageModal
+												onClickToggleModal={
+													onClickToggleModal
+												}
+											>
+												<img src={clickedImage} />
+											</ImageModal>
+										)}
+									</div>
+									<div className='new-input'>
+										<label htmlFor='post-age-input'>
+											추가로 등록할 사진
+										</label>
+										<input
+											id='post-photo-input'
+											type='file'
+											multiple
+											name='photo'
+											accept='image/*'
+											onChange={fileChangedHandler}
+										/>
+									</div>
+								</div>
 							</div>
 							<button
 								id='confirm-edit-post-button'

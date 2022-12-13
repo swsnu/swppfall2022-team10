@@ -5,7 +5,7 @@ import { Provider } from 'react-redux'
 import { AppStore, RootState } from '../store'
 import postReducer from '../store/slices/post'
 import reviewReducer from '../store/slices/review'
-import userReducer from '../store/slices/user'
+// import userReducer from '../store/slices/user'
 import applicationReducer from '../store/slices/application'
 import mypostReducer from '../store/slices/mypost'
 import qnaReducer from '../store/slices/qna'
@@ -20,7 +20,7 @@ export const getMockStore = (preloadedState?: PreloadedState<RootState>) => {
 		reducer: {
 			post: postReducer,
 			review: reviewReducer,
-			user: userReducer,
+			// user: userReducer,
 			application: applicationReducer,
 			qna: qnaReducer,
 			mypost: mypostReducer

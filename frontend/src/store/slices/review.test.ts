@@ -1,16 +1,26 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable import/no-duplicates */
-import { AnyAction, configureStore, EnhancedStore } from '@reduxjs/toolkit'
+import * as redux from '@reduxjs/toolkit'
 import axios from 'axios'
-import { ThunkMiddleware } from 'redux-thunk'
+import thunk, { ThunkMiddleware } from 'redux-thunk'
 import reducer, { reviewState } from './review'
-import { getReviews, getReview, createReview, deleteReview } from './review'
+import configureStore from 'redux-mock-store'
+import {
+	selectAnimal,
+	getReviews,
+	getReview,
+	createReview,
+	deleteReview
+} from './review'
+
+const middlewares = [thunk]
+const mockStore = configureStore(middlewares)
 
 describe('review reducer', () => {
-	let store: EnhancedStore<
+	let store: redux.EnhancedStore<
 		{ review: reviewState },
-		AnyAction,
-		[ThunkMiddleware<{ review: reviewState }, AnyAction, undefined>]
+		redux.AnyAction,
+		[ThunkMiddleware<{ review: reviewState }, redux.AnyAction, undefined>]
 	>
 	const fakeReview = {
 		id: 1,
@@ -25,7 +35,7 @@ describe('review reducer', () => {
 	}
 
 	beforeAll(() => {
-		store = configureStore({ reducer: { review: reducer } })
+		store = redux.configureStore({ reducer: { review: reducer } })
 	})
 	it('should handle initial state', () => {
 		expect(reducer(undefined, { type: 'unknown' })).toEqual({
@@ -33,6 +43,12 @@ describe('review reducer', () => {
 			selectedReview: null,
 			selectedAnimal: ''
 		})
+	})
+	it('should handle selectAnimal', async () => {
+		await store.dispatch(selectAnimal('TEST_ANIMAL_TYPE'))
+		expect(store.getState().review.selectedAnimal).toEqual(
+			'TEST_ANIMAL_TYPE'
+		)
 	})
 	it('should handle getReviews', async () => {
 		axios.get = jest
@@ -52,21 +68,31 @@ describe('review reducer', () => {
 		expect(store.getState().review.reviews).toEqual([])
 	})
 	it('should handle createReview', async () => {
-		/* jest.spyOn(axios, "post").mockResolvedValue({
-            data: fakeReview,
-        });
-        await store.dispatch(fakeReview);
-        expect(store.getState().review.reviews).toEqual([fakeReview]); */
+		jest.spyOn(axios, 'post').mockResolvedValue({
+			data: fakeReview
+		})
+		const store = mockStore({})
+		const formData = new FormData()
+		await store.dispatch(createReview(formData) as any)
+		expect(store.getActions()[0].type).toEqual(createReview.pending.type)
+		expect(store.getActions()[1]).toEqual(
+			expect.objectContaining({
+				type: createReview.fulfilled.type,
+				payload: fakeReview
+			})
+		)
 	})
 
 	it('should handle error on createReview', async () => {
-		/* const mockConsoleError = jest.fn();
-        console.error = mockConsoleError;
-        jest.spyOn(axios, "post").mockRejectedValue({
-            response: { data: { title: ["error"] } },
-        });
-        await store.dispatch(postTodo({ title: "test", content: "test" }));
-        expect(mockConsoleError).toBeCalled(); */
+		const mockAlert = jest.fn()
+		global.alert = mockAlert
+		jest.spyOn(axios, 'post').mockRejectedValue({
+			response: { data: { title: ['error'] } }
+		})
+		const formData = new FormData()
+
+		await store.dispatch(createReview(formData))
+		expect(mockAlert).toHaveBeenCalledWith('ERROR')
 	})
 	it('should handle null on getReview', async () => {
 		axios.get = jest.fn().mockResolvedValue({ data: null })
