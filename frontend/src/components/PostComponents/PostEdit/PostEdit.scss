@@ -78,7 +78,7 @@
 			}
 		}
 
-		.photo-input-container {
+		.file-input-container {
 			display: flex;
 			flex-direction: row;
 			align-self: flex-start;
@@ -86,10 +86,12 @@
 			width: 900px;
 			justify-content: space-between;
 			margin-bottom: 15px;
-			#photo-title {
+			#photo-title,
+			#apply-form-title {
 				text-align: left;
 			}
-			.photo-input {
+			.photo-input,
+			.apply-form-input {
 				width: 600px;
 				display: flex;
 				flex-direction: column;
@@ -116,6 +118,9 @@
 							cursor: pointer;
 						}
 					}
+				}
+				.current-form {
+					text-align: left;
 				}
 				.new-input {
 					display: flex;
