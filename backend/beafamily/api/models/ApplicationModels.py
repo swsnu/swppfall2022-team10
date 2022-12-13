@@ -27,7 +27,7 @@ class Application(AbstractMetaDataType):
 
 @receiver(pre_delete, sender=Application)
 def cleanup_form(sender, instance, *args, **kwargs):
-    if instance.form and instance.form.url:
-        storage = instance.form.storage
-        if storage.exists(instance.form.name):
-            storage.delete(instance.form.name)
+    if instance.file and instance.file.url:
+        storage = instance.file.storage
+        if storage.exists(instance.file.name):
+            storage.delete(instance.file.name)
