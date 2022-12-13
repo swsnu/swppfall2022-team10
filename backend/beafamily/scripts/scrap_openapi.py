@@ -229,8 +229,10 @@ def main():
 
         if animal_type == "개":
             form = "dog_form.docx"
-        else:
+        elif animal_type == "고양이":
             form = "cat_form.docx"
+        else:
+            form = "etc_form.docx"
 
         try:
             author: User = u.filter(nickname=post_info["careNm"])[0]
