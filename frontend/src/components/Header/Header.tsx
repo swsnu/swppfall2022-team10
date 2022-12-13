@@ -40,7 +40,7 @@ export default function Header(props: IProps) {
 						className='header-buttons'
 						onClick={(event) => {
 							event.preventDefault()
-							navigate('/')
+							navigate('/introduction')
 						}}
 					>
 						입양 절차 소개
