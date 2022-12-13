@@ -14,6 +14,7 @@
 #RUN npm run build --prod --silent
 
 
+# too slow, use local build
 FROM nginx:latest
 RUN mkdir -p /usr/share/nginx/html
 #COPY --from=build /frontend/build /usr/share/nginx/html
@@ -24,3 +25,5 @@ RUN rm -f /etc/nginx/conf.d/default
 RUN mkdir -p /etc/nginx/sites-enabled
 RUN ln -s -f /etc/nginx/sites-available/nginx.conf /etc/nginx/sites-enabled/nginx.conf
 RUN ln -s -f /etc/nginx/sites-available/nginx.conf /etc/nginx/conf.d/nginx.conf
+
+CMD nginx -g 'daemon off;'

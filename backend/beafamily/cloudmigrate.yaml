@@ -24,8 +24,8 @@ steps:
       ]
 
 substitutions:
-  _INSTANCE_NAME: beafamily-database
-  _REGION: asia-northeast3
+  _INSTANCE_NAME: beafamily-database-1
+  _REGION: asia-northeast1
   _SERVICE_NAME: beafamily-backend
   _SECRET_SETTINGS_NAME: django_settings
 

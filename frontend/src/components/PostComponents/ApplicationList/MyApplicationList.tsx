@@ -53,7 +53,7 @@ export default function MyApplicationList(props: IProps) {
 										<td>{apply.id}</td>
 										<td>
 											<a
-												href={`http://localhost:8000/api/posts/${apply?.post_id}/applications/${apply?.id}`}
+												href={`/api/posts/${apply?.post_id}/applications/${apply?.id}`}
 											>
 												{apply?.file}
 											</a>

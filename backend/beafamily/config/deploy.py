@@ -56,8 +56,8 @@ SECRET_KEY = env("SECRET_KEY")
 API_KEY = env("API_KEY")
 DEBUG = env("DEBUG")
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "api.beafamily.site", "*"]
-CSRF_TRUSTED_ORIGINS = ["https://beafamily.site"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "api.beafamily.site", "beafamily.site", "*"]
+# CSRF_TRUSTED_ORIGINS = ["https://beafamily.site"]
 
 SECURE_HSTS_SECONDS = env("SECURE_HSTS_SECONDS", int)
 SESSION_COOKIE_SECURE = env("SESSION_COOKIE_SECURE", bool)
@@ -103,8 +103,38 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",
     "https://localhost:3000",
     "https://127.0.0.1:3000",
+    "https://beafamily-backend-rii2tck3sq-an.a.run.app",
+]
+CSRF_TRUSTED_ORIGINS = [
+    "https://beafamily.site",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "https://localhost:3000",
+    "https://127.0.0.1:3000",
+    "https://beafamily-backend-rii2tck3sq-an.a.run.app",
 ]
 CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOW_HEADERS = (
+    "access-control-allow-credentials",
+    "access-control-allow-origin",
+    "access-control-request-method",
+    "access-control-request-headers",
+    "accept",
+    "accept-encoding",
+    "accept-language",
+    "authorization",
+    "connection",
+    "content-type",
+    "dnt",
+    "credentials",
+    "host",
+    "origin",
+    "user-agent",
+    "X-CSRFToken",
+    "csrftoken",
+    "x-requested-with",
+)
 
 ROOT_URLCONF = "beafamily.urls"
 

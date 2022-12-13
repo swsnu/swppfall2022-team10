@@ -1,3 +1,3 @@
 #!/bin/bash
 #
-sed 's/\/api/https:\/\/api.beafamily.site\/api/' src/**/*.ts -i
+sed -i "s/http:\/\/localhost:8000//g" src/**/*.tsx

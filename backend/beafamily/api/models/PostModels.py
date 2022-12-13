@@ -77,3 +77,11 @@ def cleanup_image(sender, instance, *args, **kwargs):
         storage = instance.image.storage
         if storage.exists(instance.image.name):
             storage.delete(instance.image.name)
+
+
+@receiver(pre_delete, sender=Post)
+def cleanup_form(sender, instance, *args, **kwargs):
+    if instance.form and instance.form.url:
+        storage = instance.form.storage
+        if storage.exists(instance.form.name):
+            storage.delete(instance.form.name)

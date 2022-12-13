@@ -128,11 +128,12 @@ export default function PostEdit() {
 		const formData = new FormData()
 		formData.append('content', JSON.stringify(data))
 		file.forEach((f, i) => formData.append('photos', f))
-		formData.append('application', applyForm[0])
+		if (applyForm[0] !== null && applyForm[0] !== undefined)
+			formData.append('application', applyForm[0])
 
 		dispatch(editPost({ id: id, post: formData }))
 			.then((result) => {
-				const id: number = result.payload.id
+				// const id: number = result.payload.id
 				navigate(`/post/${id}`)
 			})
 			.catch((err) => {
@@ -414,7 +415,7 @@ export default function PostEdit() {
 									<div className='current-apply-form'>
 										현재 등록된 파일 {''}
 										<a
-											href={`http://localhost:8000${postState.selectedPost?.form}`}
+											href={`${postState.selectedPost?.form}`}
 										>
 											입양신청서 서식
 										</a>
@@ -436,7 +437,9 @@ export default function PostEdit() {
 							<button
 								id='confirm-edit-post-button'
 								type='submit'
-								disabled={!!fields.filter((x) => x === '').length}
+								disabled={
+									!!fields.filter((x) => x === '').length
+								}
 							>
 								수정하기
 							</button>
