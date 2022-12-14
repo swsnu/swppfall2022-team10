@@ -99,6 +99,7 @@ export const createComment = createAsyncThunk(
 			`/api/questions/${arg.id}/comments/`,
 			arg.comment
 		)
+		dispatch(qnaActions.addComment(response.data))
 		return response.data
 	}
 )
@@ -153,7 +154,28 @@ export const qnaSlice = createSlice({
 				editable: false
 			}
 			state.qnas.push(newQna)
-		}
+		},
+		addComment: (
+			state,
+			action: PayloadAction<{
+				id: number
+				author_id: number
+				author_name: string
+				content: string
+				created_at: string
+				editable: boolean
+			}>
+		) => {
+			const newComment = {
+				id: action.payload.id,
+				author_id: action.payload.author_id,
+				author_name: action.payload.author_name,
+				content: action.payload.content,
+				created_at: action.payload.created_at,
+				editable: action.payload.editable
+			}
+			state.selectedQna?.comments.push(newComment)
+		},
 	},
 	extraReducers: (builder) => {
 		builder.addCase(getQnas.fulfilled, (state, action) => {

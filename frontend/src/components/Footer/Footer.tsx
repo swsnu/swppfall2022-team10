@@ -30,12 +30,12 @@ export default function Footer() {
 								Products
 							</h6>
 							<p>
-								<a href='#!' className='text-reset'>
+								<a href='https://beafamily.site/introduction' className='text-reset'>
 									이용약관
 								</a>
 							</p>
 							<p>
-								<a href='#!' className='text-reset'>
+								<a href='https://beafamily.site/introduction' className='text-reset'>
 									개인정보처리방침
 								</a>
 							</p>
@@ -46,12 +46,12 @@ export default function Footer() {
 								Useful links
 							</h6>
 							<p>
-								<a href='#!' className='text-reset'>
+								<a href='https://beafamily.site/introduction' className='text-reset'>
 									About Us
 								</a>
 							</p>
 							<p>
-								<a href='#!' className='text-reset'>
+								<a href='https://beafamily.site/introduction' className='text-reset'>
 									Help
 								</a>
 							</p>
