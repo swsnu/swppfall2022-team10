@@ -44,6 +44,8 @@ const QnaDetail = () => {
 			console.log(err)
 			alert('ERROR')
 		})
+		
+		dispatch(getQna(Number(id)))
 	}
 
 	useEffect(() => {
