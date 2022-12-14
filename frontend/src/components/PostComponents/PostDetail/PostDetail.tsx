@@ -100,7 +100,7 @@ const PostDetail = (props: IProps) => {
 							</a>
 						</div>
 						<br />
-						{!postState.selectedPost?.is_active && (
+						{!postState.selectedPost?.is_active && editable && (
 							<div className='det2'>
 								입양공고가 마감되어 입양신청서를 확인할 수
 								없습니다.
