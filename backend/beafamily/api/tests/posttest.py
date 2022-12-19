@@ -261,6 +261,19 @@ class PostTestCase(APITestCase):
     def test_putpost(self):
         response = self.client.get("/api/token/")
         token = response.cookies["csrftoken"].value
+        data = json.dumps(
+            {
+                "animal_type": "dd",
+                "age": 134,
+                "name": "adf",
+                "gender": True,
+                "title": "dsaf",
+                "species": "dsfa",
+                "neutering": True,
+                "vaccination": True,
+                "content": "text",
+            }
+        )
 
         response = self.client.post(
             "/api/signin/",
@@ -270,13 +283,19 @@ class PostTestCase(APITestCase):
 
         token = response.cookies["csrftoken"].value
 
-        response = self.client.put("/api/posts/1/", HTTP_X_CSRFTOKEN=token)
+        response = self.client.put(
+            "/api/posts/1/", HTTP_X_CSRFTOKEN=token, data={"content": data}
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        response = self.client.put("/api/posts/2/", HTTP_X_CSRFTOKEN=token)
+        response = self.client.put(
+            "/api/posts/2/", HTTP_X_CSRFTOKEN=token, data={"content": data}
+        )
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-        response = self.client.put("/api/posts/124/", HTTP_X_CSRFTOKEN=token)
+        response = self.client.put(
+            "/api/posts/124/", HTTP_X_CSRFTOKEN=token, data={"content": data}
+        )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_createpost(self):
