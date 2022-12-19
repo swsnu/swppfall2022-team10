@@ -5,6 +5,7 @@
 /* eslint-disable react/jsx-key */
 /* eslint-disable @typescript-eslint/no-floating-promises */
 import Layout from '../../Layout/Layout'
+import Comment from '../Comment/Comment'
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router'
@@ -44,6 +45,7 @@ const QnaDetail = () => {
 			console.log(err)
 			alert('ERROR')
 		})
+		dispatch(getQna(Number(id)))
 	}
 
 	useEffect(() => {
@@ -87,7 +89,16 @@ const QnaDetail = () => {
 							댓글 작성하기
 						</button>
 						<div>
-							<CommentList />
+							{qnaState.selectedQna?.comments.map((comment) => {
+								return (
+									<Comment
+										key={`${comment.id}_comment`}
+										author={comment.author_name}
+										content={comment.content}
+										created_at={comment.created_at}
+									/>
+								)
+							})}
 						</div>
 					</form>
 				</div>

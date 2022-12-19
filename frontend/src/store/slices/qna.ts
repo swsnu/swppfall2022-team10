@@ -56,8 +56,12 @@ export const getQna = createAsyncThunk(
 	async (id: QnaType['id'], { dispatch }) => {
 		const response = await axios.get(`/api/questions/${id}/`)
 		return response.data ?? null
+		// dispatch(qnaActions.getQna({ targetId: id }))
+		// return response.data ?? null
 	}
 )
+
+
 
 export const createQna = createAsyncThunk(
 	'qna/createQna',
@@ -99,6 +103,7 @@ export const createComment = createAsyncThunk(
 			`/api/questions/${arg.id}/comments/`,
 			arg.comment
 		)
+		dispatch(qnaActions.addComment(response.data))
 		return response.data
 	}
 )
@@ -107,6 +112,12 @@ export const qnaSlice = createSlice({
 	name: 'qna',
 	initialState,
 	reducers: {
+		getQna: (state, action: PayloadAction<{ targetId: number }>) => {
+			const target = state.qnas.find(
+				(td) => td.id === action.payload.targetId
+			)
+			state.selectedQna = target ?? null
+		},
 		deleteQna: (state, action: PayloadAction<{ targetId: number }>) => {
 			const deleted = state.qnas.filter((qna: QnaType) => {
 				return qna.id !== action.payload.targetId
@@ -153,6 +164,27 @@ export const qnaSlice = createSlice({
 				editable: false
 			}
 			state.qnas.push(newQna)
+		},
+		addComment: (
+			state,
+			action: PayloadAction<{
+				id: number
+				author_id: number
+				author_name: string
+				content: string
+				created_at: string
+				editable: boolean
+			}>
+		) => {
+			const newComment = {
+				id: action.payload.id,
+				author_id: action.payload.author_id,
+				author_name: action.payload.author_name,
+				content: action.payload.content,
+				created_at: action.payload.created_at,
+				editable: action.payload.editable,
+			}
+			state.selectedQna?.comments.push(newComment)
 		}
 	},
 	extraReducers: (builder) => {

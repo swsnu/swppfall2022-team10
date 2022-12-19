@@ -46,7 +46,7 @@ export default function Footer() {
 								Useful links
 							</h6>
 							<p>
-								<a href='#!' className='text-reset'>
+								<a href='http://beafamily.site/introduction' className='text-reset'>
 									About Us
 								</a>
 							</p>

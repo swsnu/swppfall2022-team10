@@ -13,13 +13,13 @@ const Introduction = () => {
         <Layout>
             <div className='ListContainer'>
                 <div className='InfoContainer'>
-                    <div className='title'>Welcome to Be A Family</div>
+                    <div className='title'>{`Welcome to Be A Family`}</div>
                     <br />
                     <div className='Infos'>
                         <Accordion>
                             <Accordion.Item eventKey='0'>
                                 <Accordion.Header>
-                                    About Be A Family
+                                    {`About`}
                                 </Accordion.Header>
                                 <Accordion.Body>
                                     {`Why Stray Animals? Whilst the number of household pets continue to grow, more and more animals are abandoned behind the door. Thankfully, the call  “Don’t buy, Adopt” is gaining more attention – but where do we go when we finally decide to add a family member to our lives?

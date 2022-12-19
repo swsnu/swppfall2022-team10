@@ -196,7 +196,7 @@ describe('<PostEdit />', () => {
 			const postButton = await screen.findByText('수정하기')
 			fireEvent.click(postButton)
 			await waitFor(() =>
-				expect(mockNavigate).toHaveBeenCalledWith('/post/1')
+				expect(mockNavigate).toHaveBeenCalledWith('/login')
 			)
 		})
 	})

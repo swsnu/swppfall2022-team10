@@ -120,16 +120,16 @@ describe('<CommentList />', () => {
 			const { container } = render(commentList)
 			expect(container).toBeTruthy()
 		})
-		await screen.findByText('Comment List')
+
 		await screen.findByText('COMMENT_AUTHOR_NAME')
 		await screen.findByText('COMMENT_CONTENT')
 		await screen.findByText('COMMENT_CREATED_AT')
 	})
 	/* it('should render comments', async () => {
-        await act(() => {
-            render(commentList)
-        })
-        const comments = screen.getAllByTestId('spyComment')
-        expect(comments).toHaveLength(1)
-    }) */
+		await act(() => {
+			render(commentList)
+		})
+		const comments = screen.getAllByTestId('spyComment')
+		expect(comments).toHaveLength(1)
+	}) */
 })

@@ -21,7 +21,6 @@ export default function CommentList() {
 
     return (
         <div className='CommentList'>
-            <div>Comment List</div>
             <div>
                 {qnaState.selectedQna?.comments.map((comment) => {
                     return (

@@ -64,7 +64,7 @@ describe('<Header />', () => {
 		)
 		const introduceButton = screen.getByText('입양 절차 소개')
 		fireEvent.click(introduceButton)
-		await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith('/'))
+		await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith('/introduction'))
 
 		expect(screen.getByText('입양 게시글').closest('a')).toHaveAttribute(
 			'href',
